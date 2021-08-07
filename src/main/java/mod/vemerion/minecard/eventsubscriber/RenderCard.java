@@ -25,6 +25,8 @@ import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 @EventBusSubscriber(modid = Main.MODID, bus = EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
 public class RenderCard {
 
+	private static final float TEXT_SIZE = 0.01f;
+
 	@SubscribeEvent
 	public static void renderCard(RenderHandEvent event) {
 		ItemStack stack = event.getItemStack();
@@ -62,25 +64,27 @@ public class RenderCard {
 				bothArms ? 0 : -Mth.sin(getSwingProgress(player, event)) * 2, 0);
 		pose.scale(0.5f, 0.5f, 0.5f);
 		pose.mulPose(new Quaternion(80 * xProgress - 90, 0, 0, true));
-		Minecraft.getInstance().getItemRenderer().renderStatic(null, stack, TransformType.NONE, false,
-				event.getMatrixStack(), event.getBuffers(), null, event.getLight(), OverlayTexture.NO_OVERLAY, 0);
+		mc.getItemRenderer().renderStatic(null, stack, TransformType.NONE, false, event.getMatrixStack(),
+				event.getBuffers(), null, event.getLight(), OverlayTexture.NO_OVERLAY, 0);
+
+		// Render text
+		pose.pushPose();
+		pose.translate(-0.4, -0.2, 0.1);
+		pose.scale(TEXT_SIZE, -TEXT_SIZE, TEXT_SIZE);
+		mc.font.draw(pose, "text", 0, 0, 0x000000);
+		pose.popPose();
 
 		// Render entity
 		pose.pushPose();
 		pose.translate(0, -0.4, 0);
 		pose.scale(0.4f, 0.4f, 0.4f);
 		pose.mulPose(new Quaternion(0, player.tickCount + event.getPartialTicks(), 0, true));
-		((EntityRenderer) Minecraft.getInstance().getEntityRenderDispatcher().renderers.get(EntityType.ENDERMAN))
-				.render(EntityType.ENDERMAN.create(Minecraft.getInstance().level), 0, 0, pose, event.getBuffers(),
-						event.getLight());
+		((EntityRenderer) mc.getEntityRenderDispatcher().renderers.get(EntityType.ENDERMAN)).render(
+				EntityType.ENDERMAN.create(Minecraft.getInstance().level), 0, 0, pose, event.getBuffers(),
+				event.getLight());
 
 		pose.popPose();
 		pose.popPose();
-//		ZombieModel<?> model = new ZombieModel<>(Minecraft.getInstance().);
-//		model.renderToBuffer(pose,
-//				event.getBuffers()
-//						.getBuffer(RenderType.entityCutout(new ResourceLocation("textures/entity/zombie/zombie.png"))),
-//				OverlayTexture.NO_OVERLAY, event.getLight(), 1, 1, 1, 1);
 	}
 
 	private static void renderArm(HumanoidArm arm, PlayerRenderer renderer, PoseStack pose, MultiBufferSource buffers,
