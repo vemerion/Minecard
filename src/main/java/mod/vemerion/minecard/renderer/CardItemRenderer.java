@@ -44,12 +44,10 @@ public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 		pose.translate(0.1, 1, 0.45);
 		pose.pushPose();
 		pose.scale(CARD_SIZE, -CARD_SIZE, CARD_SIZE);
-		Matrix4f matrix = pose.last().pose();
-		VertexConsumer consumer = buffer.getBuffer(CARD);
-		consumer.vertex(matrix, 0, 32, 0).color(255, 255, 255, 255).uv(0, 1).uv2(light).endVertex();
-		consumer.vertex(matrix, 32, 32, 0).color(255, 255, 255, 255).uv(1, 1).uv2(light).endVertex();
-		consumer.vertex(matrix, 32, 0, 0).color(255, 255, 255, 255).uv(1, 0).uv2(light).endVertex();
-		consumer.vertex(matrix, 0, 0, 0).color(255, 255, 255, 255).uv(0, 0).uv2(light).endVertex();
+		renderCard(pose, buffer, light);
+		pose.scale(-1, 1, 1);
+		pose.translate(-32, 0, 0);
+		renderCard(pose, buffer, light);
 		pose.popPose();
 
 		// Render text
@@ -68,5 +66,14 @@ public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 				.render(EntityType.ENDERMAN.create(Minecraft.getInstance().level), 0, 0, pose, buffer, light);
 
 		pose.popPose();
+	}
+	
+	private void renderCard(PoseStack pose, MultiBufferSource buffer, int light) {
+		Matrix4f matrix = pose.last().pose();
+		VertexConsumer consumer = buffer.getBuffer(CARD);
+		consumer.vertex(matrix, 0, 32, 0).color(255, 255, 255, 255).uv(0, 1).uv2(light).endVertex();
+		consumer.vertex(matrix, 32, 32, 0).color(255, 255, 255, 255).uv(1, 1).uv2(light).endVertex();
+		consumer.vertex(matrix, 32, 0, 0).color(255, 255, 255, 255).uv(1, 0).uv2(light).endVertex();
+		consumer.vertex(matrix, 0, 0, 0).color(255, 255, 255, 255).uv(0, 0).uv2(light).endVertex();
 	}
 }
