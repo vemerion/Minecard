@@ -8,12 +8,10 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.block.model.ItemTransforms.TransformType;
-import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -24,8 +22,6 @@ import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 
 @EventBusSubscriber(modid = Main.MODID, bus = EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
 public class RenderCard {
-
-	private static final float TEXT_SIZE = 0.01f;
 
 	@SubscribeEvent
 	public static void renderCard(RenderHandEvent event) {
@@ -62,28 +58,10 @@ public class RenderCard {
 		// Render card
 		pose.translate(offset * 0.6 - offset * Mth.sin(getSwingProgress(player, event)),
 				bothArms ? 0 : -Mth.sin(getSwingProgress(player, event)) * 2, 0);
-		pose.scale(0.5f, 0.5f, 0.5f);
 		pose.mulPose(new Quaternion(80 * xProgress - 90, 0, 0, true));
 		mc.getItemRenderer().renderStatic(null, stack, TransformType.NONE, false, event.getMatrixStack(),
 				event.getBuffers(), null, event.getLight(), OverlayTexture.NO_OVERLAY, 0);
 
-		// Render text
-		pose.pushPose();
-		pose.translate(-0.4, -0.2, 0.1);
-		pose.scale(TEXT_SIZE, -TEXT_SIZE, TEXT_SIZE);
-		mc.font.draw(pose, "text", 0, 0, 0x000000);
-		pose.popPose();
-
-		// Render entity
-		pose.pushPose();
-		pose.translate(0, -0.4, 0);
-		pose.scale(0.4f, 0.4f, 0.4f);
-		pose.mulPose(new Quaternion(0, player.tickCount + event.getPartialTicks(), 0, true));
-		((EntityRenderer) mc.getEntityRenderDispatcher().renderers.get(EntityType.ENDERMAN)).render(
-				EntityType.ENDERMAN.create(Minecraft.getInstance().level), 0, 0, pose, event.getBuffers(),
-				event.getLight());
-
-		pose.popPose();
 		pose.popPose();
 	}
 

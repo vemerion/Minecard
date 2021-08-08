@@ -15,7 +15,7 @@ public class ModEventSubscriber {
 	@SubscribeEvent
 	public static void registerItem(RegistryEvent.Register<Item> event) {
 		IForgeRegistry<Item> reg = event.getRegistry();
-		
+
 		Item card = new CardItem();
 		card.setRegistryName(new ResourceLocation(Main.MODID, "card"));
 		reg.register(card);
