@@ -1,5 +1,11 @@
 package mod.vemerion.minecard.eventsubscriber;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Supplier;
+
+import com.google.common.collect.ImmutableList;
+
 import mod.vemerion.minecard.Main;
 import mod.vemerion.minecard.item.CardItem;
 import net.minecraft.resources.ResourceLocation;
@@ -13,12 +19,25 @@ import net.minecraftforge.registries.IForgeRegistry;
 @EventBusSubscriber(modid = Main.MODID, bus = EventBusSubscriber.Bus.MOD)
 public class ModEventSubscriber {
 
+	private static List<CardItem> cards;
+
 	@SubscribeEvent
 	public static void registerItem(RegistryEvent.Register<Item> event) {
+		cards = new ArrayList<>();
+
 		IForgeRegistry<Item> reg = event.getRegistry();
 
-		Item card = new CardItem(() -> EntityType.CREEPER);
-		card.setRegistryName(new ResourceLocation(Main.MODID, "card"));
-		reg.register(card);
+		reg.register(addCard("Creeper", () -> EntityType.CREEPER));
+	}
+
+	private static CardItem addCard(String name, Supplier<EntityType<?>> type) {
+		CardItem card = new CardItem(name, type);
+		card.setRegistryName(new ResourceLocation(Main.MODID, name.toLowerCase() + "_card"));
+		cards.add(card);
+		return card;
+	}
+
+	public static Iterable<CardItem> getCards() {
+		return ImmutableList.copyOf(cards);
 	}
 }

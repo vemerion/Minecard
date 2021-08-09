@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Quaternion;
 
 import mod.vemerion.minecard.Main;
+import mod.vemerion.minecard.item.CardItem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -27,7 +28,7 @@ public class RenderCard {
 	public static void renderCard(RenderHandEvent event) {
 		ItemStack stack = event.getItemStack();
 
-		if (stack.getItem() != Main.CARD)
+		if (!(stack.getItem() instanceof CardItem))
 			return;
 		event.setCanceled(true);
 

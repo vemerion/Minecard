@@ -15,10 +15,12 @@ import net.minecraftforge.client.IItemRenderProperties;
 public class CardItem extends Item {
 
 	private final Supplier<EntityType<?>> TYPE;
+	private final String NAME;
 	private Entity entity;
 
-	public CardItem(Supplier<EntityType<?>> type) {
+	public CardItem(String name, Supplier<EntityType<?>> type) {
 		super(new Item.Properties());
+		this.NAME = name;
 		this.TYPE = type;
 	}
 
@@ -30,6 +32,10 @@ public class CardItem extends Item {
 		if (entity == null)
 			entity = getType().create(level);
 		return entity;
+	}
+	
+	public String getEntityName() {
+		return NAME;
 	}
 
 	@Override
