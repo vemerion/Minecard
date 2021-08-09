@@ -6,6 +6,7 @@ import com.mojang.math.Matrix4f;
 import com.mojang.math.Quaternion;
 
 import mod.vemerion.minecard.Main;
+import mod.vemerion.minecard.item.CardItem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.geom.EntityModelSet;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
@@ -15,7 +16,6 @@ import net.minecraft.client.renderer.block.model.ItemTransforms.TransformType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.ItemStack;
 
 public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
@@ -32,9 +32,13 @@ public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 		this.dispatcher = dispatcher;
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public void renderByItem(ItemStack stack, TransformType transform, PoseStack pose, MultiBufferSource buffer,
 			int light, int overlay) {
+
+		if (!(stack.getItem()instanceof CardItem card))
+			return;
 
 		Minecraft mc = Minecraft.getInstance();
 
@@ -62,12 +66,12 @@ public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 		pose.translate(0.4, -0.5, 0);
 		pose.scale(0.15f, 0.15f, 0.15f);
 		pose.mulPose(new Quaternion(0, dispatcher.level.getGameTime() + mc.getFrameTime(), 0, true));
-		((EntityRenderer) mc.getEntityRenderDispatcher().renderers.get(EntityType.ENDERMAN))
-				.render(EntityType.ENDERMAN.create(Minecraft.getInstance().level), 0, 0, pose, buffer, light);
+		((EntityRenderer) mc.getEntityRenderDispatcher().renderers.get(card.getType())).render(card.getEntity(mc.level),
+				0, 0, pose, buffer, light);
 
 		pose.popPose();
 	}
-	
+
 	private void renderCard(PoseStack pose, MultiBufferSource buffer, int light) {
 		Matrix4f matrix = pose.last().pose();
 		VertexConsumer consumer = buffer.getBuffer(CARD);
