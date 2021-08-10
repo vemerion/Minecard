@@ -16,6 +16,7 @@ import net.minecraft.client.renderer.block.model.ItemTransforms.TransformType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.world.item.ItemStack;
 
 public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
@@ -58,7 +59,12 @@ public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 		pose.pushPose();
 		pose.translate(0.1, -0.55, 0.01);
 		pose.scale(TEXT_SIZE, -TEXT_SIZE, TEXT_SIZE);
-		mc.font.draw(pose, "text", 0, 0, 0x000000);
+		mc.font.drawWordWrap(card.getCardText(), 0, 0, 500, 0x000000);
+		int y = 0;
+		for (FormattedCharSequence line : mc.font.split(card.getCardText(), 50)) {
+			mc.font.draw(pose, line, 0, y, 0x000000);
+			y += 10;
+		}
 		pose.popPose();
 
 		// Render entity

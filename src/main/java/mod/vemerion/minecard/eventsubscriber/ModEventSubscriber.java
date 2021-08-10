@@ -27,12 +27,12 @@ public class ModEventSubscriber {
 
 		IForgeRegistry<Item> reg = event.getRegistry();
 
-		reg.register(addCard("Creeper", () -> EntityType.CREEPER));
+		reg.register(addCard("creeper", () -> EntityType.CREEPER));
 	}
 
 	private static CardItem addCard(String name, Supplier<EntityType<?>> type) {
-		CardItem card = new CardItem(name, type);
-		card.setRegistryName(new ResourceLocation(Main.MODID, name.toLowerCase() + "_card"));
+		CardItem card = new CardItem(type);
+		card.setRegistryName(new ResourceLocation(Main.MODID, name + "_card"));
 		cards.add(card);
 		return card;
 	}

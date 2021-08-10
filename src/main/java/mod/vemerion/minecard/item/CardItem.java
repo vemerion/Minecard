@@ -6,6 +6,8 @@ import java.util.function.Supplier;
 import mod.vemerion.minecard.renderer.CardItemRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
@@ -15,12 +17,10 @@ import net.minecraftforge.client.IItemRenderProperties;
 public class CardItem extends Item {
 
 	private final Supplier<EntityType<?>> TYPE;
-	private final String NAME;
 	private Entity entity;
 
-	public CardItem(String name, Supplier<EntityType<?>> type) {
+	public CardItem(Supplier<EntityType<?>> type) {
 		super(new Item.Properties());
-		this.NAME = name;
 		this.TYPE = type;
 	}
 
@@ -33,9 +33,13 @@ public class CardItem extends Item {
 			entity = getType().create(level);
 		return entity;
 	}
-	
-	public String getEntityName() {
-		return NAME;
+
+	public Component getCardText() {
+		return new TranslatableComponent(getCardTextId());
+	}
+
+	public String getCardTextId() {
+		return "item." + getRegistryName().getNamespace() + "." + getRegistryName().getPath() + ".description";
 	}
 
 	@Override

@@ -1,3 +1,4 @@
 {
-  "item.minecard.creeper_card": "Card: Creeper"
+  "item.minecard.creeper_card": "Card: Creeper",
+  "item.minecard.creeper_card.description": "Use to blow up!"
 }
