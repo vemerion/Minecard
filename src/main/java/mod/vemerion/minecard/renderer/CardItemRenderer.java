@@ -24,7 +24,8 @@ public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 	private static final float TEXT_SIZE = 0.01f;
 	private static final float CARD_SIZE = 0.025f;
 
-	private static final RenderType CARD = RenderType.text(new ResourceLocation(Main.MODID, "textures/item/card.png"));
+	private static final RenderType CARD_FRONT = RenderType.text(new ResourceLocation(Main.MODID, "textures/item/card_front.png"));
+	private static final RenderType CARD_BACK = RenderType.text(new ResourceLocation(Main.MODID, "textures/item/card_back.png"));
 
 	private BlockEntityRenderDispatcher dispatcher;
 
@@ -49,10 +50,10 @@ public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 		pose.translate(0.1, 1, 0.45);
 		pose.pushPose();
 		pose.scale(CARD_SIZE, -CARD_SIZE, CARD_SIZE);
-		renderCard(pose, buffer, light);
+		renderCard(pose, CARD_FRONT, buffer, light);
 		pose.scale(-1, 1, 1);
 		pose.translate(-32, 0, 0);
-		renderCard(pose, buffer, light);
+		renderCard(pose, CARD_BACK, buffer, light);
 		pose.popPose();
 
 		// Render text
@@ -69,7 +70,7 @@ public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 
 		// Render entity
 		pose.pushPose();
-		pose.translate(0.4, -0.5, 0);
+		pose.translate(0.4, -0.43, 0);
 		pose.scale(0.15f, 0.15f, 0.15f);
 		pose.mulPose(new Quaternion(0, dispatcher.level.getGameTime() + mc.getFrameTime(), 0, true));
 		((EntityRenderer) mc.getEntityRenderDispatcher().renderers.get(card.getType())).render(card.getEntity(mc.level),
@@ -78,9 +79,9 @@ public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 		pose.popPose();
 	}
 
-	private void renderCard(PoseStack pose, MultiBufferSource buffer, int light) {
+	private void renderCard(PoseStack pose, RenderType card, MultiBufferSource buffer, int light) {
 		Matrix4f matrix = pose.last().pose();
-		VertexConsumer consumer = buffer.getBuffer(CARD);
+		VertexConsumer consumer = buffer.getBuffer(card);
 		consumer.vertex(matrix, 0, 32, 0).color(255, 255, 255, 255).uv(0, 1).uv2(light).endVertex();
 		consumer.vertex(matrix, 32, 32, 0).color(255, 255, 255, 255).uv(1, 1).uv2(light).endVertex();
 		consumer.vertex(matrix, 32, 0, 0).color(255, 255, 255, 255).uv(1, 0).uv2(light).endVertex();
