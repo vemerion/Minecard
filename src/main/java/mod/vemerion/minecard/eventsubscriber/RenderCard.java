@@ -26,7 +26,6 @@ public class RenderCard {
 	@SubscribeEvent
 	public static void renderCard(RenderHandEvent event) {
 		ItemStack stack = event.getItemStack();
-
 		if (!(stack.getItem() instanceof CardItem))
 			return;
 		event.setCanceled(true);
