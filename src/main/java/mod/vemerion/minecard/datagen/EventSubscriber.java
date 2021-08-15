@@ -18,6 +18,7 @@ public class EventSubscriber {
 		ExistingFileHelper existingFileHelper = event.getExistingFileHelper();
 
 		if (event.includeServer()) {
+			generator.addProvider(new ModLootModifierProvider(generator));
 		}
 		if (event.includeClient()) {
 			generator.addProvider(new ModItemModelProvider(generator, existingFileHelper));

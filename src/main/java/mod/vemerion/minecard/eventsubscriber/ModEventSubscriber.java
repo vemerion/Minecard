@@ -8,9 +8,11 @@ import com.google.common.collect.ImmutableList;
 
 import mod.vemerion.minecard.Main;
 import mod.vemerion.minecard.item.CardItem;
+import mod.vemerion.minecard.lootmodifier.CardLootModifier;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
+import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
@@ -39,5 +41,12 @@ public class ModEventSubscriber {
 
 	public static Iterable<CardItem> getCards() {
 		return ImmutableList.copyOf(cards);
+	}
+	
+	@SubscribeEvent
+	public static void registerLootModifier(RegistryEvent.Register<GlobalLootModifierSerializer<?>> event) {
+		CardLootModifier.Serializer cardSerializer = new CardLootModifier.Serializer();
+		cardSerializer.setRegistryName(new ResourceLocation(Main.MODID, "card_loot_modifier"));
+		event.getRegistry().register(cardSerializer);
 	}
 }
