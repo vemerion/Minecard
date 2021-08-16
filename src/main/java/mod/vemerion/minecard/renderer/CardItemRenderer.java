@@ -1,5 +1,7 @@
 package mod.vemerion.minecard.renderer;
 
+import java.util.Random;
+
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Matrix4f;
@@ -17,15 +19,20 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.phys.Vec3;
 
 public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 
 	private static final float TEXT_SIZE = 0.01f;
 	private static final float CARD_SIZE = 0.025f;
 
-	private static final RenderType CARD_FRONT = RenderType.text(new ResourceLocation(Main.MODID, "textures/item/card_front.png"));
-	private static final RenderType CARD_BACK = RenderType.text(new ResourceLocation(Main.MODID, "textures/item/card_back.png"));
+	private static final RenderType CARD_FRONT = RenderType
+			.text(new ResourceLocation(Main.MODID, "textures/item/card_front.png"));
+	private static final RenderType CARD_BACK = RenderType
+			.text(new ResourceLocation(Main.MODID, "textures/item/card_back.png"));
 
 	private BlockEntityRenderDispatcher dispatcher;
 
@@ -43,6 +50,7 @@ public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 			return;
 
 		Minecraft mc = Minecraft.getInstance();
+		float partialTicks = mc.getFrameTime();
 
 		// Render card
 		if (transform == TransformType.GUI)
@@ -69,10 +77,20 @@ public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 		pose.popPose();
 
 		// Render entity
+		Player player = mc.player;
+		boolean isUsing = player != null && player.getUseItem().equals(stack);
+		int maxDuration = stack.getUseDuration();
+		float duration = isUsing ? maxDuration - (player.getUseItemRemainingTicks() - partialTicks + 1) : 0;
+		float progress = duration / maxDuration;
+		Random random = new Random(((int) duration % 5) * 100000);
+		Vec3 offset = new Vec3((random.nextDouble() - 0.5) * 0.15 * progress,
+				(random.nextDouble() - 0.5) * 0.15 * progress, 0);
+
 		pose.pushPose();
 		pose.translate(0.4, -0.43, 0);
+		pose.translate(Mth.clampedLerp(0, offset.x, partialTicks), Mth.clampedLerp(0, offset.y, partialTicks), 0);
 		pose.scale(0.15f, 0.15f, 0.15f);
-		pose.mulPose(new Quaternion(0, dispatcher.level.getGameTime() + mc.getFrameTime(), 0, true));
+		pose.mulPose(new Quaternion(0, dispatcher.level.getGameTime() + partialTicks, 0, true));
 		((EntityRenderer) mc.getEntityRenderDispatcher().renderers.get(card.getType())).render(card.getEntity(mc.level),
 				0, 0, pose, buffer, light);
 

@@ -8,6 +8,7 @@ import com.google.common.collect.ImmutableList;
 
 import mod.vemerion.minecard.Main;
 import mod.vemerion.minecard.item.CardItem;
+import mod.vemerion.minecard.item.CreeperCardItem;
 import mod.vemerion.minecard.lootmodifier.CardLootModifier;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
@@ -33,7 +34,7 @@ public class ModEventSubscriber {
 	}
 
 	private static CardItem addCard(String name, Supplier<EntityType<?>> type) {
-		CardItem card = new CardItem(type);
+		CardItem card = new CreeperCardItem();
 		card.setRegistryName(new ResourceLocation(Main.MODID, name + "_card"));
 		cards.add(card);
 		return card;
