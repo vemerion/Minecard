@@ -14,7 +14,7 @@ public class ModLanguageProvider extends LanguageProvider {
 
 	@Override
 	protected void addTranslations() {
-		add(ModItems.CARD.get(), "Card");
+		add(ModItems.CARD.get(), "%s Card");
 		addCardText(ModItems.CARD.get(), "Use to blow up!");
 	}
 

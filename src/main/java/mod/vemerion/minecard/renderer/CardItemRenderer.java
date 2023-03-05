@@ -22,6 +22,7 @@ import net.minecraft.world.item.ItemStack;
 public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 
 	private static final float TEXT_SIZE = 0.01f;
+	private static final float TITLE_SIZE = 0.005f;
 	private static final float CARD_SIZE = 0.025f;
 
 	private static final RenderType CARD_FRONT = RenderType
@@ -58,12 +59,18 @@ public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 		pose.translate(-32, 0, 0);
 		renderCard(pose, CARD_BACK, buffer, light);
 		pose.popPose();
+		
+		// Render title
+		pose.pushPose();
+		pose.translate(0.2, -0.065, 0.01);
+		pose.scale(TITLE_SIZE, -TITLE_SIZE, TITLE_SIZE);
+		mc.font.draw(pose, card.getName(stack), 0, 0, 0x000000);
+		pose.popPose();
 
 		// Render text
 		pose.pushPose();
 		pose.translate(0.1, -0.55, 0.01);
 		pose.scale(TEXT_SIZE, -TEXT_SIZE, TEXT_SIZE);
-		mc.font.drawWordWrap(card.getCardText(), 0, 0, 500, 0x000000);
 		int y = 0;
 		for (FormattedCharSequence line : mc.font.split(card.getCardText(), 50)) {
 			mc.font.draw(pose, line, 0, y, 0x000000);

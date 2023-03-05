@@ -1,4 +1,4 @@
 {
-  "item.minecard.card": "Card",
+  "item.minecard.card": "%s Card",
   "item.minecard.card.description": "Use to blow up!"
 }

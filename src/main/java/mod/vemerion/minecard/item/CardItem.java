@@ -24,6 +24,11 @@ public class CardItem extends Item {
 	public EntityType<?> getType(ItemStack stack) {
 		return CardData.getType(stack).orElse(EntityType.PIG);
 	}
+	
+	@Override
+	public Component getName(ItemStack pStack) {
+		return new TranslatableComponent(getDescriptionId(pStack), getType(pStack).getDescription());
+	}
 
 	public Component getCardText() {
 		return new TranslatableComponent(getCardTextId());
