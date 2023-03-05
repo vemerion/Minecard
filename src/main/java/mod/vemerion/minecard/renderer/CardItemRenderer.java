@@ -1,7 +1,5 @@
 package mod.vemerion.minecard.renderer;
 
-import java.util.Random;
-
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Matrix4f;
@@ -19,10 +17,7 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
-import net.minecraft.util.Mth;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.phys.Vec3;
 
 public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 
@@ -46,7 +41,7 @@ public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 	public void renderByItem(ItemStack stack, TransformType transform, PoseStack pose, MultiBufferSource buffer,
 			int light, int overlay) {
 
-		if (!(stack.getItem()instanceof CardItem card))
+		if (!(stack.getItem() instanceof CardItem card))
 			return;
 
 		Minecraft mc = Minecraft.getInstance();
@@ -77,18 +72,8 @@ public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 		pose.popPose();
 
 		// Render entity
-		Player player = mc.player;
-		boolean isUsing = player != null && player.getUseItem().equals(stack);
-		int maxDuration = stack.getUseDuration();
-		float duration = isUsing ? maxDuration - (player.getUseItemRemainingTicks() - partialTicks + 1) : 0;
-		float progress = duration / maxDuration;
-		Random random = new Random(((int) duration % 5) * 100000);
-		Vec3 offset = new Vec3((random.nextDouble() - 0.5) * 0.15 * progress,
-				(random.nextDouble() - 0.5) * 0.15 * progress, 0);
-
 		pose.pushPose();
 		pose.translate(0.4, -0.43, 0);
-		pose.translate(Mth.clampedLerp(0, offset.x, partialTicks), Mth.clampedLerp(0, offset.y, partialTicks), 0);
 		pose.scale(0.15f, 0.15f, 0.15f);
 		pose.mulPose(new Quaternion(0, dispatcher.level.getGameTime() + partialTicks, 0, true));
 		((EntityRenderer) mc.getEntityRenderDispatcher().renderers.get(card.getType())).render(card.getEntity(mc.level),

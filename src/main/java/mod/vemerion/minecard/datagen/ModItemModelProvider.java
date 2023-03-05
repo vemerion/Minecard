@@ -1,8 +1,7 @@
 package mod.vemerion.minecard.datagen;
 
 import mod.vemerion.minecard.Main;
-import mod.vemerion.minecard.eventsubscriber.ModEventSubscriber;
-import mod.vemerion.minecard.item.CardItem;
+import mod.vemerion.minecard.init.ModItems;
 import net.minecraft.data.DataGenerator;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
 import net.minecraftforge.client.model.generators.ModelFile.UncheckedModelFile;
@@ -16,8 +15,7 @@ public class ModItemModelProvider extends ItemModelProvider {
 
 	@Override
 	protected void registerModels() {
-		for (CardItem card : ModEventSubscriber.getCards())
-			getBuilder(card.getRegistryName().getPath()).parent(new UncheckedModelFile(mcLoc("builtin/entity")));
+			getBuilder(ModItems.CARD.get().getRegistryName().getPath()).parent(new UncheckedModelFile(mcLoc("builtin/entity")));
 	}
 
 }
