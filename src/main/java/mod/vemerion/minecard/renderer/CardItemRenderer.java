@@ -76,8 +76,9 @@ public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 		pose.translate(0.4, -0.43, 0);
 		pose.scale(0.15f, 0.15f, 0.15f);
 		pose.mulPose(new Quaternion(0, dispatcher.level.getGameTime() + partialTicks, 0, true));
-		((EntityRenderer) mc.getEntityRenderDispatcher().renderers.get(card.getType())).render(card.getEntity(mc.level),
-				0, 0, pose, buffer, light);
+		var type = card.getType(stack);
+		var entity = type.create(mc.level);
+		((EntityRenderer) mc.getEntityRenderDispatcher().renderers.get(type)).render(entity, 0, 0, pose, buffer, light);
 
 		pose.popPose();
 	}
