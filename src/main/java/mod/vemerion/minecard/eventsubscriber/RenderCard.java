@@ -40,7 +40,7 @@ public class RenderCard {
 		float equipProgress = event.getEquipProgress();
 		float swingProgress = event.getSwingProgress();
 		PlayerRenderer renderer = (PlayerRenderer) mc.getEntityRenderDispatcher().getRenderer(player);
-		PoseStack pose = event.getMatrixStack();
+		PoseStack pose = event.getPoseStack();
 		pose.pushPose();
 		pose.translate(0, -0.4 + 0.3 * xProgress - equipProgress - (bothArms ? Mth.sin(swingProgress * Mth.PI) : 0),
 				-0.7 - (bothArms ? Mth.sin(swingProgress * Mth.PI) : 0));
@@ -49,16 +49,16 @@ public class RenderCard {
 		pose.pushPose();
 		pose.translate(offset, -0.8, 0.4);
 		pose.mulPose(new Quaternion(-50, 0, offset * Mth.sin(swingProgress) * 80, true));
-		renderArm(arm, renderer, pose, event.getBuffers(), event.getLight(), player);
+		renderArm(arm, renderer, pose, event.getMultiBufferSource(), event.getPackedLight(), player);
 		if (bothArms)
-			renderArm(arm.getOpposite(), renderer, pose, event.getBuffers(), event.getLight(), player);
+			renderArm(arm.getOpposite(), renderer, pose, event.getMultiBufferSource(), event.getPackedLight(), player);
 		pose.popPose();
 
 		// Render card
 		pose.translate(offset * 0.6 - offset * Mth.sin(swingProgress), bothArms ? 0 : -Mth.sin(swingProgress) * 2, 0);
 		pose.mulPose(new Quaternion(80 * xProgress - 90, 0, 0, true));
-		mc.getItemRenderer().renderStatic(null, stack, TransformType.NONE, false, event.getMatrixStack(),
-				event.getBuffers(), null, event.getLight(), OverlayTexture.NO_OVERLAY, 0);
+		mc.getItemRenderer().renderStatic(null, stack, TransformType.NONE, false, event.getPoseStack(),
+				event.getMultiBufferSource(), null, event.getPackedLight(), OverlayTexture.NO_OVERLAY, 0);
 
 		pose.popPose();
 	}
