@@ -1,4 +1,5 @@
 {
+  "block.minecard.game": "Game Board",
   "item.minecard.card": "%s Card",
   "item.minecard.card.description": "Use to blow up!"
 }

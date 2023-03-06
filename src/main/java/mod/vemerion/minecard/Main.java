@@ -1,5 +1,7 @@
 package mod.vemerion.minecard;
 
+import mod.vemerion.minecard.init.ModBlockEntities;
+import mod.vemerion.minecard.init.ModBlocks;
 import mod.vemerion.minecard.init.ModItems;
 import mod.vemerion.minecard.init.ModLootModifiers;
 import net.minecraftforge.fml.common.Mod;
@@ -13,5 +15,7 @@ public class Main {
 		var bus = FMLJavaModLoadingContext.get().getModEventBus();
 		ModLootModifiers.LOOT_MODIFIERS.register(bus);
 		ModItems.ITEMS.register(bus);
+		ModBlockEntities.BLOCK_ENTITIES.register(bus);
+		ModBlocks.BLOCKS.register(bus);
 	}
 }
