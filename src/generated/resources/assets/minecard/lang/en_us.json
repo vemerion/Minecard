@@ -1,5 +1,7 @@
 {
   "block.minecard.game": "Game Board",
+  "gui.minecard.game": "Minecard Game",
   "item.minecard.card": "%s Card",
-  "item.minecard.card.description": "Use to blow up!"
+  "item.minecard.card.description": "Use to blow up!",
+  "item.minecard.deck": "Deck"
 }

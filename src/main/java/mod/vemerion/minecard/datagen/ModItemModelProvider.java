@@ -15,7 +15,11 @@ public class ModItemModelProvider extends ItemModelProvider {
 
 	@Override
 	protected void registerModels() {
-			getBuilder(ModItems.CARD.get().getRegistryName().getPath()).parent(new UncheckedModelFile(mcLoc("builtin/entity")));
+		getBuilder(ModItems.CARD.get().getRegistryName().getPath())
+				.parent(new UncheckedModelFile(mcLoc("builtin/entity")));
+
+		var deckName = ModItems.DECK.get().getRegistryName().getPath();
+		singleTexture(deckName, mcLoc(ITEM_FOLDER + "/generated"), "layer0", modLoc(folder + "/" + deckName));
 	}
 
 }

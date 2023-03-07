@@ -4,6 +4,7 @@ import mod.vemerion.minecard.init.ModBlockEntities;
 import mod.vemerion.minecard.init.ModBlocks;
 import mod.vemerion.minecard.init.ModItems;
 import mod.vemerion.minecard.init.ModLootModifiers;
+import mod.vemerion.minecard.init.ModMenus;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
@@ -17,5 +18,6 @@ public class Main {
 		ModItems.ITEMS.register(bus);
 		ModBlockEntities.BLOCK_ENTITIES.register(bus);
 		ModBlocks.BLOCKS.register(bus);
+		ModMenus.MENUS.register(bus);
 	}
 }
