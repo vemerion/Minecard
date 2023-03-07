@@ -19,6 +19,7 @@ public class ModLanguageProvider extends LanguageProvider {
 		addCardText(ModItems.CARD.get(), "Use to blow up!");
 
 		add(ModBlocks.GAME.get(), "Game Board");
+		add("gui." + Main.MODID + ".game", "Minecard Game");
 	}
 
 	private void addCardText(CardItem card, String descr) {
