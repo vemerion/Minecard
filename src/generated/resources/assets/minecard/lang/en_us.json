@@ -1,5 +1,9 @@
 {
   "block.minecard.game": "Game Board",
+  "chat.minecard.game_ongoing": "A game is already ongoing.",
+  "chat.minecard.need_deck": "Right-click with a deck to enter the game.",
+  "chat.minecard.not_enough_cards": "You need a full deck to enter the game.",
+  "chat.minecard.not_enough_players": "Need one more player to start the game.",
   "gui.minecard.game": "Minecard Game",
   "item.minecard.card": "%s Card",
   "item.minecard.card.description": "Use to blow up!",

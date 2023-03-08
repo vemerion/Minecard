@@ -1,8 +1,7 @@
 package mod.vemerion.minecard.block;
 
 import mod.vemerion.minecard.blockentity.GameBlockEntity;
-import mod.vemerion.minecard.network.Network;
-import mod.vemerion.minecard.network.OpenGameMessage;
+import mod.vemerion.minecard.init.ModBlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
@@ -14,7 +13,6 @@ import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraftforge.network.PacketDistributor;
 
 public class GameBlock extends Block implements EntityBlock {
 	public GameBlock(Properties properties) {
@@ -24,7 +22,10 @@ public class GameBlock extends Block implements EntityBlock {
 	public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand,
 			BlockHitResult pHit) {
 		if (!pLevel.isClientSide) {
-			Network.INSTANCE.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer) pPlayer), new OpenGameMessage());
+			pLevel.getBlockEntity(pPos, ModBlockEntities.GAME.get()).ifPresent(game -> {
+				var stack = pPlayer.getItemInHand(pHand);
+				game.open((ServerPlayer) pPlayer, stack);
+			});
 		}
 		return InteractionResult.sidedSuccess(pLevel.isClientSide);
 	}

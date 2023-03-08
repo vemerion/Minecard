@@ -1,6 +1,7 @@
 package mod.vemerion.minecard.datagen;
 
 import mod.vemerion.minecard.Main;
+import mod.vemerion.minecard.helper.Helper;
 import mod.vemerion.minecard.init.ModBlocks;
 import mod.vemerion.minecard.init.ModItems;
 import mod.vemerion.minecard.item.CardItem;
@@ -22,6 +23,11 @@ public class ModLanguageProvider extends LanguageProvider {
 		add(ModItems.DECK.get(), "Deck");
 
 		add("gui." + Main.MODID + ".game", "Minecard Game");
+
+		add(Helper.chat("not_enough_players"), "Need one more player to start the game.");
+		add(Helper.chat("game_ongoing"), "A game is already ongoing.");
+		add(Helper.chat("need_deck"), "Right-click with a deck to enter the game.");
+		add(Helper.chat("not_enough_cards"), "You need a full deck to enter the game.");
 	}
 
 	private void addCardText(CardItem card, String descr) {
