@@ -1,6 +1,7 @@
 package mod.vemerion.minecard.menu;
 
 import mod.vemerion.minecard.capability.DeckData;
+import mod.vemerion.minecard.init.ModItems;
 import mod.vemerion.minecard.init.ModMenus;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -42,9 +43,34 @@ public class DeckMenu extends AbstractContainerMenu {
 	public boolean stillValid(Player pPlayer) {
 		return true;
 	}
-	
+
 	@Override
-	public ItemStack quickMoveStack(Player pPlayer, int pIndex) {
-		return ItemStack.EMPTY; // TODO
+	public ItemStack quickMoveStack(Player playerIn, int index) {
+		var slot = slots.get(index);
+		var copy = ItemStack.EMPTY;
+		if (slot != null && slot.hasItem()) {
+			var stack = slot.getItem();
+
+			if (!stack.is(ModItems.CARD.get())) {
+				return copy;
+			}
+
+			copy = stack.copy();
+
+			if (index < DeckData.CAPACITY) {
+				if (!moveItemStackTo(stack, DeckData.CAPACITY, slots.size(), true))
+					return ItemStack.EMPTY;
+			} else if (!moveItemStackTo(stack, 0, DeckData.CAPACITY, false)) {
+				return ItemStack.EMPTY;
+			}
+
+			if (stack.isEmpty())
+				slot.set(ItemStack.EMPTY);
+			else
+				slot.setChanged();
+			slot.onTake(playerIn, stack);
+		}
+
+		return copy;
 	}
 }
