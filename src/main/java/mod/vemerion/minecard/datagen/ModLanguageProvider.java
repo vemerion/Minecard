@@ -16,6 +16,7 @@ public class ModLanguageProvider extends LanguageProvider {
 
 	@Override
 	protected void addTranslations() {
+		add("itemGroup." + Main.MODID, "Minecard");
 		add(ModItems.CARD.get(), "%s Card");
 		addCardText(ModItems.CARD.get(), "Use to blow up!");
 

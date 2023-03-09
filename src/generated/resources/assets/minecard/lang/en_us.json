@@ -7,5 +7,6 @@
   "gui.minecard.game": "Minecard Game",
   "item.minecard.card": "%s Card",
   "item.minecard.card.description": "Use to blow up!",
-  "item.minecard.deck": "Deck"
+  "item.minecard.deck": "Deck",
+  "itemGroup.minecard": "Minecard"
 }

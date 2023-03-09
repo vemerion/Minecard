@@ -5,6 +5,7 @@ import java.util.List;
 import com.google.gson.JsonObject;
 
 import mod.vemerion.minecard.capability.CardData;
+import mod.vemerion.minecard.game.Cards;
 import mod.vemerion.minecard.init.ModItems;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
@@ -22,8 +23,12 @@ public class CardLootModifier extends LootModifier {
 
 	@Override
 	protected List<ItemStack> doApply(List<ItemStack> generatedLoot, LootContext context) {
+		var type = context.getParam(LootContextParams.THIS_ENTITY).getType();
+		if (!Cards.isAllowed(type))
+			return generatedLoot;
+
 		var card = ModItems.CARD.get().getDefaultInstance();
-		CardData.get(card).ifPresent(data -> data.setType(context.getParam(LootContextParams.THIS_ENTITY).getType()));
+		CardData.get(card).ifPresent(data -> data.setType(type));
 		generatedLoot.add(card);
 		return generatedLoot;
 	}
