@@ -1,5 +1,8 @@
 package mod.vemerion.minecard.renderer;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Matrix4f;
@@ -17,9 +20,13 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.ItemStack;
 
 public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
+
+	private static final Map<EntityType<?>, Entity> CACHE = new HashMap<>();
 
 	private static final float TEXT_SIZE = 0.01f;
 	private static final float TITLE_SIZE = 0.005f;
@@ -59,7 +66,7 @@ public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 		pose.translate(-32, 0, 0);
 		renderCard(pose, CARD_BACK, buffer, light);
 		pose.popPose();
-		
+
 		// Render title
 		pose.pushPose();
 		pose.translate(0.2, -0.065, 0.01);
@@ -83,7 +90,7 @@ public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 		float maxHeight = 2;
 
 		var type = card.getType(stack);
-		var entity = type.create(mc.level);
+		var entity = CACHE.computeIfAbsent(type, t -> t.create(mc.level));
 		var dimensions = type.getDimensions();
 		var widthScale = Math.min(1, maxWidth / dimensions.width);
 		var heightScale = Math.min(1, maxHeight / dimensions.height);
