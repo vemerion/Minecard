@@ -2,14 +2,13 @@ package mod.vemerion.minecard.blockentity;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 import mod.vemerion.minecard.capability.CardData;
 import mod.vemerion.minecard.capability.DeckData;
 import mod.vemerion.minecard.game.Card;
+import mod.vemerion.minecard.game.ClientState;
 import mod.vemerion.minecard.game.PlayerState;
 import mod.vemerion.minecard.helper.Helper;
 import mod.vemerion.minecard.init.ModBlockEntities;
@@ -28,20 +27,20 @@ public class GameBlockEntity extends BlockEntity {
 
 	private static final int START_HAND_SIZE = 5;
 
-	private Map<UUID, PlayerState> state;
+	private List<PlayerState> state;
 
 	public GameBlockEntity(BlockPos pWorldPosition, BlockState pBlockState) {
 		super(ModBlockEntities.GAME.get(), pWorldPosition, pBlockState);
-		state = new HashMap<>();
+		state = new ArrayList<>();
 	}
 
 	public void open(ServerPlayer player, ItemStack stack) {
 		var id = player.getUUID();
-		if (state.containsKey(id)) {
+		if (state.stream().anyMatch(s -> s.getId() == id)) {
 			if (state.size() == 1) {
 				player.sendMessage(new TranslatableComponent(Helper.chat("not_enough_players")), id);
 			} else {
-				Network.INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), new OpenGameMessage());
+				Network.INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), createOpenGateMessage(id));
 			}
 		} else if (state.size() > 1) {
 			player.sendMessage(new TranslatableComponent(Helper.chat("game_ongoing")), id);
@@ -76,7 +75,16 @@ public class GameBlockEntity extends BlockEntity {
 				hand.add(deck.remove(deck.size() - 1));
 			}
 
-			state.put(id, new PlayerState(deck, hand, new ArrayList<>()));
+			state.add(new PlayerState(id, deck, hand, new ArrayList<>()));
 		});
 	}
+
+	private OpenGameMessage createOpenGateMessage(UUID id) {
+		var yourState = state.stream().filter(s -> s.getId() != id).findAny().get();
+		var enemyState = state.stream().filter(s -> s.getId() == id).findAny().get();
+
+		return new OpenGameMessage(new ClientState(enemyState.getDeck().size(), yourState.getDeck().size(),
+				enemyState.getHand().size(), yourState.getHand(), enemyState.getBoard(), yourState.getBoard()));
+	}
+
 }

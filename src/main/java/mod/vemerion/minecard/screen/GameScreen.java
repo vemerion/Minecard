@@ -1,12 +1,9 @@
 package mod.vemerion.minecard.screen;
 
-import java.util.List;
-
 import com.mojang.blaze3d.vertex.PoseStack;
 
 import mod.vemerion.minecard.Main;
 import mod.vemerion.minecard.capability.CardData;
-import mod.vemerion.minecard.game.Card;
 import mod.vemerion.minecard.game.ClientState;
 import mod.vemerion.minecard.init.ModItems;
 import net.minecraft.client.Minecraft;
@@ -16,7 +13,6 @@ import net.minecraft.client.renderer.block.model.ItemTransforms.TransformType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
-import net.minecraft.world.entity.EntityType;
 
 public class GameScreen extends Screen {
 
@@ -28,10 +24,9 @@ public class GameScreen extends Screen {
 
 	private ClientState state;
 
-	public GameScreen() {
+	public GameScreen(ClientState state) {
 		super(TITLE);
-		this.state = new ClientState(5, 5, 5, List.of(new Card(EntityType.ARMOR_STAND, 5, 5, 5)),
-				List.of(new Card(EntityType.ARMOR_STAND, 5, 5, 5)), List.of(new Card(EntityType.ARMOR_STAND, 5, 5, 5)));
+		this.state = state;
 	}
 
 	@Override
@@ -39,8 +34,8 @@ public class GameScreen extends Screen {
 		var source = Minecraft.getInstance().renderBuffers().bufferSource();
 
 		// Your board
-		int x = (width - (state.yourBoard.size() - 1) * CARD_SCALE) / 2;
-		for (var card : state.yourBoard) {
+		int x = (width - (state.yourHand.size() - 1) * CARD_SCALE) / 2;
+		for (var card : state.yourHand) {
 			var stack = ModItems.CARD.get().getDefaultInstance();
 			CardData.get(stack).ifPresent(data -> data.setType(card.getType()));
 			var ps = new PoseStack();
