@@ -9,6 +9,8 @@ import com.mojang.math.Matrix4f;
 import com.mojang.math.Quaternion;
 
 import mod.vemerion.minecard.Main;
+import mod.vemerion.minecard.game.Card;
+import mod.vemerion.minecard.game.Cards;
 import mod.vemerion.minecard.item.CardItem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.geom.EntityModelSet;
@@ -37,28 +39,21 @@ public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 	private static final RenderType CARD_BACK = RenderType
 			.text(new ResourceLocation(Main.MODID, "textures/item/card_back.png"));
 
-	private BlockEntityRenderDispatcher dispatcher;
-
 	public CardItemRenderer(BlockEntityRenderDispatcher dispatcher, EntityModelSet modelSet) {
 		super(dispatcher, modelSet);
-		this.dispatcher = dispatcher;
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	@Override
-	public void renderByItem(ItemStack stack, TransformType transform, PoseStack pose, MultiBufferSource buffer,
+	public static void renderCard(Card card, TransformType transform, PoseStack pose, MultiBufferSource buffer,
 			int light, int overlay) {
-
-		if (!(stack.getItem() instanceof CardItem card))
-			return;
-
 		Minecraft mc = Minecraft.getInstance();
 		float partialTicks = mc.getFrameTime();
 
 		// Render card
 		if (transform == TransformType.GUI)
 			pose.translate(0.01, -0.1, 0);
-		pose.translate(0.1, 1, 0.45);
+		if (transform != TransformType.NONE)
+			pose.translate(0.1, 1, 0.45);
 		pose.pushPose();
 		pose.scale(CARD_SIZE, -CARD_SIZE, CARD_SIZE);
 		renderCard(pose, CARD_FRONT, buffer, light);
@@ -71,7 +66,7 @@ public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 		pose.pushPose();
 		pose.translate(0.2, -0.065, 0.01);
 		pose.scale(TITLE_SIZE, -TITLE_SIZE, TITLE_SIZE);
-		mc.font.draw(pose, card.getName(stack), 0, 0, 0x000000);
+		mc.font.draw(pose, card.getType().getDescription(), 0, 0, 0x000000);
 		pose.popPose();
 
 		// Render text
@@ -79,8 +74,8 @@ public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 		pose.translate(0.1, -0.55, 0.01);
 		pose.scale(TEXT_SIZE, -TEXT_SIZE, TEXT_SIZE);
 		int y = 0;
-		for (FormattedCharSequence line : mc.font.split(card.getCardText(), 50)) {
-			mc.font.draw(pose, line, 0, y, 0x000000);
+		for (FormattedCharSequence line : mc.font.split(card.getType().getDescription(), 50)) {
+			mc.font.draw(pose, line, 0, y, 0);
 			y += 10;
 		}
 		pose.popPose();
@@ -89,7 +84,7 @@ public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 		float maxWidth = 2;
 		float maxHeight = 2;
 
-		var type = card.getType(stack);
+		var type = card.getType();
 		var entity = CACHE.computeIfAbsent(type, t -> t.create(mc.level));
 		var dimensions = type.getDimensions();
 		var widthScale = Math.min(1, maxWidth / dimensions.width);
@@ -99,13 +94,23 @@ public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 		pose.pushPose();
 		pose.translate(0.4, -0.43, 0);
 		pose.scale(0.15f * scale, 0.15f * scale, 0.15f * scale);
-		pose.mulPose(new Quaternion(0, dispatcher.level.getGameTime() + partialTicks, 0, true));
+		pose.mulPose(new Quaternion(0, mc.level.getGameTime() + partialTicks, 0, true));
 		((EntityRenderer) mc.getEntityRenderDispatcher().renderers.get(type)).render(entity, 0, 0, pose, buffer, light);
 
 		pose.popPose();
 	}
 
-	private void renderCard(PoseStack pose, RenderType card, MultiBufferSource buffer, int light) {
+	@Override
+	public void renderByItem(ItemStack stack, TransformType transform, PoseStack pose, MultiBufferSource buffer,
+			int light, int overlay) {
+
+		if (!(stack.getItem() instanceof CardItem card))
+			return;
+
+		renderCard(Cards.getInstance().get(card.getType(stack)), transform, pose, buffer, light, overlay);
+	}
+
+	private static void renderCard(PoseStack pose, RenderType card, MultiBufferSource buffer, int light) {
 		Matrix4f matrix = pose.last().pose();
 		VertexConsumer consumer = buffer.getBuffer(card);
 		consumer.vertex(matrix, 0, 32, 0).color(255, 255, 255, 255).uv(0, 1).uv2(light).endVertex();

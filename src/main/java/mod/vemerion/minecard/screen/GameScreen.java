@@ -6,11 +6,10 @@ import java.util.List;
 import com.mojang.blaze3d.vertex.PoseStack;
 
 import mod.vemerion.minecard.Main;
-import mod.vemerion.minecard.capability.CardData;
 import mod.vemerion.minecard.game.Card;
 import mod.vemerion.minecard.game.Cards;
 import mod.vemerion.minecard.game.ClientState;
-import mod.vemerion.minecard.init.ModItems;
+import mod.vemerion.minecard.renderer.CardItemRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.LightTexture;
@@ -27,12 +26,10 @@ public class GameScreen extends Screen {
 	public static final Component TITLE = new TranslatableComponent("gui." + Main.MODID + ".game");
 
 	private static final int CARD_SCALE = 60;
-	private static final int YOUR_BOARD_BOTTOM_OFFSET = 25;
-	private static final int CARD_Z = 1000;
 	private static final int CARD_LIGHT = LightTexture.FULL_BRIGHT;
 	private static final int CARD_LIGHT_HOVER = 0b011000000000000001100000;
-	private static final int CARD_WIDTH = 44;
-	private static final int CARD_HEIGHT = 50;
+	private static final int CARD_WIDTH = 46;
+	private static final int CARD_HEIGHT = 48;
 
 	// State
 	ClientState state;
@@ -60,13 +57,12 @@ public class GameScreen extends Screen {
 		yourBoard = new ArrayList<>();
 
 		for (int i = 0; i < state.enemyHand; i++) {
-			enemyHand
-					.add(new ClientCard(Cards.EMPTY, new Vec2(cardRowX(state.enemyHand, state.enemyHand - i - 1), 35)));
+			enemyHand.add(new ClientCard(Cards.EMPTY, new Vec2(cardRowX(state.enemyHand, state.enemyHand - i - 1), 5)));
 		}
 
 		for (int i = 0; i < state.yourHand.size(); i++) {
 			yourHand.add(new ClientCard(state.yourHand.get(i),
-					new Vec2(cardRowX(state.yourHand.size(), i), height - YOUR_BOARD_BOTTOM_OFFSET)));
+					new Vec2(cardRowX(state.yourHand.size(), i), height - CARD_HEIGHT - 5)));
 		}
 
 		for (int i = 0; i < state.enemyBoard.size(); i++) {
@@ -76,12 +72,12 @@ public class GameScreen extends Screen {
 
 		for (int i = 0; i < state.yourBoard.size(); i++) {
 			yourBoard.add(new ClientCard(state.yourBoard.get(i),
-					new Vec2(cardRowX(state.yourBoard.size(), i), height - YOUR_BOARD_BOTTOM_OFFSET - 100)));
+					new Vec2(cardRowX(state.yourBoard.size(), i), height - CARD_HEIGHT - 150)));
 		}
 	}
 
 	private int cardRowX(int total, int i) {
-		return (width - (total - 1) * CARD_SCALE) / 2 + i * CARD_SCALE;
+		return (width - (total - 1) * CARD_WIDTH) / 2 + i * CARD_WIDTH - CARD_WIDTH / 2;
 	}
 
 	@Override
@@ -114,21 +110,17 @@ public class GameScreen extends Screen {
 		}
 
 		public void render(int mouseX, int mouseY, BufferSource source, ItemRenderer renderer) {
-			var stack = ModItems.CARD.get().getDefaultInstance();
-			CardData.get(stack).ifPresent(data -> data.setType(card.getType()));
 			var ps = new PoseStack();
 			ps.pushPose();
-			ps.translate(position.x, position.y, CARD_Z);
+			ps.translate(position.x, position.y, 0);
 			ps.scale(CARD_SCALE, -CARD_SCALE, CARD_SCALE);
 			int light = contains(mouseX, mouseY) ? CARD_LIGHT : CARD_LIGHT_HOVER;
-			renderer.renderStatic(null, stack, TransformType.GUI, false, ps, source, null, light,
-					OverlayTexture.NO_OVERLAY, 0);
+			CardItemRenderer.renderCard(card, TransformType.NONE, ps, source, light, OverlayTexture.NO_OVERLAY);
 			ps.popPose();
 		}
 
 		private boolean contains(int x, int y) {
-			return x > position.x - CARD_WIDTH / 2 && x < position.x + CARD_WIDTH / 2
-					&& y > position.y - CARD_HEIGHT / 2 && y < position.y + CARD_HEIGHT / 2;
+			return x > position.x && x < position.x + CARD_WIDTH && y > position.y && y < position.y + CARD_HEIGHT;
 		}
 
 	}

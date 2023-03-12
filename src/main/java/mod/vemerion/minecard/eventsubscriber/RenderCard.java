@@ -57,7 +57,7 @@ public class RenderCard {
 		// Render card
 		pose.translate(offset * 0.6 - offset * Mth.sin(swingProgress), bothArms ? 0 : -Mth.sin(swingProgress) * 2, 0);
 		pose.mulPose(new Quaternion(80 * xProgress - 90, 0, 0, true));
-		mc.getItemRenderer().renderStatic(null, stack, TransformType.NONE, false, event.getPoseStack(),
+		mc.getItemRenderer().renderStatic(null, stack, TransformType.FIXED, false, event.getPoseStack(),
 				event.getMultiBufferSource(), null, event.getPackedLight(), OverlayTexture.NO_OVERLAY, 0);
 
 		pose.popPose();
