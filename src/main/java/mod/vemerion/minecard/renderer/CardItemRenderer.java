@@ -13,6 +13,7 @@ import mod.vemerion.minecard.game.Card;
 import mod.vemerion.minecard.game.Cards;
 import mod.vemerion.minecard.item.CardItem;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
 import net.minecraft.client.model.geom.EntityModelSet;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -20,11 +21,14 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.ItemTransforms.TransformType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 
 public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 
@@ -80,6 +84,14 @@ public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 		}
 		pose.popPose();
 
+		// Render values
+		var itemRenderer = mc.getItemRenderer();
+		renderValue(itemRenderer, mc.font, Items.EMERALD, card.getCost(), 0.62f, -0.14f, light, overlay, pose, buffer);
+		renderValue(itemRenderer, mc.font, Items.STONE_SWORD, card.getDamage(), 0.21f, -0.42f, light,
+				overlay, pose, buffer);
+		renderValue(itemRenderer, mc.font, Items.GLISTERING_MELON_SLICE, card.getHealth(), 0.6f, -0.42f, light,
+				overlay, pose, buffer);
+
 		// Render entity
 		float maxWidth = 2;
 		float maxHeight = 2;
@@ -98,6 +110,35 @@ public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 		((EntityRenderer) mc.getEntityRenderDispatcher().renderers.get(type)).render(entity, 0, 0, pose, buffer, light);
 
 		pose.popPose();
+	}
+
+	private static void renderValue(ItemRenderer itemRenderer, Font font, Item item, int value, float x, float y,
+			int light, int overlay, PoseStack poseStack, MultiBufferSource buffer) {
+		poseStack.pushPose();
+		poseStack.translate(x, y, 0);
+
+		// Item
+		poseStack.pushPose();
+		poseStack.scale(0.2f, 0.2f, 0.2f);
+		itemRenderer.renderStatic(new ItemStack(item), TransformType.NONE, light, overlay, poseStack, buffer, 0);
+		poseStack.popPose();
+
+		// Text
+		var text = String.valueOf(value);
+		var offset = -font.width(text) * TEXT_SIZE / 2;
+		poseStack.translate(offset, 0.03, 0.01);
+		poseStack.scale(TEXT_SIZE, -TEXT_SIZE, TEXT_SIZE);
+		
+		// Shadow
+		poseStack.pushPose();
+		poseStack.translate(0.7, 0.7, 0);
+		font.draw(poseStack, String.valueOf(value), 0, 0, 0);
+		poseStack.popPose();
+
+		// Actual text
+		poseStack.translate(0, 0, 0.01);
+		font.draw(poseStack, String.valueOf(value), 0, 0, 0xFFFFFF);
+		poseStack.popPose();
 	}
 
 	@Override

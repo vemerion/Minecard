@@ -8,6 +8,7 @@ import java.util.UUID;
 import mod.vemerion.minecard.capability.CardData;
 import mod.vemerion.minecard.capability.DeckData;
 import mod.vemerion.minecard.game.Card;
+import mod.vemerion.minecard.game.Cards;
 import mod.vemerion.minecard.game.ClientState;
 import mod.vemerion.minecard.game.PlayerState;
 import mod.vemerion.minecard.helper.Helper;
@@ -62,7 +63,7 @@ public class GameBlockEntity extends BlockEntity {
 					player.sendMessage(new TranslatableComponent(Helper.chat("not_enough_cards")), id);
 					break;
 				}
-				CardData.getType(item).ifPresent(type -> deck.add(new Card(type, 0, 0, 0))); // TODO: Get proper card
+				CardData.getType(item).ifPresent(type -> deck.add(Cards.getInstance().get(type).copy()));
 			}
 
 			if (deck.size() != DeckData.CAPACITY) {
