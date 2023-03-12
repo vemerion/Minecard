@@ -80,8 +80,8 @@ public class GameBlockEntity extends BlockEntity {
 	}
 
 	private OpenGameMessage createOpenGateMessage(UUID id) {
-		var yourState = state.stream().filter(s -> s.getId() != id).findAny().get();
-		var enemyState = state.stream().filter(s -> s.getId() == id).findAny().get();
+		var yourState = state.stream().filter(s -> s.getId() == id).findAny().get();
+		var enemyState = state.stream().filter(s -> s.getId() != id).findAny().get();
 
 		return new OpenGameMessage(new ClientState(enemyState.getDeck().size(), yourState.getDeck().size(),
 				enemyState.getHand().size(), yourState.getHand(), enemyState.getBoard(), yourState.getBoard()));
