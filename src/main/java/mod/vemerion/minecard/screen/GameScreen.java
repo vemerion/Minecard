@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Quaternion;
 
 import mod.vemerion.minecard.Main;
 import mod.vemerion.minecard.game.Card;
@@ -15,7 +16,6 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource.BufferSource;
 import net.minecraft.client.renderer.block.model.ItemTransforms.TransformType;
-import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
@@ -86,13 +86,21 @@ public class GameScreen extends Screen {
 
 		var itemRenderer = minecraft.getItemRenderer();
 		for (var card : enemyHand)
-			card.render(mouseX, mouseY, source, itemRenderer);
+			card.render(mouseX, mouseY, source);
 		for (var card : yourHand)
-			card.render(mouseX, mouseY, source, itemRenderer);
+			card.render(mouseX, mouseY, source);
 		for (var card : enemyBoard)
-			card.render(mouseX, mouseY, source, itemRenderer);
+			card.render(mouseX, mouseY, source);
 		for (var card : yourBoard)
-			card.render(mouseX, mouseY, source, itemRenderer);
+			card.render(mouseX, mouseY, source);
+
+		// Decks
+		for (int i = 0; i < state.enemyDeck; i++) {
+			new ClientCard(Cards.EMPTY, new Vec2(20 + i * 0.2f, 20)).render(mouseX, mouseY, source);
+		}
+		for (int i = 0; i < state.yourDeck; i++) {
+			new ClientCard(Cards.EMPTY, new Vec2(width - 80 + i * 0.2f, height - 80)).render(mouseX, mouseY, source);
+		}
 
 		source.endBatch();
 
@@ -109,9 +117,17 @@ public class GameScreen extends Screen {
 			this.position = position;
 		}
 
-		public void render(int mouseX, int mouseY, BufferSource source, ItemRenderer renderer) {
+		public void render(int mouseX, int mouseY, BufferSource source) {
 			var ps = new PoseStack();
 			ps.pushPose();
+
+			// Rotate to show back
+			if (card.getType() == null) {
+				ps.translate(position.x + 24, 0, 0);
+				ps.mulPose(new Quaternion(0, 180, 0, true));
+				ps.translate(-position.x - 24, 0, 0);
+			}
+
 			ps.translate(position.x, position.y, 0);
 			ps.scale(CARD_SCALE, -CARD_SCALE, CARD_SCALE);
 			int light = contains(mouseX, mouseY) ? CARD_LIGHT : CARD_LIGHT_HOVER;

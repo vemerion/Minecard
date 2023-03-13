@@ -51,7 +51,7 @@ public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 	public static void renderCard(Card card, TransformType transform, PoseStack pose, MultiBufferSource buffer,
 			int light, int overlay) {
 		Minecraft mc = Minecraft.getInstance();
-		float partialTicks = mc.getFrameTime();
+		var type = card.getType();
 
 		// Render card
 		if (transform == TransformType.GUI)
@@ -67,10 +67,13 @@ public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 		pose.popPose();
 
 		// Render title
+		if (type == null)
+			return;
+
 		pose.pushPose();
 		pose.translate(0.2, -0.065, 0.01);
 		pose.scale(TITLE_SIZE, -TITLE_SIZE, TITLE_SIZE);
-		mc.font.draw(pose, card.getType().getDescription(), 0, 0, 0x000000);
+		mc.font.draw(pose, type.getDescription(), 0, 0, 0x000000);
 		pose.popPose();
 
 		// Render text
@@ -78,7 +81,7 @@ public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 		pose.translate(0.1, -0.55, 0.01);
 		pose.scale(TEXT_SIZE, -TEXT_SIZE, TEXT_SIZE);
 		int y = 0;
-		for (FormattedCharSequence line : mc.font.split(card.getType().getDescription(), 50)) {
+		for (FormattedCharSequence line : mc.font.split(type.getDescription(), 50)) {
 			mc.font.draw(pose, line, 0, y, 0);
 			y += 10;
 		}
@@ -87,16 +90,15 @@ public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 		// Render values
 		var itemRenderer = mc.getItemRenderer();
 		renderValue(itemRenderer, mc.font, Items.EMERALD, card.getCost(), 0.62f, -0.14f, light, overlay, pose, buffer);
-		renderValue(itemRenderer, mc.font, Items.STONE_SWORD, card.getDamage(), 0.21f, -0.42f, light,
-				overlay, pose, buffer);
-		renderValue(itemRenderer, mc.font, Items.GLISTERING_MELON_SLICE, card.getHealth(), 0.6f, -0.42f, light,
-				overlay, pose, buffer);
+		renderValue(itemRenderer, mc.font, Items.STONE_SWORD, card.getDamage(), 0.21f, -0.42f, light, overlay, pose,
+				buffer);
+		renderValue(itemRenderer, mc.font, Items.GLISTERING_MELON_SLICE, card.getHealth(), 0.6f, -0.42f, light, overlay,
+				pose, buffer);
 
 		// Render entity
 		float maxWidth = 2;
 		float maxHeight = 2;
 
-		var type = card.getType();
 		var entity = CACHE.computeIfAbsent(type, t -> t.create(mc.level));
 		var dimensions = type.getDimensions();
 		var widthScale = Math.min(1, maxWidth / dimensions.width);
@@ -106,9 +108,8 @@ public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 		pose.pushPose();
 		pose.translate(0.4, -0.43, 0);
 		pose.scale(0.15f * scale, 0.15f * scale, 0.15f * scale);
-		pose.mulPose(new Quaternion(0, mc.level.getGameTime() + partialTicks, 0, true));
+		pose.mulPose(new Quaternion(0, 20, 0, true));
 		((EntityRenderer) mc.getEntityRenderDispatcher().renderers.get(type)).render(entity, 0, 0, pose, buffer, light);
-
 		pose.popPose();
 	}
 
@@ -128,7 +129,7 @@ public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 		var offset = -font.width(text) * TEXT_SIZE / 2;
 		poseStack.translate(offset, 0.03, 0.01);
 		poseStack.scale(TEXT_SIZE, -TEXT_SIZE, TEXT_SIZE);
-		
+
 		// Shadow
 		poseStack.pushPose();
 		poseStack.translate(0.7, 0.7, 0);
