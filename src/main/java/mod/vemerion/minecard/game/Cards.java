@@ -2,6 +2,7 @@ package mod.vemerion.minecard.game;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
@@ -19,7 +20,7 @@ public class Cards {
 	}
 
 	public Card get(EntityType<?> type) {
-		return CARDS.computeIfAbsent(type, t -> new Card(t, 5, 5, 5));
+		return CARDS.computeIfAbsent(type, this::generateCard);
 	}
 
 	public static Cards getInstance() {
@@ -30,5 +31,15 @@ public class Cards {
 
 	public static boolean isAllowed(EntityType<?> type) {
 		return type.getCategory() != MobCategory.MISC;
+	}
+
+	private Card generateCard(EntityType<?> type) {
+		Random rand = new Random(type.getRegistryName().toString().hashCode());
+
+		int cost = rand.nextInt(1, 11);
+		int totalStats = cost * 2 + 1;
+		int health = rand.nextInt(1, totalStats);
+
+		return new Card(type, cost, health, totalStats - health);
 	}
 }
