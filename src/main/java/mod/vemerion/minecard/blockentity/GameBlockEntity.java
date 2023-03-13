@@ -10,11 +10,13 @@ import mod.vemerion.minecard.capability.DeckData;
 import mod.vemerion.minecard.game.Card;
 import mod.vemerion.minecard.game.Cards;
 import mod.vemerion.minecard.game.ClientState;
+import mod.vemerion.minecard.game.GameState;
 import mod.vemerion.minecard.game.PlayerState;
 import mod.vemerion.minecard.helper.Helper;
 import mod.vemerion.minecard.init.ModBlockEntities;
 import mod.vemerion.minecard.init.ModItems;
 import mod.vemerion.minecard.network.Network;
+import mod.vemerion.minecard.network.NewTurnMessage;
 import mod.vemerion.minecard.network.OpenGameMessage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.TranslatableComponent;
@@ -28,22 +30,24 @@ public class GameBlockEntity extends BlockEntity {
 
 	private static final int START_HAND_SIZE = 5;
 
-	private List<PlayerState> state;
+	GameState state;
 
 	public GameBlockEntity(BlockPos pWorldPosition, BlockState pBlockState) {
 		super(ModBlockEntities.GAME.get(), pWorldPosition, pBlockState);
-		state = new ArrayList<>();
+		state = new GameState();
 	}
 
 	public void open(ServerPlayer player, ItemStack stack) {
 		var id = player.getUUID();
-		if (state.stream().anyMatch(s -> s.getId() == id)) {
-			if (state.size() == 1) {
+		if (state.getPlayerStates().stream().anyMatch(s -> s.getId() == id)) {
+			if (state.getPlayerStates().size() == 1) {
 				player.sendMessage(new TranslatableComponent(Helper.chat("not_enough_players")), id);
 			} else {
 				Network.INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), createOpenGateMessage(id));
+				Network.INSTANCE.send(PacketDistributor.PLAYER.with(() -> player),
+						new NewTurnMessage(state.getCurrentPlayer()));
 			}
-		} else if (state.size() > 1) {
+		} else if (state.getPlayerStates().size() > 1) {
 			player.sendMessage(new TranslatableComponent(Helper.chat("game_ongoing")), id);
 		} else if (stack.is(ModItems.DECK.get())) {
 			addPlayer(player, stack);
@@ -76,13 +80,13 @@ public class GameBlockEntity extends BlockEntity {
 				hand.add(deck.remove(deck.size() - 1));
 			}
 
-			state.add(new PlayerState(id, deck, hand, new ArrayList<>()));
+			state.getPlayerStates().add(new PlayerState(id, deck, hand, new ArrayList<>()));
 		});
 	}
 
 	private OpenGameMessage createOpenGateMessage(UUID id) {
-		var yourState = state.stream().filter(s -> s.getId() == id).findAny().get();
-		var enemyState = state.stream().filter(s -> s.getId() != id).findAny().get();
+		var yourState = state.getPlayerStates().stream().filter(s -> s.getId() == id).findAny().get();
+		var enemyState = state.getPlayerStates().stream().filter(s -> s.getId() != id).findAny().get();
 
 		return new OpenGameMessage(new ClientState(enemyState.getDeck().size(), yourState.getDeck().size(),
 				enemyState.getHand().size(), yourState.getHand(), enemyState.getBoard(), yourState.getBoard()));

@@ -2,6 +2,7 @@ package mod.vemerion.minecard.screen;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Quaternion;
@@ -10,8 +11,10 @@ import mod.vemerion.minecard.Main;
 import mod.vemerion.minecard.game.Card;
 import mod.vemerion.minecard.game.Cards;
 import mod.vemerion.minecard.game.ClientState;
+import mod.vemerion.minecard.helper.Helper;
 import mod.vemerion.minecard.renderer.CardItemRenderer;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.components.Widget;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource.BufferSource;
@@ -19,6 +22,7 @@ import net.minecraft.client.renderer.block.model.ItemTransforms.TransformType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.util.FastColor;
 import net.minecraft.world.phys.Vec2;
 
 public class GameScreen extends Screen {
@@ -37,10 +41,15 @@ public class GameScreen extends Screen {
 	private List<ClientCard> yourHand;
 	private List<ClientCard> enemyBoard;
 	private List<ClientCard> yourBoard;
+	private UUID current = UUID.randomUUID();
+
+	// Text
+	TurnText turnText;
 
 	public GameScreen(ClientState state) {
 		super(TITLE);
 		this.state = state;
+		this.turnText = new TurnText();
 		updateState();
 	}
 
@@ -48,6 +57,11 @@ public class GameScreen extends Screen {
 	protected void init() {
 		super.init();
 		updateState();
+	}
+
+	public void setCurrent(UUID current) {
+		this.current = current;
+		turnText.change(current.equals(minecraft.player.getUUID()));
 	}
 
 	private void updateState() {
@@ -84,7 +98,6 @@ public class GameScreen extends Screen {
 	public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTicks) {
 		var source = Minecraft.getInstance().renderBuffers().bufferSource();
 
-		var itemRenderer = minecraft.getItemRenderer();
 		for (var card : enemyHand)
 			card.render(mouseX, mouseY, source);
 		for (var card : yourHand)
@@ -104,7 +117,16 @@ public class GameScreen extends Screen {
 
 		source.endBatch();
 
+		turnText.render(poseStack, mouseX, mouseY, partialTicks);
+
 		super.render(poseStack, mouseX, mouseY, partialTicks);
+	}
+
+	@Override
+	public void tick() {
+		super.tick();
+
+		turnText.tick();
 	}
 
 	private static class ClientCard {
@@ -137,6 +159,42 @@ public class GameScreen extends Screen {
 
 		private boolean contains(int x, int y) {
 			return x > position.x && x < position.x + CARD_WIDTH && y > position.y && y < position.y + CARD_HEIGHT;
+		}
+
+	}
+
+	private class TurnText implements Widget {
+
+		private static Component YOUR_TURN = new TranslatableComponent(Helper.gui("your_turn"));
+		private static Component ENEMY_TURN = new TranslatableComponent(Helper.gui("enemy_turn"));
+
+		private Component text;
+		private int alpha;
+		private float scale;
+
+		private TurnText() {
+			this.text = YOUR_TURN;
+		}
+
+		@Override
+		public void render(PoseStack pPoseStack, int pMouseX, int pMouseY, float pPartialTick) {
+			var font = minecraft.font;
+			pPoseStack.pushPose();
+			pPoseStack.translate(width / 2 - font.width(text) * scale / 2, height / 2 - font.lineHeight / 2 * scale, 0);
+			pPoseStack.scale(scale, scale, scale);
+			font.draw(pPoseStack, text, 0, 0, FastColor.ARGB32.color(alpha, 255, 255, 0));
+			pPoseStack.popPose();
+		}
+
+		private void tick() {
+			alpha = (int) (alpha * 0.95);
+			scale = scale * 0.95f;
+		}
+
+		private void change(boolean yourTurn) {
+			text = yourTurn ? YOUR_TURN : ENEMY_TURN;
+			alpha = 255;
+			scale = 3;
 		}
 
 	}

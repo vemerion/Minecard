@@ -6,4 +6,8 @@ public class Helper {
 	public static String chat(String suffix) {
 		return "chat." + Main.MODID + "." + suffix;
 	}
+	
+	public static String gui(String suffix) {
+		return "gui." + Main.MODID + "." + suffix;
+	}
 }

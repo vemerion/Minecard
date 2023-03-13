@@ -4,6 +4,7 @@ import mod.vemerion.minecard.Main;
 import mod.vemerion.minecard.capability.CardData;
 import mod.vemerion.minecard.capability.DeckData;
 import mod.vemerion.minecard.network.Network;
+import mod.vemerion.minecard.network.NewTurnMessage;
 import mod.vemerion.minecard.network.OpenGameMessage;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -24,5 +25,7 @@ public class ModEventSubscriber {
 	public static void setup(FMLCommonSetupEvent event) {
 		Network.INSTANCE.registerMessage(0, OpenGameMessage.class, OpenGameMessage::encode, OpenGameMessage::decode,
 				OpenGameMessage::handle);
+		Network.INSTANCE.registerMessage(1, NewTurnMessage.class, NewTurnMessage::encode, NewTurnMessage::decode,
+				NewTurnMessage::handle);
 	}
 }
