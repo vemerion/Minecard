@@ -9,7 +9,6 @@ import mod.vemerion.minecard.capability.CardData;
 import mod.vemerion.minecard.capability.DeckData;
 import mod.vemerion.minecard.game.Card;
 import mod.vemerion.minecard.game.Cards;
-import mod.vemerion.minecard.game.ClientState;
 import mod.vemerion.minecard.game.GameState;
 import mod.vemerion.minecard.game.PlayerState;
 import mod.vemerion.minecard.helper.Helper;
@@ -88,8 +87,7 @@ public class GameBlockEntity extends BlockEntity {
 		var yourState = state.getPlayerStates().stream().filter(s -> s.getId() == id).findAny().get();
 		var enemyState = state.getPlayerStates().stream().filter(s -> s.getId() != id).findAny().get();
 
-		return new OpenGameMessage(new ClientState(enemyState.getDeck().size(), yourState.getDeck().size(),
-				enemyState.getHand().size(), yourState.getHand(), enemyState.getBoard(), yourState.getBoard()));
+		return new OpenGameMessage(List.of(yourState.toClient(false), enemyState.toClient(true)));
 	}
 
 }

@@ -5,7 +5,8 @@ import java.util.List;
 import java.util.function.Supplier;
 
 import mod.vemerion.minecard.game.Card;
-import mod.vemerion.minecard.game.ClientState;
+import mod.vemerion.minecard.game.Cards;
+import mod.vemerion.minecard.game.ClientPlayerState;
 import mod.vemerion.minecard.screen.GameScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
@@ -18,26 +19,35 @@ import net.minecraftforge.network.NetworkEvent;
 
 public class OpenGameMessage {
 
-	private ClientState state;
+	private List<ClientPlayerState> state;
 
-	public OpenGameMessage(ClientState state) {
+	public OpenGameMessage(List<ClientPlayerState> state) {
 		this.state = state;
 	}
 
 	public void encode(final FriendlyByteBuf buffer) {
-		buffer.writeInt(state.enemyDeck);
-		buffer.writeInt(state.yourDeck);
-		buffer.writeInt(state.enemyHand);
-		writeCards(buffer, state.yourHand);
-		writeCards(buffer, state.enemyBoard);
-		writeCards(buffer, state.yourBoard);
+		for (var player : state)
+			writePlayer(buffer, player);
+	}
+
+	private static void writePlayer(final FriendlyByteBuf buffer, ClientPlayerState player) {
+		buffer.writeUUID(player.id);
+		buffer.writeInt(player.deck);
+		writeCards(buffer, player.hand);
+		writeCards(buffer, player.board);
+	}
+
+	private static ClientPlayerState readPlayer(final FriendlyByteBuf buffer) {
+		return new ClientPlayerState(buffer.readUUID(), buffer.readInt(), readCards(buffer), readCards(buffer));
 	}
 
 	private static void writeCards(final FriendlyByteBuf buffer, List<Card> cards) {
 		buffer.writeInt(cards.size());
 		for (var card : cards) {
 			CompoundTag tag = new CompoundTag();
-			tag.put("value", Card.CODEC.encodeStart(NbtOps.INSTANCE, card).getOrThrow(false, OpenGameMessage::onError));
+			if (card.getType() != null)
+				tag.put("value",
+						Card.CODEC.encodeStart(NbtOps.INSTANCE, card).getOrThrow(false, OpenGameMessage::onError));
 			buffer.writeNbt(tag);
 		}
 	}
@@ -46,8 +56,12 @@ public class OpenGameMessage {
 		List<Card> result = new ArrayList<>();
 		int size = buffer.readInt();
 		for (int i = 0; i < size; i++) {
-			result.add(Card.CODEC.parse(NbtOps.INSTANCE, buffer.readNbt().get("value")).getOrThrow(false,
-					OpenGameMessage::onError));
+			var nbt = buffer.readNbt();
+			if (nbt.contains("value"))
+				result.add(Card.CODEC.parse(NbtOps.INSTANCE, nbt.get("value")).getOrThrow(false,
+						OpenGameMessage::onError));
+			else
+				result.add(Cards.EMPTY);
 		}
 		return result;
 	}
@@ -56,8 +70,7 @@ public class OpenGameMessage {
 	}
 
 	public static OpenGameMessage decode(final FriendlyByteBuf buffer) {
-		return new OpenGameMessage(new ClientState(buffer.readInt(), buffer.readInt(), buffer.readInt(),
-				readCards(buffer), readCards(buffer), readCards(buffer)));
+		return new OpenGameMessage(List.of(readPlayer(buffer), readPlayer(buffer)));
 	}
 
 	public void handle(final Supplier<NetworkEvent.Context> supplier) {

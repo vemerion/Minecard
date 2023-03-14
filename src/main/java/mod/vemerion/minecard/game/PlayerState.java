@@ -1,5 +1,6 @@
 package mod.vemerion.minecard.game;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -43,5 +44,16 @@ public class PlayerState {
 
 	public List<Card> getBoard() {
 		return board;
+	}
+
+	public ClientPlayerState toClient(boolean hide) {
+		List<Card> hand = this.hand;
+		if (hide) {
+			hand = new ArrayList<>();
+			for (int i = 0; i < this.hand.size(); i++) {
+				hand.add(Cards.EMPTY);
+			}
+		}
+		return new ClientPlayerState(id, deck.size(), hand, board);
 	}
 }

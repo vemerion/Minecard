@@ -1,6 +1,5 @@
 package mod.vemerion.minecard.screen;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -10,7 +9,7 @@ import com.mojang.math.Quaternion;
 import mod.vemerion.minecard.Main;
 import mod.vemerion.minecard.game.Card;
 import mod.vemerion.minecard.game.Cards;
-import mod.vemerion.minecard.game.ClientState;
+import mod.vemerion.minecard.game.ClientPlayerState;
 import mod.vemerion.minecard.helper.Helper;
 import mod.vemerion.minecard.renderer.CardItemRenderer;
 import net.minecraft.client.Minecraft;
@@ -36,21 +35,16 @@ public class GameScreen extends Screen {
 	private static final int CARD_HEIGHT = 48;
 
 	// State
-	ClientState state;
-	private List<ClientCard> enemyHand;
-	private List<ClientCard> yourHand;
-	private List<ClientCard> enemyBoard;
-	private List<ClientCard> yourBoard;
+	List<ClientPlayerState> state;
 	private UUID current = UUID.randomUUID();
 
 	// Text
 	TurnText turnText;
 
-	public GameScreen(ClientState state) {
+	public GameScreen(List<ClientPlayerState> state) {
 		super(TITLE);
 		this.state = state;
 		this.turnText = new TurnText();
-		updateState();
 	}
 
 	@Override
@@ -65,28 +59,18 @@ public class GameScreen extends Screen {
 	}
 
 	private void updateState() {
-		enemyHand = new ArrayList<>();
-		yourHand = new ArrayList<>();
-		enemyBoard = new ArrayList<>();
-		yourBoard = new ArrayList<>();
-
-		for (int i = 0; i < state.enemyHand; i++) {
-			enemyHand.add(new ClientCard(Cards.EMPTY, new Vec2(cardRowX(state.enemyHand, state.enemyHand - i - 1), 5)));
-		}
-
-		for (int i = 0; i < state.yourHand.size(); i++) {
-			yourHand.add(new ClientCard(state.yourHand.get(i),
-					new Vec2(cardRowX(state.yourHand.size(), i), height - CARD_HEIGHT - 5)));
-		}
-
-		for (int i = 0; i < state.enemyBoard.size(); i++) {
-			enemyBoard.add(new ClientCard(state.enemyBoard.get(i),
-					new Vec2(cardRowX(state.enemyBoard.size(), state.enemyBoard.size() - i - 1), 150)));
-		}
-
-		for (int i = 0; i < state.yourBoard.size(); i++) {
-			yourBoard.add(new ClientCard(state.yourBoard.get(i),
-					new Vec2(cardRowX(state.yourBoard.size(), i), height - CARD_HEIGHT - 150)));
+		for (var playerState : state) {
+			boolean enemy = !playerState.id.equals(minecraft.player.getUUID());
+			for (int i = 0; i < playerState.hand.size(); i++) {
+				int x = cardRowX(playerState.hand.size(), enemy ? playerState.hand.size() - i - 1 : i);
+				int y = enemy ? 5 : height - CARD_HEIGHT - 5;
+				playerState.hand.set(i, new ClientCard(playerState.hand.get(i), new Vec2(x, y)));
+			}
+			for (int i = 0; i < playerState.board.size(); i++) {
+				int x = cardRowX(playerState.board.size(), enemy ? playerState.board.size() - i - 1 : i);
+				int y = enemy ? 150 : height - CARD_HEIGHT - 150;
+				playerState.board.set(i, new ClientCard(playerState.board.get(i), new Vec2(x, y)));
+			}
 		}
 	}
 
@@ -98,21 +82,18 @@ public class GameScreen extends Screen {
 	public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTicks) {
 		var source = Minecraft.getInstance().renderBuffers().bufferSource();
 
-		for (var card : enemyHand)
-			card.render(mouseX, mouseY, source);
-		for (var card : yourHand)
-			card.render(mouseX, mouseY, source);
-		for (var card : enemyBoard)
-			card.render(mouseX, mouseY, source);
-		for (var card : yourBoard)
-			card.render(mouseX, mouseY, source);
+		for (var playerState : state) {
+			boolean enemy = !playerState.id.equals(minecraft.player.getUUID());
+			for (var card : playerState.board)
+				((ClientCard) card).render(mouseX, mouseY, source);
+			for (var card : playerState.hand)
+				((ClientCard) card).render(mouseX, mouseY, source);
 
-		// Decks
-		for (int i = 0; i < state.enemyDeck; i++) {
-			new ClientCard(Cards.EMPTY, new Vec2(20 + i * 0.2f, 20)).render(mouseX, mouseY, source);
-		}
-		for (int i = 0; i < state.yourDeck; i++) {
-			new ClientCard(Cards.EMPTY, new Vec2(width - 80 + i * 0.2f, height - 80)).render(mouseX, mouseY, source);
+			for (int i = 0; i < playerState.deck; i++) {
+				float x = enemy ? 20 + i * 0.2f : width - 80 + i * 0.2f;
+				float y = enemy ? 20 : height - 80;
+				new ClientCard(Cards.EMPTY, new Vec2(x, y)).render(mouseX, mouseY, source);
+			}
 		}
 
 		source.endBatch();
@@ -129,13 +110,12 @@ public class GameScreen extends Screen {
 		turnText.tick();
 	}
 
-	private static class ClientCard {
+	private static class ClientCard extends Card {
 
-		private Card card;
 		private Vec2 position;
 
 		public ClientCard(Card card, Vec2 position) {
-			this.card = card;
+			super(card.getType(), card.getCost(), card.getHealth(), card.getDamage());
 			this.position = position;
 		}
 
@@ -144,7 +124,7 @@ public class GameScreen extends Screen {
 			ps.pushPose();
 
 			// Rotate to show back
-			if (card.getType() == null) {
+			if (getType() == null) {
 				ps.translate(position.x + 24, 0, 0);
 				ps.mulPose(new Quaternion(0, 180, 0, true));
 				ps.translate(-position.x - 24, 0, 0);
@@ -153,7 +133,7 @@ public class GameScreen extends Screen {
 			ps.translate(position.x, position.y, 0);
 			ps.scale(CARD_SCALE, -CARD_SCALE, CARD_SCALE);
 			int light = contains(mouseX, mouseY) ? CARD_LIGHT : CARD_LIGHT_HOVER;
-			CardItemRenderer.renderCard(card, TransformType.NONE, ps, source, light, OverlayTexture.NO_OVERLAY);
+			CardItemRenderer.renderCard(this, TransformType.NONE, ps, source, light, OverlayTexture.NO_OVERLAY);
 			ps.popPose();
 		}
 
