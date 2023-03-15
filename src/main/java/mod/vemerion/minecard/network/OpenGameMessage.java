@@ -9,6 +9,7 @@ import mod.vemerion.minecard.game.Cards;
 import mod.vemerion.minecard.game.ClientPlayerState;
 import mod.vemerion.minecard.screen.GameScreen;
 import net.minecraft.client.Minecraft;
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.FriendlyByteBuf;
@@ -20,14 +21,17 @@ import net.minecraftforge.network.NetworkEvent;
 public class OpenGameMessage {
 
 	private List<ClientPlayerState> state;
+	private BlockPos pos;
 
-	public OpenGameMessage(List<ClientPlayerState> state) {
+	public OpenGameMessage(List<ClientPlayerState> state, BlockPos pos) {
 		this.state = state;
+		this.pos = pos;
 	}
 
 	public void encode(final FriendlyByteBuf buffer) {
 		for (var player : state)
 			writePlayer(buffer, player);
+		buffer.writeBlockPos(pos);
 	}
 
 	private static void writePlayer(final FriendlyByteBuf buffer, ClientPlayerState player) {
@@ -70,7 +74,7 @@ public class OpenGameMessage {
 	}
 
 	public static OpenGameMessage decode(final FriendlyByteBuf buffer) {
-		return new OpenGameMessage(List.of(readPlayer(buffer), readPlayer(buffer)));
+		return new OpenGameMessage(List.of(readPlayer(buffer), readPlayer(buffer)), buffer.readBlockPos());
 	}
 
 	public void handle(final Supplier<NetworkEvent.Context> supplier) {
@@ -90,7 +94,7 @@ public class OpenGameMessage {
 					if (mc == null)
 						return;
 
-					mc.setScreen(new GameScreen(message.state));
+					mc.setScreen(new GameScreen(message.state, message.pos));
 				}
 			};
 		}

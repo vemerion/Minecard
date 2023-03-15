@@ -6,6 +6,7 @@
   "chat.minecard.not_enough_players": "Need one more player to start the game.",
   "gui.minecard.enemy_turn": "Enemy Turn",
   "gui.minecard.game": "Minecard Game",
+  "gui.minecard.next_turn": "Next Turn",
   "gui.minecard.your_turn": "Your Turn",
   "item.minecard.card": "%s Card",
   "item.minecard.card.description": "Use to blow up!",

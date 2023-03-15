@@ -29,9 +29,10 @@ public class ModLanguageProvider extends LanguageProvider {
 		add(Helper.chat("game_ongoing"), "A game is already ongoing.");
 		add(Helper.chat("need_deck"), "Right-click with a deck to enter the game.");
 		add(Helper.chat("not_enough_cards"), "You need a full deck to enter the game.");
-		
+
 		add(Helper.gui("your_turn"), "Your Turn");
 		add(Helper.gui("enemy_turn"), "Enemy Turn");
+		add(Helper.gui("next_turn"), "Next Turn");
 	}
 
 	private void addCardText(CardItem card, String descr) {

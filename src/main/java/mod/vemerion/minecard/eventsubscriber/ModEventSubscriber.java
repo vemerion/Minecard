@@ -3,6 +3,7 @@ package mod.vemerion.minecard.eventsubscriber;
 import mod.vemerion.minecard.Main;
 import mod.vemerion.minecard.capability.CardData;
 import mod.vemerion.minecard.capability.DeckData;
+import mod.vemerion.minecard.network.EndTurnMessage;
 import mod.vemerion.minecard.network.Network;
 import mod.vemerion.minecard.network.NewTurnMessage;
 import mod.vemerion.minecard.network.OpenGameMessage;
@@ -27,5 +28,7 @@ public class ModEventSubscriber {
 				OpenGameMessage::handle);
 		Network.INSTANCE.registerMessage(1, NewTurnMessage.class, NewTurnMessage::encode, NewTurnMessage::decode,
 				NewTurnMessage::handle);
+		Network.INSTANCE.registerMessage(2, EndTurnMessage.class, EndTurnMessage::encode, EndTurnMessage::decode,
+				EndTurnMessage::handle);
 	}
 }

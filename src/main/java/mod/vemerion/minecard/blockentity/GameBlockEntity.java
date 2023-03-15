@@ -36,13 +36,25 @@ public class GameBlockEntity extends BlockEntity {
 		state = new GameState();
 	}
 
+	public void endTurn(ServerPlayer player) {
+		if (!state.getCurrentPlayer().equals(player.getUUID()))
+			return;
+
+		state.endTurn();
+		for (var playerState : state.getPlayerStates()) {
+			var receiver = level.getPlayerByUUID(playerState.getId());
+			Network.INSTANCE.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer) receiver),
+					new NewTurnMessage(state.getCurrentPlayer()));
+		}
+	}
+
 	public void open(ServerPlayer player, ItemStack stack) {
 		var id = player.getUUID();
 		if (state.getPlayerStates().stream().anyMatch(s -> s.getId() == id)) {
 			if (state.getPlayerStates().size() == 1) {
 				player.sendMessage(new TranslatableComponent(Helper.chat("not_enough_players")), id);
 			} else {
-				Network.INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), createOpenGateMessage(id));
+				Network.INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), createOpenGameMessage(id));
 				Network.INSTANCE.send(PacketDistributor.PLAYER.with(() -> player),
 						new NewTurnMessage(state.getCurrentPlayer()));
 			}
@@ -83,11 +95,11 @@ public class GameBlockEntity extends BlockEntity {
 		});
 	}
 
-	private OpenGameMessage createOpenGateMessage(UUID id) {
+	private OpenGameMessage createOpenGameMessage(UUID id) {
 		var yourState = state.getPlayerStates().stream().filter(s -> s.getId() == id).findAny().get();
 		var enemyState = state.getPlayerStates().stream().filter(s -> s.getId() != id).findAny().get();
 
-		return new OpenGameMessage(List.of(yourState.toClient(false), enemyState.toClient(true)));
+		return new OpenGameMessage(List.of(yourState.toClient(false), enemyState.toClient(true)), getBlockPos());
 	}
 
 }

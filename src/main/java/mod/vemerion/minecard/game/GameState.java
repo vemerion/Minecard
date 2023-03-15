@@ -12,12 +12,16 @@ public class GameState {
 	public GameState() {
 		playerStates = new ArrayList<>();
 	}
-	
+
 	public List<PlayerState> getPlayerStates() {
 		return playerStates;
 	}
 
 	public UUID getCurrentPlayer() {
 		return playerStates.get(turn % 2).getId();
+	}
+
+	public void endTurn() {
+		turn++;
 	}
 }
