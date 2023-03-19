@@ -39,10 +39,13 @@ public class OpenGameMessage {
 		buffer.writeInt(player.deck);
 		writeCards(buffer, player.hand);
 		writeCards(buffer, player.board);
+		buffer.writeInt(player.resources);
+		buffer.writeInt(player.maxResources);
 	}
 
 	private static ClientPlayerState readPlayer(final FriendlyByteBuf buffer) {
-		return new ClientPlayerState(buffer.readUUID(), buffer.readInt(), readCards(buffer), readCards(buffer));
+		return new ClientPlayerState(buffer.readUUID(), buffer.readInt(), readCards(buffer), readCards(buffer),
+				buffer.readInt(), buffer.readInt());
 	}
 
 	private static void writeCards(final FriendlyByteBuf buffer, List<Card> cards) {

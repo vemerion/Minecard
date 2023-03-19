@@ -15,7 +15,6 @@ import mod.vemerion.minecard.helper.Helper;
 import mod.vemerion.minecard.network.EndTurnMessage;
 import mod.vemerion.minecard.network.Network;
 import mod.vemerion.minecard.renderer.CardItemRenderer;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.AbstractButton;
 import net.minecraft.client.gui.components.Widget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
@@ -23,6 +22,7 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource.BufferSource;
+import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.block.model.ItemTransforms.TransformType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
@@ -31,7 +31,9 @@ import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FastColor;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.Vec2;
+import net.minecraft.world.phys.Vec3;
 
 public class GameScreen extends Screen {
 
@@ -72,6 +74,15 @@ public class GameScreen extends Screen {
 		turnText.change(current.equals(minecraft.player.getUUID()));
 	}
 
+	public void setResources(UUID id, int resources, int maxResources) {
+		for (var playerState : state) {
+			if (playerState.id.equals(id)) {
+				playerState.resources = resources;
+				playerState.maxResources = maxResources;
+			}
+		}
+	}
+
 	private void updateState() {
 		for (var playerState : state) {
 			boolean enemy = !playerState.id.equals(minecraft.player.getUUID());
@@ -98,20 +109,30 @@ public class GameScreen extends Screen {
 
 	@Override
 	public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTicks) {
-		var source = Minecraft.getInstance().renderBuffers().bufferSource();
+		var source = minecraft.renderBuffers().bufferSource();
 
 		for (var playerState : state) {
 			boolean enemy = !playerState.id.equals(minecraft.player.getUUID());
+
+			// Cards
 			for (var card : playerState.board)
 				((ClientCard) card).render(mouseX, mouseY, source);
 			for (var card : playerState.hand)
 				((ClientCard) card).render(mouseX, mouseY, source);
 
+			// Deck
 			for (int i = 0; i < playerState.deck; i++) {
 				float x = enemy ? 20 + i * 0.2f : width - 80 + i * 0.2f;
 				float y = enemy ? 20 : height - 80;
 				new ClientCard(Cards.EMPTY, new Vec2(x, y)).render(mouseX, mouseY, source);
 			}
+
+			// Resources
+			int resourcesX = enemy ? 200 : width - 200;
+			int resourcesY = enemy ? 65 : height - 65;
+			renderResources(playerState.maxResources, new Vec3(resourcesX, resourcesY, 0), enemy, 0, poseStack, source);
+			renderResources(playerState.resources, new Vec3(resourcesX, resourcesY, 0.1), enemy,
+					LightTexture.FULL_BRIGHT, poseStack, source);
 		}
 
 		source.endBatch();
@@ -119,6 +140,19 @@ public class GameScreen extends Screen {
 		turnText.render(poseStack, mouseX, mouseY, partialTicks);
 
 		super.render(poseStack, mouseX, mouseY, partialTicks);
+	}
+
+	private void renderResources(int count, Vec3 position, boolean reverse, int light, PoseStack poseStack,
+			BufferSource source) {
+		var stack = Items.EMERALD.getDefaultInstance();
+		for (int i = 0; i < count; i++) {
+			poseStack.pushPose();
+			poseStack.translate(position.x + i * 10 * (reverse ? -1 : 1), position.y, position.z);
+			poseStack.scale(15, -15, 15);
+			itemRenderer.renderStatic(stack, ItemTransforms.TransformType.GUI, light, OverlayTexture.NO_OVERLAY,
+					poseStack, source, 0);
+			poseStack.popPose();
+		}
 	}
 
 	@Override

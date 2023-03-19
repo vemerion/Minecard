@@ -17,6 +17,7 @@ import mod.vemerion.minecard.init.ModItems;
 import mod.vemerion.minecard.network.Network;
 import mod.vemerion.minecard.network.NewTurnMessage;
 import mod.vemerion.minecard.network.OpenGameMessage;
+import mod.vemerion.minecard.network.SetResourcesMessage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerPlayer;
@@ -41,10 +42,13 @@ public class GameBlockEntity extends BlockEntity {
 			return;
 
 		state.endTurn();
+		var current = state.getCurrentPlayerState();
 		for (var playerState : state.getPlayerStates()) {
 			var receiver = level.getPlayerByUUID(playerState.getId());
 			Network.INSTANCE.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer) receiver),
 					new NewTurnMessage(state.getCurrentPlayer()));
+			Network.INSTANCE.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer) receiver), new SetResourcesMessage(
+					state.getCurrentPlayer(), current.getResources(), current.getMaxResources()));
 		}
 	}
 
@@ -91,7 +95,7 @@ public class GameBlockEntity extends BlockEntity {
 				hand.add(deck.remove(deck.size() - 1));
 			}
 
-			state.getPlayerStates().add(new PlayerState(id, deck, hand, new ArrayList<>()));
+			state.getPlayerStates().add(new PlayerState(id, deck, hand, new ArrayList<>(), 1, 1));
 		});
 	}
 

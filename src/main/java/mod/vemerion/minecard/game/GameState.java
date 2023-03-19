@@ -18,10 +18,16 @@ public class GameState {
 	}
 
 	public UUID getCurrentPlayer() {
-		return playerStates.get(turn % 2).getId();
+		return getCurrentPlayerState().getId();
+	}
+
+	public PlayerState getCurrentPlayerState() {
+		return playerStates.get(turn % 2);
 	}
 
 	public void endTurn() {
 		turn++;
+		var current = getCurrentPlayerState();
+		current.newTurn();
 	}
 }

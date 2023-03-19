@@ -9,11 +9,15 @@ public class ClientPlayerState {
 	public int deck;
 	public List<Card> hand;
 	public List<Card> board;
+	public int resources;
+	public int maxResources;
 
-	public ClientPlayerState(UUID id, int deck, List<Card> hand, List<Card> board) {
+	public ClientPlayerState(UUID id, int deck, List<Card> hand, List<Card> board, int resources, int maxResources) {
 		this.id = id;
 		this.deck = deck;
 		this.hand = hand;
 		this.board = board;
+		this.resources = resources;
+		this.maxResources = maxResources;
 	}
 }
