@@ -7,7 +7,12 @@ import java.util.UUID;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
+import mod.vemerion.minecard.network.Network;
+import mod.vemerion.minecard.network.PlaceCardMessage;
+import mod.vemerion.minecard.network.SetResourcesMessage;
 import net.minecraft.core.SerializableUUID;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraftforge.network.PacketDistributor;
 
 public class PlayerState {
 
@@ -59,10 +64,30 @@ public class PlayerState {
 	public int getMaxResources() {
 		return maxResources;
 	}
-	
+
 	public void newTurn() {
 		maxResources = Math.min(10, maxResources + 1);
 		resources = maxResources;
+	}
+
+	public void playCard(List<ServerPlayer> receivers, int cardIndex, int position) {
+		if (hand.size() < cardIndex || board.size() < position)
+			return;
+
+		var card = hand.get(cardIndex);
+		if (card.getCost() > resources)
+			return;
+
+		resources -= card.getCost();
+		board.add(position, card);
+		hand.remove(cardIndex);
+
+		for (var receiver : receivers) {
+			Network.INSTANCE.send(PacketDistributor.PLAYER.with(() -> receiver),
+					new SetResourcesMessage(id, resources, maxResources));
+			Network.INSTANCE.send(PacketDistributor.PLAYER.with(() -> receiver),
+					new PlaceCardMessage(id, card, cardIndex, position));
+		}
 	}
 
 	public ClientPlayerState toClient(boolean hide) {

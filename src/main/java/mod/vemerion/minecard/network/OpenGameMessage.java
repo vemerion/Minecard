@@ -5,13 +5,10 @@ import java.util.List;
 import java.util.function.Supplier;
 
 import mod.vemerion.minecard.game.Card;
-import mod.vemerion.minecard.game.Cards;
 import mod.vemerion.minecard.game.ClientPlayerState;
 import mod.vemerion.minecard.screen.GameScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
@@ -51,11 +48,7 @@ public class OpenGameMessage {
 	private static void writeCards(final FriendlyByteBuf buffer, List<Card> cards) {
 		buffer.writeInt(cards.size());
 		for (var card : cards) {
-			CompoundTag tag = new CompoundTag();
-			if (card.getType() != null)
-				tag.put("value",
-						Card.CODEC.encodeStart(NbtOps.INSTANCE, card).getOrThrow(false, OpenGameMessage::onError));
-			buffer.writeNbt(tag);
+			MessageUtil.encodeCard(buffer, card);
 		}
 	}
 
@@ -63,17 +56,9 @@ public class OpenGameMessage {
 		List<Card> result = new ArrayList<>();
 		int size = buffer.readInt();
 		for (int i = 0; i < size; i++) {
-			var nbt = buffer.readNbt();
-			if (nbt.contains("value"))
-				result.add(Card.CODEC.parse(NbtOps.INSTANCE, nbt.get("value")).getOrThrow(false,
-						OpenGameMessage::onError));
-			else
-				result.add(Cards.EMPTY);
+			result.add(MessageUtil.decodeCard(buffer));
 		}
 		return result;
-	}
-
-	private static void onError(String msg) {
 	}
 
 	public static OpenGameMessage decode(final FriendlyByteBuf buffer) {

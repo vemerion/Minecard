@@ -1,7 +1,11 @@
 package mod.vemerion.minecard.screen;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
+
+import org.lwjgl.glfw.GLFW;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -14,6 +18,7 @@ import mod.vemerion.minecard.game.ClientPlayerState;
 import mod.vemerion.minecard.helper.Helper;
 import mod.vemerion.minecard.network.EndTurnMessage;
 import mod.vemerion.minecard.network.Network;
+import mod.vemerion.minecard.network.PlayCardMessage;
 import mod.vemerion.minecard.renderer.CardItemRenderer;
 import net.minecraft.client.gui.components.AbstractButton;
 import net.minecraft.client.gui.components.Widget;
@@ -47,24 +52,35 @@ public class GameScreen extends Screen {
 	private static final int NEXT_TURN_BUTTON_SIZE = 20;
 
 	// State
-	List<ClientPlayerState> state;
+	Map<UUID, ClientPlayerState> state;
 	private UUID current = UUID.randomUUID();
 	private BlockPos pos;
 
 	// Widgets
 	TurnText turnText;
 
-	public GameScreen(List<ClientPlayerState> state, BlockPos pos) {
+	Card selectedCard;
+
+	public GameScreen(List<ClientPlayerState> list, BlockPos pos) {
 		super(TITLE);
-		this.state = state;
+		this.state = initState(list);
 		this.pos = pos;
 		this.turnText = new TurnText();
+		updateState();
+	}
+
+	private Map<UUID, ClientPlayerState> initState(List<ClientPlayerState> list) {
+		Map<UUID, ClientPlayerState> map = new HashMap<>();
+		for (var playerState : list)
+			map.put(playerState.id, playerState);
+		return map;
 	}
 
 	@Override
 	protected void init() {
 		super.init();
-		updateState();
+		for (var playerState : state.values())
+			resetPositions(playerState);
 		addRenderableWidget(new NextTurnButton((int) (width * 0.75), height / 2 - NEXT_TURN_BUTTON_SIZE / 2,
 				NEXT_TURN_BUTTON_SIZE, NEXT_TURN_BUTTON_SIZE, TextComponent.EMPTY));
 	}
@@ -75,27 +91,86 @@ public class GameScreen extends Screen {
 	}
 
 	public void setResources(UUID id, int resources, int maxResources) {
-		for (var playerState : state) {
-			if (playerState.id.equals(id)) {
-				playerState.resources = resources;
-				playerState.maxResources = maxResources;
+		var playerState = state.get(id);
+		playerState.resources = resources;
+		playerState.maxResources = maxResources;
+	}
+
+	public void placeCard(UUID id, Card card, int cardIndex, int position) {
+		var playerState = state.get(id);
+		playerState.board.add(position, new ClientCard(card, Vec2.ZERO));
+		playerState.hand.remove(cardIndex);
+		resetPositions(playerState);
+	}
+
+	private ClientPlayerState yourState() {
+		return state.get(minecraft.player.getUUID());
+	}
+
+	@Override
+	public boolean mouseClicked(double pMouseX, double pMouseY, int pButton) {
+		if (isCurrentActive()) {
+			if (pButton == GLFW.GLFW_MOUSE_BUTTON_LEFT) {
+				if (selectedCard == null) {
+					for (var card : yourState().hand) {
+						if (((ClientCard) card).contains(pMouseX, pMouseY)) {
+							selectedCard = card;
+							return true;
+						}
+					}
+				} else {
+					if (pMouseY + CARD_HEIGHT / 2 < height - CARD_HEIGHT && pMouseY > height - CARD_HEIGHT * 2) {
+						int order = 0;
+						int cardIndex = 0;
+						for (int i = 0; i < yourState().board.size(); i++) {
+							var card = (ClientCard) yourState().board.get(i);
+							if (pMouseX < ((ClientCard) card).position.x + CARD_WIDTH / 2) {
+								order = i;
+								break;
+							} else {
+								order = i + 1;
+							}
+						}
+						for (int i = 0; i < yourState().hand.size(); i++) {
+							if (yourState().hand.get(i) == selectedCard) {
+								cardIndex = i;
+								break;
+							}
+						}
+						Network.INSTANCE.sendToServer(new PlayCardMessage(pos, cardIndex, order));
+						selectedCard = null;
+						return true;
+					}
+				}
+			} else if (pButton == GLFW.GLFW_MOUSE_BUTTON_RIGHT) {
+				selectedCard = null;
+			}
+		}
+		return super.mouseClicked(pMouseX, pMouseY, pButton);
+	}
+
+	private void updateState() {
+		for (var playerState : state.values()) {
+			for (int i = 0; i < playerState.hand.size(); i++) {
+				playerState.hand.set(i, new ClientCard(playerState.hand.get(i), Vec2.ZERO));
+			}
+			for (int i = 0; i < playerState.board.size(); i++) {
+				playerState.board.set(i, new ClientCard(playerState.board.get(i), Vec2.ZERO));
 			}
 		}
 	}
 
-	private void updateState() {
-		for (var playerState : state) {
-			boolean enemy = !playerState.id.equals(minecraft.player.getUUID());
-			for (int i = 0; i < playerState.hand.size(); i++) {
-				int x = cardRowX(playerState.hand.size(), enemy ? playerState.hand.size() - i - 1 : i);
-				int y = enemy ? 5 : height - CARD_HEIGHT - 5;
-				playerState.hand.set(i, new ClientCard(playerState.hand.get(i), new Vec2(x, y)));
-			}
-			for (int i = 0; i < playerState.board.size(); i++) {
-				int x = cardRowX(playerState.board.size(), enemy ? playerState.board.size() - i - 1 : i);
-				int y = enemy ? 150 : height - CARD_HEIGHT - 150;
-				playerState.board.set(i, new ClientCard(playerState.board.get(i), new Vec2(x, y)));
-			}
+	private void resetPositions(ClientPlayerState playerState) {
+		boolean enemy = !playerState.id.equals(minecraft.player.getUUID());
+		for (int i = 0; i < playerState.hand.size(); i++) {
+			int x = cardRowX(playerState.hand.size(), enemy ? playerState.hand.size() - i - 1 : i);
+			int y = enemy ? 5 : height - CARD_HEIGHT - 5;
+			((ClientCard) playerState.hand.get(i)).position = new Vec2(x, y);
+		}
+		for (int i = 0; i < playerState.board.size(); i++) {
+			int x = cardRowX(playerState.board.size(), enemy ? playerState.board.size() - i - 1 : i);
+			int y = enemy ? CARD_HEIGHT + 20 : height - CARD_HEIGHT * 2 - 20;
+			((ClientCard) playerState.board.get(i)).position = new Vec2(x, y);
 		}
 	}
 
@@ -111,7 +186,7 @@ public class GameScreen extends Screen {
 	public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTicks) {
 		var source = minecraft.renderBuffers().bufferSource();
 
-		for (var playerState : state) {
+		for (var playerState : state.values()) {
 			boolean enemy = !playerState.id.equals(minecraft.player.getUUID());
 
 			// Cards
@@ -129,7 +204,7 @@ public class GameScreen extends Screen {
 
 			// Resources
 			int resourcesX = enemy ? 200 : width - 200;
-			int resourcesY = enemy ? 65 : height - 65;
+			int resourcesY = enemy ? 60 : height - 60;
 			renderResources(playerState.maxResources, new Vec3(resourcesX, resourcesY, 0), enemy, 0, poseStack, source);
 			renderResources(playerState.resources, new Vec3(resourcesX, resourcesY, 0.1), enemy,
 					LightTexture.FULL_BRIGHT, poseStack, source);
@@ -162,35 +237,38 @@ public class GameScreen extends Screen {
 		turnText.tick();
 	}
 
-	private static class ClientCard extends Card {
+	private class ClientCard extends Card {
 
 		private Vec2 position;
 
-		public ClientCard(Card card, Vec2 position) {
+		private ClientCard(Card card, Vec2 position) {
 			super(card.getType(), card.getCost(), card.getHealth(), card.getDamage());
 			this.position = position;
 		}
 
-		public void render(int mouseX, int mouseY, BufferSource source) {
+		private void render(int mouseX, int mouseY, BufferSource source) {
 			var ps = new PoseStack();
 			ps.pushPose();
 
+			var pos = this == selectedCard ? new Vec2(mouseX - CARD_WIDTH / 2, mouseY - CARD_HEIGHT / 2) : position;
+
 			// Rotate to show back
 			if (getType() == null) {
-				ps.translate(position.x + 24, 0, 0);
+				ps.translate(pos.x + 24, 0, 0);
 				ps.mulPose(new Quaternion(0, 180, 0, true));
-				ps.translate(-position.x - 24, 0, 0);
+				ps.translate(-pos.x - 24, 0, 0);
 			}
 
-			ps.translate(position.x, position.y, 0);
+			ps.translate(pos.x, pos.y, 0);
 			ps.scale(CARD_SCALE, -CARD_SCALE, CARD_SCALE);
 			int light = contains(mouseX, mouseY) ? CARD_LIGHT : CARD_LIGHT_HOVER;
 			CardItemRenderer.renderCard(this, TransformType.NONE, ps, source, light, OverlayTexture.NO_OVERLAY);
 			ps.popPose();
 		}
 
-		private boolean contains(int x, int y) {
-			return x > position.x && x < position.x + CARD_WIDTH && y > position.y && y < position.y + CARD_HEIGHT;
+		private boolean contains(double pMouseX, double pMouseY) {
+			return pMouseX > position.x && pMouseX < position.x + CARD_WIDTH && pMouseY > position.y
+					&& pMouseY < position.y + CARD_HEIGHT;
 		}
 
 	}

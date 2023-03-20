@@ -7,6 +7,8 @@ import mod.vemerion.minecard.network.EndTurnMessage;
 import mod.vemerion.minecard.network.Network;
 import mod.vemerion.minecard.network.NewTurnMessage;
 import mod.vemerion.minecard.network.OpenGameMessage;
+import mod.vemerion.minecard.network.PlaceCardMessage;
+import mod.vemerion.minecard.network.PlayCardMessage;
 import mod.vemerion.minecard.network.SetResourcesMessage;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -33,5 +35,10 @@ public class ModEventSubscriber {
 				EndTurnMessage::handle);
 		Network.INSTANCE.registerMessage(3, SetResourcesMessage.class, SetResourcesMessage::encode,
 				SetResourcesMessage::decode, SetResourcesMessage::handle);
+		Network.INSTANCE.registerMessage(4, PlayCardMessage.class, PlayCardMessage::encode, PlayCardMessage::decode,
+				PlayCardMessage::handle);
+		Network.INSTANCE.registerMessage(5, PlaceCardMessage.class, PlaceCardMessage::encode, PlaceCardMessage::decode,
+				PlaceCardMessage::handle);
+
 	}
 }

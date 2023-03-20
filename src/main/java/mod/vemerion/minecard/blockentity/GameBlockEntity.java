@@ -51,6 +51,23 @@ public class GameBlockEntity extends BlockEntity {
 					state.getCurrentPlayer(), current.getResources(), current.getMaxResources()));
 		}
 	}
+	
+	public void playCard(ServerPlayer player, int card, int position) {
+		if (!state.getCurrentPlayer().equals(player.getUUID()))
+			return;
+		
+		state.getCurrentPlayerState().playCard(getReceivers(), card, position);
+	}
+	
+	private List<ServerPlayer> getReceivers() {
+		var list = new ArrayList<ServerPlayer>();
+		for (var playerState : state.getPlayerStates()) {
+			var player = level.getPlayerByUUID(playerState.getId());
+			if (player != null)
+				list.add((ServerPlayer) player);
+		}
+		return list;
+	}
 
 	public void open(ServerPlayer player, ItemStack stack) {
 		var id = player.getUUID();
