@@ -16,6 +16,7 @@ import mod.vemerion.minecard.game.Card;
 import mod.vemerion.minecard.game.Cards;
 import mod.vemerion.minecard.game.ClientPlayerState;
 import mod.vemerion.minecard.helper.Helper;
+import mod.vemerion.minecard.network.AttackMessage;
 import mod.vemerion.minecard.network.EndTurnMessage;
 import mod.vemerion.minecard.network.Network;
 import mod.vemerion.minecard.network.PlayCardMessage;
@@ -36,6 +37,7 @@ import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FastColor;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
@@ -60,6 +62,7 @@ public class GameScreen extends Screen {
 	TurnText turnText;
 
 	Card selectedCard;
+	Card attackingCard;
 
 	public GameScreen(List<ClientPlayerState> list, BlockPos pos) {
 		super(TITLE);
@@ -103,14 +106,40 @@ public class GameScreen extends Screen {
 		resetPositions(playerState);
 	}
 
+	public void setReady(UUID id, List<Integer> cards) {
+		var playerState = state.get(id);
+		for (var card : cards)
+			playerState.board.get(card).setReady(true);
+	}
+
+	public void updateCard(UUID id, Card card, int position) {
+		var playerState = state.get(id);
+		if (card.isDead()) {
+			playerState.board.remove(position);
+		} else {
+			playerState.board.set(position, new ClientCard(card, Vec2.ZERO));
+		}
+
+		resetPositions(playerState);
+	}
+
 	private ClientPlayerState yourState() {
 		return state.get(minecraft.player.getUUID());
+	}
+
+	private ClientPlayerState enemyState() {
+		for (var playerState : state.values())
+			if (!playerState.id.equals(minecraft.player.getUUID()))
+				return playerState;
+		return null;
 	}
 
 	@Override
 	public boolean mouseClicked(double pMouseX, double pMouseY, int pButton) {
 		if (isCurrentActive()) {
 			if (pButton == GLFW.GLFW_MOUSE_BUTTON_LEFT) {
+
+				// Play card
 				if (selectedCard == null) {
 					for (var card : yourState().hand) {
 						if (((ClientCard) card).contains(pMouseX, pMouseY)) {
@@ -142,8 +171,33 @@ public class GameScreen extends Screen {
 						return true;
 					}
 				}
+
+				// Attack
+				if (selectedCard == null && attackingCard == null) {
+					for (var card : yourState().board) {
+						if (((ClientCard) card).contains(pMouseX, pMouseY) && card.isReady()) {
+							attackingCard = card;
+							return true;
+						}
+					}
+				} else if (attackingCard != null) {
+					var enemy = enemyState().board;
+					for (int i = 0; i < enemy.size(); i++) {
+						if (((ClientCard) enemy.get(i)).contains(pMouseX, pMouseY)) {
+							for (int j = 0; j < yourState().board.size(); i++) {
+								if (yourState().board.get(j) == attackingCard) {
+									Network.INSTANCE.sendToServer(new AttackMessage(pos, j, i));
+									break;
+								}
+							}
+							attackingCard = null;
+							return true;
+						}
+					}
+				}
 			} else if (pButton == GLFW.GLFW_MOUSE_BUTTON_RIGHT) {
 				selectedCard = null;
+				attackingCard = null;
 			}
 		}
 		return super.mouseClicked(pMouseX, pMouseY, pButton);
@@ -242,7 +296,7 @@ public class GameScreen extends Screen {
 		private Vec2 position;
 
 		private ClientCard(Card card, Vec2 position) {
-			super(card.getType(), card.getCost(), card.getHealth(), card.getDamage());
+			super(card.getType(), card.getCost(), card.getHealth(), card.getDamage(), card.isReady());
 			this.position = position;
 		}
 
@@ -264,6 +318,20 @@ public class GameScreen extends Screen {
 			int light = contains(mouseX, mouseY) ? CARD_LIGHT : CARD_LIGHT_HOVER;
 			CardItemRenderer.renderCard(this, TransformType.NONE, ps, source, light, OverlayTexture.NO_OVERLAY);
 			ps.popPose();
+
+			// Attacking card
+			if (this == attackingCard) {
+				ps.pushPose();
+				ps.translate(pos.x + CARD_WIDTH / 2 + 1, pos.y + CARD_WIDTH / 2 - 2, 50);
+				ps.scale(30, -30, 30);
+				minecraft.getItemRenderer().renderStatic(new ItemStack(Items.NETHERITE_SWORD), TransformType.NONE,
+						LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY, ps, source, 0);
+				ps.scale(-1, 1, 1);
+				minecraft.getItemRenderer().renderStatic(new ItemStack(Items.NETHERITE_SWORD), TransformType.NONE,
+						LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY, ps, source, 0);
+				ps.popPose();
+			}
+
 		}
 
 		private boolean contains(double pMouseX, double pMouseY) {
@@ -291,6 +359,8 @@ public class GameScreen extends Screen {
 		public void onPress() {
 			if (isCurrentActive()) {
 				Network.INSTANCE.sendToServer(new EndTurnMessage(pos));
+				selectedCard = null;
+				attackingCard = null;
 			}
 		}
 

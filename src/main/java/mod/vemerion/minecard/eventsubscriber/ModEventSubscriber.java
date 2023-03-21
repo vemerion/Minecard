@@ -3,13 +3,16 @@ package mod.vemerion.minecard.eventsubscriber;
 import mod.vemerion.minecard.Main;
 import mod.vemerion.minecard.capability.CardData;
 import mod.vemerion.minecard.capability.DeckData;
+import mod.vemerion.minecard.network.AttackMessage;
 import mod.vemerion.minecard.network.EndTurnMessage;
 import mod.vemerion.minecard.network.Network;
 import mod.vemerion.minecard.network.NewTurnMessage;
 import mod.vemerion.minecard.network.OpenGameMessage;
 import mod.vemerion.minecard.network.PlaceCardMessage;
 import mod.vemerion.minecard.network.PlayCardMessage;
+import mod.vemerion.minecard.network.SetReadyMessage;
 import mod.vemerion.minecard.network.SetResourcesMessage;
+import mod.vemerion.minecard.network.UpdateCardMessage;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
@@ -39,6 +42,11 @@ public class ModEventSubscriber {
 				PlayCardMessage::handle);
 		Network.INSTANCE.registerMessage(5, PlaceCardMessage.class, PlaceCardMessage::encode, PlaceCardMessage::decode,
 				PlaceCardMessage::handle);
-
+		Network.INSTANCE.registerMessage(6, SetReadyMessage.class, SetReadyMessage::encode, SetReadyMessage::decode,
+				SetReadyMessage::handle);
+		Network.INSTANCE.registerMessage(7, AttackMessage.class, AttackMessage::encode, AttackMessage::decode,
+				AttackMessage::handle);
+		Network.INSTANCE.registerMessage(8, UpdateCardMessage.class, UpdateCardMessage::encode,
+				UpdateCardMessage::decode, UpdateCardMessage::handle);
 	}
 }

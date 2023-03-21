@@ -95,6 +95,16 @@ public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 		renderValue(itemRenderer, mc.font, Items.GLISTERING_MELON_SLICE, card.getHealth(), 0.6f, -0.42f, light, overlay,
 				pose, buffer);
 
+		// Ready
+		if (card.isReady()) {
+			pose.pushPose();
+			pose.translate(0.43, 0.07, 0);
+			pose.scale(0.3f, 0.3f, 0.3f);
+			itemRenderer.renderStatic(new ItemStack(Items.CARROT_ON_A_STICK), TransformType.NONE, light, overlay, pose,
+					buffer, 0);
+			pose.popPose();
+		}
+
 		// Render entity
 		float maxWidth = 2;
 		float maxHeight = 2;

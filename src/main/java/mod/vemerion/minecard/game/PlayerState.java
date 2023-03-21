@@ -68,10 +68,12 @@ public class PlayerState {
 	public void newTurn() {
 		maxResources = Math.min(10, maxResources + 1);
 		resources = maxResources;
+		for (var card : board)
+			card.setReady(true);
 	}
 
 	public void playCard(List<ServerPlayer> receivers, int cardIndex, int position) {
-		if (hand.size() < cardIndex || board.size() < position)
+		if (cardIndex < 0 || position < 0 || hand.size() <= cardIndex || board.size() < position)
 			return;
 
 		var card = hand.get(cardIndex);

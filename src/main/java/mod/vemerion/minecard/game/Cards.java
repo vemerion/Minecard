@@ -8,7 +8,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 
 public class Cards {
-	public static final Card EMPTY = new Card(null, 0, 0, 0);
+	public static final Card EMPTY = new Card(null, 0, 0, 0, false);
 
 	private static Cards instance;
 
@@ -16,7 +16,7 @@ public class Cards {
 
 	private Cards() {
 		CARDS = new HashMap<>();
-		CARDS.put(EntityType.CREEPER, new Card(EntityType.CREEPER, 3, 2, 3));
+		CARDS.put(EntityType.CREEPER, new Card(EntityType.CREEPER, 3, 2, 3, false));
 	}
 
 	public Card get(EntityType<?> type) {
@@ -40,6 +40,6 @@ public class Cards {
 		int totalStats = cost * 2 + 1;
 		int health = rand.nextInt(1, totalStats);
 
-		return new Card(type, cost, health, totalStats - health);
+		return new Card(type, cost, health, totalStats - health, false);
 	}
 }

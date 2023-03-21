@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import mod.vemerion.minecard.capability.CardData;
 import mod.vemerion.minecard.capability.DeckData;
@@ -17,6 +19,7 @@ import mod.vemerion.minecard.init.ModItems;
 import mod.vemerion.minecard.network.Network;
 import mod.vemerion.minecard.network.NewTurnMessage;
 import mod.vemerion.minecard.network.OpenGameMessage;
+import mod.vemerion.minecard.network.SetReadyMessage;
 import mod.vemerion.minecard.network.SetResourcesMessage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.TranslatableComponent;
@@ -50,15 +53,26 @@ public class GameBlockEntity extends BlockEntity {
 			Network.INSTANCE.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer) receiver), new SetResourcesMessage(
 					state.getCurrentPlayer(), current.getResources(), current.getMaxResources()));
 		}
+		Network.INSTANCE.send(
+				PacketDistributor.PLAYER.with(() -> (ServerPlayer) level.getPlayerByUUID(current.getId())),
+				new SetReadyMessage(current.getId(),
+						IntStream.range(0, current.getBoard().size()).boxed().collect(Collectors.toList())));
 	}
-	
+
 	public void playCard(ServerPlayer player, int card, int position) {
 		if (!state.getCurrentPlayer().equals(player.getUUID()))
 			return;
-		
+
 		state.getCurrentPlayerState().playCard(getReceivers(), card, position);
 	}
 	
+	public void attack(ServerPlayer player, int attacker, int target) {
+		if (!state.getCurrentPlayer().equals(player.getUUID()))
+			return;
+		
+		state.attack(getReceivers(), attacker, target);
+	}
+
 	private List<ServerPlayer> getReceivers() {
 		var list = new ArrayList<ServerPlayer>();
 		for (var playerState : state.getPlayerStates()) {

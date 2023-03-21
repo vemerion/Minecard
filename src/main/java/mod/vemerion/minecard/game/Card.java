@@ -12,22 +12,25 @@ public class Card {
 			instance -> instance.group(ForgeRegistries.ENTITIES.getCodec().fieldOf("type").forGetter(Card::getType),
 					Codec.INT.fieldOf("cost").forGetter(Card::getCost),
 					Codec.INT.fieldOf("health").forGetter(Card::getHealth),
-					Codec.INT.fieldOf("damage").forGetter(Card::getDamage)).apply(instance, Card::new));
+					Codec.INT.fieldOf("damage").forGetter(Card::getDamage),
+					Codec.BOOL.fieldOf("ready").forGetter(Card::isReady)).apply(instance, Card::new));
 
 	private final EntityType<?> type;
 	private final int cost;
-	private final int health;
+	private int health;
 	private final int damage;
+	private boolean ready;
 
-	public Card(EntityType<?> type, int cost, int health, int damage) {
+	public Card(EntityType<?> type, int cost, int health, int damage, boolean ready) {
 		this.type = type;
 		this.cost = cost;
 		this.health = health;
 		this.damage = damage;
+		this.ready = ready;
 	}
 
 	public Card copy() {
-		return new Card(type, cost, health, damage);
+		return new Card(type, cost, health, damage, ready);
 	}
 
 	public EntityType<?> getType() {
@@ -42,7 +45,23 @@ public class Card {
 		return health;
 	}
 
+	public void hurt(int amount) {
+		this.health -= amount;
+	}
+
+	public boolean isDead() {
+		return health <= 0;
+	}
+
 	public int getDamage() {
 		return damage;
+	}
+
+	public boolean isReady() {
+		return ready;
+	}
+
+	public void setReady(boolean b) {
+		this.ready = b;
 	}
 }
