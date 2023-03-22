@@ -44,7 +44,7 @@ public class GameBlockEntity extends BlockEntity {
 		if (!state.getCurrentPlayer().equals(player.getUUID()))
 			return;
 
-		state.endTurn();
+		state.endTurn(getReceivers());
 		var current = state.getCurrentPlayerState();
 		for (var playerState : state.getPlayerStates()) {
 			var receiver = level.getPlayerByUUID(playerState.getId());

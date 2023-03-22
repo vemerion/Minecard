@@ -7,6 +7,7 @@ import java.util.UUID;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
+import mod.vemerion.minecard.network.DrawCardMessage;
 import mod.vemerion.minecard.network.Network;
 import mod.vemerion.minecard.network.PlaceCardMessage;
 import mod.vemerion.minecard.network.SetResourcesMessage;
@@ -65,11 +66,20 @@ public class PlayerState {
 		return maxResources;
 	}
 
-	public void newTurn() {
+	public void newTurn(List<ServerPlayer> receivers) {
 		maxResources = Math.min(10, maxResources + 1);
 		resources = maxResources;
 		for (var card : board)
 			card.setReady(true);
+
+		if (!deck.isEmpty()) {
+			var card = deck.remove(deck.size() - 1);
+			hand.add(card);
+			for (var receiver : receivers) {
+				Network.INSTANCE.send(PacketDistributor.PLAYER.with(() -> receiver),
+						new DrawCardMessage(id, receiver.getUUID().equals(id) ? card : Cards.EMPTY, true));
+			}
+		}
 	}
 
 	public void playCard(List<ServerPlayer> receivers, int cardIndex, int position) {

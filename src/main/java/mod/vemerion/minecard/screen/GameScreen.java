@@ -123,6 +123,15 @@ public class GameScreen extends Screen {
 		resetPositions(playerState);
 	}
 
+	public void drawCard(UUID id, Card card, boolean shrinkDeck) {
+		var playerState = state.get(id);
+		playerState.hand.add(new ClientCard(card, Vec2.ZERO));
+		resetPositions(playerState);
+
+		if (shrinkDeck)
+			playerState.deck--;
+	}
+
 	private ClientPlayerState yourState() {
 		return state.get(minecraft.player.getUUID());
 	}

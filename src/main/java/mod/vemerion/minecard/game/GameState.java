@@ -34,10 +34,10 @@ public class GameState {
 		return playerStates.get((turn + 1) % 2);
 	}
 
-	public void endTurn() {
+	public void endTurn(List<ServerPlayer> receivers) {
 		turn++;
 		var current = getCurrentPlayerState();
-		current.newTurn();
+		current.newTurn(receivers);
 	}
 
 	public void attack(List<ServerPlayer> receivers, int attacker, int target) {
