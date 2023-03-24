@@ -7,6 +7,7 @@ import java.util.UUID;
 import mod.vemerion.minecard.network.Network;
 import mod.vemerion.minecard.network.UpdateCardMessage;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.EntityType;
 import net.minecraftforge.network.PacketDistributor;
 
 public class GameState {
@@ -53,6 +54,7 @@ public class GameState {
 
 		attackerCard.hurt(targetCard.getDamage());
 		targetCard.hurt(attackerCard.getDamage());
+		attackerCard.setReady(false);
 		if (attackerCard.isDead())
 			current.getBoard().remove(attacker);
 		if (targetCard.isDead())
@@ -64,5 +66,18 @@ public class GameState {
 			Network.INSTANCE.send(PacketDistributor.PLAYER.with(() -> receiver),
 					new UpdateCardMessage(enemy.getId(), targetCard, target));
 		}
+	}
+
+	public boolean isGameOver() {
+		int count = 0;
+		for (var playerState : playerStates) {
+			for (var card : playerState.getBoard()) {
+				if (card.getType() == EntityType.PLAYER && !card.isDead()) {
+					count++;
+					break;
+				}
+			}
+		}
+		return count < playerStates.size();
 	}
 }

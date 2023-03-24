@@ -9,6 +9,7 @@ import net.minecraft.world.entity.MobCategory;
 
 public class Cards {
 	public static final Card EMPTY = new Card(null, 0, 0, 0, false);
+	public static final Card PLAYER = new Card(EntityType.PLAYER, 0, 30, 0, false);
 
 	private static Cards instance;
 

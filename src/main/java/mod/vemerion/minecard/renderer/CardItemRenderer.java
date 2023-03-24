@@ -15,6 +15,7 @@ import mod.vemerion.minecard.item.CardItem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.model.geom.EntityModelSet;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -109,7 +110,7 @@ public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 		float maxWidth = 2;
 		float maxHeight = 2;
 
-		var entity = CACHE.computeIfAbsent(type, t -> t.create(mc.level));
+		var entity = getEntity(type, mc.level);
 		var dimensions = type.getDimensions();
 		var widthScale = Math.min(1, maxWidth / dimensions.width);
 		var heightScale = Math.min(1, maxHeight / dimensions.height);
@@ -119,7 +120,7 @@ public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 		pose.translate(0.4, -0.43, 0);
 		pose.scale(0.15f * scale, 0.15f * scale, 0.15f * scale);
 		pose.mulPose(new Quaternion(0, 20, 0, true));
-		((EntityRenderer) mc.getEntityRenderDispatcher().renderers.get(type)).render(entity, 0, 0, pose, buffer, light);
+		((EntityRenderer) mc.getEntityRenderDispatcher().getRenderer(entity)).render(entity, 0, 0, pose, buffer, light);
 		pose.popPose();
 	}
 
@@ -150,6 +151,14 @@ public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 		poseStack.translate(0, 0, 0.01);
 		font.draw(poseStack, String.valueOf(value), 0, 0, 0xFFFFFF);
 		poseStack.popPose();
+	}
+
+	private static Entity getEntity(EntityType<?> type, ClientLevel level) {
+		if (type == EntityType.PLAYER) {
+			return level.players().get(0);
+		}
+
+		return CACHE.computeIfAbsent(type, t -> t.create(level));
 	}
 
 	@Override

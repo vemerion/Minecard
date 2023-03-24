@@ -6,6 +6,7 @@ import mod.vemerion.minecard.capability.DeckData;
 import mod.vemerion.minecard.network.AttackMessage;
 import mod.vemerion.minecard.network.DrawCardMessage;
 import mod.vemerion.minecard.network.EndTurnMessage;
+import mod.vemerion.minecard.network.GameOverMessage;
 import mod.vemerion.minecard.network.Network;
 import mod.vemerion.minecard.network.NewTurnMessage;
 import mod.vemerion.minecard.network.OpenGameMessage;
@@ -51,5 +52,7 @@ public class ModEventSubscriber {
 				UpdateCardMessage::decode, UpdateCardMessage::handle);
 		Network.INSTANCE.registerMessage(9, DrawCardMessage.class, DrawCardMessage::encode, DrawCardMessage::decode,
 				DrawCardMessage::handle);
+		Network.INSTANCE.registerMessage(10, GameOverMessage.class, GameOverMessage::encode, GameOverMessage::decode,
+				GameOverMessage::handle);
 	}
 }

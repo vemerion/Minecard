@@ -46,6 +46,10 @@ public class GameScreen extends Screen {
 
 	public static final Component TITLE = new TranslatableComponent("gui." + Main.MODID + ".game");
 
+	private static Component YOUR_TURN = new TranslatableComponent(Helper.gui("your_turn"));
+	private static Component ENEMY_TURN = new TranslatableComponent(Helper.gui("enemy_turn"));
+	private static Component GAME_OVER = new TranslatableComponent(Helper.gui("game_over"));
+
 	private static final int CARD_SCALE = 60;
 	private static final int CARD_LIGHT = LightTexture.FULL_BRIGHT;
 	private static final int CARD_LIGHT_HOVER = 0b011000000000000001100000;
@@ -59,7 +63,7 @@ public class GameScreen extends Screen {
 	private BlockPos pos;
 
 	// Widgets
-	TurnText turnText;
+	PopupText popup;
 
 	Card selectedCard;
 	Card attackingCard;
@@ -68,7 +72,7 @@ public class GameScreen extends Screen {
 		super(TITLE);
 		this.state = initState(list);
 		this.pos = pos;
-		this.turnText = new TurnText();
+		this.popup = new PopupText();
 		updateState();
 	}
 
@@ -90,7 +94,7 @@ public class GameScreen extends Screen {
 
 	public void setCurrent(UUID current) {
 		this.current = current;
-		turnText.change(current.equals(minecraft.player.getUUID()));
+		popup.popup(current.equals(minecraft.player.getUUID()) ? YOUR_TURN : ENEMY_TURN);
 	}
 
 	public void setResources(UUID id, int resources, int maxResources) {
@@ -130,6 +134,10 @@ public class GameScreen extends Screen {
 
 		if (shrinkDeck)
 			playerState.deck--;
+	}
+
+	public void gameOver() {
+		popup.popup(GAME_OVER);
 	}
 
 	private ClientPlayerState yourState() {
@@ -193,7 +201,7 @@ public class GameScreen extends Screen {
 					var enemy = enemyState().board;
 					for (int i = 0; i < enemy.size(); i++) {
 						if (((ClientCard) enemy.get(i)).contains(pMouseX, pMouseY)) {
-							for (int j = 0; j < yourState().board.size(); i++) {
+							for (int j = 0; j < yourState().board.size(); j++) {
 								if (yourState().board.get(j) == attackingCard) {
 									Network.INSTANCE.sendToServer(new AttackMessage(pos, j, i));
 									break;
@@ -275,7 +283,7 @@ public class GameScreen extends Screen {
 
 		source.endBatch();
 
-		turnText.render(poseStack, mouseX, mouseY, partialTicks);
+		popup.render(poseStack, mouseX, mouseY, partialTicks);
 
 		super.render(poseStack, mouseX, mouseY, partialTicks);
 	}
@@ -297,7 +305,7 @@ public class GameScreen extends Screen {
 	public void tick() {
 		super.tick();
 
-		turnText.tick();
+		popup.tick();
 	}
 
 	private class ClientCard extends Card {
@@ -389,16 +397,12 @@ public class GameScreen extends Screen {
 
 	}
 
-	private class TurnText implements Widget {
-
-		private static Component YOUR_TURN = new TranslatableComponent(Helper.gui("your_turn"));
-		private static Component ENEMY_TURN = new TranslatableComponent(Helper.gui("enemy_turn"));
-
+	private class PopupText implements Widget {
 		private Component text;
 		private int alpha;
 		private float scale;
 
-		private TurnText() {
+		private PopupText() {
 			this.text = YOUR_TURN;
 		}
 
@@ -417,8 +421,8 @@ public class GameScreen extends Screen {
 			scale = scale * 0.95f;
 		}
 
-		private void change(boolean yourTurn) {
-			text = yourTurn ? YOUR_TURN : ENEMY_TURN;
+		private void popup(Component text) {
+			this.text = text;
 			alpha = 255;
 			scale = 3;
 		}

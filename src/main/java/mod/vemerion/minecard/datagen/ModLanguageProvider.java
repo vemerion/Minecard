@@ -33,6 +33,7 @@ public class ModLanguageProvider extends LanguageProvider {
 		add(Helper.gui("your_turn"), "Your Turn");
 		add(Helper.gui("enemy_turn"), "Enemy Turn");
 		add(Helper.gui("next_turn"), "Next Turn");
+		add(Helper.gui("game_over"), "Game Over");
 	}
 
 	private void addCardText(CardItem card, String descr) {

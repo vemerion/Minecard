@@ -1,26 +1,23 @@
 package mod.vemerion.minecard.network;
 
-import java.util.function.Supplier;
-
 import mod.vemerion.minecard.blockentity.GameBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraftforge.network.NetworkEvent;
+import net.minecraft.server.level.ServerPlayer;
 
-public class AttackMessage {
+public class AttackMessage extends ClientToServerMessage {
 
-	private BlockPos pos;
 	int attacker;
 	int target;
 
 	public AttackMessage(BlockPos pos, int attacker, int target) {
-		this.pos = pos;
+		super(pos);
 		this.attacker = attacker;
 		this.target = target;
 	}
 
-	public void encode(final FriendlyByteBuf buffer) {
-		buffer.writeBlockPos(pos);
+	@Override
+	protected void encodeAdditional(FriendlyByteBuf buffer) {
 		buffer.writeInt(attacker);
 		buffer.writeInt(target);
 	}
@@ -29,14 +26,8 @@ public class AttackMessage {
 		return new AttackMessage(buffer.readBlockPos(), buffer.readInt(), buffer.readInt());
 	}
 
-	public void handle(final Supplier<NetworkEvent.Context> supplier) {
-		final NetworkEvent.Context context = supplier.get();
-		context.setPacketHandled(true);
-
-		var sender = context.getSender();
-		var level = sender.getLevel();
-		if (level.isLoaded(pos) && level.getBlockEntity(pos) instanceof GameBlockEntity game) {
-			game.attack(sender, attacker, target);
-		}
+	@Override
+	protected void handle(GameBlockEntity game, ServerPlayer sender) {
+		game.attack(sender, attacker, target);
 	}
 }

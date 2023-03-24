@@ -1,26 +1,23 @@
 package mod.vemerion.minecard.network;
 
-import java.util.function.Supplier;
-
 import mod.vemerion.minecard.blockentity.GameBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraftforge.network.NetworkEvent;
+import net.minecraft.server.level.ServerPlayer;
 
-public class PlayCardMessage {
+public class PlayCardMessage extends ClientToServerMessage {
 
-	private BlockPos pos;
-	int card;
-	int position;
+	private int card;
+	private int position;
 
 	public PlayCardMessage(BlockPos pos, int card, int position) {
-		this.pos = pos;
+		super(pos);
 		this.card = card;
 		this.position = position;
 	}
 
-	public void encode(final FriendlyByteBuf buffer) {
-		buffer.writeBlockPos(pos);
+	@Override
+	protected void encodeAdditional(FriendlyByteBuf buffer) {
 		buffer.writeInt(card);
 		buffer.writeInt(position);
 	}
@@ -29,14 +26,8 @@ public class PlayCardMessage {
 		return new PlayCardMessage(buffer.readBlockPos(), buffer.readInt(), buffer.readInt());
 	}
 
-	public void handle(final Supplier<NetworkEvent.Context> supplier) {
-		final NetworkEvent.Context context = supplier.get();
-		context.setPacketHandled(true);
-
-		var sender = context.getSender();
-		var level = sender.getLevel();
-		if (level.isLoaded(pos) && level.getBlockEntity(pos) instanceof GameBlockEntity game) {
-			game.playCard(sender, card, position);
-		}
+	@Override
+	protected void handle(GameBlockEntity game, ServerPlayer sender) {
+		game.playCard(sender, card, position);
 	}
 }
