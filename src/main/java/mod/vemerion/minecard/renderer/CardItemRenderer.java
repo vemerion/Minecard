@@ -9,6 +9,7 @@ import com.mojang.math.Matrix4f;
 import com.mojang.math.Quaternion;
 
 import mod.vemerion.minecard.Main;
+import mod.vemerion.minecard.game.AdditionalCardData;
 import mod.vemerion.minecard.game.Card;
 import mod.vemerion.minecard.game.Cards;
 import mod.vemerion.minecard.item.CardItem;
@@ -52,7 +53,6 @@ public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 	public static void renderCard(Card card, TransformType transform, PoseStack pose, MultiBufferSource buffer,
 			int light, int overlay) {
 		Minecraft mc = Minecraft.getInstance();
-		var type = card.getType();
 
 		// Render card
 		if (transform == TransformType.GUI)
@@ -67,14 +67,16 @@ public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 		renderCard(pose, CARD_BACK, buffer, light);
 		pose.popPose();
 
-		// Render title
+		var type = card.getType();
 		if (type == null)
 			return;
+		var entity = getEntity(card, mc.level);
 
+		// Render title
 		pose.pushPose();
 		pose.translate(0.2, -0.065, 0.01);
 		pose.scale(TITLE_SIZE, -TITLE_SIZE, TITLE_SIZE);
-		mc.font.draw(pose, type.getDescription(), 0, 0, 0x000000);
+		mc.font.draw(pose, entity.getName(), 0, 0, 0x000000);
 		pose.popPose();
 
 		// Render text
@@ -110,7 +112,6 @@ public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 		float maxWidth = 2;
 		float maxHeight = 2;
 
-		var entity = getEntity(type, mc.level);
 		var dimensions = type.getDimensions();
 		var widthScale = Math.min(1, maxWidth / dimensions.width);
 		var heightScale = Math.min(1, maxHeight / dimensions.height);
@@ -153,8 +154,14 @@ public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 		poseStack.popPose();
 	}
 
-	private static Entity getEntity(EntityType<?> type, ClientLevel level) {
+	private static Entity getEntity(Card card, ClientLevel level) {
+		var type = card.getType();
 		if (type == EntityType.PLAYER) {
+			if (card.getAdditionalData() instanceof AdditionalCardData.IdData idData) {
+				for (var player : level.players())
+					if (player.getUUID().equals(idData.getId()))
+						return player;
+			}
 			return level.players().get(0);
 		}
 

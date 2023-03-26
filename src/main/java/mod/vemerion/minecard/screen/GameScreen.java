@@ -313,7 +313,8 @@ public class GameScreen extends Screen {
 		private Vec2 position;
 
 		private ClientCard(Card card, Vec2 position) {
-			super(card.getType(), card.getCost(), card.getHealth(), card.getDamage(), card.isReady());
+			super(card.getType(), card.getCost(), card.getHealth(), card.getDamage(), card.isReady(),
+					card.getAdditionalData());
 			this.position = position;
 		}
 

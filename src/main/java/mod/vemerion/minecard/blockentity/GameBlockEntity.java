@@ -9,6 +9,7 @@ import java.util.stream.IntStream;
 
 import mod.vemerion.minecard.capability.CardData;
 import mod.vemerion.minecard.capability.DeckData;
+import mod.vemerion.minecard.game.AdditionalCardData;
 import mod.vemerion.minecard.game.Card;
 import mod.vemerion.minecard.game.Cards;
 import mod.vemerion.minecard.game.GameState;
@@ -133,7 +134,9 @@ public class GameBlockEntity extends BlockEntity {
 			}
 
 			List<Card> board = new ArrayList<>();
-			board.add(Cards.PLAYER.copy());
+			var playerCard = Cards.PLAYER.copy();
+			playerCard.setAdditionalData(new AdditionalCardData.IdData(player.getUUID()));
+			board.add(playerCard);
 
 			state.getPlayerStates().add(new PlayerState(id, deck, hand, board, 1, 1));
 		});
