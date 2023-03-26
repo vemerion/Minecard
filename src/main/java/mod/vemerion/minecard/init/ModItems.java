@@ -38,6 +38,7 @@ public class ModItems {
 		@Override
 		public void fillItemList(NonNullList<ItemStack> items) {
 			items.add(new ItemStack(DECK.get()));
+			items.add(new ItemStack(GAME.get()));
 			for (var type : ForgeRegistries.ENTITIES) {
 				if (!Cards.isAllowed(type))
 					continue;

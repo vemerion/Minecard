@@ -14,6 +14,7 @@ import net.minecraftforge.registries.RegistryObject;
 public class ModBlocks {
 	public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, Main.MODID);
 
-	public static final RegistryObject<Block> GAME = BLOCKS.register("game", () -> new GameBlock(
-			BlockBehaviour.Properties.of(Material.WOOD, MaterialColor.WOOD).strength(2, 3).sound(SoundType.WOOD)));
+	public static final RegistryObject<Block> GAME = BLOCKS.register("game",
+			() -> new GameBlock(BlockBehaviour.Properties.of(Material.WOOD, MaterialColor.WOOD).strength(2, 3)
+					.sound(SoundType.WOOD).noOcclusion()));
 }
