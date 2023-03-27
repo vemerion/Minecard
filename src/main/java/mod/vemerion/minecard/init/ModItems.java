@@ -1,5 +1,7 @@
 package mod.vemerion.minecard.init;
 
+import javax.annotation.Nullable;
+
 import mod.vemerion.minecard.Main;
 import mod.vemerion.minecard.capability.CardData;
 import mod.vemerion.minecard.game.Cards;
@@ -10,6 +12,7 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
@@ -20,7 +23,12 @@ public class ModItems {
 	public static final RegistryObject<CardItem> CARD = ITEMS.register("card", () -> new CardItem());
 	public static final RegistryObject<DeckItem> DECK = ITEMS.register("deck", () -> new DeckItem());
 	public static final RegistryObject<Item> GAME = ITEMS.register("game",
-			() -> new BlockItem(ModBlocks.GAME.get(), new Item.Properties()));
+			() -> new BlockItem(ModBlocks.GAME.get(), new Item.Properties().tab(CreativeModeTab.TAB_SEARCH)) {
+				@Override
+				public int getBurnTime(ItemStack itemStack, @Nullable RecipeType<?> recipeType) {
+					return 300;
+				}
+			});
 
 	public static final ModCreativeModeTab MOD_CREATIVE_MODE_TAB = new ModCreativeModeTab();
 

@@ -1,0 +1,34 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "minecard:game"
+    ]
+  },
+  "criteria": {
+    "has_card": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minecard:card"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "minecard:game"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_card",
+      "has_the_recipe"
+    ]
+  ]
+}

@@ -3,6 +3,7 @@ package mod.vemerion.minecard.block;
 import mod.vemerion.minecard.blockentity.GameBlockEntity;
 import mod.vemerion.minecard.init.ModBlockEntities;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -43,5 +44,15 @@ public class GameBlock extends Block implements EntityBlock {
 	@Override
 	public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {
 		return new GameBlockEntity(pPos, pState);
+	}
+	
+	@Override
+	public int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
+		return 20;
+	}
+	
+	@Override
+	public int getFireSpreadSpeed(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
+		return 5;
 	}
 }
