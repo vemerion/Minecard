@@ -37,6 +37,7 @@ import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FastColor;
+import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.Vec2;
@@ -56,6 +57,8 @@ public class GameScreen extends Screen {
 	private static final int CARD_WIDTH = 46;
 	private static final int CARD_HEIGHT = 48;
 	private static final int NEXT_TURN_BUTTON_SIZE = 20;
+	private static final int DECK_HORIZONTAL_OFFSET = 20;
+	private static final int DECK_VERTICAL_OFFSET = 20;
 
 	// State
 	Map<UUID, ClientPlayerState> state;
@@ -105,7 +108,7 @@ public class GameScreen extends Screen {
 
 	public void placeCard(UUID id, Card card, int cardIndex, int position) {
 		var playerState = state.get(id);
-		playerState.board.add(position, new ClientCard(card, Vec2.ZERO));
+		playerState.board.add(position, new ClientCard(card, ((ClientCard) playerState.hand.get(cardIndex)).position));
 		playerState.hand.remove(cardIndex);
 		resetPositions(playerState);
 	}
@@ -121,7 +124,8 @@ public class GameScreen extends Screen {
 		if (card.isDead()) {
 			playerState.board.remove(position);
 		} else {
-			playerState.board.set(position, new ClientCard(card, Vec2.ZERO));
+			playerState.board.set(position,
+					new ClientCard(card, ((ClientCard) playerState.board.get(position)).position));
 		}
 
 		resetPositions(playerState);
@@ -129,7 +133,10 @@ public class GameScreen extends Screen {
 
 	public void drawCard(UUID id, Card card, boolean shrinkDeck) {
 		var playerState = state.get(id);
-		playerState.hand.add(new ClientCard(card, Vec2.ZERO));
+		boolean enemy = !minecraft.player.getUUID().equals(id);
+		float x = enemy ? DECK_HORIZONTAL_OFFSET : width - DECK_HORIZONTAL_OFFSET - CARD_WIDTH;
+		float y = enemy ? DECK_VERTICAL_OFFSET : height - DECK_VERTICAL_OFFSET - CARD_HEIGHT;
+		playerState.hand.add(new ClientCard(card, new Vec2(x, y)));
 		resetPositions(playerState);
 
 		if (shrinkDeck)
@@ -236,12 +243,12 @@ public class GameScreen extends Screen {
 		for (int i = 0; i < playerState.hand.size(); i++) {
 			int x = cardRowX(playerState.hand.size(), enemy ? playerState.hand.size() - i - 1 : i);
 			int y = enemy ? 5 : height - CARD_HEIGHT - 5;
-			((ClientCard) playerState.hand.get(i)).position = new Vec2(x, y);
+			((ClientCard) playerState.hand.get(i)).setPosition(new Vec2(x, y));
 		}
 		for (int i = 0; i < playerState.board.size(); i++) {
 			int x = cardRowX(playerState.board.size(), enemy ? playerState.board.size() - i - 1 : i);
 			int y = enemy ? CARD_HEIGHT + 20 : height - CARD_HEIGHT * 2 - 20;
-			((ClientCard) playerState.board.get(i)).position = new Vec2(x, y);
+			((ClientCard) playerState.board.get(i)).setPosition(new Vec2(x, y));
 		}
 	}
 
@@ -262,15 +269,16 @@ public class GameScreen extends Screen {
 
 			// Cards
 			for (var card : playerState.board)
-				((ClientCard) card).render(mouseX, mouseY, source);
+				((ClientCard) card).render(mouseX, mouseY, source, partialTicks);
 			for (var card : playerState.hand)
-				((ClientCard) card).render(mouseX, mouseY, source);
+				((ClientCard) card).render(mouseX, mouseY, source, partialTicks);
 
 			// Deck
 			for (int i = 0; i < playerState.deck; i++) {
-				float x = enemy ? 20 + i * 0.2f : width - 80 + i * 0.2f;
-				float y = enemy ? 20 : height - 80;
-				new ClientCard(Cards.EMPTY, new Vec2(x, y)).render(mouseX, mouseY, source);
+				float x = enemy ? DECK_HORIZONTAL_OFFSET + i * 0.2f
+						: width - DECK_HORIZONTAL_OFFSET - CARD_WIDTH + i * 0.2f;
+				float y = enemy ? DECK_VERTICAL_OFFSET : height - DECK_VERTICAL_OFFSET - CARD_HEIGHT;
+				new ClientCard(Cards.EMPTY, new Vec2(x, y)).render(mouseX, mouseY, source, partialTicks);
 			}
 
 			// Resources
@@ -305,24 +313,52 @@ public class GameScreen extends Screen {
 	public void tick() {
 		super.tick();
 
+		for (var playerState : state.values()) {
+			// Cards
+			for (var card : playerState.board)
+				((ClientCard) card).tick();
+			for (var card : playerState.hand)
+				((ClientCard) card).tick();
+		}
+
 		popup.tick();
 	}
 
 	private class ClientCard extends Card {
 
 		private Vec2 position;
+		private Vec2 position0;
+		private Vec2 targetPosition;
 
 		private ClientCard(Card card, Vec2 position) {
 			super(card.getType(), card.getCost(), card.getHealth(), card.getDamage(), card.isReady(),
 					card.getAdditionalData());
 			this.position = position;
+			this.position0 = position;
+			this.targetPosition = position;
 		}
 
-		private void render(int mouseX, int mouseY, BufferSource source) {
+		private void tick() {
+			position0 = position;
+			position = new Vec2((float) Mth.lerp(0.9, position.x, targetPosition.x),
+					(float) Mth.lerp(0.9, position.y, targetPosition.y));
+		}
+
+		private Vec2 getPosition(float partialTick) {
+			return new Vec2((float) Mth.lerp(partialTick, position0.x, position.x),
+					(float) Mth.lerp(partialTick, position0.y, position.y));
+		}
+
+		private void setPosition(Vec2 position) {
+			this.targetPosition = position;
+		}
+
+		private void render(int mouseX, int mouseY, BufferSource source, float partialTick) {
 			var ps = new PoseStack();
 			ps.pushPose();
 
-			var pos = this == selectedCard ? new Vec2(mouseX - CARD_WIDTH / 2, mouseY - CARD_HEIGHT / 2) : position;
+			var pos = this == selectedCard ? new Vec2(mouseX - CARD_WIDTH / 2, mouseY - CARD_HEIGHT / 2)
+					: getPosition(partialTick);
 
 			// Rotate to show back
 			if (getType() == null) {
