@@ -1,5 +1,6 @@
 package mod.vemerion.minecard.screen;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,7 +10,6 @@ import org.lwjgl.glfw.GLFW;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Quaternion;
 
 import mod.vemerion.minecard.Main;
 import mod.vemerion.minecard.game.Card;
@@ -20,7 +20,8 @@ import mod.vemerion.minecard.network.AttackMessage;
 import mod.vemerion.minecard.network.EndTurnMessage;
 import mod.vemerion.minecard.network.Network;
 import mod.vemerion.minecard.network.PlayCardMessage;
-import mod.vemerion.minecard.renderer.CardItemRenderer;
+import mod.vemerion.minecard.screen.animation.Animation;
+import mod.vemerion.minecard.screen.animation.ThrowItemAnimation;
 import net.minecraft.client.gui.components.AbstractButton;
 import net.minecraft.client.gui.components.Widget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
@@ -29,7 +30,6 @@ import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource.BufferSource;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
-import net.minecraft.client.renderer.block.model.ItemTransforms.TransformType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -37,7 +37,6 @@ import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FastColor;
-import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.Vec2;
@@ -51,11 +50,11 @@ public class GameScreen extends Screen {
 	private static Component ENEMY_TURN = new TranslatableComponent(Helper.gui("enemy_turn"));
 	private static Component GAME_OVER = new TranslatableComponent(Helper.gui("game_over"));
 
-	private static final int CARD_SCALE = 60;
-	private static final int CARD_LIGHT = LightTexture.FULL_BRIGHT;
-	private static final int CARD_LIGHT_HOVER = 0b011000000000000001100000;
-	private static final int CARD_WIDTH = 46;
-	private static final int CARD_HEIGHT = 48;
+	public static final int CARD_SCALE = 60;
+	public static final int CARD_LIGHT = LightTexture.FULL_BRIGHT;
+	public static final int CARD_LIGHT_HOVER = 0b011000000000000001100000;
+	public static final int CARD_WIDTH = 46;
+	public static final int CARD_HEIGHT = 48;
 	private static final int NEXT_TURN_BUTTON_SIZE = 20;
 	private static final int DECK_HORIZONTAL_OFFSET = 20;
 	private static final int DECK_VERTICAL_OFFSET = 20;
@@ -66,10 +65,11 @@ public class GameScreen extends Screen {
 	private BlockPos pos;
 
 	// Widgets
-	PopupText popup;
+	private PopupText popup;
+	private List<Animation> animations;
 
-	Card selectedCard;
-	Card attackingCard;
+	private Card selectedCard;
+	private Card attackingCard;
 
 	public GameScreen(List<ClientPlayerState> list, BlockPos pos) {
 		super(TITLE);
@@ -77,6 +77,15 @@ public class GameScreen extends Screen {
 		this.pos = pos;
 		this.popup = new PopupText();
 		updateState();
+		this.animations = new ArrayList<>();
+	}
+
+	public Card getSelectedCard() {
+		return selectedCard;
+	}
+
+	public Card getAttackingCard() {
+		return attackingCard;
 	}
 
 	private Map<UUID, ClientPlayerState> initState(List<ClientPlayerState> list) {
@@ -108,7 +117,8 @@ public class GameScreen extends Screen {
 
 	public void placeCard(UUID id, Card card, int cardIndex, int position) {
 		var playerState = state.get(id);
-		playerState.board.add(position, new ClientCard(card, ((ClientCard) playerState.hand.get(cardIndex)).position));
+		playerState.board.add(position,
+				new ClientCard(card, ((ClientCard) playerState.hand.get(cardIndex)).getPosition(), this));
 		playerState.hand.remove(cardIndex);
 		resetPositions(playerState);
 	}
@@ -119,16 +129,17 @@ public class GameScreen extends Screen {
 			playerState.board.get(card).setReady(true);
 	}
 
-	public void updateCard(UUID id, Card card, int position) {
+	public Card updateCard(UUID id, Card card, int position) {
 		var playerState = state.get(id);
 		if (card.isDead()) {
-			playerState.board.remove(position);
+			card = playerState.board.remove(position);
 		} else {
-			playerState.board.set(position,
-					new ClientCard(card, ((ClientCard) playerState.board.get(position)).position));
+			card = playerState.board.set(position,
+					new ClientCard(card, ((ClientCard) playerState.board.get(position)).getPosition(), this));
 		}
 
 		resetPositions(playerState);
+		return card;
 	}
 
 	public void drawCard(UUID id, Card card, boolean shrinkDeck) {
@@ -136,7 +147,7 @@ public class GameScreen extends Screen {
 		boolean enemy = !minecraft.player.getUUID().equals(id);
 		float x = enemy ? DECK_HORIZONTAL_OFFSET : width - DECK_HORIZONTAL_OFFSET - CARD_WIDTH;
 		float y = enemy ? DECK_VERTICAL_OFFSET : height - DECK_VERTICAL_OFFSET - CARD_HEIGHT;
-		playerState.hand.add(new ClientCard(card, new Vec2(x, y)));
+		playerState.hand.add(new ClientCard(card, new Vec2(x, y), this));
 		resetPositions(playerState);
 
 		if (shrinkDeck)
@@ -145,6 +156,16 @@ public class GameScreen extends Screen {
 
 	public void gameOver() {
 		popup.popup(GAME_OVER);
+	}
+
+	public void combat(UUID attackerId, Card attackerCard, int attackerPos, UUID targetId, Card targetCard,
+			int targetPos) {
+		ClientCard attacker = (ClientCard) updateCard(attackerId, attackerCard, attackerPos);
+		ClientCard target = (ClientCard) updateCard(targetId, targetCard, targetPos);
+
+		animations.add(new ThrowItemAnimation(minecraft, new ItemStack(Items.STONE_SWORD),
+				new Vec2(attacker.getPosition().x + CARD_WIDTH / 2, attacker.getPosition().y + CARD_HEIGHT / 2),
+				target));
 	}
 
 	private ClientPlayerState yourState() {
@@ -177,7 +198,7 @@ public class GameScreen extends Screen {
 						int cardIndex = 0;
 						for (int i = 0; i < yourState().board.size(); i++) {
 							var card = (ClientCard) yourState().board.get(i);
-							if (pMouseX < ((ClientCard) card).position.x + CARD_WIDTH / 2) {
+							if (pMouseX < ((ClientCard) card).getPosition().x + CARD_WIDTH / 2) {
 								order = i;
 								break;
 							} else {
@@ -230,10 +251,10 @@ public class GameScreen extends Screen {
 	private void updateState() {
 		for (var playerState : state.values()) {
 			for (int i = 0; i < playerState.hand.size(); i++) {
-				playerState.hand.set(i, new ClientCard(playerState.hand.get(i), Vec2.ZERO));
+				playerState.hand.set(i, new ClientCard(playerState.hand.get(i), Vec2.ZERO, this));
 			}
 			for (int i = 0; i < playerState.board.size(); i++) {
-				playerState.board.set(i, new ClientCard(playerState.board.get(i), Vec2.ZERO));
+				playerState.board.set(i, new ClientCard(playerState.board.get(i), Vec2.ZERO, this));
 			}
 		}
 	}
@@ -262,6 +283,7 @@ public class GameScreen extends Screen {
 
 	@Override
 	public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTicks) {
+		partialTicks = this.minecraft.getFrameTime(); // s
 		var source = minecraft.renderBuffers().bufferSource();
 
 		for (var playerState : state.values()) {
@@ -278,7 +300,7 @@ public class GameScreen extends Screen {
 				float x = enemy ? DECK_HORIZONTAL_OFFSET + i * 0.2f
 						: width - DECK_HORIZONTAL_OFFSET - CARD_WIDTH + i * 0.2f;
 				float y = enemy ? DECK_VERTICAL_OFFSET : height - DECK_VERTICAL_OFFSET - CARD_HEIGHT;
-				new ClientCard(Cards.EMPTY, new Vec2(x, y)).render(mouseX, mouseY, source, partialTicks);
+				new ClientCard(Cards.EMPTY, new Vec2(x, y), this).render(mouseX, mouseY, source, partialTicks);
 			}
 
 			// Resources
@@ -288,6 +310,9 @@ public class GameScreen extends Screen {
 			renderResources(playerState.resources, new Vec3(resourcesX, resourcesY, 0.1), enemy,
 					LightTexture.FULL_BRIGHT, poseStack, source);
 		}
+
+		for (var animation : animations)
+			animation.render(mouseX, mouseY, source, partialTicks);
 
 		source.endBatch();
 
@@ -321,78 +346,14 @@ public class GameScreen extends Screen {
 				((ClientCard) card).tick();
 		}
 
+		for (var animation : animations)
+			animation.tick();
+
+		for (int i = animations.size() - 1; i >= 0; i--)
+			if (animations.get(i).isDone())
+				animations.remove(i);
+
 		popup.tick();
-	}
-
-	private class ClientCard extends Card {
-
-		private Vec2 position;
-		private Vec2 position0;
-		private Vec2 targetPosition;
-
-		private ClientCard(Card card, Vec2 position) {
-			super(card.getType(), card.getCost(), card.getHealth(), card.getDamage(), card.isReady(),
-					card.getAdditionalData());
-			this.position = position;
-			this.position0 = position;
-			this.targetPosition = position;
-		}
-
-		private void tick() {
-			position0 = position;
-			position = new Vec2((float) Mth.lerp(0.9, position.x, targetPosition.x),
-					(float) Mth.lerp(0.9, position.y, targetPosition.y));
-		}
-
-		private Vec2 getPosition(float partialTick) {
-			return new Vec2((float) Mth.lerp(partialTick, position0.x, position.x),
-					(float) Mth.lerp(partialTick, position0.y, position.y));
-		}
-
-		private void setPosition(Vec2 position) {
-			this.targetPosition = position;
-		}
-
-		private void render(int mouseX, int mouseY, BufferSource source, float partialTick) {
-			var ps = new PoseStack();
-			ps.pushPose();
-
-			var pos = this == selectedCard ? new Vec2(mouseX - CARD_WIDTH / 2, mouseY - CARD_HEIGHT / 2)
-					: getPosition(partialTick);
-
-			// Rotate to show back
-			if (getType() == null) {
-				ps.translate(pos.x + 24, 0, 0);
-				ps.mulPose(new Quaternion(0, 180, 0, true));
-				ps.translate(-pos.x - 24, 0, 0);
-			}
-
-			ps.translate(pos.x, pos.y, 0);
-			ps.scale(CARD_SCALE, -CARD_SCALE, CARD_SCALE);
-			int light = contains(mouseX, mouseY) ? CARD_LIGHT : CARD_LIGHT_HOVER;
-			CardItemRenderer.renderCard(this, TransformType.NONE, ps, source, light, OverlayTexture.NO_OVERLAY);
-			ps.popPose();
-
-			// Attacking card
-			if (this == attackingCard) {
-				ps.pushPose();
-				ps.translate(pos.x + CARD_WIDTH / 2 + 1, pos.y + CARD_WIDTH / 2 - 2, 50);
-				ps.scale(30, -30, 30);
-				minecraft.getItemRenderer().renderStatic(new ItemStack(Items.NETHERITE_SWORD), TransformType.NONE,
-						LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY, ps, source, 0);
-				ps.scale(-1, 1, 1);
-				minecraft.getItemRenderer().renderStatic(new ItemStack(Items.NETHERITE_SWORD), TransformType.NONE,
-						LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY, ps, source, 0);
-				ps.popPose();
-			}
-
-		}
-
-		private boolean contains(double pMouseX, double pMouseY) {
-			return pMouseX > position.x && pMouseX < position.x + CARD_WIDTH && pMouseY > position.y
-					&& pMouseY < position.y + CARD_HEIGHT;
-		}
-
 	}
 
 	private class NextTurnButton extends AbstractButton {

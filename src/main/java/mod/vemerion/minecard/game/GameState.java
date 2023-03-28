@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import mod.vemerion.minecard.network.CombatMessage;
 import mod.vemerion.minecard.network.Network;
-import mod.vemerion.minecard.network.UpdateCardMessage;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EntityType;
 import net.minecraftforge.network.PacketDistributor;
@@ -62,9 +62,7 @@ public class GameState {
 
 		for (var receiver : receivers) {
 			Network.INSTANCE.send(PacketDistributor.PLAYER.with(() -> receiver),
-					new UpdateCardMessage(current.getId(), attackerCard, attacker));
-			Network.INSTANCE.send(PacketDistributor.PLAYER.with(() -> receiver),
-					new UpdateCardMessage(enemy.getId(), targetCard, target));
+					new CombatMessage(current.getId(), attackerCard, attacker, enemy.getId(), targetCard, target));
 		}
 	}
 
