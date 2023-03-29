@@ -55,8 +55,7 @@ public class ClientCard extends Card {
 		this.targetPosition = position;
 	}
 
-	public void render(int mouseX, int mouseY, BufferSource source, float partialTick) {
-		var ps = new PoseStack();
+	public void render(PoseStack ps, int mouseX, int mouseY, BufferSource source, float partialTick) {
 		ps.pushPose();
 
 		var pos = this == screen.getSelectedCard() ? new Vec2(mouseX - CARD_WIDTH / 2, mouseY - CARD_HEIGHT / 2)

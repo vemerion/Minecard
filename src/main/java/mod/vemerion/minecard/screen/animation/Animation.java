@@ -4,10 +4,13 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource.BufferSource;
 
 public abstract class Animation {
-	protected Minecraft mc;
 
-	public Animation(Minecraft mc) {
+	protected Minecraft mc;
+	private Runnable runnable;
+
+	public Animation(Minecraft mc, Runnable onDone) {
 		this.mc = mc;
+		this.runnable = onDone;
 	}
 
 	public void tick() {
@@ -17,6 +20,10 @@ public abstract class Animation {
 	public void render(int mouseX, int mouseY, BufferSource source, float partialTick) {
 
 	}
-	
+
 	public abstract boolean isDone();
+
+	public void onDone() {
+		runnable.run();
+	}
 }

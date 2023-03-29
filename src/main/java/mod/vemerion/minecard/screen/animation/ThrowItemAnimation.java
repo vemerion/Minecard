@@ -22,8 +22,8 @@ public class ThrowItemAnimation extends Animation {
 	private ClientCard target;
 	private int timer = 0;
 
-	public ThrowItemAnimation(Minecraft mc, ItemStack stack, Vec2 start, ClientCard target) {
-		super(mc);
+	public ThrowItemAnimation(Minecraft mc, ItemStack stack, Vec2 start, ClientCard target, Runnable onDone) {
+		super(mc, onDone);
 		this.stack = stack;
 		this.start = start;
 		this.target = target;

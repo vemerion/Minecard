@@ -1,5 +1,9 @@
 package mod.vemerion.minecard;
 
+import org.slf4j.Logger;
+
+import com.mojang.logging.LogUtils;
+
 import mod.vemerion.minecard.init.ModBlockEntities;
 import mod.vemerion.minecard.init.ModBlocks;
 import mod.vemerion.minecard.init.ModItems;
@@ -11,6 +15,8 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 @Mod(Main.MODID)
 public class Main {
 	public static final String MODID = "minecard";
+
+	public static final Logger LOGGER = LogUtils.getLogger();
 
 	public Main() {
 		var bus = FMLJavaModLoadingContext.get().getModEventBus();

@@ -21,6 +21,7 @@ import mod.vemerion.minecard.network.EndTurnMessage;
 import mod.vemerion.minecard.network.Network;
 import mod.vemerion.minecard.network.PlayCardMessage;
 import mod.vemerion.minecard.screen.animation.Animation;
+import mod.vemerion.minecard.screen.animation.DeathAnimation;
 import mod.vemerion.minecard.screen.animation.ThrowItemAnimation;
 import net.minecraft.client.gui.components.AbstractButton;
 import net.minecraft.client.gui.components.Widget;
@@ -31,11 +32,13 @@ import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource.BufferSource;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.FastColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -132,13 +135,12 @@ public class GameScreen extends Screen {
 	public Card updateCard(UUID id, Card card, int position) {
 		var playerState = state.get(id);
 		if (card.isDead()) {
-			card = playerState.board.remove(position);
+			card = new ClientCard(card, ((ClientCard) playerState.board.remove(position)).getPosition(), this);
 		} else {
 			card = playerState.board.set(position,
 					new ClientCard(card, ((ClientCard) playerState.board.get(position)).getPosition(), this));
 		}
 
-		resetPositions(playerState);
 		return card;
 	}
 
@@ -164,8 +166,20 @@ public class GameScreen extends Screen {
 		ClientCard target = (ClientCard) updateCard(targetId, targetCard, targetPos);
 
 		animations.add(new ThrowItemAnimation(minecraft, new ItemStack(Items.STONE_SWORD),
-				new Vec2(attacker.getPosition().x + CARD_WIDTH / 2, attacker.getPosition().y + CARD_HEIGHT / 2),
-				target));
+				new Vec2(attacker.getPosition().x + CARD_WIDTH / 2, attacker.getPosition().y + CARD_HEIGHT / 2), target,
+				() -> {
+					minecraft.getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.PLAYER_ATTACK_SWEEP, 1));
+				}));
+		if (attacker.isDead()) {
+			animations.add(new DeathAnimation(minecraft, attacker, 40, () -> {
+				resetPositions(state.get(attackerId));
+			}));
+		}
+		if (target.isDead()) {
+			animations.add(new DeathAnimation(minecraft, target, 40, () -> {
+				resetPositions(state.get(targetId));
+			}));
+		}
 	}
 
 	private ClientPlayerState yourState() {
@@ -291,16 +305,17 @@ public class GameScreen extends Screen {
 
 			// Cards
 			for (var card : playerState.board)
-				((ClientCard) card).render(mouseX, mouseY, source, partialTicks);
+				((ClientCard) card).render(new PoseStack(), mouseX, mouseY, source, partialTicks);
 			for (var card : playerState.hand)
-				((ClientCard) card).render(mouseX, mouseY, source, partialTicks);
+				((ClientCard) card).render(new PoseStack(), mouseX, mouseY, source, partialTicks);
 
 			// Deck
 			for (int i = 0; i < playerState.deck; i++) {
 				float x = enemy ? DECK_HORIZONTAL_OFFSET + i * 0.2f
 						: width - DECK_HORIZONTAL_OFFSET - CARD_WIDTH + i * 0.2f;
 				float y = enemy ? DECK_VERTICAL_OFFSET : height - DECK_VERTICAL_OFFSET - CARD_HEIGHT;
-				new ClientCard(Cards.EMPTY, new Vec2(x, y), this).render(mouseX, mouseY, source, partialTicks);
+				new ClientCard(Cards.EMPTY, new Vec2(x, y), this).render(new PoseStack(), mouseX, mouseY, source,
+						partialTicks);
 			}
 
 			// Resources
@@ -350,8 +365,10 @@ public class GameScreen extends Screen {
 			animation.tick();
 
 		for (int i = animations.size() - 1; i >= 0; i--)
-			if (animations.get(i).isDone())
+			if (animations.get(i).isDone()) {
+				animations.get(i).onDone();
 				animations.remove(i);
+			}
 
 		popup.tick();
 	}
