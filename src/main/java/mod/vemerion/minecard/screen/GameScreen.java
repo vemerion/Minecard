@@ -40,10 +40,10 @@ import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.FastColor;
+import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.Vec2;
-import net.minecraft.world.phys.Vec3;
 
 public class GameScreen extends Screen {
 
@@ -70,6 +70,7 @@ public class GameScreen extends Screen {
 	// Widgets
 	private PopupText popup;
 	private List<Animation> animations;
+	private List<Resources> resources;
 
 	private Card selectedCard;
 	private Card attackingCard;
@@ -101,8 +102,13 @@ public class GameScreen extends Screen {
 	@Override
 	protected void init() {
 		super.init();
-		for (var playerState : state.values())
+		resources = new ArrayList<>();
+		for (var playerState : state.values()) {
 			resetPositions(playerState);
+
+			boolean enemy = !playerState.id.equals(minecraft.player.getUUID());
+			resources.add(new Resources(playerState.id, enemy));
+		}
 		addRenderableWidget(new NextTurnButton((int) (width * 0.75), height / 2 - NEXT_TURN_BUTTON_SIZE / 2,
 				NEXT_TURN_BUTTON_SIZE, NEXT_TURN_BUTTON_SIZE, TextComponent.EMPTY));
 	}
@@ -317,14 +323,10 @@ public class GameScreen extends Screen {
 				new ClientCard(Cards.EMPTY, new Vec2(x, y), this).render(new PoseStack(), mouseX, mouseY, source,
 						partialTicks);
 			}
-
-			// Resources
-			int resourcesX = enemy ? 200 : width - 200;
-			int resourcesY = enemy ? 60 : height - 60;
-			renderResources(playerState.maxResources, new Vec3(resourcesX, resourcesY, 0), enemy, 0, poseStack, source);
-			renderResources(playerState.resources, new Vec3(resourcesX, resourcesY, 0.1), enemy,
-					LightTexture.FULL_BRIGHT, poseStack, source);
 		}
+
+		for (var r : resources)
+			r.render(new PoseStack(), partialTicks, source);
 
 		for (var animation : animations)
 			animation.render(mouseX, mouseY, source, partialTicks);
@@ -334,19 +336,6 @@ public class GameScreen extends Screen {
 		popup.render(poseStack, mouseX, mouseY, partialTicks);
 
 		super.render(poseStack, mouseX, mouseY, partialTicks);
-	}
-
-	private void renderResources(int count, Vec3 position, boolean reverse, int light, PoseStack poseStack,
-			BufferSource source) {
-		var stack = Items.EMERALD.getDefaultInstance();
-		for (int i = 0; i < count; i++) {
-			poseStack.pushPose();
-			poseStack.translate(position.x + i * 10 * (reverse ? -1 : 1), position.y, position.z);
-			poseStack.scale(15, -15, 15);
-			itemRenderer.renderStatic(stack, ItemTransforms.TransformType.GUI, light, OverlayTexture.NO_OVERLAY,
-					poseStack, source, 0);
-			poseStack.popPose();
-		}
 	}
 
 	@Override
@@ -360,6 +349,9 @@ public class GameScreen extends Screen {
 			for (var card : playerState.hand)
 				((ClientCard) card).tick();
 		}
+
+		for (var r : resources)
+			r.tick();
 
 		for (var animation : animations)
 			animation.tick();
@@ -440,6 +432,63 @@ public class GameScreen extends Screen {
 			this.text = text;
 			alpha = 255;
 			scale = 3;
+		}
+
+	}
+
+	private class Resources {
+
+		private static final float SCALE = 15;
+
+		private UUID id;
+		private boolean top;
+
+		private float[] scales = new float[20];
+		private float[] scales0 = new float[20];
+
+		private Resources(UUID id, boolean top) {
+			this.id = id;
+			this.top = top;
+		}
+
+		public void render(PoseStack poseStack, float pPartialTick, BufferSource source) {
+			for (int i = 0; i < 10; i++) {
+				poseStack.pushPose();
+				poseStack.translate((top ? 200 : width - 200) + i * 10 * (top ? -1 : 1), top ? 60 : height - 60, 0);
+
+				renderResource(poseStack, pPartialTick, source, i * 2, true);
+				renderResource(poseStack, pPartialTick, source, i * 2 + 1, false);
+
+				poseStack.popPose();
+			}
+		}
+
+		private void renderResource(PoseStack poseStack, float pPartialTick, BufferSource source, int index,
+				boolean background) {
+			poseStack.pushPose();
+			float scale = SCALE * Mth.lerp(pPartialTick, scales0[index], scales[index]);
+			poseStack.scale(scale, -scale, scale);
+			if (!background)
+				poseStack.translate(0, 0, 0.1);
+			itemRenderer.renderStatic(Items.EMERALD.getDefaultInstance(), ItemTransforms.TransformType.GUI,
+					background ? 0 : LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY, poseStack, source, 0);
+			poseStack.popPose();
+		}
+
+		private void tick() {
+			var playerState = state.get(id);
+			for (int i = 0; i < 10; i++) {
+				updateResource(i * 2, i < playerState.maxResources);
+				updateResource(i * 2 + 1, i < playerState.resources);
+			}
+		}
+
+		private void updateResource(int index, boolean increase) {
+			scales0[index] = scales[index];
+			if (increase)
+				scales[index] = (float) Mth.lerp(0.1, scales[index], 1);
+			else
+				scales[index] = (float) Mth.lerp(0.1, scales[index], 0);
 		}
 
 	}
