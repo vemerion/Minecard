@@ -3,8 +3,6 @@ package mod.vemerion.minecard.init;
 import javax.annotation.Nullable;
 
 import mod.vemerion.minecard.Main;
-import mod.vemerion.minecard.capability.CardData;
-import mod.vemerion.minecard.game.Cards;
 import mod.vemerion.minecard.item.CardItem;
 import mod.vemerion.minecard.item.DeckItem;
 import net.minecraft.core.NonNullList;
@@ -47,15 +45,7 @@ public class ModItems {
 		public void fillItemList(NonNullList<ItemStack> items) {
 			items.add(new ItemStack(DECK.get()));
 			items.add(new ItemStack(GAME.get()));
-			for (var type : ForgeRegistries.ENTITIES) {
-				if (!Cards.isAllowed(type))
-					continue;
-				var stack = CARD.get().getDefaultInstance();
-				CardData.get(stack).ifPresent(data -> {
-					data.setType(type);
-					items.add(stack);
-				});
-			}
+			CARD.get().fillItemCategory(MOD_CREATIVE_MODE_TAB, items);
 		}
 	}
 }
