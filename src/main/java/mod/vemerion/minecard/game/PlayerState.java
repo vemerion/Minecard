@@ -102,7 +102,7 @@ public class PlayerState {
 		}
 	}
 
-	public ClientPlayerState toClient(boolean hide) {
+	public MessagePlayerState toMessage(boolean hide) {
 		List<Card> hand = this.hand;
 		if (hide) {
 			hand = new ArrayList<>();
@@ -110,6 +110,6 @@ public class PlayerState {
 				hand.add(Cards.EMPTY);
 			}
 		}
-		return new ClientPlayerState(id, deck.size(), hand, board, resources, maxResources);
+		return new MessagePlayerState(id, deck.size(), hand, board, resources, maxResources);
 	}
 }

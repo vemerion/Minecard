@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.lwjgl.glfw.GLFW;
 
@@ -14,7 +15,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import mod.vemerion.minecard.Main;
 import mod.vemerion.minecard.game.Card;
 import mod.vemerion.minecard.game.Cards;
-import mod.vemerion.minecard.game.ClientPlayerState;
+import mod.vemerion.minecard.game.MessagePlayerState;
 import mod.vemerion.minecard.helper.Helper;
 import mod.vemerion.minecard.network.AttackMessage;
 import mod.vemerion.minecard.network.EndTurnMessage;
@@ -75,12 +76,11 @@ public class GameScreen extends Screen {
 	private Card selectedCard;
 	private Card attackingCard;
 
-	public GameScreen(List<ClientPlayerState> list, BlockPos pos) {
+	public GameScreen(List<MessagePlayerState> list, BlockPos pos) {
 		super(TITLE);
 		this.state = initState(list);
 		this.pos = pos;
 		this.popup = new PopupText();
-		updateState();
 		this.animations = new ArrayList<>();
 	}
 
@@ -92,10 +92,16 @@ public class GameScreen extends Screen {
 		return attackingCard;
 	}
 
-	private Map<UUID, ClientPlayerState> initState(List<ClientPlayerState> list) {
+	private Map<UUID, ClientPlayerState> initState(List<MessagePlayerState> list) {
 		Map<UUID, ClientPlayerState> map = new HashMap<>();
-		for (var playerState : list)
-			map.put(playerState.id, playerState);
+		for (var messageState : list)
+			map.put(messageState.id,
+					new ClientPlayerState(messageState.id, messageState.deck,
+							messageState.hand.stream().map(c -> new ClientCard(c, Vec2.ZERO, this))
+									.collect(Collectors.toList()),
+							messageState.board.stream().map(c -> new ClientCard(c, Vec2.ZERO, this))
+									.collect(Collectors.toList()),
+							messageState.resources, messageState.maxResources));
 		return map;
 	}
 
@@ -126,8 +132,7 @@ public class GameScreen extends Screen {
 
 	public void placeCard(UUID id, Card card, int cardIndex, int position) {
 		var playerState = state.get(id);
-		playerState.board.add(position,
-				new ClientCard(card, ((ClientCard) playerState.hand.get(cardIndex)).getPosition(), this));
+		playerState.board.add(position, new ClientCard(card, playerState.hand.get(cardIndex).getPosition(), this));
 		playerState.hand.remove(cardIndex);
 		resetPositions(playerState);
 	}
@@ -138,16 +143,14 @@ public class GameScreen extends Screen {
 			playerState.board.get(card).setReady(true);
 	}
 
-	public Card updateCard(UUID id, Card card, int position) {
+	public ClientCard updateCard(UUID id, Card card, int position) {
 		var playerState = state.get(id);
 		if (card.isDead()) {
-			card = new ClientCard(card, ((ClientCard) playerState.board.remove(position)).getPosition(), this);
+			return new ClientCard(card, playerState.board.remove(position).getPosition(), this);
 		} else {
-			card = playerState.board.set(position,
-					new ClientCard(card, ((ClientCard) playerState.board.get(position)).getPosition(), this));
+			return playerState.board.set(position,
+					new ClientCard(card, playerState.board.get(position).getPosition(), this));
 		}
-
-		return card;
 	}
 
 	public void drawCard(UUID id, Card card, boolean shrinkDeck) {
@@ -168,8 +171,8 @@ public class GameScreen extends Screen {
 
 	public void combat(UUID attackerId, Card attackerCard, int attackerPos, UUID targetId, Card targetCard,
 			int targetPos) {
-		ClientCard attacker = (ClientCard) updateCard(attackerId, attackerCard, attackerPos);
-		ClientCard target = (ClientCard) updateCard(targetId, targetCard, targetPos);
+		ClientCard attacker = updateCard(attackerId, attackerCard, attackerPos);
+		ClientCard target = updateCard(targetId, targetCard, targetPos);
 
 		animations.add(new ThrowItemAnimation(minecraft, new ItemStack(Items.STONE_SWORD),
 				new Vec2(attacker.getPosition().x + CARD_WIDTH / 2, attacker.getPosition().y + CARD_HEIGHT / 2), target,
@@ -207,7 +210,7 @@ public class GameScreen extends Screen {
 				// Play card
 				if (selectedCard == null) {
 					for (var card : yourState().hand) {
-						if (((ClientCard) card).contains(pMouseX, pMouseY)) {
+						if (card.contains(pMouseX, pMouseY)) {
 							selectedCard = card;
 							return true;
 						}
@@ -217,8 +220,8 @@ public class GameScreen extends Screen {
 						int order = 0;
 						int cardIndex = 0;
 						for (int i = 0; i < yourState().board.size(); i++) {
-							var card = (ClientCard) yourState().board.get(i);
-							if (pMouseX < ((ClientCard) card).getPosition().x + CARD_WIDTH / 2) {
+							var card = yourState().board.get(i);
+							if (pMouseX < card.getPosition().x + CARD_WIDTH / 2) {
 								order = i;
 								break;
 							} else {
@@ -240,7 +243,7 @@ public class GameScreen extends Screen {
 				// Attack
 				if (selectedCard == null && attackingCard == null) {
 					for (var card : yourState().board) {
-						if (((ClientCard) card).contains(pMouseX, pMouseY) && card.isReady()) {
+						if (card.contains(pMouseX, pMouseY) && card.isReady()) {
 							attackingCard = card;
 							return true;
 						}
@@ -248,7 +251,7 @@ public class GameScreen extends Screen {
 				} else if (attackingCard != null) {
 					var enemy = enemyState().board;
 					for (int i = 0; i < enemy.size(); i++) {
-						if (((ClientCard) enemy.get(i)).contains(pMouseX, pMouseY)) {
+						if (enemy.get(i).contains(pMouseX, pMouseY)) {
 							for (int j = 0; j < yourState().board.size(); j++) {
 								if (yourState().board.get(j) == attackingCard) {
 									Network.INSTANCE.sendToServer(new AttackMessage(pos, j, i));
@@ -268,28 +271,17 @@ public class GameScreen extends Screen {
 		return super.mouseClicked(pMouseX, pMouseY, pButton);
 	}
 
-	private void updateState() {
-		for (var playerState : state.values()) {
-			for (int i = 0; i < playerState.hand.size(); i++) {
-				playerState.hand.set(i, new ClientCard(playerState.hand.get(i), Vec2.ZERO, this));
-			}
-			for (int i = 0; i < playerState.board.size(); i++) {
-				playerState.board.set(i, new ClientCard(playerState.board.get(i), Vec2.ZERO, this));
-			}
-		}
-	}
-
 	private void resetPositions(ClientPlayerState playerState) {
 		boolean enemy = !playerState.id.equals(minecraft.player.getUUID());
 		for (int i = 0; i < playerState.hand.size(); i++) {
 			int x = cardRowX(playerState.hand.size(), enemy ? playerState.hand.size() - i - 1 : i);
 			int y = enemy ? 5 : height - CARD_HEIGHT - 5;
-			((ClientCard) playerState.hand.get(i)).setPosition(new Vec2(x, y));
+			playerState.hand.get(i).setPosition(new Vec2(x, y));
 		}
 		for (int i = 0; i < playerState.board.size(); i++) {
 			int x = cardRowX(playerState.board.size(), enemy ? playerState.board.size() - i - 1 : i);
 			int y = enemy ? CARD_HEIGHT + 20 : height - CARD_HEIGHT * 2 - 20;
-			((ClientCard) playerState.board.get(i)).setPosition(new Vec2(x, y));
+			playerState.board.get(i).setPosition(new Vec2(x, y));
 		}
 	}
 
@@ -311,9 +303,9 @@ public class GameScreen extends Screen {
 
 			// Cards
 			for (var card : playerState.board)
-				((ClientCard) card).render(new PoseStack(), mouseX, mouseY, source, partialTicks);
+				card.render(new PoseStack(), mouseX, mouseY, source, partialTicks);
 			for (var card : playerState.hand)
-				((ClientCard) card).render(new PoseStack(), mouseX, mouseY, source, partialTicks);
+				card.render(new PoseStack(), mouseX, mouseY, source, partialTicks);
 
 			// Deck
 			float deckX = enemy ? DECK_HORIZONTAL_OFFSET : width - DECK_HORIZONTAL_OFFSET - CARD_WIDTH;
@@ -348,9 +340,9 @@ public class GameScreen extends Screen {
 		for (var playerState : state.values()) {
 			// Cards
 			for (var card : playerState.board)
-				((ClientCard) card).tick();
+				card.tick();
 			for (var card : playerState.hand)
-				((ClientCard) card).tick();
+				card.tick();
 		}
 
 		for (var r : resources)

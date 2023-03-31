@@ -146,7 +146,7 @@ public class GameBlockEntity extends BlockEntity {
 		var yourState = state.getPlayerStates().stream().filter(s -> s.getId() == id).findAny().get();
 		var enemyState = state.getPlayerStates().stream().filter(s -> s.getId() != id).findAny().get();
 
-		return new OpenGameMessage(List.of(yourState.toClient(false), enemyState.toClient(true)), getBlockPos());
+		return new OpenGameMessage(List.of(yourState.toMessage(false), enemyState.toMessage(true)), getBlockPos());
 	}
 
 }

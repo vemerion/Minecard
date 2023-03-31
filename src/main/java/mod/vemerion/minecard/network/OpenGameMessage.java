@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.function.Supplier;
 
 import mod.vemerion.minecard.game.Card;
-import mod.vemerion.minecard.game.ClientPlayerState;
+import mod.vemerion.minecard.game.MessagePlayerState;
 import mod.vemerion.minecard.screen.GameScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
@@ -17,10 +17,10 @@ import net.minecraftforge.network.NetworkEvent;
 
 public class OpenGameMessage {
 
-	private List<ClientPlayerState> state;
+	private List<MessagePlayerState> state;
 	private BlockPos pos;
 
-	public OpenGameMessage(List<ClientPlayerState> state, BlockPos pos) {
+	public OpenGameMessage(List<MessagePlayerState> state, BlockPos pos) {
 		this.state = state;
 		this.pos = pos;
 	}
@@ -31,7 +31,7 @@ public class OpenGameMessage {
 		buffer.writeBlockPos(pos);
 	}
 
-	private static void writePlayer(final FriendlyByteBuf buffer, ClientPlayerState player) {
+	private static void writePlayer(final FriendlyByteBuf buffer, MessagePlayerState player) {
 		buffer.writeUUID(player.id);
 		buffer.writeInt(player.deck);
 		writeCards(buffer, player.hand);
@@ -40,8 +40,8 @@ public class OpenGameMessage {
 		buffer.writeInt(player.maxResources);
 	}
 
-	private static ClientPlayerState readPlayer(final FriendlyByteBuf buffer) {
-		return new ClientPlayerState(buffer.readUUID(), buffer.readInt(), readCards(buffer), readCards(buffer),
+	private static MessagePlayerState readPlayer(final FriendlyByteBuf buffer) {
+		return new MessagePlayerState(buffer.readUUID(), buffer.readInt(), readCards(buffer), readCards(buffer),
 				buffer.readInt(), buffer.readInt());
 	}
 
