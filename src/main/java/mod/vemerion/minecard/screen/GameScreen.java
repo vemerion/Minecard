@@ -316,17 +316,20 @@ public class GameScreen extends Screen {
 				((ClientCard) card).render(new PoseStack(), mouseX, mouseY, source, partialTicks);
 
 			// Deck
+			float deckX = enemy ? DECK_HORIZONTAL_OFFSET : width - DECK_HORIZONTAL_OFFSET - CARD_WIDTH;
+			float deckY = enemy ? DECK_VERTICAL_OFFSET : height - DECK_VERTICAL_OFFSET - CARD_HEIGHT;
 			for (int i = 0; i < playerState.deck; i++) {
-				float x = enemy ? DECK_HORIZONTAL_OFFSET + i * 0.2f
-						: width - DECK_HORIZONTAL_OFFSET - CARD_WIDTH + i * 0.2f;
-				float y = enemy ? DECK_VERTICAL_OFFSET : height - DECK_VERTICAL_OFFSET - CARD_HEIGHT;
-				new ClientCard(Cards.EMPTY, new Vec2(x, y), this).render(new PoseStack(), mouseX, mouseY, source,
+				float x = deckX + i * 0.2f;
+				new ClientCard(Cards.EMPTY, new Vec2(x, deckY), this).render(new PoseStack(), mouseX, mouseY, source,
 						partialTicks);
 			}
+			if (mouseX > deckX && mouseX < deckX + CARD_WIDTH && mouseY > deckY && mouseY < deckY + CARD_HEIGHT)
+				renderTooltip(poseStack, new TranslatableComponent(Helper.gui("deck_count"), playerState.deck), mouseX,
+						mouseY);
 		}
 
 		for (var r : resources)
-			r.render(new PoseStack(), partialTicks, source);
+			r.render(new PoseStack(), mouseX, mouseY, partialTicks, source);
 
 		for (var animation : animations)
 			animation.render(mouseX, mouseY, source, partialTicks);
@@ -439,6 +442,7 @@ public class GameScreen extends Screen {
 	private class Resources {
 
 		private static final float SCALE = 15;
+		private static final int OFFSET = 10;
 
 		private UUID id;
 		private boolean top;
@@ -451,16 +455,26 @@ public class GameScreen extends Screen {
 			this.top = top;
 		}
 
-		public void render(PoseStack poseStack, float pPartialTick, BufferSource source) {
+		public void render(PoseStack poseStack, int pMouseX, int pMouseY, float pPartialTick, BufferSource source) {
+			var position = new Vec2((top ? 200 : width - 200), top ? 60 : height - 60);
 			for (int i = 0; i < 10; i++) {
 				poseStack.pushPose();
-				poseStack.translate((top ? 200 : width - 200) + i * 10 * (top ? -1 : 1), top ? 60 : height - 60, 0);
+				poseStack.translate(position.x + i * OFFSET * (top ? -1 : 1), position.y, 0);
 
 				renderResource(poseStack, pPartialTick, source, i * 2, true);
 				renderResource(poseStack, pPartialTick, source, i * 2 + 1, false);
 
 				poseStack.popPose();
 			}
+
+			// Render count text
+			var playerState = state.get(id);
+			int width = Math.max(playerState.resources, playerState.maxResources) * OFFSET;
+			position = position.add(new Vec2(OFFSET / 2 * (top ? 1 : -1), -OFFSET / 2));
+			if (pMouseX > (top ? position.x - width : position.x) && pMouseX < (top ? position.x : position.x + width)
+					&& pMouseY > position.y && pMouseY < position.y + OFFSET)
+				GameScreen.this.renderTooltip(poseStack, new TranslatableComponent(Helper.gui("resources_count"),
+						playerState.resources, playerState.maxResources), pMouseX, pMouseY);
 		}
 
 		private void renderResource(PoseStack poseStack, float pPartialTick, BufferSource source, int index,
