@@ -312,7 +312,7 @@ public class GameScreen extends Screen {
 			float deckY = enemy ? DECK_VERTICAL_OFFSET : height - DECK_VERTICAL_OFFSET - CARD_HEIGHT;
 			for (int i = 0; i < playerState.deck; i++) {
 				float x = deckX + i * 0.2f;
-				new ClientCard(Cards.EMPTY, new Vec2(x, deckY), this).render(new PoseStack(), mouseX, mouseY, source,
+				new ClientCard(Cards.EMPTY_CARD, new Vec2(x, deckY), this).render(new PoseStack(), mouseX, mouseY, source,
 						partialTicks);
 			}
 			if (mouseX > deckX && mouseX < deckX + CARD_WIDTH && mouseY > deckY && mouseY < deckY + CARD_HEIGHT)

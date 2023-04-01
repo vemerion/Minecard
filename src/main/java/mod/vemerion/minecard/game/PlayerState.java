@@ -77,7 +77,7 @@ public class PlayerState {
 			hand.add(card);
 			for (var receiver : receivers) {
 				Network.INSTANCE.send(PacketDistributor.PLAYER.with(() -> receiver),
-						new DrawCardMessage(id, receiver.getUUID().equals(id) ? card : Cards.EMPTY, true));
+						new DrawCardMessage(id, receiver.getUUID().equals(id) ? card : Cards.EMPTY_CARD, true));
 			}
 		}
 	}
@@ -107,7 +107,7 @@ public class PlayerState {
 		if (hide) {
 			hand = new ArrayList<>();
 			for (int i = 0; i < this.hand.size(); i++) {
-				hand.add(Cards.EMPTY);
+				hand.add(Cards.EMPTY_CARD);
 			}
 		}
 		return new MessagePlayerState(id, deck.size(), hand, board, resources, maxResources);

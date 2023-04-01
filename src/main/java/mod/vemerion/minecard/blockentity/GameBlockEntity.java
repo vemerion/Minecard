@@ -120,7 +120,7 @@ public class GameBlockEntity extends BlockEntity {
 					player.sendMessage(new TranslatableComponent(Helper.chat("not_enough_cards")), id);
 					break;
 				}
-				CardData.getType(item).ifPresent(type -> deck.add(Cards.getInstance().get(type).copy()));
+				CardData.getType(item).ifPresent(type -> deck.add(Cards.getInstance().get(type).create()));
 			}
 
 			if (deck.size() != DeckData.CAPACITY) {
@@ -134,7 +134,7 @@ public class GameBlockEntity extends BlockEntity {
 			}
 
 			List<Card> board = new ArrayList<>();
-			var playerCard = Cards.PLAYER.copy();
+			var playerCard = Cards.PLAYER.create();
 			playerCard.setAdditionalData(new AdditionalCardData.IdData(player.getUUID()));
 			board.add(playerCard);
 

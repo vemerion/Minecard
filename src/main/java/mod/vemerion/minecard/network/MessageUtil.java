@@ -19,7 +19,7 @@ public class MessageUtil {
 		if (nbt.contains("value"))
 			return Card.CODEC.parse(NbtOps.INSTANCE, nbt.get("value")).getOrThrow(false, MessageUtil::onError);
 		else
-			return Cards.EMPTY;
+			return Cards.EMPTY_CARD;
 	}
 
 	private static void onError(String msg) {

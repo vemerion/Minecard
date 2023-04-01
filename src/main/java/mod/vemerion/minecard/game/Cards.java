@@ -4,24 +4,27 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 
 public class Cards {
-	public static final Card EMPTY = new Card(null, 0, 0, 0, false, AdditionalCardData.EMPTY);
-	public static final Card PLAYER = new Card(EntityType.PLAYER, 0, 30, 0, false, AdditionalCardData.EMPTY);
+	public static final CardType EMPTY_CARD_TYPE = new CardType(null, 0, 0, 0, AdditionalCardData.EMPTY);
+	public static final Card EMPTY_CARD = EMPTY_CARD_TYPE.create();
+	public static final CardType PLAYER = new CardType(EntityType.PLAYER, 0, 30, 0, AdditionalCardData.EMPTY);
 
 	private static Cards instance;
 
-	private final Map<EntityType<?>, Card> CARDS;
+	private final Map<ResourceLocation, CardType> CARDS;
 
 	private Cards() {
 		CARDS = new HashMap<>();
-		CARDS.put(EntityType.CREEPER, new Card(EntityType.CREEPER, 3, 2, 3, false, AdditionalCardData.EMPTY));
+		CARDS.put(EntityType.CREEPER.getRegistryName(),
+				new CardType(EntityType.CREEPER, 3, 2, 3, AdditionalCardData.EMPTY));
 	}
 
-	public Card get(EntityType<?> type) {
-		return CARDS.computeIfAbsent(type, this::generateCard);
+	public CardType get(EntityType<?> type) {
+		return CARDS.computeIfAbsent(type.getRegistryName(), rl -> generateCardType(type));
 	}
 
 	public static Cards getInstance() {
@@ -34,13 +37,13 @@ public class Cards {
 		return type.getCategory() != MobCategory.MISC;
 	}
 
-	private Card generateCard(EntityType<?> type) {
+	private CardType generateCardType(EntityType<?> type) {
 		Random rand = new Random(type.getRegistryName().toString().hashCode());
 
 		int cost = rand.nextInt(1, 11);
 		int totalStats = cost * 2 + 1;
 		int health = rand.nextInt(1, totalStats);
 
-		return new Card(type, cost, health, totalStats - health, false, AdditionalCardData.EMPTY);
+		return new CardType(type, cost, health, totalStats - health, AdditionalCardData.EMPTY);
 	}
 }

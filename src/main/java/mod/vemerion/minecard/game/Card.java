@@ -9,7 +9,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 public class Card {
 
 	public static final Codec<Card> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-			ForgeRegistries.ENTITIES.getCodec().fieldOf("type").forGetter(Card::getType),
+			ForgeRegistries.ENTITIES.getCodec().fieldOf("entity").forGetter(Card::getType),
 			Codec.INT.fieldOf("cost").forGetter(Card::getCost), Codec.INT.fieldOf("health").forGetter(Card::getHealth),
 			Codec.INT.fieldOf("damage").forGetter(Card::getDamage),
 			Codec.BOOL.fieldOf("ready").forGetter(Card::isReady), AdditionalCardData.CODEC
@@ -31,10 +31,6 @@ public class Card {
 		this.damage = damage;
 		this.ready = ready;
 		this.additionalData = additionalData;
-	}
-
-	public Card copy() {
-		return new Card(type, cost, health, damage, ready, additionalData);
 	}
 
 	public EntityType<?> getType() {
