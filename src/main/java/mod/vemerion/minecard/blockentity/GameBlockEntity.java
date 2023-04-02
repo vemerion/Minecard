@@ -120,7 +120,7 @@ public class GameBlockEntity extends BlockEntity {
 					player.sendMessage(new TranslatableComponent(Helper.chat("not_enough_cards")), id);
 					break;
 				}
-				CardData.getType(item).ifPresent(type -> deck.add(Cards.getInstance().get(type).create()));
+				CardData.getType(item).ifPresent(type -> deck.add(Cards.getInstance(false).get(type).create()));
 			}
 
 			if (deck.size() != DeckData.CAPACITY) {

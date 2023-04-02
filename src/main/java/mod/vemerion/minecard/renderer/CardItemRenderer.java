@@ -174,7 +174,7 @@ public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 		if (!(stack.getItem() instanceof CardItem card))
 			return;
 
-		renderCard(Cards.getInstance().get(card.getType(stack)).getCardForRendering(), transform, pose, buffer, light,
+		renderCard(Cards.getInstance(true).get(card.getType(stack)).getCardForRendering(), transform, pose, buffer, light,
 				overlay);
 	}
 

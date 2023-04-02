@@ -16,6 +16,7 @@ import mod.vemerion.minecard.network.PlayCardMessage;
 import mod.vemerion.minecard.network.SetReadyMessage;
 import mod.vemerion.minecard.network.SetResourcesMessage;
 import mod.vemerion.minecard.network.UpdateCardMessage;
+import mod.vemerion.minecard.network.UpdateCardTypesMessage;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
@@ -57,5 +58,7 @@ public class ModEventSubscriber {
 				GameOverMessage::handle);
 		Network.INSTANCE.registerMessage(11, CombatMessage.class, CombatMessage::encode, CombatMessage::decode,
 				CombatMessage::handle);
+		Network.INSTANCE.registerMessage(12, UpdateCardTypesMessage.class, UpdateCardTypesMessage::encode,
+				UpdateCardTypesMessage::decode, UpdateCardTypesMessage::handle);
 	}
 }
