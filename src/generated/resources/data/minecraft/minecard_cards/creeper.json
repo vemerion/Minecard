@@ -1,0 +1,6 @@
+{
+  "health": 4,
+  "damage": 3,
+  "entity": "minecraft:creeper",
+  "cost": 5
+}

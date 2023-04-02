@@ -30,7 +30,6 @@ public class Cards extends SimpleJsonResourceReloadListener {
 
 	public static final CardType EMPTY_CARD_TYPE = new CardType(null, 0, 0, 0, AdditionalCardData.EMPTY);
 	public static final Card EMPTY_CARD = EMPTY_CARD_TYPE.create();
-	public static final CardType PLAYER = new CardType(EntityType.PLAYER, 0, 30, 0, AdditionalCardData.EMPTY);
 
 	private static Cards clientInstance;
 	private static Cards serverInstance;

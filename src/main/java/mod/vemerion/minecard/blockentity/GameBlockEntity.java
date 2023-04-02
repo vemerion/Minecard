@@ -26,6 +26,7 @@ import mod.vemerion.minecard.network.SetResourcesMessage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -134,7 +135,7 @@ public class GameBlockEntity extends BlockEntity {
 			}
 
 			List<Card> board = new ArrayList<>();
-			var playerCard = Cards.PLAYER.create();
+			var playerCard = Cards.getInstance(false).get(EntityType.PLAYER).create();
 			playerCard.setAdditionalData(new AdditionalCardData.IdData(player.getUUID()));
 			board.add(playerCard);
 
