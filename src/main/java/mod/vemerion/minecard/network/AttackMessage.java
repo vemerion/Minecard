@@ -7,8 +7,8 @@ import net.minecraft.server.level.ServerPlayer;
 
 public class AttackMessage extends ClientToServerMessage {
 
-	int attacker;
-	int target;
+	private int attacker;
+	private int target;
 
 	public AttackMessage(BlockPos pos, int attacker, int target) {
 		super(pos);

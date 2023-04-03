@@ -16,22 +16,19 @@ public class UpdateCardMessage {
 
 	private UUID id;
 	private Card card;
-	private int position;
 
-	public UpdateCardMessage(UUID id, Card card, int position) {
+	public UpdateCardMessage(UUID id, Card card) {
 		this.id = id;
 		this.card = card;
-		this.position = position;
 	}
 
 	public void encode(final FriendlyByteBuf buffer) {
 		buffer.writeUUID(id);
 		MessageUtil.encodeCard(buffer, card);
-		buffer.writeInt(position);
 	}
 
 	public static UpdateCardMessage decode(final FriendlyByteBuf buffer) {
-		return new UpdateCardMessage(buffer.readUUID(), MessageUtil.decodeCard(buffer), buffer.readInt());
+		return new UpdateCardMessage(buffer.readUUID(), MessageUtil.decodeCard(buffer));
 	}
 
 	public void handle(final Supplier<NetworkEvent.Context> supplier) {
@@ -52,7 +49,7 @@ public class UpdateCardMessage {
 						return;
 
 					if (mc.screen instanceof GameScreen game) {
-						game.updateCard(message.id, message.card, message.position);
+						game.updateCard(message.id, message.card);
 					}
 				}
 			};

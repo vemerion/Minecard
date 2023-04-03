@@ -29,7 +29,6 @@ public class Cards extends SimpleJsonResourceReloadListener {
 	public static final String FOLDER_NAME = Main.MODID + "_cards";
 
 	public static final CardType EMPTY_CARD_TYPE = new CardType(null, 0, 0, 0, Map.of(), AdditionalCardData.EMPTY);
-	public static final Card EMPTY_CARD = EMPTY_CARD_TYPE.create();
 
 	private static Cards clientInstance;
 	private static Cards serverInstance;

@@ -63,6 +63,8 @@ public class GameScreen extends Screen {
 	private static final int DECK_HORIZONTAL_OFFSET = 20;
 	private static final int DECK_VERTICAL_OFFSET = 20;
 
+	private static final Card EMPTY_CARD = Cards.EMPTY_CARD_TYPE.create();
+
 	// State
 	Map<UUID, ClientPlayerState> state;
 	private UUID current = UUID.randomUUID();
@@ -119,6 +121,10 @@ public class GameScreen extends Screen {
 				NEXT_TURN_BUTTON_SIZE, NEXT_TURN_BUTTON_SIZE, TextComponent.EMPTY));
 	}
 
+	private ClientCard withId(List<ClientCard> list, int id) {
+		return list.stream().filter(c -> c.getId() == id).findFirst().orElse(null);
+	}
+
 	public void setCurrent(UUID current) {
 		this.current = current;
 		popup.popup(current.equals(minecraft.player.getUUID()) ? YOUR_TURN : ENEMY_TURN);
@@ -130,27 +136,36 @@ public class GameScreen extends Screen {
 		playerState.maxResources = maxResources;
 	}
 
-	public void placeCard(UUID id, Card card, int cardIndex, int position) {
+	public void placeCard(UUID id, Card card, int position) {
 		var playerState = state.get(id);
-		playerState.board.add(position, new ClientCard(card, playerState.hand.get(cardIndex).getPosition(), this));
-		playerState.hand.remove(cardIndex);
+		playerState.board.add(position,
+				new ClientCard(card, withId(playerState.hand, card.getId()).getPosition(), this));
+		playerState.hand.removeIf(c -> c.getId() == card.getId());
 		resetPositions(playerState);
 	}
 
 	public void setReady(UUID id, List<Integer> cards) {
 		var playerState = state.get(id);
-		for (var card : cards)
-			playerState.board.get(card).setReady(true);
+		for (var card : playerState.board)
+			if (cards.contains(card.getId()))
+				card.setReady(true);
 	}
 
-	public ClientCard updateCard(UUID id, Card card, int position) {
+	public ClientCard updateCard(UUID id, Card card) {
 		var playerState = state.get(id);
+		var old = withId(playerState.board, card.getId());
 		if (card.isDead()) {
-			return new ClientCard(card, playerState.board.remove(position).getPosition(), this);
+			playerState.board.removeIf(c -> c.getId() == card.getId());
+			return new ClientCard(card, old.getPosition(), this);
 		} else {
-			return playerState.board.set(position,
-					new ClientCard(card, playerState.board.get(position).getPosition(), this));
+			for (int i = 0; i < playerState.board.size(); i++) {
+				if (playerState.board.get(i).getId() == card.getId()) {
+					playerState.board.set(i, new ClientCard(card, old.getPosition(), this));
+					return playerState.board.get(i);
+				}
+			}
 		}
+		return null;
 	}
 
 	public void drawCard(UUID id, Card card, boolean shrinkDeck) {
@@ -169,10 +184,9 @@ public class GameScreen extends Screen {
 		popup.popup(GAME_OVER);
 	}
 
-	public void combat(UUID attackerId, Card attackerCard, int attackerPos, UUID targetId, Card targetCard,
-			int targetPos) {
-		ClientCard attacker = updateCard(attackerId, attackerCard, attackerPos);
-		ClientCard target = updateCard(targetId, targetCard, targetPos);
+	public void combat(UUID attackerId, Card attackerCard, UUID targetId, Card targetCard) {
+		var attacker = updateCard(attackerId, attackerCard);
+		var target = updateCard(targetId, targetCard);
 
 		animations.add(new ThrowItemAnimation(minecraft, new ItemStack(Items.STONE_SWORD),
 				new Vec2(attacker.getPosition().x + CARD_WIDTH / 2, attacker.getPosition().y + CARD_HEIGHT / 2), target,
@@ -218,7 +232,6 @@ public class GameScreen extends Screen {
 				} else {
 					if (pMouseY + CARD_HEIGHT / 2 < height - CARD_HEIGHT && pMouseY > height - CARD_HEIGHT * 2) {
 						int order = 0;
-						int cardIndex = 0;
 						for (int i = 0; i < yourState().board.size(); i++) {
 							var card = yourState().board.get(i);
 							if (pMouseX < card.getPosition().x + CARD_WIDTH / 2) {
@@ -228,13 +241,7 @@ public class GameScreen extends Screen {
 								order = i + 1;
 							}
 						}
-						for (int i = 0; i < yourState().hand.size(); i++) {
-							if (yourState().hand.get(i) == selectedCard) {
-								cardIndex = i;
-								break;
-							}
-						}
-						Network.INSTANCE.sendToServer(new PlayCardMessage(pos, cardIndex, order));
+						Network.INSTANCE.sendToServer(new PlayCardMessage(pos, selectedCard.getId(), order));
 						selectedCard = null;
 						return true;
 					}
@@ -249,15 +256,9 @@ public class GameScreen extends Screen {
 						}
 					}
 				} else if (attackingCard != null) {
-					var enemy = enemyState().board;
-					for (int i = 0; i < enemy.size(); i++) {
-						if (enemy.get(i).contains(pMouseX, pMouseY)) {
-							for (int j = 0; j < yourState().board.size(); j++) {
-								if (yourState().board.get(j) == attackingCard) {
-									Network.INSTANCE.sendToServer(new AttackMessage(pos, j, i));
-									break;
-								}
-							}
+					for (var card : enemyState().board) {
+						if (card.contains(pMouseX, pMouseY)) {
+							Network.INSTANCE.sendToServer(new AttackMessage(pos, attackingCard.getId(), card.getId()));
 							attackingCard = null;
 							return true;
 						}
@@ -312,7 +313,7 @@ public class GameScreen extends Screen {
 			float deckY = enemy ? DECK_VERTICAL_OFFSET : height - DECK_VERTICAL_OFFSET - CARD_HEIGHT;
 			for (int i = 0; i < playerState.deck; i++) {
 				float x = deckX + i * 0.2f;
-				new ClientCard(Cards.EMPTY_CARD, new Vec2(x, deckY), this).render(new PoseStack(), mouseX, mouseY, source,
+				new ClientCard(EMPTY_CARD, new Vec2(x, deckY), this).render(new PoseStack(), mouseX, mouseY, source,
 						partialTicks);
 			}
 			if (mouseX > deckX && mouseX < deckX + CARD_WIDTH && mouseY > deckY && mouseY < deckY + CARD_HEIGHT)

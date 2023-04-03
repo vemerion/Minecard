@@ -66,24 +66,35 @@ public class PlayerState {
 	public int getMaxResources() {
 		return maxResources;
 	}
-	
+
+	private Card withId(List<Card> list, int id) {
+		return list.stream().filter(c -> c.getId() == id).findFirst().orElse(null);
+	}
+
+	public Card findFromBoard(int id) {
+		return withId(board, id);
+	}
+
+	public Card findFromHand(int id) {
+		return withId(hand, id);
+	}
+
 	public List<Integer> getReady() {
 		var list = new ArrayList<Integer>();
-		for (int i = 0; i < board.size(); i++) {
-			if (board.get(i).isReady())
-				list.add(i);
+		for (var card : board) {
+			if (card.isReady())
+				list.add(card.getId());
 		}
 		return list;
 	}
 
 	public void endTurn(List<ServerPlayer> receivers) {
-		for (int i = 0; i < board.size(); i++) {
-			var card = board.get(i);
+		for (var card : board) {
 			if (card.hasProperty(CardProperty.FREEZE)) {
 				card.removeProperty(CardProperty.FREEZE);
 				for (var receiver : receivers)
 					Network.INSTANCE.send(PacketDistributor.PLAYER.with(() -> receiver),
-							new UpdateCardMessage(id, card, i));
+							new UpdateCardMessage(id, card));
 			}
 		}
 	}
@@ -92,23 +103,25 @@ public class PlayerState {
 		maxResources = Math.min(10, maxResources + 1);
 		resources = maxResources;
 		for (var card : board)
-			card.setReady(true);
+			if (!card.hasProperty(CardProperty.FREEZE))
+				card.setReady(true);
 
 		if (!deck.isEmpty()) {
 			var card = deck.remove(deck.size() - 1);
 			hand.add(card);
 			for (var receiver : receivers) {
-				Network.INSTANCE.send(PacketDistributor.PLAYER.with(() -> receiver),
-						new DrawCardMessage(id, receiver.getUUID().equals(id) ? card : Cards.EMPTY_CARD, true));
+				Network.INSTANCE.send(PacketDistributor.PLAYER.with(() -> receiver), new DrawCardMessage(id,
+						receiver.getUUID().equals(id) ? card : Cards.EMPTY_CARD_TYPE.create().setId(card.getId()),
+						true));
 			}
 		}
 	}
 
-	public void playCard(List<ServerPlayer> receivers, int cardIndex, int position) {
-		if (cardIndex < 0 || position < 0 || hand.size() <= cardIndex || board.size() < position)
+	public void playCard(List<ServerPlayer> receivers, int cardId, int position) {
+		var card = findFromHand(cardId);
+		if (card == null || position < 0 || board.size() < position)
 			return;
 
-		var card = hand.get(cardIndex);
 		if (card.getCost() > resources)
 			return;
 
@@ -117,13 +130,13 @@ public class PlayerState {
 
 		resources -= card.getCost();
 		board.add(position, card);
-		hand.remove(cardIndex);
+		hand.remove(card);
 
 		for (var receiver : receivers) {
 			Network.INSTANCE.send(PacketDistributor.PLAYER.with(() -> receiver),
 					new SetResourcesMessage(id, resources, maxResources));
 			Network.INSTANCE.send(PacketDistributor.PLAYER.with(() -> receiver),
-					new PlaceCardMessage(id, card, cardIndex, position));
+					new PlaceCardMessage(id, card, position));
 		}
 	}
 
@@ -131,8 +144,8 @@ public class PlayerState {
 		List<Card> hand = this.hand;
 		if (hide) {
 			hand = new ArrayList<>();
-			for (int i = 0; i < this.hand.size(); i++) {
-				hand.add(Cards.EMPTY_CARD);
+			for (var card : this.hand) {
+				hand.add(Cards.EMPTY_CARD_TYPE.create().setId(card.getId()));
 			}
 		}
 		return new MessagePlayerState(id, deck.size(), hand, board, resources, maxResources);

@@ -7,18 +7,18 @@ import net.minecraft.server.level.ServerPlayer;
 
 public class PlayCardMessage extends ClientToServerMessage {
 
-	private int card;
+	private int cardId;
 	private int position;
 
-	public PlayCardMessage(BlockPos pos, int card, int position) {
+	public PlayCardMessage(BlockPos pos, int cardId, int position) {
 		super(pos);
-		this.card = card;
+		this.cardId = cardId;
 		this.position = position;
 	}
 
 	@Override
 	protected void encodeAdditional(FriendlyByteBuf buffer) {
-		buffer.writeInt(card);
+		buffer.writeInt(cardId);
 		buffer.writeInt(position);
 	}
 
@@ -28,6 +28,6 @@ public class PlayCardMessage extends ClientToServerMessage {
 
 	@Override
 	protected void handle(GameBlockEntity game, ServerPlayer sender) {
-		game.playCard(sender, card, position);
+		game.playCard(sender, cardId, position);
 	}
 }

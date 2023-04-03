@@ -15,34 +15,26 @@ import net.minecraftforge.network.NetworkEvent;
 public class CombatMessage {
 
 	private UUID attackerId;
-	private Card attackerCard;
-	private int attackerPos;
+	private Card attacker;
 	private UUID targetId;
-	private Card targetCard;
-	private int targetPos;
+	private Card target;
 
-	public CombatMessage(UUID attackerId, Card attackerCard, int attackerPos, UUID targetId, Card targetCard,
-			int targetPos) {
+	public CombatMessage(UUID attackerId, Card attacker, UUID targetId, Card target) {
 		this.attackerId = attackerId;
-		this.attackerCard = attackerCard;
-		this.attackerPos = attackerPos;
+		this.attacker = attacker;
 		this.targetId = targetId;
-		this.targetCard = targetCard;
-		this.targetPos = targetPos;
+		this.target = target;
 	}
 
 	public void encode(final FriendlyByteBuf buffer) {
 		buffer.writeUUID(attackerId);
-		MessageUtil.encodeCard(buffer, attackerCard);
-		buffer.writeInt(attackerPos);
+		MessageUtil.encodeCard(buffer, attacker);
 		buffer.writeUUID(targetId);
-		MessageUtil.encodeCard(buffer, targetCard);
-		buffer.writeInt(targetPos);
+		MessageUtil.encodeCard(buffer, target);
 	}
 
 	public static CombatMessage decode(final FriendlyByteBuf buffer) {
-		return new CombatMessage(buffer.readUUID(), MessageUtil.decodeCard(buffer), buffer.readInt(), buffer.readUUID(),
-				MessageUtil.decodeCard(buffer), buffer.readInt());
+		return new CombatMessage(buffer.readUUID(), MessageUtil.decodeCard(buffer), buffer.readUUID(), MessageUtil.decodeCard(buffer));
 	}
 
 	public void handle(final Supplier<NetworkEvent.Context> supplier) {
@@ -63,8 +55,7 @@ public class CombatMessage {
 						return;
 
 					if (mc.screen instanceof GameScreen game) {
-						game.combat(message.attackerId, message.attackerCard, message.attackerPos, message.targetId,
-								message.targetCard, message.targetPos);
+						game.combat(message.attackerId, message.attacker, message.targetId, message.target);
 					}
 				}
 			};

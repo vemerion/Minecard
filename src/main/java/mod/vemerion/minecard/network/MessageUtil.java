@@ -14,14 +14,19 @@ public class MessageUtil {
 		if (card.getType() != null)
 			tag.put("value", Card.CODEC.encodeStart(NbtOps.INSTANCE, card).getOrThrow(false, MessageUtil::onError));
 		buffer.writeNbt(tag);
+		buffer.writeInt(card.getId());
 	}
 
 	public static Card decodeCard(FriendlyByteBuf buffer) {
 		var nbt = buffer.readNbt();
+		Card card;
 		if (nbt.contains("value"))
-			return Card.CODEC.parse(NbtOps.INSTANCE, nbt.get("value")).getOrThrow(false, MessageUtil::onError);
-		else
-			return Cards.EMPTY_CARD;
+			card = Card.CODEC.parse(NbtOps.INSTANCE, nbt.get("value")).getOrThrow(false, MessageUtil::onError);
+		else {
+			card = Cards.EMPTY_CARD_TYPE.create();
+		}
+		card.setId(buffer.readInt());
+		return card;
 	}
 
 	public static void encodeCardType(FriendlyByteBuf buffer, CardType card) {

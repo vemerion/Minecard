@@ -16,26 +16,22 @@ public class PlaceCardMessage {
 
 	private UUID id;
 	private Card card;
-	private int cardIndex;
 	private int position;
 
-	public PlaceCardMessage(UUID id, Card card, int cardIndex, int position) {
+	public PlaceCardMessage(UUID id, Card card, int position) {
 		this.id = id;
 		this.card = card;
-		this.cardIndex = cardIndex;
 		this.position = position;
 	}
 
 	public void encode(final FriendlyByteBuf buffer) {
 		buffer.writeUUID(id);
 		MessageUtil.encodeCard(buffer, card);
-		buffer.writeInt(cardIndex);
 		buffer.writeInt(position);
 	}
 
 	public static PlaceCardMessage decode(final FriendlyByteBuf buffer) {
-		return new PlaceCardMessage(buffer.readUUID(), MessageUtil.decodeCard(buffer), buffer.readInt(),
-				buffer.readInt());
+		return new PlaceCardMessage(buffer.readUUID(), MessageUtil.decodeCard(buffer), buffer.readInt());
 	}
 
 	public void handle(final Supplier<NetworkEvent.Context> supplier) {
@@ -56,7 +52,7 @@ public class PlaceCardMessage {
 						return;
 
 					if (mc.screen instanceof GameScreen game) {
-						game.placeCard(message.id, message.card, message.cardIndex, message.position);
+						game.placeCard(message.id, message.card, message.position);
 					}
 				}
 			};

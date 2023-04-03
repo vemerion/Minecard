@@ -11,6 +11,8 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 public class Card {
 
+	private static int counter = 0;
+
 	public static final Codec<Card> CODEC = RecordCodecBuilder.create(
 			instance -> instance.group(ForgeRegistries.ENTITIES.getCodec().fieldOf("entity").forGetter(Card::getType),
 					Codec.INT.fieldOf("cost").forGetter(Card::getCost),
@@ -30,6 +32,7 @@ public class Card {
 	private final int damage;
 	private boolean ready;
 	private final Map<CardProperty, Integer> properties;
+	private int id;
 
 	public Card(EntityType<?> type, int cost, int health, int damage, boolean ready,
 			Map<CardProperty, Integer> properties, AdditionalCardData additionalData) {
@@ -40,6 +43,7 @@ public class Card {
 		this.ready = ready;
 		this.properties = properties;
 		this.additionalData = additionalData;
+		this.id = counter++;
 	}
 
 	public EntityType<?> getType() {
@@ -96,5 +100,14 @@ public class Card {
 
 	public void setAdditionalData(AdditionalCardData data) {
 		this.additionalData = data;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public Card setId(int id) {
+		this.id = id;
+		return this;
 	}
 }

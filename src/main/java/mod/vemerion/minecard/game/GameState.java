@@ -41,16 +41,14 @@ public class GameState {
 		getCurrentPlayerState().newTurn(receivers);
 	}
 
-	public void attack(List<ServerPlayer> receivers, int attacker, int target) {
+	public void attack(List<ServerPlayer> receivers, int attackerId, int targetId) {
 		var current = getCurrentPlayerState();
 		var enemy = getEnemyPlayerState();
 
-		if (attacker < 0 || target < 0 || current.getBoard().size() <= attacker || enemy.getBoard().size() <= target
-				|| !current.getBoard().get(attacker).isReady())
+		var attackerCard = current.findFromBoard(attackerId);
+		var targetCard = enemy.findFromBoard(targetId);
+		if (attackerCard == null || targetCard == null || !attackerCard.isReady())
 			return;
-
-		var attackerCard = current.getBoard().get(attacker);
-		var targetCard = enemy.getBoard().get(target);
 
 		// Can't be targeted
 		if (targetCard.hasProperty(CardProperty.STEALTH)
@@ -64,13 +62,13 @@ public class GameState {
 		attackerCard.setReady(false);
 		attackerCard.removeProperty(CardProperty.STEALTH);
 		if (attackerCard.isDead())
-			current.getBoard().remove(attacker);
+			current.getBoard().remove(attackerCard);
 		if (targetCard.isDead())
-			enemy.getBoard().remove(target);
+			enemy.getBoard().remove(targetCard);
 
 		for (var receiver : receivers) {
 			Network.INSTANCE.send(PacketDistributor.PLAYER.with(() -> receiver),
-					new CombatMessage(current.getId(), attackerCard, attacker, enemy.getId(), targetCard, target));
+					new CombatMessage(current.getId(), attackerCard, enemy.getId(), targetCard));
 		}
 	}
 
