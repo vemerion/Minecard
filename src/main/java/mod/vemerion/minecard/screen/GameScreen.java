@@ -153,16 +153,18 @@ public class GameScreen extends Screen {
 
 	public ClientCard updateCard(UUID id, Card card) {
 		var playerState = state.get(id);
-		var old = withId(playerState.board, card.getId());
-		if (card.isDead()) {
-			playerState.board.removeIf(c -> c.getId() == card.getId());
-			return new ClientCard(card, old.getPosition(), this);
-		} else {
-			for (int i = 0; i < playerState.board.size(); i++) {
-				if (playerState.board.get(i).getId() == card.getId()) {
-					playerState.board.set(i, new ClientCard(card, old.getPosition(), this));
-					return playerState.board.get(i);
+
+		for (int i = 0; i < playerState.board.size(); i++) {
+			if (playerState.board.get(i).getId() == card.getId()) {
+				var updated = new ClientCard(card, withId(playerState.board, card.getId()).getPosition(), this);
+				playerState.board.set(i, updated);
+				if (updated.isDead()) {
+					animations.add(new DeathAnimation(minecraft, updated, 40, () -> {
+						playerState.board.removeIf(c -> c.getId() == updated.getId());
+						resetPositions(state.get(id));
+					}));
 				}
+				return updated;
 			}
 		}
 		return null;
@@ -193,16 +195,6 @@ public class GameScreen extends Screen {
 				() -> {
 					minecraft.getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.PLAYER_ATTACK_SWEEP, 1));
 				}));
-		if (attacker.isDead()) {
-			animations.add(new DeathAnimation(minecraft, attacker, 40, () -> {
-				resetPositions(state.get(attackerId));
-			}));
-		}
-		if (target.isDead()) {
-			animations.add(new DeathAnimation(minecraft, target, 40, () -> {
-				resetPositions(state.get(targetId));
-			}));
-		}
 	}
 
 	private ClientPlayerState yourState() {
@@ -304,9 +296,11 @@ public class GameScreen extends Screen {
 
 			// Cards
 			for (var card : playerState.board)
-				card.render(new PoseStack(), mouseX, mouseY, source, partialTicks);
+				if (card.getType() == null || !card.isDead())
+					card.render(new PoseStack(), mouseX, mouseY, source, partialTicks);
 			for (var card : playerState.hand)
-				card.render(new PoseStack(), mouseX, mouseY, source, partialTicks);
+				if (card.getType() == null || !card.isDead())
+					card.render(new PoseStack(), mouseX, mouseY, source, partialTicks);
 
 			// Deck
 			float deckX = enemy ? DECK_HORIZONTAL_OFFSET : width - DECK_HORIZONTAL_OFFSET - CARD_WIDTH;
