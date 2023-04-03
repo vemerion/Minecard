@@ -28,7 +28,7 @@ public class Cards extends SimpleJsonResourceReloadListener {
 	private static final Gson GSON = (new GsonBuilder()).setPrettyPrinting().disableHtmlEscaping().create();
 	public static final String FOLDER_NAME = Main.MODID + "_cards";
 
-	public static final CardType EMPTY_CARD_TYPE = new CardType(null, 0, 0, 0, AdditionalCardData.EMPTY);
+	public static final CardType EMPTY_CARD_TYPE = new CardType(null, 0, 0, 0, Map.of(), AdditionalCardData.EMPTY);
 	public static final Card EMPTY_CARD = EMPTY_CARD_TYPE.create();
 
 	private static Cards clientInstance;
@@ -68,7 +68,7 @@ public class Cards extends SimpleJsonResourceReloadListener {
 		int totalStats = cost * 2 + 1;
 		int health = rand.nextInt(1, totalStats);
 
-		return new CardType(type, cost, health, totalStats - health, AdditionalCardData.EMPTY);
+		return new CardType(type, cost, health, totalStats - health, Map.of(), AdditionalCardData.EMPTY);
 	}
 
 	@Override

@@ -28,7 +28,7 @@ public class ClientCard extends Card {
 	private GameScreen screen;
 
 	public ClientCard(Card card, Vec2 position, GameScreen screen) {
-		super(card.getType(), card.getCost(), card.getHealth(), card.getDamage(), card.isReady(),
+		super(card.getType(), card.getCost(), card.getHealth(), card.getDamage(), card.isReady(), card.getProperties(),
 				card.getAdditionalData());
 		this.position = position;
 		this.position0 = position;

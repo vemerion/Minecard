@@ -107,6 +107,19 @@ public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 			pose.popPose();
 		}
 
+		// Properties
+		float propertyY = -0.08f;
+		for (var entry : card.getProperties().entrySet()) {
+			if (entry.getValue() > 0) {
+				pose.pushPose();
+				pose.translate(0.74, propertyY, 0);
+				pose.scale(0.7f, 0.7f, 0.7f);
+				renderItem(itemRenderer, entry.getKey().getIcon(), light, overlay, pose, buffer);
+				pose.popPose();
+				propertyY -= 0.15f;
+			}
+		}
+
 		// Render entity
 		float maxWidth = 2;
 		float maxHeight = 2;
@@ -124,16 +137,21 @@ public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 		pose.popPose();
 	}
 
+	private static void renderItem(ItemRenderer itemRenderer, ItemStack stack, int light, int overlay,
+			PoseStack poseStack, MultiBufferSource buffer) {
+		poseStack.pushPose();
+		poseStack.scale(0.2f, 0.2f, 0.2f);
+		itemRenderer.renderStatic(stack, TransformType.GUI, light, overlay, poseStack, buffer, 0);
+		poseStack.popPose();
+	}
+
 	private static void renderValue(ItemRenderer itemRenderer, Font font, Item item, int value, float x, float y,
 			int light, int overlay, PoseStack poseStack, MultiBufferSource buffer) {
 		poseStack.pushPose();
 		poseStack.translate(x, y, 0);
 
 		// Item
-		poseStack.pushPose();
-		poseStack.scale(0.2f, 0.2f, 0.2f);
-		itemRenderer.renderStatic(new ItemStack(item), TransformType.NONE, light, overlay, poseStack, buffer, 0);
-		poseStack.popPose();
+		renderItem(itemRenderer, new ItemStack(item), light, overlay, poseStack, buffer);
 
 		// Text
 		var text = String.valueOf(value);
@@ -174,8 +192,8 @@ public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 		if (!(stack.getItem() instanceof CardItem card))
 			return;
 
-		renderCard(Cards.getInstance(true).get(card.getType(stack)).getCardForRendering(), transform, pose, buffer, light,
-				overlay);
+		renderCard(Cards.getInstance(true).get(card.getType(stack)).getCardForRendering(), transform, pose, buffer,
+				light, overlay);
 	}
 
 	private static void renderCard(PoseStack pose, RenderType card, MultiBufferSource buffer, int light) {

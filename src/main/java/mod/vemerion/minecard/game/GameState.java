@@ -36,9 +36,9 @@ public class GameState {
 	}
 
 	public void endTurn(List<ServerPlayer> receivers) {
+		getCurrentPlayerState().endTurn(receivers);
 		turn++;
-		var current = getCurrentPlayerState();
-		current.newTurn(receivers);
+		getCurrentPlayerState().newTurn(receivers);
 	}
 
 	public void attack(List<ServerPlayer> receivers, int attacker, int target) {
@@ -52,9 +52,17 @@ public class GameState {
 		var attackerCard = current.getBoard().get(attacker);
 		var targetCard = enemy.getBoard().get(target);
 
+		// Can't be targeted
+		if (targetCard.hasProperty(CardProperty.STEALTH)
+				|| (!targetCard.hasProperty(CardProperty.TAUNT) && enemy.getBoard().stream()
+						.anyMatch(c -> c.hasProperty(CardProperty.TAUNT) && !c.hasProperty(CardProperty.STEALTH)))) {
+			return;
+		}
+
 		attackerCard.hurt(targetCard.getDamage());
 		targetCard.hurt(attackerCard.getDamage());
 		attackerCard.setReady(false);
+		attackerCard.removeProperty(CardProperty.STEALTH);
 		if (attackerCard.isDead())
 			current.getBoard().remove(attacker);
 		if (targetCard.isDead())

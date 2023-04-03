@@ -11,6 +11,7 @@ import mod.vemerion.minecard.network.DrawCardMessage;
 import mod.vemerion.minecard.network.Network;
 import mod.vemerion.minecard.network.PlaceCardMessage;
 import mod.vemerion.minecard.network.SetResourcesMessage;
+import mod.vemerion.minecard.network.UpdateCardMessage;
 import net.minecraft.core.SerializableUUID;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.PacketDistributor;
@@ -65,6 +66,27 @@ public class PlayerState {
 	public int getMaxResources() {
 		return maxResources;
 	}
+	
+	public List<Integer> getReady() {
+		var list = new ArrayList<Integer>();
+		for (int i = 0; i < board.size(); i++) {
+			if (board.get(i).isReady())
+				list.add(i);
+		}
+		return list;
+	}
+
+	public void endTurn(List<ServerPlayer> receivers) {
+		for (int i = 0; i < board.size(); i++) {
+			var card = board.get(i);
+			if (card.hasProperty(CardProperty.FREEZE)) {
+				card.removeProperty(CardProperty.FREEZE);
+				for (var receiver : receivers)
+					Network.INSTANCE.send(PacketDistributor.PLAYER.with(() -> receiver),
+							new UpdateCardMessage(id, card, i));
+			}
+		}
+	}
 
 	public void newTurn(List<ServerPlayer> receivers) {
 		maxResources = Math.min(10, maxResources + 1);
@@ -89,6 +111,9 @@ public class PlayerState {
 		var card = hand.get(cardIndex);
 		if (card.getCost() > resources)
 			return;
+
+		if (card.hasProperty(CardProperty.CHARGE))
+			card.setReady(true);
 
 		resources -= card.getCost();
 		board.add(position, card);

@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 import mod.vemerion.minecard.capability.CardData;
 import mod.vemerion.minecard.capability.DeckData;
@@ -60,8 +58,7 @@ public class GameBlockEntity extends BlockEntity {
 		if (!current.getBoard().isEmpty()) {
 			Network.INSTANCE.send(
 					PacketDistributor.PLAYER.with(() -> (ServerPlayer) level.getPlayerByUUID(current.getId())),
-					new SetReadyMessage(current.getId(),
-							IntStream.range(0, current.getBoard().size()).boxed().collect(Collectors.toList())));
+					new SetReadyMessage(current.getId(), current.getReady()));
 		}
 	}
 

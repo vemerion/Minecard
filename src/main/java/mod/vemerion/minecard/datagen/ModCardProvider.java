@@ -10,6 +10,7 @@ import com.mojang.serialization.JsonOps;
 
 import mod.vemerion.minecard.Main;
 import mod.vemerion.minecard.game.AdditionalCardData;
+import mod.vemerion.minecard.game.CardProperty;
 import mod.vemerion.minecard.game.CardType;
 import mod.vemerion.minecard.game.Cards;
 import net.minecraft.data.DataGenerator;
@@ -47,8 +48,11 @@ public class ModCardProvider implements DataProvider {
 	}
 
 	private void addCards() {
-		add(new Builder(EntityType.CREEPER, 5, 4, 3));
 		add(new Builder(EntityType.PLAYER, 0, 30, 0));
+		add(new Builder(EntityType.CREEPER, 5, 4, 3).addProperty(CardProperty.CHARGE, 1)
+				.addProperty(CardProperty.FREEZE, 1).addProperty(CardProperty.STEALTH, 1)
+				.addProperty(CardProperty.TAUNT, 1));
+		add(new Builder(EntityType.SHULKER, 3, 3, 3).addProperty(CardProperty.SHIELD, 1));
 	}
 
 	private void add(Builder builder) {
@@ -66,6 +70,7 @@ public class ModCardProvider implements DataProvider {
 		private int cost;
 		private int health;
 		private int damage;
+		private Map<CardProperty, Integer> properties = new HashMap<>();
 		private AdditionalCardData additionalData = AdditionalCardData.EMPTY;
 		private ResourceLocation key;
 
@@ -76,12 +81,18 @@ public class ModCardProvider implements DataProvider {
 			this.damage = damage;
 		}
 
-		private void setKey(ResourceLocation key) {
+		private Builder setKey(ResourceLocation key) {
 			this.key = key;
+			return this;
+		}
+
+		private Builder addProperty(CardProperty property, int value) {
+			properties.put(property, value);
+			return this;
 		}
 
 		private CardType build() {
-			return new CardType(type, cost, health, damage, additionalData);
+			return new CardType(type, cost, health, damage, properties, additionalData);
 		}
 
 		private ResourceLocation getKey() {

@@ -1,6 +1,12 @@
 {
-  "health": 4,
   "damage": 3,
+  "properties": {
+    "freeze": 1,
+    "charge": 1,
+    "stealth": 1,
+    "taunt": 1
+  },
   "entity": "minecraft:creeper",
-  "cost": 5
+  "cost": 5,
+  "health": 4
 }
