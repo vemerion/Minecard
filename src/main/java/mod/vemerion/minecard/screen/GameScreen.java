@@ -14,6 +14,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 
 import mod.vemerion.minecard.Main;
 import mod.vemerion.minecard.game.Card;
+import mod.vemerion.minecard.game.CardProperty;
 import mod.vemerion.minecard.game.Cards;
 import mod.vemerion.minecard.game.MessagePlayerState;
 import mod.vemerion.minecard.helper.Helper;
@@ -77,6 +78,8 @@ public class GameScreen extends Screen {
 
 	private Card selectedCard;
 	private Card attackingCard;
+
+	private float fovModifier = 1;
 
 	public GameScreen(List<MessagePlayerState> list, BlockPos pos) {
 		super(TITLE);
@@ -142,6 +145,9 @@ public class GameScreen extends Screen {
 				new ClientCard(card, withId(playerState.hand, card.getId()).getPosition(), this));
 		playerState.hand.removeIf(c -> c.getId() == card.getId());
 		resetPositions(playerState);
+
+		if (card.hasProperty(CardProperty.CHARGE))
+			fovModifier = 3;
 	}
 
 	public void setReady(UUID id, List<Integer> cards) {
@@ -353,6 +359,8 @@ public class GameScreen extends Screen {
 			}
 
 		popup.tick();
+
+		fovModifier = (float) Mth.lerp(0.08, fovModifier, 1);
 	}
 
 	private class NextTurnButton extends AbstractButton {
@@ -492,5 +500,9 @@ public class GameScreen extends Screen {
 				scales[index] = (float) Mth.lerp(0.1, scales[index], 0);
 		}
 
+	}
+
+	public float getFovModifier() {
+		return fovModifier;
 	}
 }
