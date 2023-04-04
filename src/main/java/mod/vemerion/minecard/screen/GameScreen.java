@@ -25,6 +25,7 @@ import mod.vemerion.minecard.network.PlayCardMessage;
 import mod.vemerion.minecard.screen.animation.Animation;
 import mod.vemerion.minecard.screen.animation.DeathAnimation;
 import mod.vemerion.minecard.screen.animation.ThrowItemAnimation;
+import mod.vemerion.minecard.screen.animation.WallAnimation;
 import net.minecraft.client.gui.components.AbstractButton;
 import net.minecraft.client.gui.components.Widget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
@@ -83,10 +84,10 @@ public class GameScreen extends Screen {
 
 	public GameScreen(List<MessagePlayerState> list, BlockPos pos) {
 		super(TITLE);
+		this.animations = new ArrayList<>();
 		this.state = initState(list);
 		this.pos = pos;
 		this.popup = new PopupText();
-		this.animations = new ArrayList<>();
 	}
 
 	public Card getSelectedCard() {
@@ -122,6 +123,11 @@ public class GameScreen extends Screen {
 		}
 		addRenderableWidget(new NextTurnButton((int) (width * 0.75), height / 2 - NEXT_TURN_BUTTON_SIZE / 2,
 				NEXT_TURN_BUTTON_SIZE, NEXT_TURN_BUTTON_SIZE, TextComponent.EMPTY));
+
+		animations = new ArrayList<>();
+		for (var playerState : state.values())
+			for (var card : playerState.board)
+				updatePropertiesAnimations(null, card);
 	}
 
 	private ClientCard withId(List<ClientCard> list, int id) {
@@ -141,13 +147,12 @@ public class GameScreen extends Screen {
 
 	public void placeCard(UUID id, Card card, int position) {
 		var playerState = state.get(id);
-		playerState.board.add(position,
-				new ClientCard(card, withId(playerState.hand, card.getId()).getPosition(), this));
+		var placed = new ClientCard(card, withId(playerState.hand, card.getId()).getPosition(), this);
+		playerState.board.add(position, placed);
 		playerState.hand.removeIf(c -> c.getId() == card.getId());
 		resetPositions(playerState);
 
-		if (card.hasProperty(CardProperty.CHARGE))
-			fovModifier = 3;
+		updatePropertiesAnimations(null, placed);
 	}
 
 	public void setReady(UUID id, List<Integer> cards) {
@@ -157,20 +162,21 @@ public class GameScreen extends Screen {
 				card.setReady(true);
 	}
 
-	public ClientCard updateCard(UUID id, Card card) {
+	public ClientCard updateCard(UUID id, Card received) {
 		var playerState = state.get(id);
 
-		for (int i = 0; i < playerState.board.size(); i++) {
-			if (playerState.board.get(i).getId() == card.getId()) {
-				var updated = new ClientCard(card, withId(playerState.board, card.getId()).getPosition(), this);
-				playerState.board.set(i, updated);
-				if (updated.isDead()) {
-					animations.add(new DeathAnimation(minecraft, updated, 40, () -> {
-						playerState.board.removeIf(c -> c.getId() == updated.getId());
+		for (var card : playerState.board) {
+			if (card.getId() == received.getId()) {
+				card.copy(received);
+
+				if (card.isDead()) {
+					animations.add(new DeathAnimation(minecraft, card, 40, () -> {
+						playerState.board.removeIf(c -> card.getId() == c.getId());
+						card.remove();
 						resetPositions(state.get(id));
 					}));
 				}
-				return updated;
+				return card;
 			}
 		}
 		return null;
@@ -201,6 +207,36 @@ public class GameScreen extends Screen {
 				() -> {
 					minecraft.getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.PLAYER_ATTACK_SWEEP, 1));
 				}));
+	}
+
+	public void setProperties(UUID id, int cardId, Map<CardProperty, Integer> properties) {
+		var card = withId(state.get(id).board, cardId);
+		var old = new HashMap<>(card.getProperties());
+		card.getProperties().clear();
+		card.getProperties().putAll(properties);
+		updatePropertiesAnimations(old, card);
+	}
+
+	private void updatePropertiesAnimations(Map<CardProperty, Integer> old, ClientCard card) {
+		for (var entry : card.getProperties().entrySet()) {
+			if ((old == null || old.getOrDefault(entry.getKey(), 0) < 1) && entry.getValue() > 0) {
+				switch (entry.getKey()) {
+				case CHARGE:
+					fovModifier = 3;
+					break;
+				case FREEZE:
+					break;
+				case SHIELD:
+					animations.add(new WallAnimation(minecraft, card, () -> {
+					}));
+					break;
+				case STEALTH:
+					break;
+				case TAUNT:
+					break;
+				}
+			}
+		}
 	}
 
 	private ClientPlayerState yourState() {

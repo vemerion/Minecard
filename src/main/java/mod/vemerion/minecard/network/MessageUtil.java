@@ -1,7 +1,8 @@
 package mod.vemerion.minecard.network;
 
+import com.mojang.serialization.Codec;
+
 import mod.vemerion.minecard.game.Card;
-import mod.vemerion.minecard.game.CardType;
 import mod.vemerion.minecard.game.Cards;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
@@ -29,15 +30,15 @@ public class MessageUtil {
 		return card;
 	}
 
-	public static void encodeCardType(FriendlyByteBuf buffer, CardType card) {
+	public static <T> void encode(FriendlyByteBuf buffer, T value, Codec<T> codec) {
 		var tag = new CompoundTag();
-		tag.put("value", CardType.CODEC.encodeStart(NbtOps.INSTANCE, card).getOrThrow(false, MessageUtil::onError));
+		tag.put("value", codec.encodeStart(NbtOps.INSTANCE, value).getOrThrow(false, MessageUtil::onError));
 		buffer.writeNbt(tag);
 	}
 
-	public static CardType decodeCardType(FriendlyByteBuf buffer) {
+	public static <T> T decode(FriendlyByteBuf buffer, Codec<T> codec) {
 		var nbt = buffer.readNbt();
-		return CardType.CODEC.parse(NbtOps.INSTANCE, nbt.get("value")).getOrThrow(false, MessageUtil::onError);
+		return codec.parse(NbtOps.INSTANCE, nbt.get("value")).getOrThrow(false, MessageUtil::onError);
 	}
 
 	private static void onError(String msg) {

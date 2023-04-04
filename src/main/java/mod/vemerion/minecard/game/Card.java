@@ -13,25 +13,23 @@ public class Card {
 
 	private static int counter = 0;
 
-	public static final Codec<Card> CODEC = RecordCodecBuilder.create(
-			instance -> instance.group(ForgeRegistries.ENTITIES.getCodec().fieldOf("entity").forGetter(Card::getType),
-					Codec.INT.fieldOf("cost").forGetter(Card::getCost),
-					Codec.INT.fieldOf("health").forGetter(Card::getHealth),
-					Codec.INT.fieldOf("damage").forGetter(Card::getDamage),
-					Codec.BOOL.fieldOf("ready").forGetter(Card::isReady),
-					Codec.unboundedMap(CardProperty.CODEC, Codec.INT).optionalFieldOf("properties", new HashMap<>())
-							.forGetter(Card::getProperties),
-					AdditionalCardData.CODEC.optionalFieldOf("additional_data", AdditionalCardData.EMPTY)
-							.forGetter(Card::getAdditionalData))
-					.apply(instance, Card::new));
+	public static final Codec<Card> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+			ForgeRegistries.ENTITIES.getCodec().fieldOf("entity").forGetter(Card::getType),
+			Codec.INT.fieldOf("cost").forGetter(Card::getCost), Codec.INT.fieldOf("health").forGetter(Card::getHealth),
+			Codec.INT.fieldOf("damage").forGetter(Card::getDamage),
+			Codec.BOOL.fieldOf("ready").forGetter(Card::isReady),
+			CardProperty.CODEC_MAP.optionalFieldOf("properties", new HashMap<>()).forGetter(Card::getProperties),
+			AdditionalCardData.CODEC.optionalFieldOf("additional_data", AdditionalCardData.EMPTY)
+					.forGetter(Card::getAdditionalData))
+			.apply(instance, Card::new));
 
-	private final EntityType<?> type;
+	private EntityType<?> type;
 	private AdditionalCardData additionalData;
-	private final int cost;
+	private int cost;
 	private int health;
-	private final int damage;
+	private int damage;
 	private boolean ready;
-	private final Map<CardProperty, Integer> properties;
+	private Map<CardProperty, Integer> properties;
 	private int id;
 
 	public Card(EntityType<?> type, int cost, int health, int damage, boolean ready,
@@ -109,5 +107,14 @@ public class Card {
 	public Card setId(int id) {
 		this.id = id;
 		return this;
+	}
+
+	public void copy(Card received) {
+		this.cost = received.cost;
+		this.health = received.getHealth();
+		this.damage = received.getDamage();
+		this.ready = received.isReady();
+		this.properties = received.getProperties();
+		this.additionalData = received.getAdditionalData();
 	}
 }

@@ -25,7 +25,7 @@ public class UpdateCardTypesMessage {
 		buffer.writeInt(cardTypes.size());
 		for (var entry : cardTypes.entrySet()) {
 			buffer.writeResourceLocation(entry.getKey());
-			MessageUtil.encodeCardType(buffer, entry.getValue());
+			MessageUtil.encode(buffer, entry.getValue(), CardType.CODEC);
 		}
 	}
 
@@ -34,7 +34,7 @@ public class UpdateCardTypesMessage {
 		int size = buffer.readInt();
 		for (int i = 0; i < size; i++) {
 			var key = buffer.readResourceLocation();
-			cardTypes.put(key, MessageUtil.decodeCardType(buffer));
+			cardTypes.put(key, MessageUtil.decode(buffer, CardType.CODEC));
 		}
 		return new UpdateCardTypesMessage(cardTypes);
 	}

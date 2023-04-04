@@ -26,6 +26,7 @@ public class ClientCard extends Card {
 	private Vec2 position0;
 	private Vec2 targetPosition;
 	private GameScreen screen;
+	private boolean removed;
 
 	public ClientCard(Card card, Vec2 position, GameScreen screen) {
 		super(card.getType(), card.getCost(), card.getHealth(), card.getDamage(), card.isReady(), card.getProperties(),
@@ -54,6 +55,14 @@ public class ClientCard extends Card {
 
 	public void setPosition(Vec2 position) {
 		this.targetPosition = position;
+	}
+
+	public void remove() {
+		this.removed = true;
+	}
+
+	public boolean isRemoved() {
+		return removed;
 	}
 
 	public void render(PoseStack ps, int mouseX, int mouseY, BufferSource source, float partialTick) {
@@ -94,5 +103,4 @@ public class ClientCard extends Card {
 		return pMouseX > position.x && pMouseX < position.x + CARD_WIDTH && pMouseY > position.y
 				&& pMouseY < position.y + CARD_HEIGHT;
 	}
-
 }

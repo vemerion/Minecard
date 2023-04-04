@@ -13,9 +13,9 @@ import mod.vemerion.minecard.network.NewTurnMessage;
 import mod.vemerion.minecard.network.OpenGameMessage;
 import mod.vemerion.minecard.network.PlaceCardMessage;
 import mod.vemerion.minecard.network.PlayCardMessage;
+import mod.vemerion.minecard.network.SetPropertiesMessage;
 import mod.vemerion.minecard.network.SetReadyMessage;
 import mod.vemerion.minecard.network.SetResourcesMessage;
-import mod.vemerion.minecard.network.UpdateCardMessage;
 import mod.vemerion.minecard.network.UpdateCardTypesMessage;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -34,31 +34,34 @@ public class ModEventSubscriber {
 
 	@SubscribeEvent
 	public static void setup(FMLCommonSetupEvent event) {
-		Network.INSTANCE.registerMessage(0, OpenGameMessage.class, OpenGameMessage::encode, OpenGameMessage::decode,
+		int id = 0;
+
+		Network.INSTANCE.registerMessage(id++, OpenGameMessage.class, OpenGameMessage::encode, OpenGameMessage::decode,
 				OpenGameMessage::handle);
-		Network.INSTANCE.registerMessage(1, NewTurnMessage.class, NewTurnMessage::encode, NewTurnMessage::decode,
+		Network.INSTANCE.registerMessage(id++, NewTurnMessage.class, NewTurnMessage::encode, NewTurnMessage::decode,
 				NewTurnMessage::handle);
-		Network.INSTANCE.registerMessage(2, EndTurnMessage.class, EndTurnMessage::encode, EndTurnMessage::decode,
+		Network.INSTANCE.registerMessage(id++, EndTurnMessage.class, EndTurnMessage::encode, EndTurnMessage::decode,
 				EndTurnMessage::handle);
-		Network.INSTANCE.registerMessage(3, SetResourcesMessage.class, SetResourcesMessage::encode,
+		Network.INSTANCE.registerMessage(id++, SetResourcesMessage.class, SetResourcesMessage::encode,
 				SetResourcesMessage::decode, SetResourcesMessage::handle);
-		Network.INSTANCE.registerMessage(4, PlayCardMessage.class, PlayCardMessage::encode, PlayCardMessage::decode,
+		Network.INSTANCE.registerMessage(id++, PlayCardMessage.class, PlayCardMessage::encode, PlayCardMessage::decode,
 				PlayCardMessage::handle);
-		Network.INSTANCE.registerMessage(5, PlaceCardMessage.class, PlaceCardMessage::encode, PlaceCardMessage::decode,
-				PlaceCardMessage::handle);
-		Network.INSTANCE.registerMessage(6, SetReadyMessage.class, SetReadyMessage::encode, SetReadyMessage::decode,
+		Network.INSTANCE.registerMessage(id++, PlaceCardMessage.class, PlaceCardMessage::encode,
+				PlaceCardMessage::decode, PlaceCardMessage::handle);
+		Network.INSTANCE.registerMessage(id++, SetReadyMessage.class, SetReadyMessage::encode, SetReadyMessage::decode,
 				SetReadyMessage::handle);
-		Network.INSTANCE.registerMessage(7, AttackMessage.class, AttackMessage::encode, AttackMessage::decode,
+		Network.INSTANCE.registerMessage(id++, AttackMessage.class, AttackMessage::encode, AttackMessage::decode,
 				AttackMessage::handle);
-		Network.INSTANCE.registerMessage(8, UpdateCardMessage.class, UpdateCardMessage::encode,
-				UpdateCardMessage::decode, UpdateCardMessage::handle);
-		Network.INSTANCE.registerMessage(9, DrawCardMessage.class, DrawCardMessage::encode, DrawCardMessage::decode,
+		Network.INSTANCE.registerMessage(id++, DrawCardMessage.class, DrawCardMessage::encode, DrawCardMessage::decode,
 				DrawCardMessage::handle);
-		Network.INSTANCE.registerMessage(10, GameOverMessage.class, GameOverMessage::encode, GameOverMessage::decode,
+		Network.INSTANCE.registerMessage(id++, GameOverMessage.class, GameOverMessage::encode, GameOverMessage::decode,
 				GameOverMessage::handle);
-		Network.INSTANCE.registerMessage(11, CombatMessage.class, CombatMessage::encode, CombatMessage::decode,
+		Network.INSTANCE.registerMessage(id++, CombatMessage.class, CombatMessage::encode, CombatMessage::decode,
 				CombatMessage::handle);
-		Network.INSTANCE.registerMessage(12, UpdateCardTypesMessage.class, UpdateCardTypesMessage::encode,
+		Network.INSTANCE.registerMessage(id++, UpdateCardTypesMessage.class, UpdateCardTypesMessage::encode,
 				UpdateCardTypesMessage::decode, UpdateCardTypesMessage::handle);
+		Network.INSTANCE.registerMessage(id++, SetPropertiesMessage.class, SetPropertiesMessage::encode,
+				SetPropertiesMessage::decode, SetPropertiesMessage::handle);
+
 	}
 }

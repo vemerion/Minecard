@@ -10,8 +10,8 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import mod.vemerion.minecard.network.DrawCardMessage;
 import mod.vemerion.minecard.network.Network;
 import mod.vemerion.minecard.network.PlaceCardMessage;
+import mod.vemerion.minecard.network.SetPropertiesMessage;
 import mod.vemerion.minecard.network.SetResourcesMessage;
-import mod.vemerion.minecard.network.UpdateCardMessage;
 import net.minecraft.core.SerializableUUID;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.PacketDistributor;
@@ -94,7 +94,7 @@ public class PlayerState {
 				card.removeProperty(CardProperty.FREEZE);
 				for (var receiver : receivers)
 					Network.INSTANCE.send(PacketDistributor.PLAYER.with(() -> receiver),
-							new UpdateCardMessage(id, card));
+							new SetPropertiesMessage(id, card.getId(), card.getProperties()));
 			}
 		}
 	}
