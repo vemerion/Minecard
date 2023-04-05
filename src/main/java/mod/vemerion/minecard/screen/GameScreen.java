@@ -24,6 +24,7 @@ import mod.vemerion.minecard.network.Network;
 import mod.vemerion.minecard.network.PlayCardMessage;
 import mod.vemerion.minecard.screen.animation.Animation;
 import mod.vemerion.minecard.screen.animation.DeathAnimation;
+import mod.vemerion.minecard.screen.animation.FreezeAnimation;
 import mod.vemerion.minecard.screen.animation.TauntAnimation;
 import mod.vemerion.minecard.screen.animation.ThrowItemAnimation;
 import mod.vemerion.minecard.screen.animation.WallAnimation;
@@ -226,6 +227,8 @@ public class GameScreen extends Screen {
 					fovModifier = 3;
 					break;
 				case FREEZE:
+					animations.add(new FreezeAnimation(minecraft, card, () -> {
+					}));
 					break;
 				case SHIELD:
 					animations.add(new WallAnimation(minecraft, card, () -> {
@@ -335,7 +338,7 @@ public class GameScreen extends Screen {
 	public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTicks) {
 		partialTicks = this.minecraft.getFrameTime(); // s
 		var source = minecraft.renderBuffers().bufferSource();
-		
+
 		for (var playerState : state.values()) {
 			boolean enemy = !playerState.id.equals(minecraft.player.getUUID());
 
