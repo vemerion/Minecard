@@ -24,6 +24,7 @@ import mod.vemerion.minecard.network.Network;
 import mod.vemerion.minecard.network.PlayCardMessage;
 import mod.vemerion.minecard.screen.animation.Animation;
 import mod.vemerion.minecard.screen.animation.DeathAnimation;
+import mod.vemerion.minecard.screen.animation.TauntAnimation;
 import mod.vemerion.minecard.screen.animation.ThrowItemAnimation;
 import mod.vemerion.minecard.screen.animation.WallAnimation;
 import net.minecraft.client.gui.components.AbstractButton;
@@ -233,6 +234,8 @@ public class GameScreen extends Screen {
 				case STEALTH:
 					break;
 				case TAUNT:
+					animations.add(new TauntAnimation(minecraft, card, () -> {
+					}));
 					break;
 				}
 			}
@@ -332,7 +335,7 @@ public class GameScreen extends Screen {
 	public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTicks) {
 		partialTicks = this.minecraft.getFrameTime(); // s
 		var source = minecraft.renderBuffers().bufferSource();
-
+		
 		for (var playerState : state.values()) {
 			boolean enemy = !playerState.id.equals(minecraft.player.getUUID());
 

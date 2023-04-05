@@ -15,7 +15,7 @@ public class CardType {
 					Codec.INT.fieldOf("cost").forGetter(CardType::getCost),
 					Codec.INT.fieldOf("health").forGetter(CardType::getHealth),
 					Codec.INT.fieldOf("damage").forGetter(CardType::getDamage),
-					CardProperty.CODEC_MAP.optionalFieldOf("properties", Map.of()).forGetter(CardType::getProperties),
+					CardProperty.CODEC_MAP.optionalFieldOf("properties", new HashMap<>()).forGetter(CardType::getProperties),
 					AdditionalCardData.CODEC.optionalFieldOf("additional_data", AdditionalCardData.EMPTY)
 							.forGetter(CardType::getAdditionalData))
 			.apply(instance, CardType::new));

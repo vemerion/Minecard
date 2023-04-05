@@ -1,5 +1,6 @@
 package mod.vemerion.minecard.game;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
 
@@ -25,7 +26,9 @@ public enum CardProperty {
 		return DataResult.error("Invalid property '" + s + "'");
 	}, e -> e.name);
 
-	public static final Codec<Map<CardProperty, Integer>> CODEC_MAP = Codec.unboundedMap(CardProperty.CODEC, Codec.INT);
+	// Use xmap to make sure we get modifiable map
+	public static final Codec<Map<CardProperty, Integer>> CODEC_MAP = Codec.unboundedMap(CardProperty.CODEC, Codec.INT)
+			.xmap(map -> new HashMap<>(map), map -> map);
 
 	private String name;
 	private Supplier<ItemStack> icon;
