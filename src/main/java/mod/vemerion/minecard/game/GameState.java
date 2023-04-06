@@ -51,9 +51,7 @@ public class GameState {
 			return;
 
 		// Can't be targeted
-		if (targetCard.hasProperty(CardProperty.STEALTH)
-				|| (!targetCard.hasProperty(CardProperty.TAUNT) && enemy.getBoard().stream()
-						.anyMatch(c -> c.hasProperty(CardProperty.TAUNT) && !c.hasProperty(CardProperty.STEALTH)))) {
+		if (!GameUtil.canBeAttacked(targetCard, enemy.getBoard())) {
 			return;
 		}
 

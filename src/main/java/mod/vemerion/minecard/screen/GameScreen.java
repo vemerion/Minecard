@@ -16,6 +16,7 @@ import mod.vemerion.minecard.Main;
 import mod.vemerion.minecard.game.Card;
 import mod.vemerion.minecard.game.CardProperty;
 import mod.vemerion.minecard.game.Cards;
+import mod.vemerion.minecard.game.GameUtil;
 import mod.vemerion.minecard.game.MessagePlayerState;
 import mod.vemerion.minecard.helper.Helper;
 import mod.vemerion.minecard.network.AttackMessage;
@@ -346,9 +347,12 @@ public class GameScreen extends Screen {
 			boolean enemy = !playerState.id.equals(minecraft.player.getUUID());
 
 			// Cards
-			for (var card : playerState.board)
+			for (var card : playerState.board) {
+//				fill(poseStack, (int)card.getPosition().x, (int)card.getPosition().y, (int)card.getPosition().x + CARD_WIDTH, (int)card.getPosition().y + CARD_HEIGHT, FastColor.ARGB32.color(255, 255, 255, 255));
+
 				if (card.getType() == null || !card.isDead())
 					card.render(new PoseStack(), mouseX, mouseY, source, partialTicks);
+			}
 			for (var card : playerState.hand)
 				if (card.getType() == null || !card.isDead())
 					card.render(new PoseStack(), mouseX, mouseY, source, partialTicks);
@@ -364,6 +368,24 @@ public class GameScreen extends Screen {
 			if (mouseX > deckX && mouseX < deckX + CARD_WIDTH && mouseY > deckY && mouseY < deckY + CARD_HEIGHT)
 				renderTooltip(poseStack, new TranslatableComponent(Helper.gui("deck_count"), playerState.deck), mouseX,
 						mouseY);
+		}
+
+		// Indicate which cards can't be attacked
+		if (attackingCard != null) {
+			var enemyState = enemyState();
+			var stack = Items.BARRIER.getDefaultInstance();
+			for (var card : enemyState.board) {
+
+				if (!GameUtil.canBeAttacked(card, enemyState.board)) {
+					poseStack.pushPose();
+					poseStack.translate(card.getPosition().x + CARD_WIDTH / 2 + 1,
+							card.getPosition().y + CARD_HEIGHT / 2, 10);
+					poseStack.scale(30, -30, 30);
+					itemRenderer.renderStatic(stack, ItemTransforms.TransformType.GUI, LightTexture.FULL_BRIGHT,
+							OverlayTexture.NO_OVERLAY, poseStack, source, 0);
+					poseStack.popPose();
+				}
+			}
 		}
 
 		for (var r : resources)
