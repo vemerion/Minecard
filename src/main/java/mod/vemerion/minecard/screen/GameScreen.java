@@ -25,6 +25,7 @@ import mod.vemerion.minecard.network.PlayCardMessage;
 import mod.vemerion.minecard.screen.animation.Animation;
 import mod.vemerion.minecard.screen.animation.DeathAnimation;
 import mod.vemerion.minecard.screen.animation.FreezeAnimation;
+import mod.vemerion.minecard.screen.animation.StealthAnimation;
 import mod.vemerion.minecard.screen.animation.TauntAnimation;
 import mod.vemerion.minecard.screen.animation.ThrowItemAnimation;
 import mod.vemerion.minecard.screen.animation.WallAnimation;
@@ -235,6 +236,8 @@ public class GameScreen extends Screen {
 					}));
 					break;
 				case STEALTH:
+					animations.add(new StealthAnimation(minecraft, card, () -> {
+					}));
 					break;
 				case TAUNT:
 					animations.add(new TauntAnimation(minecraft, card, () -> {

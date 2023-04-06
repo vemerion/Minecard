@@ -47,7 +47,7 @@ public class TauntAnimation extends Animation {
 		float offset = Mth.clampedLerp(MAX_OFFSET, 0, (startTimer + partialTick) / ANIMATION_DURATION);
 		var pos = new Vec2(card.getPosition().x + ClientCard.CARD_WIDTH * 0.52f,
 				card.getPosition().y + ClientCard.CARD_HEIGHT * -0.095f);
-		float alpha = Mth.clampedLerp(1, 0, (deathTimer + partialTick) / ANIMATION_DURATION);
+		float alpha = deathTimer == 0 ? 1 : Mth.clampedLerp(1, 0, (deathTimer + partialTick) / ANIMATION_DURATION);
 
 		float z = 0;
 		for (var rect : RECTANGLES) {
