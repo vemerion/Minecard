@@ -26,6 +26,10 @@ public abstract class ClientToServerMessage {
 	}
 
 	protected abstract void handle(GameBlockEntity game, ServerPlayer sender);
+	
+	protected boolean canAlwaysBeReceived() {
+		return false;
+	}
 
 	public final void handle(final Supplier<NetworkEvent.Context> supplier) {
 		final NetworkEvent.Context context = supplier.get();
@@ -35,7 +39,7 @@ public abstract class ClientToServerMessage {
 			var sender = context.getSender();
 			var level = sender.getLevel();
 			if (level.isLoaded(pos) && level.getBlockEntity(pos) instanceof GameBlockEntity game
-					&& game.canReceiveMessage(sender)) {
+					&& game.canReceiveMessage(sender) && (game.isPlayerTurn(sender) || canAlwaysBeReceived())) {
 				handle(game, sender);
 			}
 		});

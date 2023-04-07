@@ -20,6 +20,7 @@ import mod.vemerion.minecard.game.GameUtil;
 import mod.vemerion.minecard.game.MessagePlayerState;
 import mod.vemerion.minecard.helper.Helper;
 import mod.vemerion.minecard.network.AttackMessage;
+import mod.vemerion.minecard.network.CloseGameMessage;
 import mod.vemerion.minecard.network.EndTurnMessage;
 import mod.vemerion.minecard.network.Network;
 import mod.vemerion.minecard.network.PlayCardMessage;
@@ -134,6 +135,12 @@ public class GameScreen extends Screen {
 		for (var playerState : state.values())
 			for (var card : playerState.board)
 				updatePropertiesAnimations(null, card);
+	}
+
+	@Override
+	public void onClose() {
+		Network.INSTANCE.sendToServer(new CloseGameMessage(pos));
+		super.onClose();
 	}
 
 	private ClientCard withId(List<ClientCard> list, int id) {

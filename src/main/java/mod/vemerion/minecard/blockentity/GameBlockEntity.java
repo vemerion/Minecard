@@ -2,7 +2,9 @@ package mod.vemerion.minecard.blockentity;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import mod.vemerion.minecard.capability.CardData;
@@ -36,30 +38,36 @@ public class GameBlockEntity extends BlockEntity {
 
 	GameState state;
 
+	private Set<UUID> receivers;
+
 	public GameBlockEntity(BlockPos pWorldPosition, BlockState pBlockState) {
 		super(ModBlockEntities.GAME.get(), pWorldPosition, pBlockState);
+		receivers = new HashSet<>();
 		state = new GameState();
 	}
 
 	public boolean canReceiveMessage(ServerPlayer player) {
-		return state.getPlayerStates().size() > 1 && state.getCurrentPlayer().equals(player.getUUID());
+		return state.getPlayerStates().size() > 1;
+	}
+
+	public boolean isPlayerTurn(ServerPlayer player) {
+		return state.getCurrentPlayer().equals(player.getUUID());
 	}
 
 	public void endTurn(ServerPlayer player) {
 		state.endTurn(getReceivers());
 		var current = state.getCurrentPlayerState();
-		for (var playerState : state.getPlayerStates()) {
-			var receiver = level.getPlayerByUUID(playerState.getId());
+		for (var receiver : getReceivers()) {
 			Network.INSTANCE.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer) receiver),
 					new NewTurnMessage(state.getCurrentPlayer()));
 			Network.INSTANCE.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer) receiver), new SetResourcesMessage(
 					state.getCurrentPlayer(), current.getResources(), current.getMaxResources()));
+			if (!current.getBoard().isEmpty()) {
+				Network.INSTANCE.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer) receiver),
+						new SetReadyMessage(current.getId(), current.getReady()));
+			}
 		}
-		if (!current.getBoard().isEmpty()) {
-			Network.INSTANCE.send(
-					PacketDistributor.PLAYER.with(() -> (ServerPlayer) level.getPlayerByUUID(current.getId())),
-					new SetReadyMessage(current.getId(), current.getReady()));
-		}
+
 	}
 
 	public void playCard(ServerPlayer player, int card, int position) {
@@ -78,10 +86,14 @@ public class GameBlockEntity extends BlockEntity {
 		}
 	}
 
+	public void closeGame(ServerPlayer sender) {
+		receivers.remove(sender.getUUID());
+	}
+
 	private List<ServerPlayer> getReceivers() {
 		var list = new ArrayList<ServerPlayer>();
-		for (var playerState : state.getPlayerStates()) {
-			var player = level.getPlayerByUUID(playerState.getId());
+		for (var id : receivers) {
+			var player = level.getPlayerByUUID(id);
 			if (player != null)
 				list.add((ServerPlayer) player);
 		}
@@ -94,6 +106,7 @@ public class GameBlockEntity extends BlockEntity {
 			if (state.getPlayerStates().size() == 1) {
 				player.sendMessage(new TranslatableComponent(Helper.chat("not_enough_players")), id);
 			} else {
+				receivers.add(player.getUUID());
 				Network.INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), createOpenGameMessage(id));
 				Network.INSTANCE.send(PacketDistributor.PLAYER.with(() -> player),
 						new NewTurnMessage(state.getCurrentPlayer()));
@@ -146,5 +159,4 @@ public class GameBlockEntity extends BlockEntity {
 
 		return new OpenGameMessage(List.of(yourState.toMessage(false), enemyState.toMessage(true)), getBlockPos());
 	}
-
 }
