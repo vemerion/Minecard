@@ -21,6 +21,7 @@ public class ClientCard extends Card {
 	public static final int CARD_LIGHT_HOVER = GameScreen.CARD_LIGHT_HOVER;
 	public static final int CARD_WIDTH = GameScreen.CARD_WIDTH;
 	public static final int CARD_HEIGHT = GameScreen.CARD_HEIGHT;
+	private static final int LEFT_OFFSET = 3; // To get rid of padding in texture
 
 	private Vec2 position;
 	private Vec2 position0;
@@ -66,7 +67,10 @@ public class ClientCard extends Card {
 	}
 
 	public void render(PoseStack ps, int mouseX, int mouseY, BufferSource source, float partialTick) {
+//		GuiComponent.fill(ps, (int)getPosition().x, (int)getPosition().y, (int)getPosition().x + CARD_WIDTH, (int)getPosition().y + CARD_HEIGHT, FastColor.ARGB32.color(255, 255, 255, 255));
+
 		ps.pushPose();
+		ps.translate(-LEFT_OFFSET, 0, 0);
 
 		var pos = this == screen.getSelectedCard() ? new Vec2(mouseX - CARD_WIDTH / 2, mouseY - CARD_HEIGHT / 2)
 				: getPosition(partialTick);
@@ -87,7 +91,7 @@ public class ClientCard extends Card {
 		// Attacking card
 		if (this == screen.getAttackingCard()) {
 			ps.pushPose();
-			ps.translate(pos.x + CARD_WIDTH / 2 + 1, pos.y + CARD_WIDTH / 2 - 2, 50);
+			ps.translate(pos.x + CARD_WIDTH / 2, pos.y + CARD_HEIGHT / 2 - 2, 50);
 			ps.scale(30, -30, 30);
 			screen.getMinecraft().getItemRenderer().renderStatic(new ItemStack(Items.NETHERITE_SWORD),
 					TransformType.NONE, LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY, ps, source, 0);

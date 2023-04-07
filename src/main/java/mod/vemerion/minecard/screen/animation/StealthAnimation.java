@@ -13,7 +13,7 @@ import net.minecraft.world.phys.Vec2;
 public class StealthAnimation extends Animation {
 
 	private static final ResourceLocation TEXTURE = new ResourceLocation("textures/environment/clouds.png");
-	private static final int WIDTH = (int) (ClientCard.CARD_WIDTH * 0.95);
+	private static final int WIDTH = ClientCard.CARD_WIDTH;
 	private static final int HEIGHT = ClientCard.CARD_HEIGHT;
 	private static final int Z = 3;
 	private static final int DISCARD_DURATION = 100;
@@ -41,7 +41,7 @@ public class StealthAnimation extends Animation {
 	public void render(int mouseX, int mouseY, BufferSource source, float partialTick) {
 		var bufferbuilder = source.getBuffer(RenderType.text(TEXTURE));
 
-		var pos = new Vec2(card.getPosition().x + ClientCard.CARD_WIDTH * 0.05f, card.getPosition().y);
+		var pos = new Vec2(card.getPosition().x, card.getPosition().y);
 		float progress = -(timer + partialTick) / SPEED;
 		float discardProgress = discardTimer == 0 ? 0
 				: Mth.clampedLerp(0, 1, (discardTimer + partialTick) / DISCARD_DURATION);

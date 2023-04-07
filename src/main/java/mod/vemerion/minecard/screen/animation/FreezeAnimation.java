@@ -34,7 +34,7 @@ public class FreezeAnimation extends Animation {
 	public void render(int mouseX, int mouseY, BufferSource source, float partialTick) {
 		var bufferbuilder = source.getBuffer(RenderType.text(TEXTURE));
 
-		var pos = new Vec2(card.getPosition().x + ClientCard.CARD_WIDTH * 0.05f, card.getPosition().y);
+		var pos = new Vec2(card.getPosition().x, card.getPosition().y);
 
 		float progress = -(timer + partialTick) / 200;
 

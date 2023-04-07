@@ -63,11 +63,13 @@ public class GameScreen extends Screen {
 	public static final int CARD_SCALE = 60;
 	public static final int CARD_LIGHT = LightTexture.FULL_BRIGHT;
 	public static final int CARD_LIGHT_HOVER = 0b011000000000000001100000;
-	public static final int CARD_WIDTH = 46;
+	public static final int CARD_WIDTH = 42;
 	public static final int CARD_HEIGHT = 48;
 	private static final int NEXT_TURN_BUTTON_SIZE = 20;
 	private static final int DECK_HORIZONTAL_OFFSET = 20;
 	private static final int DECK_VERTICAL_OFFSET = 20;
+	private static final int CARD_PADDING = 4;
+	private static final int CARD_WITH_PADDING = CARD_WIDTH + CARD_PADDING;
 
 	private static final Card EMPTY_CARD = Cards.EMPTY_CARD_TYPE.create();
 
@@ -331,7 +333,7 @@ public class GameScreen extends Screen {
 	}
 
 	private int cardRowX(int total, int i) {
-		return (width - (total - 1) * CARD_WIDTH) / 2 + i * CARD_WIDTH - CARD_WIDTH / 2;
+		return (width - (total - 1) * CARD_WITH_PADDING) / 2 + i * CARD_WITH_PADDING - CARD_WIDTH / 2;
 	}
 
 	private boolean isCurrentActive() {
@@ -348,8 +350,6 @@ public class GameScreen extends Screen {
 
 			// Cards
 			for (var card : playerState.board) {
-//				fill(poseStack, (int)card.getPosition().x, (int)card.getPosition().y, (int)card.getPosition().x + CARD_WIDTH, (int)card.getPosition().y + CARD_HEIGHT, FastColor.ARGB32.color(255, 255, 255, 255));
-
 				if (card.getType() == null || !card.isDead())
 					card.render(new PoseStack(), mouseX, mouseY, source, partialTicks);
 			}
@@ -378,8 +378,8 @@ public class GameScreen extends Screen {
 
 				if (!GameUtil.canBeAttacked(card, enemyState.board)) {
 					poseStack.pushPose();
-					poseStack.translate(card.getPosition().x + CARD_WIDTH / 2 + 1,
-							card.getPosition().y + CARD_HEIGHT / 2, 10);
+					poseStack.translate(card.getPosition().x + CARD_WIDTH / 2, card.getPosition().y + CARD_HEIGHT / 2,
+							10);
 					poseStack.scale(30, -30, 30);
 					itemRenderer.renderStatic(stack, ItemTransforms.TransformType.GUI, LightTexture.FULL_BRIGHT,
 							OverlayTexture.NO_OVERLAY, poseStack, source, 0);
