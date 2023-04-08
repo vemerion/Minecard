@@ -1,0 +1,11 @@
+{
+  "damage": 2,
+  "abilities": {
+    "trigger": "summon",
+    "count": 1,
+    "type": "minecard:draw_cards"
+  },
+  "entity": "minecraft:donkey",
+  "cost": 3,
+  "health": 2
+}

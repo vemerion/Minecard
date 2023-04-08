@@ -1,8 +1,8 @@
 {
   "damage": 3,
   "properties": {
-    "freeze": 1,
     "charge": 1,
+    "freeze": 1,
     "stealth": 1,
     "taunt": 1
   },

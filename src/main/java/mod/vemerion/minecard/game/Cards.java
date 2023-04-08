@@ -10,6 +10,7 @@ import com.google.gson.JsonElement;
 import com.mojang.serialization.JsonOps;
 
 import mod.vemerion.minecard.Main;
+import mod.vemerion.minecard.game.ability.NoCardAbility;
 import mod.vemerion.minecard.network.Network;
 import mod.vemerion.minecard.network.UpdateCardTypesMessage;
 import net.minecraft.resources.ResourceLocation;
@@ -28,7 +29,8 @@ public class Cards extends SimpleJsonResourceReloadListener {
 	private static final Gson GSON = (new GsonBuilder()).setPrettyPrinting().disableHtmlEscaping().create();
 	public static final String FOLDER_NAME = Main.MODID + "_cards";
 
-	public static final CardType EMPTY_CARD_TYPE = new CardType(null, 0, 0, 0, Map.of(), AdditionalCardData.EMPTY);
+	public static final CardType EMPTY_CARD_TYPE = new CardType(null, 0, 0, 0, Map.of(), NoCardAbility.NO_CARD_ABILITY,
+			AdditionalCardData.EMPTY);
 
 	private static Cards clientInstance;
 	private static Cards serverInstance;
@@ -67,7 +69,8 @@ public class Cards extends SimpleJsonResourceReloadListener {
 		int totalStats = cost * 2 + 1;
 		int health = rand.nextInt(1, totalStats);
 
-		return new CardType(type, cost, health, totalStats - health, Map.of(), AdditionalCardData.EMPTY);
+		return new CardType(type, cost, health, totalStats - health, Map.of(), NoCardAbility.NO_CARD_ABILITY,
+				AdditionalCardData.EMPTY);
 	}
 
 	@Override

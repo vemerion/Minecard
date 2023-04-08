@@ -1,5 +1,6 @@
 package mod.vemerion.minecard.network;
 
+import java.util.List;
 import java.util.UUID;
 import java.util.function.Supplier;
 
@@ -12,26 +13,26 @@ import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.DistExecutor.SafeRunnable;
 import net.minecraftforge.network.NetworkEvent;
 
-public class DrawCardMessage {
+public class DrawCardsMessage {
 
 	private UUID id;
-	private Card card;
+	private List<Card> cards;
 	private boolean shrinkDeck;
 
-	public DrawCardMessage(UUID id, Card card, boolean shrinkDeck) {
+	public DrawCardsMessage(UUID id, List<Card> cards, boolean shrinkDeck) {
 		this.id = id;
-		this.card = card;
+		this.cards = cards;
 		this.shrinkDeck = shrinkDeck;
 	}
 
 	public void encode(final FriendlyByteBuf buffer) {
 		buffer.writeUUID(id);
-		MessageUtil.encodeCard(buffer, card);
+		buffer.writeCollection(cards, MessageUtil::encodeCard);
 		buffer.writeBoolean(shrinkDeck);
 	}
 
-	public static DrawCardMessage decode(final FriendlyByteBuf buffer) {
-		return new DrawCardMessage(buffer.readUUID(), MessageUtil.decodeCard(buffer), buffer.readBoolean());
+	public static DrawCardsMessage decode(final FriendlyByteBuf buffer) {
+		return new DrawCardsMessage(buffer.readUUID(), buffer.readList(MessageUtil::decodeCard), buffer.readBoolean());
 	}
 
 	public void handle(final Supplier<NetworkEvent.Context> supplier) {
@@ -41,7 +42,7 @@ public class DrawCardMessage {
 	}
 
 	private static class Handle {
-		private static SafeRunnable handle(DrawCardMessage message) {
+		private static SafeRunnable handle(DrawCardsMessage message) {
 			return new SafeRunnable() {
 				private static final long serialVersionUID = 1L;
 
@@ -52,7 +53,7 @@ public class DrawCardMessage {
 						return;
 
 					if (mc.screen instanceof GameScreen game) {
-						game.drawCard(message.id, message.card, message.shrinkDeck);
+						game.drawCards(message.id, message.cards, message.shrinkDeck);
 					}
 				}
 			};

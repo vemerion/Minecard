@@ -6,6 +6,9 @@ import java.util.Map;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
+import mod.vemerion.minecard.game.ability.CardAbility;
+import mod.vemerion.minecard.game.ability.NoCardAbility;
+import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.entity.EntityType;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -13,15 +16,19 @@ public class Card {
 
 	private static int counter = 0;
 
-	public static final Codec<Card> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-			ForgeRegistries.ENTITIES.getCodec().fieldOf("entity").forGetter(Card::getType),
-			Codec.INT.fieldOf("cost").forGetter(Card::getCost), Codec.INT.fieldOf("health").forGetter(Card::getHealth),
-			Codec.INT.fieldOf("damage").forGetter(Card::getDamage),
-			Codec.BOOL.fieldOf("ready").forGetter(Card::isReady),
-			CardProperty.CODEC_MAP.optionalFieldOf("properties", new HashMap<>()).forGetter(Card::getProperties),
-			AdditionalCardData.CODEC.optionalFieldOf("additional_data", AdditionalCardData.EMPTY)
-					.forGetter(Card::getAdditionalData))
-			.apply(instance, Card::new));
+	public static final Codec<Card> CODEC = ExtraCodecs.lazyInitializedCodec(() -> RecordCodecBuilder.create(
+			instance -> instance.group(ForgeRegistries.ENTITIES.getCodec().fieldOf("entity").forGetter(Card::getType),
+					Codec.INT.fieldOf("cost").forGetter(Card::getCost),
+					Codec.INT.fieldOf("health").forGetter(Card::getHealth),
+					Codec.INT.fieldOf("damage").forGetter(Card::getDamage),
+					Codec.BOOL.fieldOf("ready").forGetter(Card::isReady),
+					CardProperty.CODEC_MAP.optionalFieldOf("properties", new HashMap<>())
+							.forGetter(Card::getProperties),
+					CardAbility.CODEC.optionalFieldOf("abilities", NoCardAbility.NO_CARD_ABILITY)
+							.forGetter(Card::getAbility),
+					AdditionalCardData.CODEC.optionalFieldOf("additional_data", AdditionalCardData.EMPTY)
+							.forGetter(Card::getAdditionalData))
+					.apply(instance, Card::new)));
 
 	private EntityType<?> type;
 	private AdditionalCardData additionalData;
@@ -30,16 +37,18 @@ public class Card {
 	private int damage;
 	private boolean ready;
 	private Map<CardProperty, Integer> properties;
+	private final CardAbility ability;
 	private int id;
 
 	public Card(EntityType<?> type, int cost, int health, int damage, boolean ready,
-			Map<CardProperty, Integer> properties, AdditionalCardData additionalData) {
+			Map<CardProperty, Integer> properties, CardAbility ability, AdditionalCardData additionalData) {
 		this.type = type;
 		this.cost = cost;
 		this.health = health;
 		this.damage = damage;
 		this.ready = ready;
 		this.properties = properties;
+		this.ability = ability;
 		this.additionalData = additionalData;
 		this.id = counter++;
 	}
@@ -90,6 +99,10 @@ public class Card {
 
 	public void removeProperty(CardProperty property) {
 		properties.remove(property);
+	}
+
+	public CardAbility getAbility() {
+		return ability;
 	}
 
 	public AdditionalCardData getAdditionalData() {

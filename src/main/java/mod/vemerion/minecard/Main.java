@@ -6,6 +6,7 @@ import com.mojang.logging.LogUtils;
 
 import mod.vemerion.minecard.init.ModBlockEntities;
 import mod.vemerion.minecard.init.ModBlocks;
+import mod.vemerion.minecard.init.ModCardAbilities;
 import mod.vemerion.minecard.init.ModItems;
 import mod.vemerion.minecard.init.ModLootModifiers;
 import mod.vemerion.minecard.init.ModMenus;
@@ -25,5 +26,6 @@ public class Main {
 		ModBlockEntities.BLOCK_ENTITIES.register(bus);
 		ModBlocks.BLOCKS.register(bus);
 		ModMenus.MENUS.register(bus);
+		ModCardAbilities.CARD_ABILITIES.register(bus);
 	}
 }

@@ -195,16 +195,18 @@ public class GameScreen extends Screen {
 		return null;
 	}
 
-	public void drawCard(UUID id, Card card, boolean shrinkDeck) {
+	public void drawCards(UUID id, List<Card> cards, boolean shrinkDeck) {
 		var playerState = state.get(id);
 		boolean enemy = !minecraft.player.getUUID().equals(id);
 		float x = enemy ? DECK_HORIZONTAL_OFFSET : width - DECK_HORIZONTAL_OFFSET - CARD_WIDTH;
 		float y = enemy ? DECK_VERTICAL_OFFSET : height - DECK_VERTICAL_OFFSET - CARD_HEIGHT;
-		playerState.hand.add(new ClientCard(card, new Vec2(x, y), this));
+		for (var card : cards)
+			playerState.hand.add(new ClientCard(card, new Vec2(x, y), this));
+		
 		resetPositions(playerState);
 
 		if (shrinkDeck)
-			playerState.deck--;
+			playerState.deck -= cards.size();
 	}
 
 	public void gameOver() {

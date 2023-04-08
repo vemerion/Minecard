@@ -7,25 +7,27 @@ import java.util.UUID;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
-import mod.vemerion.minecard.network.DrawCardMessage;
+import mod.vemerion.minecard.network.DrawCardsMessage;
 import mod.vemerion.minecard.network.Network;
 import mod.vemerion.minecard.network.PlaceCardMessage;
 import mod.vemerion.minecard.network.SetPropertiesMessage;
 import mod.vemerion.minecard.network.SetResourcesMessage;
 import net.minecraft.core.SerializableUUID;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.ExtraCodecs;
 import net.minecraftforge.network.PacketDistributor;
 
 public class PlayerState {
 
-	public static final Codec<PlayerState> CODEC = RecordCodecBuilder.create(instance -> instance
-			.group(SerializableUUID.CODEC.fieldOf("id").forGetter(PlayerState::getId),
-					Codec.list(Card.CODEC).fieldOf("deck").forGetter(PlayerState::getDeck),
-					Codec.list(Card.CODEC).fieldOf("hand").forGetter(PlayerState::getHand),
-					Codec.list(Card.CODEC).fieldOf("board").forGetter(PlayerState::getBoard),
-					Codec.INT.fieldOf("resources").forGetter(PlayerState::getResources),
-					Codec.INT.fieldOf("maxResources").forGetter(PlayerState::getMaxResources))
-			.apply(instance, PlayerState::new));
+	public static final Codec<PlayerState> CODEC = ExtraCodecs
+			.lazyInitializedCodec(() -> RecordCodecBuilder.create(instance -> instance
+					.group(SerializableUUID.CODEC.fieldOf("id").forGetter(PlayerState::getId),
+							Codec.list(Card.CODEC).fieldOf("deck").forGetter(PlayerState::getDeck),
+							Codec.list(Card.CODEC).fieldOf("hand").forGetter(PlayerState::getHand),
+							Codec.list(Card.CODEC).fieldOf("board").forGetter(PlayerState::getBoard),
+							Codec.INT.fieldOf("resources").forGetter(PlayerState::getResources),
+							Codec.INT.fieldOf("maxResources").forGetter(PlayerState::getMaxResources))
+					.apply(instance, PlayerState::new)));
 
 	private UUID id;
 	private List<Card> deck;
@@ -88,6 +90,23 @@ public class PlayerState {
 		return list;
 	}
 
+	public void drawCards(List<ServerPlayer> receivers, int count) {
+		List<Card> cards = new ArrayList<>();
+		List<Card> fakes = new ArrayList<>();
+		while (!deck.isEmpty() && count > 0) {
+			var card = deck.remove(deck.size() - 1);
+			hand.add(card);
+			cards.add(card);
+			fakes.add(Cards.EMPTY_CARD_TYPE.create().setId(card.getId()));
+			count--;
+		}
+
+		for (var receiver : receivers) {
+			Network.INSTANCE.send(PacketDistributor.PLAYER.with(() -> receiver),
+					new DrawCardsMessage(id, receiver.getUUID().equals(id) ? cards : fakes, true));
+		}
+	}
+
 	public void endTurn(List<ServerPlayer> receivers) {
 		for (var card : board) {
 			if (card.hasProperty(CardProperty.FREEZE)) {
@@ -106,15 +125,7 @@ public class PlayerState {
 			if (!card.hasProperty(CardProperty.FREEZE))
 				card.setReady(true);
 
-		if (!deck.isEmpty()) {
-			var card = deck.remove(deck.size() - 1);
-			hand.add(card);
-			for (var receiver : receivers) {
-				Network.INSTANCE.send(PacketDistributor.PLAYER.with(() -> receiver), new DrawCardMessage(id,
-						receiver.getUUID().equals(id) ? card : Cards.EMPTY_CARD_TYPE.create().setId(card.getId()),
-						true));
-			}
-		}
+		drawCards(receivers, 1);
 	}
 
 	public void playCard(List<ServerPlayer> receivers, int cardId, int position) {
@@ -131,6 +142,8 @@ public class PlayerState {
 		resources -= card.getCost();
 		board.add(position, card);
 		hand.remove(card);
+		
+		card.getAbility().onSummon(receivers, this, card);
 
 		for (var receiver : receivers) {
 			Network.INSTANCE.send(PacketDistributor.PLAYER.with(() -> receiver),

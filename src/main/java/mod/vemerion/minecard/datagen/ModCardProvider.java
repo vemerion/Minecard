@@ -13,6 +13,10 @@ import mod.vemerion.minecard.game.AdditionalCardData;
 import mod.vemerion.minecard.game.CardProperty;
 import mod.vemerion.minecard.game.CardType;
 import mod.vemerion.minecard.game.Cards;
+import mod.vemerion.minecard.game.ability.CardAbility;
+import mod.vemerion.minecard.game.ability.CardAbilityTrigger;
+import mod.vemerion.minecard.game.ability.DrawCardsAbility;
+import mod.vemerion.minecard.game.ability.NoCardAbility;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.HashCache;
@@ -53,6 +57,7 @@ public class ModCardProvider implements DataProvider {
 				.addProperty(CardProperty.FREEZE, 1).addProperty(CardProperty.STEALTH, 1)
 				.addProperty(CardProperty.TAUNT, 1));
 		add(new Builder(EntityType.SHULKER, 3, 3, 3).addProperty(CardProperty.SHIELD, 1));
+		add(new Builder(EntityType.DONKEY, 3, 2, 2).setCardAbility(new DrawCardsAbility(CardAbilityTrigger.SUMMON, 1)));
 	}
 
 	private void add(Builder builder) {
@@ -71,6 +76,7 @@ public class ModCardProvider implements DataProvider {
 		private int health;
 		private int damage;
 		private Map<CardProperty, Integer> properties = new HashMap<>();
+		private CardAbility ability = NoCardAbility.NO_CARD_ABILITY;
 		private AdditionalCardData additionalData = AdditionalCardData.EMPTY;
 		private ResourceLocation key;
 
@@ -91,8 +97,13 @@ public class ModCardProvider implements DataProvider {
 			return this;
 		}
 
+		private Builder setCardAbility(CardAbility ability) {
+			this.ability = ability;
+			return this;
+		}
+
 		private CardType build() {
-			return new CardType(type, cost, health, damage, properties, additionalData);
+			return new CardType(type, cost, health, damage, properties, ability, additionalData);
 		}
 
 		private ResourceLocation getKey() {
