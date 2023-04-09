@@ -7,6 +7,8 @@ import com.mojang.serialization.Codec;
 import mod.vemerion.minecard.game.Card;
 import mod.vemerion.minecard.game.PlayerState;
 import mod.vemerion.minecard.init.ModCardAbilities;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.ExtraCodecs;
 
@@ -15,7 +17,10 @@ public abstract class CardAbility {
 	public static final Codec<CardAbility> CODEC = ExtraCodecs.lazyInitializedCodec(() -> ModCardAbilities.getRegistry()
 			.getCodec().dispatch("type", CardAbility::getType, CardAbilityType::codec));
 
-	private final CardAbilityTrigger trigger;
+	private static final Object[] NO_ARGS = {};
+
+	protected final CardAbilityTrigger trigger;
+	private Component description;
 
 	public CardAbility(CardAbilityTrigger trigger) {
 		this.trigger = trigger;
@@ -23,7 +28,18 @@ public abstract class CardAbility {
 
 	protected abstract CardAbilityType<?> getType();
 
+	protected Object[] getDescriptionArgs() {
+		return NO_ARGS;
+	}
+
 	protected abstract void invoke(List<ServerPlayer> receivers, PlayerState state, Card card);
+
+	public Component getDescription() {
+		if (description == null) {
+			description = new TranslatableComponent(getType().getTranslationKey(), getDescriptionArgs());
+		}
+		return description;
+	}
 
 	public CardAbilityTrigger getTrigger() {
 		return trigger;

@@ -35,14 +35,6 @@ public class CardItem extends Item {
 		return new TranslatableComponent(getDescriptionId(pStack), getType(pStack).getDescription());
 	}
 
-	public Component getCardText() {
-		return new TranslatableComponent(getCardTextId());
-	}
-
-	public String getCardTextId() {
-		return "item." + getRegistryName().getNamespace() + "." + getRegistryName().getPath() + ".description";
-	}
-
 	@Override
 	public ICapabilityProvider initCapabilities(ItemStack stack, CompoundTag nbt) {
 		return new CardData.Provider(stack);

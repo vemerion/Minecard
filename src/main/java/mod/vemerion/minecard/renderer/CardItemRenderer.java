@@ -25,6 +25,7 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
@@ -79,15 +80,15 @@ public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 		pose.popPose();
 
 		// Render text
-//		pose.pushPose();
-//		pose.translate(0.1, -0.55, 0.01);
-//		pose.scale(TEXT_SIZE, -TEXT_SIZE, TEXT_SIZE);
-//		int y = 0;
-//		for (FormattedCharSequence line : mc.font.split(type.getDescription(), 50)) {
-//			mc.font.draw(pose, line, 0, y, 0);
-//			y += 10;
-//		}
-//		pose.popPose();
+		pose.pushPose();
+		pose.translate(0.105, -0.53, 0.01);
+		pose.scale(0.007f, -0.007f, 0.007f);
+		int y = 0;
+		for (FormattedCharSequence line : mc.font.split(card.getAbility().getDescription(), 80)) {
+			mc.font.draw(pose, line, 0, y, 0);
+			y += 10;
+		}
+		pose.popPose();
 
 		// Render values
 		var itemRenderer = mc.getItemRenderer();

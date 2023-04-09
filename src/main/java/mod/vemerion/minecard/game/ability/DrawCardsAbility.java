@@ -30,6 +30,11 @@ public class DrawCardsAbility extends CardAbility {
 	}
 
 	@Override
+	protected Object[] getDescriptionArgs() {
+		return new Object[] { trigger.getText(), count };
+	}
+
+	@Override
 	protected void invoke(List<ServerPlayer> receivers, PlayerState state, Card card) {
 		state.drawCards(receivers, count);
 	}

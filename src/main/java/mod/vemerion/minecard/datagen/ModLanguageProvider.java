@@ -1,10 +1,11 @@
 package mod.vemerion.minecard.datagen;
 
 import mod.vemerion.minecard.Main;
+import mod.vemerion.minecard.game.ability.CardAbilityTrigger;
 import mod.vemerion.minecard.helper.Helper;
 import mod.vemerion.minecard.init.ModBlocks;
+import mod.vemerion.minecard.init.ModCardAbilities;
 import mod.vemerion.minecard.init.ModItems;
-import mod.vemerion.minecard.item.CardItem;
 import net.minecraft.data.DataGenerator;
 import net.minecraftforge.common.data.LanguageProvider;
 
@@ -18,7 +19,6 @@ public class ModLanguageProvider extends LanguageProvider {
 	protected void addTranslations() {
 		add("itemGroup." + Main.MODID, "Minecard");
 		add(ModItems.CARD.get(), "%s Card");
-		addCardText(ModItems.CARD.get(), "Use to blow up!");
 
 		add(ModBlocks.GAME.get(), "Game Board");
 		add(ModItems.DECK.get(), "Deck");
@@ -36,9 +36,13 @@ public class ModLanguageProvider extends LanguageProvider {
 		add(Helper.gui("game_over"), "Game Over");
 		add(Helper.gui("resources_count"), "%s/%s");
 		add(Helper.gui("deck_count"), "%s");
-	}
 
-	private void addCardText(CardItem card, String descr) {
-		add(card.getCardTextId(), descr);
+		// Card abilities
+		add(CardAbilityTrigger.ALWAYS.getTextKey(), "Always:");
+		add(CardAbilityTrigger.NEVER.getTextKey(), "Never:");
+		add(CardAbilityTrigger.SUMMON.getTextKey(), "Summon:");
+
+		add(ModCardAbilities.NO_CARD_ABILITY.get().getTranslationKey(), "");
+		add(ModCardAbilities.DRAW_CARDS.get().getTranslationKey(), "%s draw %s card(s).");
 	}
 }
