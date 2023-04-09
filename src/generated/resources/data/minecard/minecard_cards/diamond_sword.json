@@ -1,0 +1,12 @@
+{
+  "properties": {
+    "charge": 1
+  },
+  "equipment": {
+    "mainhand": "minecraft:diamond_sword"
+  },
+  "entity": "minecraft:item",
+  "cost": 0,
+  "health": 0,
+  "damage": 1
+}

@@ -1,5 +1,4 @@
 {
-  "damage": 2,
   "abilities": {
     "trigger": "summon",
     "count": 1,
@@ -7,5 +6,6 @@
   },
   "entity": "minecraft:donkey",
   "cost": 3,
-  "health": 2
+  "health": 2,
+  "damage": 2
 }

@@ -142,8 +142,6 @@ public class PlayerState {
 		resources -= card.getCost();
 		board.add(position, card);
 		hand.remove(card);
-		
-		card.getAbility().onSummon(receivers, this, card);
 
 		for (var receiver : receivers) {
 			Network.INSTANCE.send(PacketDistributor.PLAYER.with(() -> receiver),
@@ -151,6 +149,8 @@ public class PlayerState {
 			Network.INSTANCE.send(PacketDistributor.PLAYER.with(() -> receiver),
 					new PlaceCardMessage(id, card, position));
 		}
+
+		card.getAbility().onSummon(receivers, this, card);
 	}
 
 	public MessagePlayerState toMessage(boolean hide) {

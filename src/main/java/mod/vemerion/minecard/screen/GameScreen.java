@@ -180,6 +180,7 @@ public class GameScreen extends Screen {
 
 		for (var card : playerState.board) {
 			if (card.getId() == received.getId()) {
+				var old = new HashMap<>(card.getProperties());
 				card.copy(received);
 
 				if (card.isDead()) {
@@ -189,6 +190,9 @@ public class GameScreen extends Screen {
 						resetPositions(state.get(id));
 					}));
 				}
+				
+				updatePropertiesAnimations(old, card);
+				
 				return card;
 			}
 		}

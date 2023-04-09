@@ -1,0 +1,16 @@
+{
+  "abilities": {
+    "trigger": "summon",
+    "apply_to_target": false,
+    "modifications": [
+      "minecard:shield",
+      "minecard:iron_equipment",
+      "minecard:diamond_sword"
+    ],
+    "type": "minecard:modify"
+  },
+  "entity": "minecraft:zombie",
+  "cost": 4,
+  "health": 4,
+  "damage": 4
+}

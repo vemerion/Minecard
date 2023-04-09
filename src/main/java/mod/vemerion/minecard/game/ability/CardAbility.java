@@ -2,6 +2,8 @@ package mod.vemerion.minecard.game.ability;
 
 import java.util.List;
 
+import javax.annotation.Nullable;
+
 import com.mojang.serialization.Codec;
 
 import mod.vemerion.minecard.game.Card;
@@ -32,7 +34,7 @@ public abstract class CardAbility {
 		return NO_ARGS;
 	}
 
-	protected abstract void invoke(List<ServerPlayer> receivers, PlayerState state, Card card);
+	protected abstract void invoke(List<ServerPlayer> receivers, PlayerState state, Card card, @Nullable Card other);
 
 	public Component getDescription() {
 		if (description == null) {
@@ -47,7 +49,13 @@ public abstract class CardAbility {
 
 	public void onSummon(List<ServerPlayer> receivers, PlayerState state, Card card) {
 		if (trigger == CardAbilityTrigger.ALWAYS || trigger == CardAbilityTrigger.SUMMON) {
-			invoke(receivers, state, card);
+			invoke(receivers, state, card, null);
+		}
+	}
+
+	public void onAttack(List<ServerPlayer> receivers, PlayerState state, Card card, Card target) {
+		if (trigger == CardAbilityTrigger.ALWAYS || trigger == CardAbilityTrigger.ATTACK) {
+			invoke(receivers, state, card, target);
 		}
 	}
 

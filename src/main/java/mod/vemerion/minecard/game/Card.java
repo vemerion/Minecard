@@ -10,6 +10,8 @@ import mod.vemerion.minecard.game.ability.CardAbility;
 import mod.vemerion.minecard.game.ability.NoCardAbility;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.Item;
 import net.minecraftforge.registries.ForgeRegistries;
 
 public class Card {
@@ -26,6 +28,8 @@ public class Card {
 							.forGetter(Card::getProperties),
 					CardAbility.CODEC.optionalFieldOf("abilities", NoCardAbility.NO_CARD_ABILITY)
 							.forGetter(Card::getAbility),
+					GameUtil.EQUIPMENT_MAP_CODEC.optionalFieldOf("equipment", new HashMap<>())
+							.forGetter(Card::getEquipment),
 					AdditionalCardData.CODEC.optionalFieldOf("additional_data", AdditionalCardData.EMPTY)
 							.forGetter(Card::getAdditionalData))
 					.apply(instance, Card::new)));
@@ -38,10 +42,12 @@ public class Card {
 	private boolean ready;
 	private Map<CardProperty, Integer> properties;
 	private final CardAbility ability;
+	private Map<EquipmentSlot, Item> equipment;
 	private int id;
 
 	public Card(EntityType<?> type, int cost, int health, int damage, boolean ready,
-			Map<CardProperty, Integer> properties, CardAbility ability, AdditionalCardData additionalData) {
+			Map<CardProperty, Integer> properties, CardAbility ability, Map<EquipmentSlot, Item> equipment,
+			AdditionalCardData additionalData) {
 		this.type = type;
 		this.cost = cost;
 		this.health = health;
@@ -49,6 +55,7 @@ public class Card {
 		this.ready = ready;
 		this.properties = properties;
 		this.ability = ability;
+		this.equipment = equipment;
 		this.additionalData = additionalData;
 		this.id = counter++;
 	}
@@ -65,6 +72,10 @@ public class Card {
 		return health;
 	}
 
+	public void setHealth(int health) {
+		this.health = health;
+	}
+
 	public void hurt(int amount) {
 		if (hasProperty(CardProperty.SHIELD) && amount > 0) {
 			removeProperty(CardProperty.SHIELD);
@@ -79,6 +90,10 @@ public class Card {
 
 	public int getDamage() {
 		return damage;
+	}
+
+	public void setDamage(int damage) {
+		this.damage = damage;
 	}
 
 	public boolean isReady() {
@@ -105,6 +120,10 @@ public class Card {
 		return ability;
 	}
 
+	public Map<EquipmentSlot, Item> getEquipment() {
+		return equipment;
+	}
+
 	public AdditionalCardData getAdditionalData() {
 		return additionalData;
 	}
@@ -128,6 +147,7 @@ public class Card {
 		this.damage = received.getDamage();
 		this.ready = received.isReady();
 		this.properties = received.getProperties();
+		this.equipment = received.getEquipment();
 		this.additionalData = received.getAdditionalData();
 	}
 }

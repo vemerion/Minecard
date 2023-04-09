@@ -2,6 +2,8 @@ package mod.vemerion.minecard.game.ability;
 
 import java.util.List;
 
+import javax.annotation.Nullable;
+
 import com.mojang.serialization.Codec;
 
 import mod.vemerion.minecard.game.Card;
@@ -25,7 +27,7 @@ public class NoCardAbility extends CardAbility {
 	}
 
 	@Override
-	protected void invoke(List<ServerPlayer> receivers, PlayerState state, Card card) {
+	protected void invoke(List<ServerPlayer> receivers, PlayerState state, Card card, @Nullable Card other) {
 
 	}
 

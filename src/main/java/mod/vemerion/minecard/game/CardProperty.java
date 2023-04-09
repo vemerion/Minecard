@@ -1,12 +1,11 @@
 package mod.vemerion.minecard.game;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
 
 import com.mojang.serialization.Codec;
-import com.mojang.serialization.DataResult;
 
+import mod.vemerion.minecard.Main;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraftforge.common.util.Lazy;
@@ -18,17 +17,8 @@ public enum CardProperty {
 	FREEZE("freeze", Lazy.of(() -> new ItemStack(Items.ICE))),
 	SHIELD("shield", Lazy.of(() -> new ItemStack(Items.DIAMOND_CHESTPLATE)));
 
-	public static final Codec<CardProperty> CODEC = Codec.STRING.comapFlatMap(s -> {
-		for (var e : CardProperty.values()) {
-			if (e.name.equals(s))
-				return DataResult.success(e);
-		}
-		return DataResult.error("Invalid property '" + s + "'");
-	}, e -> e.name);
-
-	// Use xmap to make sure we get modifiable map
-	public static final Codec<Map<CardProperty, Integer>> CODEC_MAP = Codec.unboundedMap(CardProperty.CODEC, Codec.INT)
-			.xmap(map -> new HashMap<>(map), map -> map);
+	public static final Codec<Map<CardProperty, Integer>> CODEC_MAP = GameUtil
+			.toMutable(Codec.unboundedMap(GameUtil.enumCodec(CardProperty.class, CardProperty::getName), Codec.INT));
 
 	private String name;
 	private Supplier<ItemStack> icon;
@@ -44,5 +34,9 @@ public enum CardProperty {
 
 	public ItemStack getIcon() {
 		return icon.get();
+	}
+	
+	public String getTextKey() {
+		return "card_property." + Main.MODID + "." + getName();
 	}
 }

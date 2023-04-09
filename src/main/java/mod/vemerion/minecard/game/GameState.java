@@ -59,6 +59,9 @@ public class GameState {
 		targetCard.hurt(attackerCard.getDamage());
 		attackerCard.setReady(false);
 		attackerCard.removeProperty(CardProperty.STEALTH);
+
+		attackerCard.getAbility().onAttack(receivers, current, attackerCard, targetCard);
+
 		if (attackerCard.isDead())
 			current.getBoard().remove(attackerCard);
 		if (targetCard.isDead())

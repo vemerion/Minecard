@@ -28,6 +28,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -183,7 +185,18 @@ public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 			return level.players().get(0);
 		}
 
-		return CACHE.computeIfAbsent(type, t -> t.create(level));
+		var entity = CACHE.computeIfAbsent(type, t -> t.create(level));
+
+		if (entity instanceof LivingEntity living) {
+			for (var slot : EquipmentSlot.values()) {
+				living.setItemSlot(slot, ItemStack.EMPTY);
+			}
+			for (var equipment : card.getEquipment().entrySet()) {
+				living.setItemSlot(equipment.getKey(), equipment.getValue().getDefaultInstance());
+			}
+		}
+
+		return entity;
 	}
 
 	@Override

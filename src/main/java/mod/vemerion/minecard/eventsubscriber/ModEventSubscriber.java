@@ -17,6 +17,7 @@ import mod.vemerion.minecard.network.PlayCardMessage;
 import mod.vemerion.minecard.network.SetPropertiesMessage;
 import mod.vemerion.minecard.network.SetReadyMessage;
 import mod.vemerion.minecard.network.SetResourcesMessage;
+import mod.vemerion.minecard.network.UpdateCardMessage;
 import mod.vemerion.minecard.network.UpdateCardTypesMessage;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -53,8 +54,8 @@ public class ModEventSubscriber {
 				SetReadyMessage::handle);
 		Network.INSTANCE.registerMessage(id++, AttackMessage.class, AttackMessage::encode, AttackMessage::decode,
 				AttackMessage::handle);
-		Network.INSTANCE.registerMessage(id++, DrawCardsMessage.class, DrawCardsMessage::encode, DrawCardsMessage::decode,
-				DrawCardsMessage::handle);
+		Network.INSTANCE.registerMessage(id++, DrawCardsMessage.class, DrawCardsMessage::encode,
+				DrawCardsMessage::decode, DrawCardsMessage::handle);
 		Network.INSTANCE.registerMessage(id++, GameOverMessage.class, GameOverMessage::encode, GameOverMessage::decode,
 				GameOverMessage::handle);
 		Network.INSTANCE.registerMessage(id++, CombatMessage.class, CombatMessage::encode, CombatMessage::decode,
@@ -65,6 +66,8 @@ public class ModEventSubscriber {
 				SetPropertiesMessage::decode, SetPropertiesMessage::handle);
 		Network.INSTANCE.registerMessage(id++, CloseGameMessage.class, CloseGameMessage::encode,
 				CloseGameMessage::decode, CloseGameMessage::handle);
+		Network.INSTANCE.registerMessage(id++, UpdateCardMessage.class, UpdateCardMessage::encode,
+				UpdateCardMessage::decode, UpdateCardMessage::handle);
 
 	}
 }

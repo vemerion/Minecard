@@ -1,0 +1,10 @@
+{
+  "equipment": {
+    "mainhand": "minecraft:iron_shovel",
+    "head": "minecraft:iron_helmet"
+  },
+  "entity": "minecraft:item",
+  "cost": 0,
+  "health": 1,
+  "damage": 1
+}

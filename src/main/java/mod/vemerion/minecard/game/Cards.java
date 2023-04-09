@@ -30,7 +30,7 @@ public class Cards extends SimpleJsonResourceReloadListener {
 	public static final String FOLDER_NAME = Main.MODID + "_cards";
 
 	public static final CardType EMPTY_CARD_TYPE = new CardType(null, 0, 0, 0, Map.of(), NoCardAbility.NO_CARD_ABILITY,
-			AdditionalCardData.EMPTY);
+			Map.of(), AdditionalCardData.EMPTY);
 
 	private static Cards clientInstance;
 	private static Cards serverInstance;
@@ -40,6 +40,10 @@ public class Cards extends SimpleJsonResourceReloadListener {
 	private Cards() {
 		super(GSON, FOLDER_NAME);
 		CARDS = new HashMap<>();
+	}
+
+	public CardType get(ResourceLocation rl) {
+		return CARDS.get(rl);
 	}
 
 	public CardType get(EntityType<?> type) {
@@ -69,7 +73,7 @@ public class Cards extends SimpleJsonResourceReloadListener {
 		int totalStats = cost * 2 + 1;
 		int health = rand.nextInt(1, totalStats);
 
-		return new CardType(type, cost, health, totalStats - health, Map.of(), NoCardAbility.NO_CARD_ABILITY,
+		return new CardType(type, cost, health, totalStats - health, Map.of(), NoCardAbility.NO_CARD_ABILITY, Map.of(),
 				AdditionalCardData.EMPTY);
 	}
 

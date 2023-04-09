@@ -1,8 +1,14 @@
 {
   "block.minecard.game": "Game Board",
   "card_ability_trigger.minecard.always": "Always:",
+  "card_ability_trigger.minecard.attack": "Attack:",
   "card_ability_trigger.minecard.never": "Never:",
   "card_ability_trigger.minecard.summon": "Summon:",
+  "card_property.minecard.charge": "charge",
+  "card_property.minecard.freeze": "freeze",
+  "card_property.minecard.shield": "shield",
+  "card_property.minecard.stealth": "stealth",
+  "card_property.minecard.taunt": "taunt",
   "chat.minecard.game_ongoing": "A game is already ongoing.",
   "chat.minecard.need_deck": "Right-click with a deck to enter the game.",
   "chat.minecard.not_enough_cards": "You need a full deck to enter the game.",
@@ -18,5 +24,9 @@
   "item.minecard.deck": "Deck",
   "itemGroup.minecard": "Minecard",
   "minecard.minecard.draw_cards": "%s draw %s card(s).",
+  "minecard.minecard.modify": "%s apply%s%s%s.",
+  "minecard.minecard.modify.element": " [%s%s/%s]",
+  "minecard.minecard.modify.one_of": " one of",
+  "minecard.minecard.modify.target": " to the target",
   "minecard.minecard.no_card_ability": ""
 }

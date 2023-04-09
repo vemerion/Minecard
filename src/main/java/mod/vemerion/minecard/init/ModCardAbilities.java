@@ -6,6 +6,7 @@ import mod.vemerion.minecard.Main;
 import mod.vemerion.minecard.game.ability.CardAbility;
 import mod.vemerion.minecard.game.ability.CardAbilityType;
 import mod.vemerion.minecard.game.ability.DrawCardsAbility;
+import mod.vemerion.minecard.game.ability.ModifyAbility;
 import mod.vemerion.minecard.game.ability.NoCardAbility;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.registries.DeferredRegister;
@@ -32,4 +33,7 @@ public class ModCardAbilities {
 			.register("no_card_ability", () -> new CardAbilityType<NoCardAbility>(NoCardAbility.CODEC));
 	public static final RegistryObject<CardAbilityType<? extends CardAbility>> DRAW_CARDS = CARD_ABILITIES
 			.register("draw_cards", () -> new CardAbilityType<DrawCardsAbility>(DrawCardsAbility.CODEC));
+	public static final RegistryObject<CardAbilityType<? extends CardAbility>> MODIFY = CARD_ABILITIES
+			.register("modify", () -> new CardAbilityType<ModifyAbility>(ModifyAbility.CODEC));
+
 }
