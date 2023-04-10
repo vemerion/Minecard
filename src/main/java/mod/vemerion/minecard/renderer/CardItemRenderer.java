@@ -36,6 +36,12 @@ import net.minecraft.world.item.Items;
 
 public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 
+	private static record DescriptionSize(float scale, int maxWidth, int maxLines) {
+	}
+
+	private static final DescriptionSize[] DESCRIPTION_SIZES = { new DescriptionSize(0.007f, 85, 3),
+			new DescriptionSize(0.006f, 98, 4), new DescriptionSize(0.004f, 148, 6) };
+
 	private static final Map<EntityType<?>, Entity> CACHE = new HashMap<>();
 
 	private static final float TEXT_SIZE = 0.01f;
@@ -82,15 +88,22 @@ public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 		pose.popPose();
 
 		// Render text
-		pose.pushPose();
-		pose.translate(0.105, -0.53, 0.01);
-		pose.scale(0.007f, -0.007f, 0.007f);
-		int y = 0;
-		for (FormattedCharSequence line : mc.font.split(card.getAbility().getDescription(), 80)) {
-			mc.font.draw(pose, line, 0, y, 0);
-			y += 10;
+		for (int i = 0; i < DESCRIPTION_SIZES.length; i++) {
+			var size = DESCRIPTION_SIZES[i];
+			var lines = mc.font.split(card.getAbility().getDescription(), size.maxWidth);
+			if (lines.size() <= size.maxLines || i == DESCRIPTION_SIZES.length - 1) {
+				pose.pushPose();
+				pose.translate(0.105, -0.53, 0.01);
+				pose.scale(size.scale, -size.scale, size.scale);
+				float y = 0;
+				for (FormattedCharSequence line : lines) {
+					mc.font.draw(pose, line, 0, y, 0);
+					y += 9.5;
+				}
+				pose.popPose();
+				break;
+			}
 		}
-		pose.popPose();
 
 		// Render values
 		var itemRenderer = mc.getItemRenderer();
