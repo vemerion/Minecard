@@ -107,6 +107,16 @@ public class PlayerState {
 		}
 	}
 
+	public void addCard(List<ServerPlayer> receivers, Card card) {
+		var fake = Cards.EMPTY_CARD_TYPE.create().setId(card.getId());
+
+		hand.add(card);
+		for (var receiver : receivers) {
+			Network.INSTANCE.send(PacketDistributor.PLAYER.with(() -> receiver),
+					new DrawCardsMessage(id, List.of(receiver.getUUID().equals(id) ? card : fake), false));
+		}
+	}
+
 	public void endTurn(List<ServerPlayer> receivers) {
 		for (var card : board) {
 			if (card.hasProperty(CardProperty.FREEZE)) {

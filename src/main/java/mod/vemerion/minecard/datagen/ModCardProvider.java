@@ -15,6 +15,7 @@ import mod.vemerion.minecard.game.CardProperty;
 import mod.vemerion.minecard.game.CardType;
 import mod.vemerion.minecard.game.Cards;
 import mod.vemerion.minecard.game.LazyCardType;
+import mod.vemerion.minecard.game.ability.AddCardsAbility;
 import mod.vemerion.minecard.game.ability.CardAbility;
 import mod.vemerion.minecard.game.ability.CardAbilityTrigger;
 import mod.vemerion.minecard.game.ability.DrawCardsAbility;
@@ -80,6 +81,8 @@ public class ModCardProvider implements DataProvider {
 				.addEquipment(EquipmentSlot.MAINHAND, Items.IRON_SHOVEL));
 		add(new Builder(EntityType.ITEM, 0, 0, 1).setKey(mod("diamond_sword")).addProperty(CardProperty.CHARGE, 1)
 				.addEquipment(EquipmentSlot.MAINHAND, Items.DIAMOND_SWORD));
+		add(new Builder(EntityType.VINDICATOR, 6, 4, 8).setCardAbility(new AddCardsAbility(CardAbilityTrigger.DEATH,
+				new LazyCardType(EntityType.VINDICATOR.getRegistryName()))));
 	}
 
 	private ResourceLocation mod(String name) {

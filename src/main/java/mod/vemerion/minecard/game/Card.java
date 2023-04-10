@@ -87,6 +87,10 @@ public class Card {
 	public boolean isDead() {
 		return health <= 0;
 	}
+	
+	public boolean isSpell() {
+		return health == 0 && damage == 0;
+	}
 
 	public int getDamage() {
 		return damage;

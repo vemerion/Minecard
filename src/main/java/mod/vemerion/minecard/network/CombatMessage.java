@@ -3,7 +3,6 @@ package mod.vemerion.minecard.network;
 import java.util.UUID;
 import java.util.function.Supplier;
 
-import mod.vemerion.minecard.game.Card;
 import mod.vemerion.minecard.screen.GameScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
@@ -15,26 +14,26 @@ import net.minecraftforge.network.NetworkEvent;
 public class CombatMessage {
 
 	private UUID attackerId;
-	private Card attacker;
+	private int attackerCardId;
 	private UUID targetId;
-	private Card target;
+	private int targetCardId;
 
-	public CombatMessage(UUID attackerId, Card attacker, UUID targetId, Card target) {
+	public CombatMessage(UUID attackerId, int attackerCardId, UUID targetId, int targetCardId) {
 		this.attackerId = attackerId;
-		this.attacker = attacker;
+		this.attackerCardId = attackerCardId;
 		this.targetId = targetId;
-		this.target = target;
+		this.targetCardId = targetCardId;
 	}
 
 	public void encode(final FriendlyByteBuf buffer) {
 		buffer.writeUUID(attackerId);
-		MessageUtil.encodeCard(buffer, attacker);
+		buffer.writeInt(attackerCardId);
 		buffer.writeUUID(targetId);
-		MessageUtil.encodeCard(buffer, target);
+		buffer.writeInt(targetCardId);
 	}
 
 	public static CombatMessage decode(final FriendlyByteBuf buffer) {
-		return new CombatMessage(buffer.readUUID(), MessageUtil.decodeCard(buffer), buffer.readUUID(), MessageUtil.decodeCard(buffer));
+		return new CombatMessage(buffer.readUUID(), buffer.readInt(), buffer.readUUID(), buffer.readInt());
 	}
 
 	public void handle(final Supplier<NetworkEvent.Context> supplier) {
@@ -55,7 +54,7 @@ public class CombatMessage {
 						return;
 
 					if (mc.screen instanceof GameScreen game) {
-						game.combat(message.attackerId, message.attacker, message.targetId, message.target);
+						game.combat(message.attackerId, message.attackerCardId, message.targetId, message.targetCardId);
 					}
 				}
 			};

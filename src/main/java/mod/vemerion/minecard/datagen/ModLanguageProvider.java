@@ -50,6 +50,7 @@ public class ModLanguageProvider extends LanguageProvider {
 		add(CardAbilityTrigger.NEVER.getTextKey(), "Never:");
 		add(CardAbilityTrigger.SUMMON.getTextKey(), "Summon:");
 		add(CardAbilityTrigger.ATTACK.getTextKey(), "Attack:");
+		add(CardAbilityTrigger.DEATH.getTextKey(), "Death:");
 
 		add(ModCardAbilities.NO_CARD_ABILITY.get().getTranslationKey(), "");
 		add(ModCardAbilities.DRAW_CARDS.get().getTranslationKey(), "%s draw %s card(s).");
@@ -57,5 +58,6 @@ public class ModLanguageProvider extends LanguageProvider {
 		add(ModCardAbilities.MODIFY.get().getTranslationKey() + ".one_of", " one of");
 		add(ModCardAbilities.MODIFY.get().getTranslationKey() + ".target", " to the target");
 		add(ModCardAbilities.MODIFY.get().getTranslationKey() + ".element", " [%s%s/%s]");
+		add(ModCardAbilities.ADD_CARDS.get().getTranslationKey(), "%s Add %s to your hand.");
 	}
 }

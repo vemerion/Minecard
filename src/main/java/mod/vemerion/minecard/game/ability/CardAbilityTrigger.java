@@ -8,7 +8,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 
 public enum CardAbilityTrigger {
-	ALWAYS("always"), NEVER("never"), SUMMON("summon"), ATTACK("attack");
+	ALWAYS("always"), NEVER("never"), SUMMON("summon"), ATTACK("attack"), DEATH("death");
 
 	public static final Codec<CardAbilityTrigger> CODEC = GameUtil.enumCodec(CardAbilityTrigger.class,
 			CardAbilityTrigger::getName);

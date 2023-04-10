@@ -108,10 +108,12 @@ public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 		// Render values
 		var itemRenderer = mc.getItemRenderer();
 		renderValue(itemRenderer, mc.font, Items.EMERALD, card.getCost(), 0.62f, -0.14f, light, overlay, pose, buffer);
-		renderValue(itemRenderer, mc.font, Items.STONE_SWORD, card.getDamage(), 0.21f, -0.42f, light, overlay, pose,
-				buffer);
-		renderValue(itemRenderer, mc.font, Items.GLISTERING_MELON_SLICE, card.getHealth(), 0.6f, -0.42f, light, overlay,
-				pose, buffer);
+		if (!card.isSpell()) {
+			renderValue(itemRenderer, mc.font, Items.STONE_SWORD, card.getDamage(), 0.21f, -0.42f, light, overlay, pose,
+					buffer);
+			renderValue(itemRenderer, mc.font, Items.GLISTERING_MELON_SLICE, card.getHealth(), 0.6f, -0.42f, light,
+					overlay, pose, buffer);
+		}
 
 		// Ready
 		if (card.isReady()) {

@@ -3,6 +3,7 @@ package mod.vemerion.minecard.init;
 import java.util.function.Supplier;
 
 import mod.vemerion.minecard.Main;
+import mod.vemerion.minecard.game.ability.AddCardsAbility;
 import mod.vemerion.minecard.game.ability.CardAbility;
 import mod.vemerion.minecard.game.ability.CardAbilityType;
 import mod.vemerion.minecard.game.ability.DrawCardsAbility;
@@ -35,5 +36,7 @@ public class ModCardAbilities {
 			.register("draw_cards", () -> new CardAbilityType<DrawCardsAbility>(DrawCardsAbility.CODEC));
 	public static final RegistryObject<CardAbilityType<? extends CardAbility>> MODIFY = CARD_ABILITIES
 			.register("modify", () -> new CardAbilityType<ModifyAbility>(ModifyAbility.CODEC));
+	public static final RegistryObject<CardAbilityType<? extends CardAbility>> ADD_CARDS = CARD_ABILITIES
+			.register("add_cards", () -> new CardAbilityType<AddCardsAbility>(AddCardsAbility.CODEC));
 
 }

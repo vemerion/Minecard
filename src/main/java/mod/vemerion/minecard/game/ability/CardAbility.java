@@ -59,4 +59,10 @@ public abstract class CardAbility {
 		}
 	}
 
+	public void onDeath(List<ServerPlayer> receivers, PlayerState state, Card card) {
+		if (trigger == CardAbilityTrigger.ALWAYS || trigger == CardAbilityTrigger.DEATH) {
+			invoke(receivers, state, card, null);
+		}
+	}
+
 }

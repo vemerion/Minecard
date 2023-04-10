@@ -190,9 +190,9 @@ public class GameScreen extends Screen {
 						resetPositions(state.get(id));
 					}));
 				}
-				
+
 				updatePropertiesAnimations(old, card);
-				
+
 				return card;
 			}
 		}
@@ -204,22 +204,33 @@ public class GameScreen extends Screen {
 		boolean enemy = !minecraft.player.getUUID().equals(id);
 		float x = enemy ? DECK_HORIZONTAL_OFFSET : width - DECK_HORIZONTAL_OFFSET - CARD_WIDTH;
 		float y = enemy ? DECK_VERTICAL_OFFSET : height - DECK_VERTICAL_OFFSET - CARD_HEIGHT;
-		for (var card : cards)
-			playerState.hand.add(new ClientCard(card, new Vec2(x, y), this));
-		
+
+		List<ClientCard> added = new ArrayList<>();
+		for (var card : cards) {
+			var c = new ClientCard(card, new Vec2(x, y), this);
+			added.add(c);
+			playerState.hand.add(c);
+		}
+
 		resetPositions(playerState);
 
-		if (shrinkDeck)
+		if (shrinkDeck) {
 			playerState.deck -= cards.size();
+		} else {
+			for (var card : added) {
+				card.resetPosition();
+				card.appear();
+			}
+		}
 	}
 
 	public void gameOver() {
 		popup.popup(GAME_OVER);
 	}
 
-	public void combat(UUID attackerId, Card attackerCard, UUID targetId, Card targetCard) {
-		var attacker = updateCard(attackerId, attackerCard);
-		var target = updateCard(targetId, targetCard);
+	public void combat(UUID attackerId, int attackerCardId, UUID targetId, int targetCardId) {
+		var attacker = withId(state.get(attackerId).board, attackerCardId);
+		var target = withId(state.get(targetId).board, targetCardId);
 
 		animations.add(new ThrowItemAnimation(minecraft, new ItemStack(Items.STONE_SWORD),
 				new Vec2(attacker.getPosition().x + CARD_WIDTH / 2, attacker.getPosition().y + CARD_HEIGHT / 2), target,
@@ -367,7 +378,7 @@ public class GameScreen extends Screen {
 					card.render(new PoseStack(), mouseX, mouseY, source, partialTicks);
 			}
 			for (var card : playerState.hand)
-				if (card.getType() == null || !card.isDead())
+				if (card.getType() == null || !card.isDead() || card.isSpell())
 					card.render(new PoseStack(), mouseX, mouseY, source, partialTicks);
 
 			// Deck

@@ -1,0 +1,11 @@
+{
+  "abilities": {
+    "trigger": "death",
+    "card": "minecraft:vindicator",
+    "type": "minecard:add_cards"
+  },
+  "entity": "minecraft:vindicator",
+  "cost": 6,
+  "health": 4,
+  "damage": 8
+}

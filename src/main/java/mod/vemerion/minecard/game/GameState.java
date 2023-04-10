@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import mod.vemerion.minecard.network.CombatMessage;
 import mod.vemerion.minecard.network.Network;
+import mod.vemerion.minecard.network.UpdateCardMessage;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EntityType;
 import net.minecraftforge.network.PacketDistributor;
@@ -55,21 +56,30 @@ public class GameState {
 			return;
 		}
 
-		attackerCard.hurt(targetCard.getDamage());
-		targetCard.hurt(attackerCard.getDamage());
-		attackerCard.setReady(false);
-		attackerCard.removeProperty(CardProperty.STEALTH);
-
 		attackerCard.getAbility().onAttack(receivers, current, attackerCard, targetCard);
 
-		if (attackerCard.isDead())
-			current.getBoard().remove(attackerCard);
-		if (targetCard.isDead())
-			enemy.getBoard().remove(targetCard);
+		attackerCard.setReady(false);
+		attackerCard.removeProperty(CardProperty.STEALTH);
+		hurt(receivers, current, attackerCard, targetCard.getDamage());
+		hurt(receivers, enemy, targetCard, attackerCard.getDamage());
 
 		for (var receiver : receivers) {
 			Network.INSTANCE.send(PacketDistributor.PLAYER.with(() -> receiver),
-					new CombatMessage(current.getId(), attackerCard, enemy.getId(), targetCard));
+					new CombatMessage(current.getId(), attackerCard.getId(), enemy.getId(), targetCard.getId()));
+		}
+	}
+
+	private void hurt(List<ServerPlayer> receivers, PlayerState playerState, Card card, int amount) {
+		card.hurt(amount);
+
+		if (card.isDead()) {
+			card.getAbility().onDeath(receivers, playerState, card);
+			playerState.getBoard().remove(card);
+		}
+
+		var msg = new UpdateCardMessage(playerState.getId(), card);
+		for (var receiver : receivers) {
+			Network.INSTANCE.send(PacketDistributor.PLAYER.with(() -> receiver), msg);
 		}
 	}
 

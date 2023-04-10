@@ -28,6 +28,8 @@ public class ClientCard extends Card {
 	private Vec2 targetPosition;
 	private GameScreen screen;
 	private boolean removed;
+	private float size = 1;
+	private float size0 = 1;
 
 	public ClientCard(Card card, Vec2 position, GameScreen screen) {
 		super(card.getType(), card.getCost(), card.getHealth(), card.getDamage(), card.isReady(), card.getProperties(),
@@ -43,11 +45,17 @@ public class ClientCard extends Card {
 		position0 = position;
 		position = new Vec2((float) Mth.lerp(0.9, position.x, targetPosition.x),
 				(float) Mth.lerp(0.9, position.y, targetPosition.y));
+		size0 = size;
+		size = Mth.lerp(0.1f, size, 1);
 	}
 
 	private Vec2 getPosition(float partialTick) {
 		return new Vec2((float) Mth.lerp(partialTick, position0.x, position.x),
 				(float) Mth.lerp(partialTick, position0.y, position.y));
+	}
+
+	private float getSize(float partialTick) {
+		return Mth.lerp(partialTick, size0, size);
 	}
 
 	public Vec2 getPosition() {
@@ -58,12 +66,21 @@ public class ClientCard extends Card {
 		this.targetPosition = position;
 	}
 
+	public void resetPosition() {
+		this.position = targetPosition;
+	}
+
 	public void remove() {
 		this.removed = true;
 	}
 
 	public boolean isRemoved() {
 		return removed;
+	}
+
+	public void appear() {
+		size = 0;
+		size0 = 0;
 	}
 
 	public void render(PoseStack ps, int mouseX, int mouseY, BufferSource source, float partialTick) {
@@ -83,7 +100,11 @@ public class ClientCard extends Card {
 		}
 
 		ps.translate(pos.x, pos.y, 0);
-		ps.scale(CARD_SCALE, -CARD_SCALE, CARD_SCALE);
+
+		var currentSize = getSize(partialTick) * CARD_SCALE;
+		ps.translate((1 - getSize(partialTick)) * CARD_WIDTH / 2, (1 - getSize(partialTick)) * CARD_HEIGHT / 2, 0);
+		ps.scale(currentSize, -currentSize, currentSize);
+
 		int light = contains(mouseX, mouseY) ? CARD_LIGHT : CARD_LIGHT_HOVER;
 		CardItemRenderer.renderCard(this, TransformType.NONE, ps, source, light, OverlayTexture.NO_OVERLAY);
 		ps.popPose();
