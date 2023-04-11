@@ -34,7 +34,7 @@ public class AddCardsAbility extends CardAbility {
 
 	@Override
 	protected Object[] getDescriptionArgs() {
-		return new Object[] { trigger.getText(), toAdd.get(true).getType().getDescription() };
+		return new Object[] { trigger.getText(), toAdd.get(true).getName() };
 	}
 
 	@Override

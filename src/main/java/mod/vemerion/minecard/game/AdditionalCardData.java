@@ -10,13 +10,15 @@ import com.mojang.serialization.DataResult;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import net.minecraft.core.SerializableUUID;
+import net.minecraft.world.item.Item;
+import net.minecraftforge.registries.ForgeRegistries;
 
 public class AdditionalCardData {
 
 	public static final NoData EMPTY = new NoData();
 
 	public static final Codec<AdditionalCardData> CODEC = chain(List.of(new CodecEntry<>(IdData.CODEC, IdData.class),
-			new CodecEntry<>(TestData.CODEC, TestData.class), new CodecEntry<>(NoData.CODEC, NoData.class)));
+			new CodecEntry<>(ItemData.CODEC, ItemData.class), new CodecEntry<>(NoData.CODEC, NoData.class)));
 
 	public static class NoData extends AdditionalCardData {
 		public static final Codec<NoData> CODEC = Codec.unit(EMPTY);
@@ -39,6 +41,23 @@ public class AdditionalCardData {
 
 		public UUID getId() {
 			return id;
+		}
+	}
+
+	public static class ItemData extends AdditionalCardData {
+
+		public static final Codec<ItemData> CODEC = RecordCodecBuilder.create(instance -> instance
+				.group(ForgeRegistries.ITEMS.getCodec().fieldOf("item").forGetter(ItemData::getItem))
+				.apply(instance, ItemData::new));
+
+		private Item item;
+
+		public ItemData(Item item) {
+			this.item = item;
+		}
+
+		public Item getItem() {
+			return item;
 		}
 	}
 

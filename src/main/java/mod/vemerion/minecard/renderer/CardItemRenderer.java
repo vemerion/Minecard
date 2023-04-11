@@ -30,6 +30,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -84,7 +85,7 @@ public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 		pose.pushPose();
 		pose.translate(0.2, -0.065, 0.01);
 		pose.scale(TITLE_SIZE, -TITLE_SIZE, TITLE_SIZE);
-		mc.font.draw(pose, entity.getName(), 0, 0, 0x000000);
+		mc.font.draw(pose, card.getName(), 0, 0, 0x000000);
 		pose.popPose();
 
 		// Render text
@@ -146,11 +147,17 @@ public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 		var widthScale = Math.min(1, maxWidth / dimensions.width);
 		var heightScale = Math.min(1, maxHeight / dimensions.height);
 		var scale = Math.min(widthScale, heightScale);
-
+	
 		pose.pushPose();
 		pose.translate(0.4, -0.43, 0);
 		pose.scale(0.15f * scale, 0.15f * scale, 0.15f * scale);
 		pose.mulPose(new Quaternion(0, 20, 0, true));
+		
+		if (type == EntityType.ITEM) {
+			pose.mulPose(new Quaternion(0, 70, 0, true));
+			pose.scale(3, 3, 3);
+		}
+		
 		((EntityRenderer) mc.getEntityRenderDispatcher().getRenderer(entity)).render(entity, 0, 0, pose, buffer, light);
 		pose.popPose();
 	}
@@ -209,6 +216,9 @@ public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 			for (var equipment : card.getEquipment().entrySet()) {
 				living.setItemSlot(equipment.getKey(), equipment.getValue().getDefaultInstance());
 			}
+		} else if (entity instanceof ItemEntity itemEntity
+				&& card.getAdditionalData() instanceof AdditionalCardData.ItemData itemData) {
+			itemEntity.setItem(itemData.getItem().getDefaultInstance());
 		}
 
 		return entity;

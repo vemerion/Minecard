@@ -81,8 +81,9 @@ public class ModCardProvider implements DataProvider {
 				.addEquipment(EquipmentSlot.MAINHAND, Items.IRON_SHOVEL));
 		add(new Builder(EntityType.ITEM, 0, 0, 1).setKey(mod("diamond_sword")).addProperty(CardProperty.CHARGE, 1)
 				.addEquipment(EquipmentSlot.MAINHAND, Items.DIAMOND_SWORD));
-		add(new Builder(EntityType.VINDICATOR, 6, 4, 8).setCardAbility(new AddCardsAbility(CardAbilityTrigger.DEATH,
-				new LazyCardType(EntityType.VINDICATOR.getRegistryName()))));
+		add(new Builder(EntityType.VINDICATOR, 6, 4, 8).setCardAbility(
+				new AddCardsAbility(CardAbilityTrigger.DEATH, new LazyCardType(new Builder(EntityType.ITEM, 0, 0, 0)
+						.setAdditionalData(new AdditionalCardData.ItemData(Items.EMERALD)).build()))));
 	}
 
 	private ResourceLocation mod(String name) {
@@ -134,6 +135,11 @@ public class ModCardProvider implements DataProvider {
 
 		private Builder setCardAbility(CardAbility ability) {
 			this.ability = ability;
+			return this;
+		}
+
+		private Builder setAdditionalData(AdditionalCardData data) {
+			this.additionalData = data;
 			return this;
 		}
 

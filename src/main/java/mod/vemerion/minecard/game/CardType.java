@@ -8,6 +8,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import mod.vemerion.minecard.game.ability.CardAbility;
 import mod.vemerion.minecard.game.ability.NoCardAbility;
+import net.minecraft.network.chat.Component;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -79,7 +80,7 @@ public class CardType {
 	public Map<CardProperty, Integer> getProperties() {
 		return properties;
 	}
-	
+
 	public boolean hasProperty(CardProperty property) {
 		return properties.getOrDefault(property, 0) > 0;
 	}
@@ -94,6 +95,11 @@ public class CardType {
 
 	public AdditionalCardData getAdditionalData() {
 		return additionalData;
+	}
+
+	public Component getName() {
+		return getAdditionalData() instanceof AdditionalCardData.ItemData itemData ? itemData.getItem().getDescription()
+				: getType().getDescription();
 	}
 
 	public Card getCardForRendering() {

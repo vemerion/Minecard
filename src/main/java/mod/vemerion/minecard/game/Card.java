@@ -8,6 +8,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import mod.vemerion.minecard.game.ability.CardAbility;
 import mod.vemerion.minecard.game.ability.NoCardAbility;
+import net.minecraft.network.chat.Component;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -87,7 +88,7 @@ public class Card {
 	public boolean isDead() {
 		return health <= 0;
 	}
-	
+
 	public boolean isSpell() {
 		return health == 0 && damage == 0;
 	}
@@ -134,6 +135,11 @@ public class Card {
 
 	public void setAdditionalData(AdditionalCardData data) {
 		this.additionalData = data;
+	}
+
+	public Component getName() {
+		return getAdditionalData() instanceof AdditionalCardData.ItemData itemData ? itemData.getItem().getDescription()
+				: getType().getDescription();
 	}
 
 	public int getId() {

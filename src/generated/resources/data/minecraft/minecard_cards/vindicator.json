@@ -1,7 +1,15 @@
 {
   "abilities": {
     "trigger": "death",
-    "card": "minecraft:vindicator",
+    "card": {
+      "additional_data": {
+        "item": "minecraft:emerald"
+      },
+      "entity": "minecraft:item",
+      "cost": 0,
+      "health": 0,
+      "damage": 0
+    },
     "type": "minecard:add_cards"
   },
   "entity": "minecraft:vindicator",
