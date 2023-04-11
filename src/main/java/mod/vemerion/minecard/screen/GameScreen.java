@@ -164,12 +164,11 @@ public class GameScreen extends Screen {
 		if (!card.isSpell()) {
 			var placed = new ClientCard(card, withId(playerState.hand, card.getId()).getPosition(), this);
 			playerState.board.add(position, placed);
-			resetPositions(playerState);
 
 			updatePropertiesAnimations(null, placed);
 		}
 		playerState.hand.removeIf(c -> c.getId() == card.getId());
-
+		resetPositions(playerState);
 	}
 
 	public void setReady(UUID id, List<Integer> cards) {

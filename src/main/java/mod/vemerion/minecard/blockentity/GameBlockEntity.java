@@ -149,7 +149,9 @@ public class GameBlockEntity extends BlockEntity {
 			playerCard.setAdditionalData(new AdditionalCardData.IdData(player.getUUID()));
 			board.add(playerCard);
 
-			state.getPlayerStates().add(new PlayerState(id, deck, hand, board, 1, 1));
+			var playerState = new PlayerState(id, deck, hand, board, 1, 1);
+			playerState.setGame(state);
+			state.getPlayerStates().add(playerState);
 		});
 	}
 

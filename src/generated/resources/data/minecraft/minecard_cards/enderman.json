@@ -1,0 +1,16 @@
+{
+  "abilities": {
+    "type": "minecard:copy_cards",
+    "value": {
+      "trigger": "summon",
+      "selection": {
+        "group": "enemy_hand",
+        "method": "random"
+      }
+    }
+  },
+  "entity": "minecraft:enderman",
+  "cost": 6,
+  "health": 4,
+  "damage": 5
+}

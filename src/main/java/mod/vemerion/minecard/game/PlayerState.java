@@ -36,6 +36,7 @@ public class PlayerState {
 	private List<Card> board;
 	private int resources;
 	private int maxResources;
+	private GameState game;
 
 	public PlayerState(UUID id, List<Card> deck, List<Card> hand, List<Card> board, int resources, int maxResources) {
 		this.id = id;
@@ -44,6 +45,14 @@ public class PlayerState {
 		this.board = board;
 		this.resources = resources;
 		this.maxResources = maxResources;
+	}
+
+	public void setGame(GameState game) {
+		this.game = game;
+	}
+
+	public GameState getGame() {
+		return game;
 	}
 
 	public UUID getId() {
@@ -108,13 +117,15 @@ public class PlayerState {
 		}
 	}
 
-	public void addCard(List<ServerPlayer> receivers, Card card) {
-		var fake = Cards.EMPTY_CARD_TYPE.create().setId(card.getId());
+	public void addCards(List<ServerPlayer> receivers, List<Card> cards) {
+		List<Card> fakes = new ArrayList<>();
+		for (var card : cards)
+			fakes.add(Cards.EMPTY_CARD_TYPE.create().setId(card.getId()));
 
-		hand.add(card);
+		hand.addAll(cards);
 		for (var receiver : receivers) {
 			Network.INSTANCE.send(PacketDistributor.PLAYER.with(() -> receiver),
-					new DrawCardsMessage(id, List.of(receiver.getUUID().equals(id) ? card : fake), false));
+					new DrawCardsMessage(id, receiver.getUUID().equals(id) ? cards : fakes, false));
 		}
 	}
 

@@ -2,6 +2,7 @@ package mod.vemerion.minecard.game;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.UUID;
 
 import mod.vemerion.minecard.network.CombatMessage;
@@ -15,13 +16,33 @@ public class GameState {
 
 	private List<PlayerState> playerStates;
 	private int turn;
+	private Random random;
 
 	public GameState() {
 		playerStates = new ArrayList<>();
+		random = new Random();
+	}
+
+	public Random getRandom() {
+		return random;
 	}
 
 	public List<PlayerState> getPlayerStates() {
 		return playerStates;
+	}
+
+	public PlayerState getYourPlayerState(UUID id) {
+		for (var playerState : playerStates)
+			if (playerState.getId().equals(id))
+				return playerState;
+		return null;
+	}
+
+	public PlayerState getEnemyPlayerState(UUID id) {
+		for (var playerState : playerStates)
+			if (!playerState.getId().equals(id))
+				return playerState;
+		return null;
 	}
 
 	public UUID getCurrentPlayer() {

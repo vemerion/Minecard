@@ -2,10 +2,13 @@ package mod.vemerion.minecard.datagen;
 
 import mod.vemerion.minecard.Main;
 import mod.vemerion.minecard.game.CardProperty;
+import mod.vemerion.minecard.game.ability.CardAbilityGroup;
 import mod.vemerion.minecard.game.ability.CardAbilityTrigger;
+import mod.vemerion.minecard.game.ability.CardSelectionMethod;
 import mod.vemerion.minecard.helper.Helper;
 import mod.vemerion.minecard.init.ModBlocks;
 import mod.vemerion.minecard.init.ModCardAbilities;
+import mod.vemerion.minecard.init.ModCardConditions;
 import mod.vemerion.minecard.init.ModItems;
 import net.minecraft.data.DataGenerator;
 import net.minecraftforge.common.data.LanguageProvider;
@@ -45,13 +48,37 @@ public class ModLanguageProvider extends LanguageProvider {
 		add(CardProperty.STEALTH.getTextKey(), "stealth");
 		add(CardProperty.TAUNT.getTextKey(), "taunt");
 
-		// Card abilities
+		// Card ability groups
+		add(CardAbilityGroup.ALL.getTextKey(), "anywhere");
+		add(CardAbilityGroup.SELF.getTextKey(), "self");
+		add(CardAbilityGroup.TARGET.getTextKey(), "target");
+		add(CardAbilityGroup.BOARD.getTextKey(), "the board");
+		add(CardAbilityGroup.ENEMY_BOARD.getTextKey(), "the enemy board");
+		add(CardAbilityGroup.YOUR_BOARD.getTextKey(), "your board");
+		add(CardAbilityGroup.HANDS.getTextKey(), "all hands");
+		add(CardAbilityGroup.ENEMY_HAND.getTextKey(), "the enemy hand");
+		add(CardAbilityGroup.YOUR_HAND.getTextKey(), "your hand");
+		add(CardAbilityGroup.ADJACENT.getTextKey(), "adjacent to this");
+
+		// Card selection methods
+		add(CardSelectionMethod.ALL.getTextKey(), "all cards from");
+		add(CardSelectionMethod.RANDOM.getTextKey(), "a random card from");
+
+		// Card conditions
+		add(ModCardConditions.NO_CONDITION.get().getTranslationKey(), "");
+		add(ModCardConditions.AND.get().getTranslationKey(), "(%s and %s)");
+		add(ModCardConditions.OR.get().getTranslationKey(), "(%s or %s)");
+		add(ModCardConditions.NOT.get().getTranslationKey(), "not (%s)");
+		add(ModCardConditions.ENTITY.get().getTranslationKey(), "card is %s");
+
+		// Card abilities triggers
 		add(CardAbilityTrigger.ALWAYS.getTextKey(), "Always:");
 		add(CardAbilityTrigger.NEVER.getTextKey(), "Never:");
 		add(CardAbilityTrigger.SUMMON.getTextKey(), "Summon:");
 		add(CardAbilityTrigger.ATTACK.getTextKey(), "Attack:");
 		add(CardAbilityTrigger.DEATH.getTextKey(), "Death:");
 
+		// Card abilities
 		add(ModCardAbilities.NO_CARD_ABILITY.get().getTranslationKey(), "");
 		add(ModCardAbilities.DRAW_CARDS.get().getTranslationKey(), "%s draw %s card(s).");
 		add(ModCardAbilities.MODIFY.get().getTranslationKey(), "%s apply%s%s%s.");
@@ -61,5 +88,7 @@ public class ModLanguageProvider extends LanguageProvider {
 		add(ModCardAbilities.ADD_CARDS.get().getTranslationKey(), "%s Add %s to your hand.");
 		add(ModCardAbilities.RESOURCE.get().getTranslationKey(),
 				"%s Gain %s temporary resources, and %s permanent resources.");
+		add(ModCardAbilities.COPY_CARDS.get().getTranslationKey(), "%s copy %s %s%s%s.");
+		add(Helper.gui("where"), " where ");
 	}
 }

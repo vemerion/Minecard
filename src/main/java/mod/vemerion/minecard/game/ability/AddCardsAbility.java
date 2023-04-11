@@ -39,7 +39,7 @@ public class AddCardsAbility extends CardAbility {
 
 	@Override
 	protected void invoke(List<ServerPlayer> receivers, PlayerState state, Card card, @Nullable Card other) {
-		state.addCard(receivers, toAdd.get(false).create());
+		state.addCards(receivers, List.of(toAdd.get(false).create()));
 	}
 
 	public LazyCardType getCard() {

@@ -17,7 +17,12 @@ import mod.vemerion.minecard.game.Cards;
 import mod.vemerion.minecard.game.LazyCardType;
 import mod.vemerion.minecard.game.ability.AddCardsAbility;
 import mod.vemerion.minecard.game.ability.CardAbility;
+import mod.vemerion.minecard.game.ability.CardAbilityGroup;
+import mod.vemerion.minecard.game.ability.CardAbilitySelection;
 import mod.vemerion.minecard.game.ability.CardAbilityTrigger;
+import mod.vemerion.minecard.game.ability.CardCondition;
+import mod.vemerion.minecard.game.ability.CardSelectionMethod;
+import mod.vemerion.minecard.game.ability.CopyCardsAbility;
 import mod.vemerion.minecard.game.ability.DrawCardsAbility;
 import mod.vemerion.minecard.game.ability.ModifyAbility;
 import mod.vemerion.minecard.game.ability.NoCardAbility;
@@ -86,6 +91,9 @@ public class ModCardProvider implements DataProvider {
 				new LazyCardType(new Builder(EntityType.ITEM, 0, 0, 0)
 						.setCardAbility(new ResourceAbility(CardAbilityTrigger.SUMMON, 1, 0))
 						.setAdditionalData(new AdditionalCardData.ItemData(Items.EMERALD)).build()))));
+		add(new Builder(EntityType.ENDERMAN, 6, 4, 5).setCardAbility(
+				new CopyCardsAbility(CardAbilityTrigger.SUMMON, new CardAbilitySelection(CardAbilityGroup.ENEMY_HAND,
+						CardSelectionMethod.RANDOM, CardCondition.NoCondition.NO_CONDITION))));
 	}
 
 	private ResourceLocation mod(String name) {
