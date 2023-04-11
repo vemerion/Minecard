@@ -2,6 +2,12 @@
   "abilities": {
     "trigger": "death",
     "card": {
+      "abilities": {
+        "trigger": "summon",
+        "temporary_resources": 1,
+        "permanent_resources": 0,
+        "type": "minecard:resource"
+      },
       "additional_data": {
         "item": "minecraft:emerald"
       },

@@ -83,6 +83,9 @@ public class ModifyAbility extends CardAbility {
 		selected.getEquipment().putAll(modification.getEquipment());
 		selected.setHealth(selected.getHealth() + modification.getHealth());
 		selected.setDamage(selected.getDamage() + modification.getDamage());
+		selected.setMaxHealth(selected.getMaxHealth() + modification.getHealth());
+		selected.setMaxDamage(selected.getMaxDamage() + modification.getDamage());
+
 		selected.getProperties().putAll(modification.getProperties());
 		if (modification.hasProperty(CardProperty.CHARGE))
 			selected.setReady(true);

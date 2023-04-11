@@ -24,6 +24,8 @@ public class Card {
 					Codec.INT.fieldOf("cost").forGetter(Card::getCost),
 					Codec.INT.fieldOf("health").forGetter(Card::getHealth),
 					Codec.INT.fieldOf("damage").forGetter(Card::getDamage),
+					Codec.INT.fieldOf("max_health").forGetter(Card::getMaxHealth),
+					Codec.INT.fieldOf("max_damage").forGetter(Card::getMaxDamage),
 					Codec.BOOL.fieldOf("ready").forGetter(Card::isReady),
 					CardProperty.CODEC_MAP.optionalFieldOf("properties", new HashMap<>())
 							.forGetter(Card::getProperties),
@@ -40,19 +42,23 @@ public class Card {
 	private int cost;
 	private int health;
 	private int damage;
+	private int maxHealth;
+	private int maxDamage;
 	private boolean ready;
 	private Map<CardProperty, Integer> properties;
 	private final CardAbility ability;
 	private Map<EquipmentSlot, Item> equipment;
 	private int id;
 
-	public Card(EntityType<?> type, int cost, int health, int damage, boolean ready,
+	public Card(EntityType<?> type, int cost, int health, int damage, int maxHealth, int maxDamage, boolean ready,
 			Map<CardProperty, Integer> properties, CardAbility ability, Map<EquipmentSlot, Item> equipment,
 			AdditionalCardData additionalData) {
 		this.type = type;
 		this.cost = cost;
 		this.health = health;
 		this.damage = damage;
+		this.maxHealth = maxHealth;
+		this.maxDamage = maxDamage;
 		this.ready = ready;
 		this.properties = properties;
 		this.ability = ability;
@@ -76,6 +82,14 @@ public class Card {
 	public void setHealth(int health) {
 		this.health = health;
 	}
+	
+	public int getMaxHealth() {
+		return maxHealth;
+	}
+
+	public void setMaxHealth(int maxHealth) {
+		this.maxHealth = maxHealth;
+	}
 
 	public void hurt(int amount) {
 		if (hasProperty(CardProperty.SHIELD) && amount > 0) {
@@ -90,7 +104,7 @@ public class Card {
 	}
 
 	public boolean isSpell() {
-		return health == 0 && damage == 0;
+		return maxHealth == 0 && maxDamage == 0;
 	}
 
 	public int getDamage() {
@@ -99,6 +113,14 @@ public class Card {
 
 	public void setDamage(int damage) {
 		this.damage = damage;
+	}
+	
+	public int getMaxDamage() {
+		return maxDamage;
+	}
+
+	public void setMaxDamage(int maxDamage) {
+		this.maxDamage = maxDamage;
 	}
 
 	public boolean isReady() {
@@ -155,6 +177,8 @@ public class Card {
 		this.cost = received.cost;
 		this.health = received.getHealth();
 		this.damage = received.getDamage();
+		this.maxHealth = received.getMaxHealth();
+		this.maxDamage = received.getMaxDamage();
 		this.ready = received.isReady();
 		this.properties = received.getProperties();
 		this.equipment = received.getEquipment();

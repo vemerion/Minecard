@@ -15,6 +15,7 @@ import mod.vemerion.minecard.network.SetResourcesMessage;
 import net.minecraft.core.SerializableUUID;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.ExtraCodecs;
+import net.minecraft.util.Mth;
 import net.minecraftforge.network.PacketDistributor;
 
 public class PlayerState {
@@ -138,6 +139,16 @@ public class PlayerState {
 		drawCards(receivers, 1);
 	}
 
+	public void addResources(List<ServerPlayer> receivers, int temporaryResources, int permanentResources) {
+		resources = Mth.clamp(resources + temporaryResources, 0, 10);
+		maxResources = Mth.clamp(maxResources + permanentResources, 0, 10);
+
+		var msg = new SetResourcesMessage(id, resources, maxResources);
+
+		for (var receiver : receivers)
+			Network.INSTANCE.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer) receiver), msg);
+	}
+
 	public void playCard(List<ServerPlayer> receivers, int cardId, int position) {
 		var card = findFromHand(cardId);
 		if (card == null || position < 0 || board.size() < position)
@@ -150,7 +161,10 @@ public class PlayerState {
 			card.setReady(true);
 
 		resources -= card.getCost();
-		board.add(position, card);
+
+		if (!card.isSpell())
+			board.add(position, card);
+
 		hand.remove(card);
 
 		for (var receiver : receivers) {

@@ -59,5 +59,7 @@ public class ModLanguageProvider extends LanguageProvider {
 		add(ModCardAbilities.MODIFY.get().getTranslationKey() + ".target", " to the target");
 		add(ModCardAbilities.MODIFY.get().getTranslationKey() + ".element", " [%s%s/%s]");
 		add(ModCardAbilities.ADD_CARDS.get().getTranslationKey(), "%s Add %s to your hand.");
+		add(ModCardAbilities.RESOURCE.get().getTranslationKey(),
+				"%s Gain %s temporary resources, and %s permanent resources.");
 	}
 }

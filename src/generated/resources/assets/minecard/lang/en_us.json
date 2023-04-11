@@ -30,5 +30,6 @@
   "minecard.minecard.modify.element": " [%s%s/%s]",
   "minecard.minecard.modify.one_of": " one of",
   "minecard.minecard.modify.target": " to the target",
-  "minecard.minecard.no_card_ability": ""
+  "minecard.minecard.no_card_ability": "",
+  "minecard.minecard.resource": "%s Gain %s temporary resources, and %s permanent resources."
 }

@@ -32,8 +32,9 @@ public class ClientCard extends Card {
 	private float size0 = 1;
 
 	public ClientCard(Card card, Vec2 position, GameScreen screen) {
-		super(card.getType(), card.getCost(), card.getHealth(), card.getDamage(), card.isReady(), card.getProperties(),
-				card.getAbility(), card.getEquipment(), card.getAdditionalData());
+		super(card.getType(), card.getCost(), card.getHealth(), card.getDamage(), card.getMaxHealth(),
+				card.getMaxDamage(), card.isReady(), card.getProperties(), card.getAbility(), card.getEquipment(),
+				card.getAdditionalData());
 		this.setId(card.getId());
 		this.position = position;
 		this.position0 = position;

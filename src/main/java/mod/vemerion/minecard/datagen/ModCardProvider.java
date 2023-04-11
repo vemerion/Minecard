@@ -21,6 +21,7 @@ import mod.vemerion.minecard.game.ability.CardAbilityTrigger;
 import mod.vemerion.minecard.game.ability.DrawCardsAbility;
 import mod.vemerion.minecard.game.ability.ModifyAbility;
 import mod.vemerion.minecard.game.ability.NoCardAbility;
+import mod.vemerion.minecard.game.ability.ResourceAbility;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.HashCache;
@@ -81,8 +82,9 @@ public class ModCardProvider implements DataProvider {
 				.addEquipment(EquipmentSlot.MAINHAND, Items.IRON_SHOVEL));
 		add(new Builder(EntityType.ITEM, 0, 0, 1).setKey(mod("diamond_sword")).addProperty(CardProperty.CHARGE, 1)
 				.addEquipment(EquipmentSlot.MAINHAND, Items.DIAMOND_SWORD));
-		add(new Builder(EntityType.VINDICATOR, 6, 4, 8).setCardAbility(
-				new AddCardsAbility(CardAbilityTrigger.DEATH, new LazyCardType(new Builder(EntityType.ITEM, 0, 0, 0)
+		add(new Builder(EntityType.VINDICATOR, 6, 4, 8).setCardAbility(new AddCardsAbility(CardAbilityTrigger.DEATH,
+				new LazyCardType(new Builder(EntityType.ITEM, 0, 0, 0)
+						.setCardAbility(new ResourceAbility(CardAbilityTrigger.SUMMON, 1, 0))
 						.setAdditionalData(new AdditionalCardData.ItemData(Items.EMERALD)).build()))));
 	}
 

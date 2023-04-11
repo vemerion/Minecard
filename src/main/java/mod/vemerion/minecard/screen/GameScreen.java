@@ -160,12 +160,16 @@ public class GameScreen extends Screen {
 
 	public void placeCard(UUID id, Card card, int position) {
 		var playerState = state.get(id);
-		var placed = new ClientCard(card, withId(playerState.hand, card.getId()).getPosition(), this);
-		playerState.board.add(position, placed);
-		playerState.hand.removeIf(c -> c.getId() == card.getId());
-		resetPositions(playerState);
 
-		updatePropertiesAnimations(null, placed);
+		if (!card.isSpell()) {
+			var placed = new ClientCard(card, withId(playerState.hand, card.getId()).getPosition(), this);
+			playerState.board.add(position, placed);
+			resetPositions(playerState);
+
+			updatePropertiesAnimations(null, placed);
+		}
+		playerState.hand.removeIf(c -> c.getId() == card.getId());
+
 	}
 
 	public void setReady(UUID id, List<Integer> cards) {

@@ -57,8 +57,8 @@ public class CardType {
 	}
 
 	public Card create() {
-		return new Card(type, cost, health, damage, false, new HashMap<>(properties), ability, new HashMap<>(equipment),
-				additionalData);
+		return new Card(type, cost, health, damage, health, damage, false, new HashMap<>(properties), ability,
+				new HashMap<>(equipment), additionalData);
 	}
 
 	public EntityType<?> getType() {
