@@ -178,25 +178,25 @@ public class GameScreen extends Screen {
 				card.setReady(true);
 	}
 
-	public ClientCard updateCard(UUID id, Card received) {
-		var playerState = state.get(id);
+	public ClientCard updateCard(Card received) {
+		for (var playerState : state.values()) {
+			for (var card : playerState.board) {
+				if (card.getId() == received.getId()) {
+					var old = new HashMap<>(card.getProperties());
+					card.copy(received);
 
-		for (var card : playerState.board) {
-			if (card.getId() == received.getId()) {
-				var old = new HashMap<>(card.getProperties());
-				card.copy(received);
+					if (card.isDead()) {
+						animations.add(new DeathAnimation(minecraft, card, 40, () -> {
+							playerState.board.removeIf(c -> card.getId() == c.getId());
+							card.remove();
+							resetPositions(playerState);
+						}));
+					}
 
-				if (card.isDead()) {
-					animations.add(new DeathAnimation(minecraft, card, 40, () -> {
-						playerState.board.removeIf(c -> card.getId() == c.getId());
-						card.remove();
-						resetPositions(state.get(id));
-					}));
+					updatePropertiesAnimations(old, card);
+
+					return card;
 				}
-
-				updatePropertiesAnimations(old, card);
-
-				return card;
 			}
 		}
 		return null;

@@ -12,10 +12,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import mod.vemerion.minecard.game.Card;
 import mod.vemerion.minecard.game.PlayerState;
-import mod.vemerion.minecard.helper.Helper;
 import mod.vemerion.minecard.init.ModCardAbilities;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.ExtraCodecs;
 
@@ -43,11 +40,7 @@ public class CopyCardsAbility extends CardAbility {
 
 	@Override
 	protected Object[] getDescriptionArgs() {
-		return new Object[] { trigger.getText(),
-				selection.group().shouldWriteSelectionMethod() ? selection.method().getText() : TextComponent.EMPTY,
-				selection.group().getText(),
-				selection.condition().isEmpty() ? TextComponent.EMPTY : new TranslatableComponent(Helper.gui("where")),
-				selection.condition().getDescription() };
+		return new Object[] { trigger.getText(), selection.getText() };
 	}
 
 	@Override

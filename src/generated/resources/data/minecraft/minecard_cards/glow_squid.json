@@ -2,15 +2,15 @@
   "abilities": {
     "type": "minecard:modify",
     "value": {
-      "trigger": "attack",
+      "trigger": "summon",
       "selection": {
-        "group": "target",
+        "group": "all",
         "method": "all"
       },
       "modifications": [
         {
           "properties": {
-            "freeze": 1
+            "stealth": 0
           },
           "entity": "minecraft:item",
           "cost": 0,
@@ -20,8 +20,8 @@
       ]
     }
   },
-  "entity": "minecraft:stray",
-  "cost": 2,
+  "entity": "minecraft:glow_squid",
+  "cost": 3,
   "health": 2,
   "damage": 2
 }

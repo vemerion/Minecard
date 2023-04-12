@@ -1,7 +1,6 @@
 package mod.vemerion.minecard.game.ability;
 
 import java.util.List;
-import java.util.Random;
 
 import javax.annotation.Nullable;
 
@@ -24,20 +23,22 @@ import net.minecraftforge.network.PacketDistributor;
 
 public class ModifyAbility extends CardAbility {
 
-	public static final Codec<ModifyAbility> CODEC = RecordCodecBuilder.create(
-			instance -> instance.group(CardAbilityTrigger.CODEC.fieldOf("trigger").forGetter(CardAbility::getTrigger),
-					Codec.BOOL.fieldOf("apply_to_target").forGetter(ModifyAbility::applyToTarget),
-					ExtraCodecs.nonEmptyList(Codec.list(LazyCardType.CODEC)).fieldOf("modifications")
-							.forGetter(ModifyAbility::getModifications))
-					.apply(instance, ModifyAbility::new));
+	public static final Codec<ModifyAbility> CODEC = ExtraCodecs
+			.lazyInitializedCodec(
+					() -> RecordCodecBuilder.create(instance -> instance
+							.group(CardAbilityTrigger.CODEC.fieldOf("trigger").forGetter(CardAbility::getTrigger),
+									CardAbilitySelection.CODEC.fieldOf("selection")
+											.forGetter(ModifyAbility::getSelection),
+									ExtraCodecs.nonEmptyList(Codec.list(LazyCardType.CODEC)).fieldOf("modifications")
+											.forGetter(ModifyAbility::getModifications))
+							.apply(instance, ModifyAbility::new)));
 
-	private final boolean applyToTarget;
+	private final CardAbilitySelection selection;
 	private final List<LazyCardType> modifications;
-	private final Random random = new Random();
 
-	public ModifyAbility(CardAbilityTrigger trigger, boolean applyToTarget, List<LazyCardType> modifications) {
+	public ModifyAbility(CardAbilityTrigger trigger, CardAbilitySelection selection, List<LazyCardType> modifications) {
 		super(trigger);
-		this.applyToTarget = applyToTarget;
+		this.selection = selection;
 		this.modifications = modifications;
 	}
 
@@ -59,9 +60,7 @@ public class ModifyAbility extends CardAbility {
 		return new Object[] { trigger.getText(),
 				modifications.size() == 1 ? TextComponent.EMPTY
 						: new TranslatableComponent(ModCardAbilities.MODIFY.get().getTranslationKey() + ".one_of"),
-				elements,
-				applyToTarget ? new TranslatableComponent(ModCardAbilities.MODIFY.get().getTranslationKey() + ".target")
-						: TextComponent.EMPTY };
+				elements, selection.getText() };
 	}
 
 	private TextComponent modifierText(int value) {
@@ -70,29 +69,28 @@ public class ModifyAbility extends CardAbility {
 
 	@Override
 	protected void invoke(List<ServerPlayer> receivers, PlayerState state, Card card, @Nullable Card other) {
-		var modification = modifications.get(random.nextInt(modifications.size())).get(false);
+		var modification = modifications.get(state.getGame().getRandom().nextInt(modifications.size())).get(false);
 		if (modification == null) {
 			return;
 		}
 
-		var selected = applyToTarget ? other : card;
+		var selectedCards = selection.select(state.getGame(), state.getId(), card, other);
 
-		if (selected == null)
-			return;
+		for (var selected : selectedCards) {
+			selected.getEquipment().putAll(modification.getEquipment());
+			selected.setHealth(selected.getHealth() + modification.getHealth());
+			selected.setDamage(selected.getDamage() + modification.getDamage());
+			selected.setMaxHealth(selected.getMaxHealth() + modification.getHealth());
+			selected.setMaxDamage(selected.getMaxDamage() + modification.getDamage());
 
-		selected.getEquipment().putAll(modification.getEquipment());
-		selected.setHealth(selected.getHealth() + modification.getHealth());
-		selected.setDamage(selected.getDamage() + modification.getDamage());
-		selected.setMaxHealth(selected.getMaxHealth() + modification.getHealth());
-		selected.setMaxDamage(selected.getMaxDamage() + modification.getDamage());
+			selected.getProperties().putAll(modification.getProperties());
+			if (modification.hasProperty(CardProperty.CHARGE))
+				selected.setReady(true);
 
-		selected.getProperties().putAll(modification.getProperties());
-		if (modification.hasProperty(CardProperty.CHARGE))
-			selected.setReady(true);
-
-		var msg = new UpdateCardMessage(state.getId(), selected);
-		for (var receiver : receivers) {
-			Network.INSTANCE.send(PacketDistributor.PLAYER.with(() -> receiver), msg);
+			var msg = new UpdateCardMessage(selected);
+			for (var receiver : receivers) {
+				Network.INSTANCE.send(PacketDistributor.PLAYER.with(() -> receiver), msg);
+			}
 		}
 	}
 
@@ -100,8 +98,8 @@ public class ModifyAbility extends CardAbility {
 		return modifications;
 	}
 
-	public boolean applyToTarget() {
-		return applyToTarget;
+	public CardAbilitySelection getSelection() {
+		return selection;
 	}
 
 }

@@ -9,6 +9,10 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import mod.vemerion.minecard.game.Card;
 import mod.vemerion.minecard.game.GameState;
+import mod.vemerion.minecard.helper.Helper;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.util.ExtraCodecs;
 
 public record CardAbilitySelection(CardAbilityGroup group, CardSelectionMethod method, CardCondition condition) {
@@ -37,5 +41,13 @@ public record CardAbilitySelection(CardAbilityGroup group, CardSelectionMethod m
 		}
 
 		return new ArrayList<>();
+	}
+
+	public Component getText() {
+		var EMPTY = TextComponent.EMPTY;
+		return new TranslatableComponent(Helper.gui("card_ability_selection"),
+				!group.singular() ? method.getText() : EMPTY, group.getText(),
+				condition.isEmpty() ? EMPTY : (group.singular() ? Helper.gui("if") : Helper.gui("where")),
+				condition.getDescription());
 	}
 }

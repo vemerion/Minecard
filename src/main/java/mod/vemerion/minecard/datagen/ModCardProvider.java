@@ -72,12 +72,28 @@ public class ModCardProvider implements DataProvider {
 				.addProperty(CardProperty.TAUNT, 1));
 		add(new Builder(EntityType.SHULKER, 3, 3, 3).addProperty(CardProperty.SHIELD, 1));
 		add(new Builder(EntityType.DONKEY, 3, 2, 2).setCardAbility(new DrawCardsAbility(CardAbilityTrigger.SUMMON, 1)));
-		add(new Builder(EntityType.ZOMBIE, 4, 4, 4).setCardAbility(
-				new ModifyAbility(CardAbilityTrigger.SUMMON, false, List.of(new LazyCardType(mod("shield")),
-						new LazyCardType(mod("iron_equipment")), new LazyCardType(mod("diamond_sword"))))));
-		add(new Builder(EntityType.STRAY, 2, 2, 2)
-				.setCardAbility(new ModifyAbility(CardAbilityTrigger.ATTACK, true, List.of(new LazyCardType(
+		add(new Builder(EntityType.ZOMBIE, 4, 4, 4).setCardAbility(new ModifyAbility(CardAbilityTrigger.SUMMON,
+				new CardAbilitySelection(CardAbilityGroup.SELF, CardSelectionMethod.ALL,
+						CardCondition.NoCondition.NO_CONDITION),
+				List.of(new LazyCardType(mod("shield")), new LazyCardType(mod("iron_equipment")),
+						new LazyCardType(mod("diamond_sword"))))));
+		add(new Builder(EntityType.STRAY, 2, 2, 2).setCardAbility(new ModifyAbility(CardAbilityTrigger.ATTACK,
+				new CardAbilitySelection(CardAbilityGroup.TARGET, CardSelectionMethod.ALL,
+						CardCondition.NoCondition.NO_CONDITION),
+				List.of(new LazyCardType(
 						new Builder(EntityType.ITEM, 0, 0, 0).addProperty(CardProperty.FREEZE, 1).build())))));
+		add(new Builder(EntityType.VINDICATOR, 6, 4, 8).setCardAbility(new AddCardsAbility(CardAbilityTrigger.DEATH,
+				new LazyCardType(new Builder(EntityType.ITEM, 0, 0, 0)
+						.setCardAbility(new ResourceAbility(CardAbilityTrigger.SUMMON, 1, 0))
+						.setAdditionalData(new AdditionalCardData.ItemData(Items.EMERALD)).build()))));
+		add(new Builder(EntityType.ENDERMAN, 6, 4, 5).setCardAbility(
+				new CopyCardsAbility(CardAbilityTrigger.SUMMON, new CardAbilitySelection(CardAbilityGroup.ENEMY_HAND,
+						CardSelectionMethod.RANDOM, CardCondition.NoCondition.NO_CONDITION))));
+		add(new Builder(EntityType.GLOW_SQUID, 3, 2, 2).setCardAbility(new ModifyAbility(CardAbilityTrigger.SUMMON,
+				new CardAbilitySelection(CardAbilityGroup.ALL, CardSelectionMethod.ALL,
+						CardCondition.NoCondition.NO_CONDITION),
+				List.of(new LazyCardType(
+						new Builder(EntityType.ITEM, 0, 0, 0).addProperty(CardProperty.STEALTH, 0).build())))));
 
 		// Auxiliary cards
 		add(new Builder(EntityType.ITEM, 0, 1, 0).setKey(mod("shield")).addProperty(CardProperty.SHIELD, 1)
@@ -87,13 +103,6 @@ public class ModCardProvider implements DataProvider {
 				.addEquipment(EquipmentSlot.MAINHAND, Items.IRON_SHOVEL));
 		add(new Builder(EntityType.ITEM, 0, 0, 1).setKey(mod("diamond_sword")).addProperty(CardProperty.CHARGE, 1)
 				.addEquipment(EquipmentSlot.MAINHAND, Items.DIAMOND_SWORD));
-		add(new Builder(EntityType.VINDICATOR, 6, 4, 8).setCardAbility(new AddCardsAbility(CardAbilityTrigger.DEATH,
-				new LazyCardType(new Builder(EntityType.ITEM, 0, 0, 0)
-						.setCardAbility(new ResourceAbility(CardAbilityTrigger.SUMMON, 1, 0))
-						.setAdditionalData(new AdditionalCardData.ItemData(Items.EMERALD)).build()))));
-		add(new Builder(EntityType.ENDERMAN, 6, 4, 5).setCardAbility(
-				new CopyCardsAbility(CardAbilityTrigger.SUMMON, new CardAbilitySelection(CardAbilityGroup.ENEMY_HAND,
-						CardSelectionMethod.RANDOM, CardCondition.NoCondition.NO_CONDITION))));
 	}
 
 	private ResourceLocation mod(String name) {

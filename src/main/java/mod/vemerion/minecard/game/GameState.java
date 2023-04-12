@@ -98,7 +98,7 @@ public class GameState {
 			playerState.getBoard().remove(card);
 		}
 
-		var msg = new UpdateCardMessage(playerState.getId(), card);
+		var msg = new UpdateCardMessage(card);
 		for (var receiver : receivers) {
 			Network.INSTANCE.send(PacketDistributor.PLAYER.with(() -> receiver), msg);
 		}

@@ -61,8 +61,8 @@ public class ModLanguageProvider extends LanguageProvider {
 		add(CardAbilityGroup.ADJACENT.getTextKey(), "adjacent to this");
 
 		// Card selection methods
-		add(CardSelectionMethod.ALL.getTextKey(), "all cards from");
-		add(CardSelectionMethod.RANDOM.getTextKey(), "a random card from");
+		add(CardSelectionMethod.ALL.getTextKey(), "all cards from ");
+		add(CardSelectionMethod.RANDOM.getTextKey(), "a random card from ");
 
 		// Card conditions
 		add(ModCardConditions.NO_CONDITION.get().getTranslationKey(), "");
@@ -81,14 +81,15 @@ public class ModLanguageProvider extends LanguageProvider {
 		// Card abilities
 		add(ModCardAbilities.NO_CARD_ABILITY.get().getTranslationKey(), "");
 		add(ModCardAbilities.DRAW_CARDS.get().getTranslationKey(), "%s draw %s card(s).");
-		add(ModCardAbilities.MODIFY.get().getTranslationKey(), "%s apply%s%s%s.");
+		add(ModCardAbilities.MODIFY.get().getTranslationKey(), "%s apply%s%s to %s.");
 		add(ModCardAbilities.MODIFY.get().getTranslationKey() + ".one_of", " one of");
-		add(ModCardAbilities.MODIFY.get().getTranslationKey() + ".target", " to the target");
 		add(ModCardAbilities.MODIFY.get().getTranslationKey() + ".element", " [%s%s/%s]");
 		add(ModCardAbilities.ADD_CARDS.get().getTranslationKey(), "%s Add %s to your hand.");
 		add(ModCardAbilities.RESOURCE.get().getTranslationKey(),
 				"%s Gain %s temporary resources, and %s permanent resources.");
-		add(ModCardAbilities.COPY_CARDS.get().getTranslationKey(), "%s copy %s %s%s%s.");
+		add(ModCardAbilities.COPY_CARDS.get().getTranslationKey(), "%s copy %s.");
+		add(Helper.gui("card_ability_selection"), "%s%s%s%s");
 		add(Helper.gui("where"), " where ");
+		add(Helper.gui("if"), " if ");
 	}
 }

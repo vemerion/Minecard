@@ -1,13 +1,18 @@
 {
   "abilities": {
-    "trigger": "summon",
-    "apply_to_target": false,
-    "modifications": [
-      "minecard:shield",
-      "minecard:iron_equipment",
-      "minecard:diamond_sword"
-    ],
-    "type": "minecard:modify"
+    "type": "minecard:modify",
+    "value": {
+      "trigger": "summon",
+      "selection": {
+        "group": "self",
+        "method": "all"
+      },
+      "modifications": [
+        "minecard:shield",
+        "minecard:iron_equipment",
+        "minecard:diamond_sword"
+      ]
+    }
   },
   "entity": "minecraft:zombie",
   "cost": 4,

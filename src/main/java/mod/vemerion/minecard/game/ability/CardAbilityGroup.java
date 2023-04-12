@@ -38,8 +38,8 @@ public enum CardAbilityGroup {
 		return new TranslatableComponent(getTextKey());
 	}
 
-	public boolean shouldWriteSelectionMethod() {
-		return this != SELF && this != TARGET;
+	public boolean singular() {
+		return this == SELF || this == TARGET;
 	}
 
 	public List<Card> get(GameState state, UUID id, Card self, Card target) {
