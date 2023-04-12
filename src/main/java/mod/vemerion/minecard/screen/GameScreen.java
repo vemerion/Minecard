@@ -31,6 +31,7 @@ import mod.vemerion.minecard.screen.animation.StealthAnimation;
 import mod.vemerion.minecard.screen.animation.TauntAnimation;
 import mod.vemerion.minecard.screen.animation.ThrowItemAnimation;
 import mod.vemerion.minecard.screen.animation.WallAnimation;
+import mod.vemerion.minecard.screen.animation.config.AnimationConfigs;
 import net.minecraft.client.gui.components.AbstractButton;
 import net.minecraft.client.gui.components.Widget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
@@ -105,6 +106,10 @@ public class GameScreen extends Screen {
 		return attackingCard;
 	}
 
+	public void addAnimation(Animation anim) {
+		animations.add(anim);
+	}
+
 	private Map<UUID, ClientPlayerState> initState(List<MessagePlayerState> list) {
 		Map<UUID, ClientPlayerState> map = new HashMap<>();
 		for (var messageState : list)
@@ -141,6 +146,18 @@ public class GameScreen extends Screen {
 	public void onClose() {
 		Network.INSTANCE.sendToServer(new CloseGameMessage(pos));
 		super.onClose();
+	}
+
+	private ClientCard withId(int id) {
+		for (var playerState : state.values()) {
+			for (var card : playerState.board)
+				if (card.getId() == id)
+					return card;
+			for (var card : playerState.hand)
+				if (card.getId() == id)
+					return card;
+		}
+		return null;
 	}
 
 	private ClientCard withId(List<ClientCard> list, int id) {
@@ -276,6 +293,15 @@ public class GameScreen extends Screen {
 				}
 			}
 		}
+	}
+
+	public void animation(int originId, List<Integer> targets, ResourceLocation rl) {
+		var animConfig = AnimationConfigs.getInstance().get(rl);
+		if (animConfig == null)
+			return;
+
+		animConfig.invoke(this, withId(originId), targets.stream().map(id -> withId(id)).filter(c -> c != null)
+				.collect(Collectors.toCollection(() -> new ArrayList<>())));
 	}
 
 	private ClientPlayerState yourState() {

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -72,16 +73,18 @@ public class ModCardProvider implements DataProvider {
 				.addProperty(CardProperty.TAUNT, 1));
 		add(new Builder(EntityType.SHULKER, 3, 3, 3).addProperty(CardProperty.SHIELD, 1));
 		add(new Builder(EntityType.DONKEY, 3, 2, 2).setCardAbility(new DrawCardsAbility(CardAbilityTrigger.SUMMON, 1)));
-		add(new Builder(EntityType.ZOMBIE, 4, 4, 4).setCardAbility(new ModifyAbility(CardAbilityTrigger.SUMMON,
-				new CardAbilitySelection(CardAbilityGroup.SELF, CardSelectionMethod.ALL,
-						CardCondition.NoCondition.NO_CONDITION),
-				List.of(new LazyCardType(mod("shield")), new LazyCardType(mod("iron_equipment")),
-						new LazyCardType(mod("diamond_sword"))))));
-		add(new Builder(EntityType.STRAY, 2, 2, 2).setCardAbility(new ModifyAbility(CardAbilityTrigger.ATTACK,
-				new CardAbilitySelection(CardAbilityGroup.TARGET, CardSelectionMethod.ALL,
-						CardCondition.NoCondition.NO_CONDITION),
-				List.of(new LazyCardType(
-						new Builder(EntityType.ITEM, 0, 0, 0).addProperty(CardProperty.FREEZE, 1).build())))));
+		add(new Builder(EntityType.ZOMBIE, 4, 4, 4)
+				.setCardAbility(new ModifyAbility(CardAbilityTrigger.SUMMON, Optional.empty(),
+						new CardAbilitySelection(CardAbilityGroup.SELF, CardSelectionMethod.ALL,
+								CardCondition.NoCondition.NO_CONDITION),
+						List.of(new LazyCardType(mod("shield")), new LazyCardType(mod("iron_equipment")),
+								new LazyCardType(mod("diamond_sword"))))));
+		add(new Builder(EntityType.STRAY, 2, 2, 2)
+				.setCardAbility(new ModifyAbility(CardAbilityTrigger.ATTACK, Optional.empty(),
+						new CardAbilitySelection(CardAbilityGroup.TARGET, CardSelectionMethod.ALL,
+								CardCondition.NoCondition.NO_CONDITION),
+						List.of(new LazyCardType(
+								new Builder(EntityType.ITEM, 0, 0, 0).addProperty(CardProperty.FREEZE, 1).build())))));
 		add(new Builder(EntityType.VINDICATOR, 6, 4, 8).setCardAbility(new AddCardsAbility(CardAbilityTrigger.DEATH,
 				new LazyCardType(new Builder(EntityType.ITEM, 0, 0, 0)
 						.setCardAbility(new ResourceAbility(CardAbilityTrigger.SUMMON, 1, 0))
@@ -90,7 +93,8 @@ public class ModCardProvider implements DataProvider {
 				new CopyCardsAbility(CardAbilityTrigger.SUMMON, new CardAbilitySelection(CardAbilityGroup.ENEMY_HAND,
 						CardSelectionMethod.RANDOM, CardCondition.NoCondition.NO_CONDITION))));
 		add(new Builder(EntityType.GLOW_SQUID, 3, 2, 2).setCardAbility(new ModifyAbility(CardAbilityTrigger.SUMMON,
-				new CardAbilitySelection(CardAbilityGroup.ALL, CardSelectionMethod.ALL,
+				Optional.of(new ResourceLocation(Main.MODID, "throw_carrot")),
+				new CardAbilitySelection(CardAbilityGroup.BOARD, CardSelectionMethod.ALL,
 						CardCondition.NoCondition.NO_CONDITION),
 				List.of(new LazyCardType(
 						new Builder(EntityType.ITEM, 0, 0, 0).addProperty(CardProperty.STEALTH, 0).build())))));

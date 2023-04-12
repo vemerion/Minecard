@@ -1,6 +1,8 @@
 package mod.vemerion.minecard.game.ability;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
 
@@ -13,31 +15,34 @@ import mod.vemerion.minecard.game.GameUtil;
 import mod.vemerion.minecard.game.LazyCardType;
 import mod.vemerion.minecard.game.PlayerState;
 import mod.vemerion.minecard.init.ModCardAbilities;
+import mod.vemerion.minecard.network.AnimationMessage;
 import mod.vemerion.minecard.network.Network;
 import mod.vemerion.minecard.network.UpdateCardMessage;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraftforge.network.PacketDistributor;
 
 public class ModifyAbility extends CardAbility {
 
-	public static final Codec<ModifyAbility> CODEC = ExtraCodecs
-			.lazyInitializedCodec(
-					() -> RecordCodecBuilder.create(instance -> instance
-							.group(CardAbilityTrigger.CODEC.fieldOf("trigger").forGetter(CardAbility::getTrigger),
-									CardAbilitySelection.CODEC.fieldOf("selection")
-											.forGetter(ModifyAbility::getSelection),
-									ExtraCodecs.nonEmptyList(Codec.list(LazyCardType.CODEC)).fieldOf("modifications")
-											.forGetter(ModifyAbility::getModifications))
-							.apply(instance, ModifyAbility::new)));
+	public static final Codec<ModifyAbility> CODEC = ExtraCodecs.lazyInitializedCodec(() -> RecordCodecBuilder.create(
+			instance -> instance.group(CardAbilityTrigger.CODEC.fieldOf("trigger").forGetter(CardAbility::getTrigger),
+					ResourceLocation.CODEC.optionalFieldOf("animation").forGetter(ModifyAbility::getAnimation),
+					CardAbilitySelection.CODEC.fieldOf("selection").forGetter(ModifyAbility::getSelection),
+					ExtraCodecs.nonEmptyList(Codec.list(LazyCardType.CODEC)).fieldOf("modifications")
+							.forGetter(ModifyAbility::getModifications))
+					.apply(instance, ModifyAbility::new)));
 
+	private final Optional<ResourceLocation> animation;
 	private final CardAbilitySelection selection;
 	private final List<LazyCardType> modifications;
 
-	public ModifyAbility(CardAbilityTrigger trigger, CardAbilitySelection selection, List<LazyCardType> modifications) {
+	public ModifyAbility(CardAbilityTrigger trigger, Optional<ResourceLocation> animation,
+			CardAbilitySelection selection, List<LazyCardType> modifications) {
 		super(trigger);
+		this.animation = animation;
 		this.selection = selection;
 		this.modifications = modifications;
 	}
@@ -92,6 +97,18 @@ public class ModifyAbility extends CardAbility {
 				Network.INSTANCE.send(PacketDistributor.PLAYER.with(() -> receiver), msg);
 			}
 		}
+
+		animation.ifPresent(anim -> {
+			var msg = new AnimationMessage(card.getId(),
+					selectedCards.stream().map(c -> c.getId()).collect(Collectors.toList()), anim);
+			for (var receiver : receivers) {
+				Network.INSTANCE.send(PacketDistributor.PLAYER.with(() -> receiver), msg);
+			}
+		});
+	}
+
+	private Optional<ResourceLocation> getAnimation() {
+		return animation;
 	}
 
 	public List<LazyCardType> getModifications() {

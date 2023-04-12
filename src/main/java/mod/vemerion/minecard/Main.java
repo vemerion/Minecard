@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
 
+import mod.vemerion.minecard.init.ModAnimationConfigs;
 import mod.vemerion.minecard.init.ModBlockEntities;
 import mod.vemerion.minecard.init.ModBlocks;
 import mod.vemerion.minecard.init.ModCardAbilities;
@@ -29,5 +30,6 @@ public class Main {
 		ModMenus.MENUS.register(bus);
 		ModCardAbilities.CARD_ABILITIES.register(bus);
 		ModCardConditions.CARD_CONDITIONS.register(bus);
+		ModAnimationConfigs.ANIMATION_CONFIGS.register(bus);
 	}
 }
