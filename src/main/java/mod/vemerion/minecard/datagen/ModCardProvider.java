@@ -70,7 +70,7 @@ public class ModCardProvider implements DataProvider {
 		add(new Builder(EntityType.PLAYER, 0, 30, 0));
 		add(new Builder(EntityType.CREEPER, 5, 4, 3).addProperty(CardProperty.CHARGE, 1)
 				.addProperty(CardProperty.FREEZE, 1).addProperty(CardProperty.STEALTH, 1)
-				.addProperty(CardProperty.TAUNT, 1));
+				.addProperty(CardProperty.TAUNT, 1).addProperty(CardProperty.BURN, 3));
 		add(new Builder(EntityType.SHULKER, 3, 3, 3).addProperty(CardProperty.SHIELD, 1));
 		add(new Builder(EntityType.DONKEY, 3, 2, 2).setCardAbility(new DrawCardsAbility(CardAbilityTrigger.SUMMON, 1)));
 		add(new Builder(EntityType.ZOMBIE, 4, 4, 4)
@@ -92,12 +92,12 @@ public class ModCardProvider implements DataProvider {
 		add(new Builder(EntityType.ENDERMAN, 6, 4, 5).setCardAbility(
 				new CopyCardsAbility(CardAbilityTrigger.SUMMON, new CardAbilitySelection(CardAbilityGroup.ENEMY_HAND,
 						CardSelectionMethod.RANDOM, CardCondition.NoCondition.NO_CONDITION))));
-		add(new Builder(EntityType.GLOW_SQUID, 3, 2, 2).setCardAbility(new ModifyAbility(CardAbilityTrigger.SUMMON,
-				Optional.of(new ResourceLocation(Main.MODID, "glow")),
-				new CardAbilitySelection(CardAbilityGroup.BOARD, CardSelectionMethod.ALL,
-						CardCondition.NoCondition.NO_CONDITION),
-				List.of(new LazyCardType(
-						new Builder(EntityType.ITEM, 0, 0, 0).addProperty(CardProperty.STEALTH, 0).build())))));
+		add(new Builder(EntityType.GLOW_SQUID, 3, 2, 2).setCardAbility(
+				new ModifyAbility(CardAbilityTrigger.SUMMON, Optional.of(new ResourceLocation(Main.MODID, "glow")),
+						new CardAbilitySelection(CardAbilityGroup.BOARD, CardSelectionMethod.ALL,
+								CardCondition.NoCondition.NO_CONDITION),
+						List.of(new LazyCardType(
+								new Builder(EntityType.ITEM, 0, 0, 0).addProperty(CardProperty.STEALTH, 0).build())))));
 
 		// Auxiliary cards
 		add(new Builder(EntityType.ITEM, 0, 1, 0).setKey(mod("shield")).addProperty(CardProperty.SHIELD, 1)

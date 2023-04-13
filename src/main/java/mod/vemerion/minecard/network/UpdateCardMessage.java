@@ -1,6 +1,5 @@
 package mod.vemerion.minecard.network;
 
-import java.util.UUID;
 import java.util.function.Supplier;
 
 import mod.vemerion.minecard.game.Card;

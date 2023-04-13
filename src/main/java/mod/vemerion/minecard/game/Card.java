@@ -82,7 +82,7 @@ public class Card {
 	public void setHealth(int health) {
 		this.health = health;
 	}
-	
+
 	public int getMaxHealth() {
 		return maxHealth;
 	}
@@ -114,7 +114,7 @@ public class Card {
 	public void setDamage(int damage) {
 		this.damage = damage;
 	}
-	
+
 	public int getMaxDamage() {
 		return maxDamage;
 	}
@@ -141,6 +141,11 @@ public class Card {
 
 	public void removeProperty(CardProperty property) {
 		properties.remove(property);
+	}
+
+	public void decrementProperty(CardProperty property) {
+		if (hasProperty(property))
+			properties.put(property, properties.get(property) - 1);
 	}
 
 	public CardAbility getAbility() {

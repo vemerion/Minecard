@@ -12,6 +12,7 @@ import mod.vemerion.minecard.network.Network;
 import mod.vemerion.minecard.network.PlaceCardMessage;
 import mod.vemerion.minecard.network.SetPropertiesMessage;
 import mod.vemerion.minecard.network.SetResourcesMessage;
+import mod.vemerion.minecard.network.UpdateCardMessage;
 import net.minecraft.core.SerializableUUID;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.ExtraCodecs;
@@ -131,12 +132,35 @@ public class PlayerState {
 
 	public void endTurn(List<ServerPlayer> receivers) {
 		for (var card : board) {
+			boolean changed = false;
 			if (card.hasProperty(CardProperty.FREEZE)) {
 				card.removeProperty(CardProperty.FREEZE);
-				for (var receiver : receivers)
-					Network.INSTANCE.send(PacketDistributor.PLAYER.with(() -> receiver),
-							new SetPropertiesMessage(id, card.getId(), card.getProperties()));
+				changed = true;
 			}
+			if (card.hasProperty(CardProperty.BURN)) {
+				hurt(receivers, card, 1);
+				card.decrementProperty(CardProperty.BURN);
+				changed = true;
+			}
+			if (changed && !card.isDead()) {
+				var msg = new SetPropertiesMessage(id, card.getId(), card.getProperties());
+				for (var receiver : receivers)
+					Network.INSTANCE.send(PacketDistributor.PLAYER.with(() -> receiver), msg);
+			}
+		}
+	}
+
+	public void hurt(List<ServerPlayer> receivers, Card card, int amount) {
+		card.hurt(amount);
+
+		if (card.isDead()) {
+			card.getAbility().onDeath(receivers, this, card);
+			board.remove(card);
+		}
+
+		var msg = new UpdateCardMessage(card);
+		for (var receiver : receivers) {
+			Network.INSTANCE.send(PacketDistributor.PLAYER.with(() -> receiver), msg);
 		}
 	}
 

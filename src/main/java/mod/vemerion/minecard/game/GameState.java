@@ -7,7 +7,6 @@ import java.util.UUID;
 
 import mod.vemerion.minecard.network.CombatMessage;
 import mod.vemerion.minecard.network.Network;
-import mod.vemerion.minecard.network.UpdateCardMessage;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EntityType;
 import net.minecraftforge.network.PacketDistributor;
@@ -81,26 +80,12 @@ public class GameState {
 
 		attackerCard.setReady(false);
 		attackerCard.removeProperty(CardProperty.STEALTH);
-		hurt(receivers, current, attackerCard, targetCard.getDamage());
-		hurt(receivers, enemy, targetCard, attackerCard.getDamage());
+		current.hurt(receivers, attackerCard, targetCard.getDamage());
+		enemy.hurt(receivers, targetCard, attackerCard.getDamage());
 
 		for (var receiver : receivers) {
 			Network.INSTANCE.send(PacketDistributor.PLAYER.with(() -> receiver),
 					new CombatMessage(current.getId(), attackerCard.getId(), enemy.getId(), targetCard.getId()));
-		}
-	}
-
-	private void hurt(List<ServerPlayer> receivers, PlayerState playerState, Card card, int amount) {
-		card.hurt(amount);
-
-		if (card.isDead()) {
-			card.getAbility().onDeath(receivers, playerState, card);
-			playerState.getBoard().remove(card);
-		}
-
-		var msg = new UpdateCardMessage(card);
-		for (var receiver : receivers) {
-			Network.INSTANCE.send(PacketDistributor.PLAYER.with(() -> receiver), msg);
 		}
 	}
 

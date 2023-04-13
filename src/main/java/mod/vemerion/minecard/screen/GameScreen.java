@@ -25,6 +25,7 @@ import mod.vemerion.minecard.network.EndTurnMessage;
 import mod.vemerion.minecard.network.Network;
 import mod.vemerion.minecard.network.PlayCardMessage;
 import mod.vemerion.minecard.screen.animation.Animation;
+import mod.vemerion.minecard.screen.animation.BurnAnimation;
 import mod.vemerion.minecard.screen.animation.DeathAnimation;
 import mod.vemerion.minecard.screen.animation.FreezeAnimation;
 import mod.vemerion.minecard.screen.animation.StealthAnimation;
@@ -288,6 +289,10 @@ public class GameScreen extends Screen {
 					break;
 				case TAUNT:
 					animations.add(new TauntAnimation(minecraft, card, () -> {
+					}));
+					break;
+				case BURN:
+					animations.add(new BurnAnimation(minecraft, card, () -> {
 					}));
 					break;
 				}
