@@ -2,5 +2,8 @@
   "throw_carrot": {
     "item": "minecraft:carrot",
     "type": "minecard:throw_item"
+  },
+  "glow": {
+    "type": "minecard:glow"
   }
 }

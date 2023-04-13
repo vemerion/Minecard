@@ -3,7 +3,7 @@
     "type": "minecard:modify",
     "value": {
       "trigger": "summon",
-      "animation": "minecard:throw_carrot",
+      "animation": "minecard:glow",
       "selection": {
         "group": "board",
         "method": "all"

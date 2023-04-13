@@ -93,7 +93,7 @@ public class ModCardProvider implements DataProvider {
 				new CopyCardsAbility(CardAbilityTrigger.SUMMON, new CardAbilitySelection(CardAbilityGroup.ENEMY_HAND,
 						CardSelectionMethod.RANDOM, CardCondition.NoCondition.NO_CONDITION))));
 		add(new Builder(EntityType.GLOW_SQUID, 3, 2, 2).setCardAbility(new ModifyAbility(CardAbilityTrigger.SUMMON,
-				Optional.of(new ResourceLocation(Main.MODID, "throw_carrot")),
+				Optional.of(new ResourceLocation(Main.MODID, "glow")),
 				new CardAbilitySelection(CardAbilityGroup.BOARD, CardSelectionMethod.ALL,
 						CardCondition.NoCondition.NO_CONDITION),
 				List.of(new LazyCardType(

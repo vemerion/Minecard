@@ -12,6 +12,7 @@ import com.mojang.serialization.JsonOps;
 import mod.vemerion.minecard.Main;
 import mod.vemerion.minecard.screen.animation.config.AnimationConfig;
 import mod.vemerion.minecard.screen.animation.config.AnimationConfigs;
+import mod.vemerion.minecard.screen.animation.config.GlowAnimationConfig;
 import mod.vemerion.minecard.screen.animation.config.ThrowItemAnimationConfig;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
@@ -50,6 +51,7 @@ public class ModAnimationConfigProvider implements DataProvider {
 
 	private void addAnimations() {
 		animations.put("throw_carrot", new ThrowItemAnimationConfig(Items.CARROT));
+		animations.put("glow", GlowAnimationConfig.INSTANCE);
 	}
 
 	@Override

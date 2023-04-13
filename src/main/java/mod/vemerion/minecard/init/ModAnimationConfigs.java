@@ -5,6 +5,7 @@ import java.util.function.Supplier;
 import mod.vemerion.minecard.Main;
 import mod.vemerion.minecard.screen.animation.config.AnimationConfig;
 import mod.vemerion.minecard.screen.animation.config.AnimationConfigType;
+import mod.vemerion.minecard.screen.animation.config.GlowAnimationConfig;
 import mod.vemerion.minecard.screen.animation.config.NoAnimationConfig;
 import mod.vemerion.minecard.screen.animation.config.ThrowItemAnimationConfig;
 import net.minecraft.resources.ResourceLocation;
@@ -33,5 +34,7 @@ public class ModAnimationConfigs {
 	public static final RegistryObject<AnimationConfigType<? extends AnimationConfig>> THROW_ITEM = ANIMATION_CONFIGS
 			.register("throw_item",
 					() -> new AnimationConfigType<ThrowItemAnimationConfig>(ThrowItemAnimationConfig.CODEC));
+	public static final RegistryObject<AnimationConfigType<? extends AnimationConfig>> GLOW = ANIMATION_CONFIGS
+			.register("glow", () -> new AnimationConfigType<GlowAnimationConfig>(GlowAnimationConfig.CODEC));
 
 }
