@@ -7,6 +7,7 @@ import java.util.UUID;
 
 import mod.vemerion.minecard.network.CombatMessage;
 import mod.vemerion.minecard.network.Network;
+import mod.vemerion.minecard.network.UpdateCardsMessage;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EntityType;
 import net.minecraftforge.network.PacketDistributor;
@@ -54,6 +55,28 @@ public class GameState {
 
 	private PlayerState getEnemyPlayerState() {
 		return playerStates.get((turn + 1) % 2);
+	}
+
+	public CardVisibility calcVisibility(UUID playerId, Card card) {
+		for (var playerState : getPlayerStates()) {
+			for (var c : playerState.getDeck()) {
+				if (c.getId() == card.getId())
+					return CardVisibility.DECK;
+			}
+			for (var c : playerState.getHand()) {
+				if (c.getId() == card.getId())
+					return playerId.equals(playerState.getId()) ? CardVisibility.VISIBLE : CardVisibility.ENEMY_HAND;
+			}
+			for (var c : playerState.getBoard())
+				if (c.getId() == card.getId())
+					return CardVisibility.VISIBLE;
+		}
+		return CardVisibility.UNKNOWN;
+	}
+
+	public void updateCards(ServerPlayer receiver, List<Card> cards) {
+		Network.INSTANCE.send(PacketDistributor.PLAYER.with(() -> receiver), new UpdateCardsMessage(cards.stream()
+				.filter(card -> calcVisibility(receiver.getUUID(), card) == CardVisibility.VISIBLE).toList()));
 	}
 
 	public void endTurn(List<ServerPlayer> receivers) {

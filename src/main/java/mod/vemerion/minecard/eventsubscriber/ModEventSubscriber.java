@@ -18,8 +18,8 @@ import mod.vemerion.minecard.network.PlayCardMessage;
 import mod.vemerion.minecard.network.SetPropertiesMessage;
 import mod.vemerion.minecard.network.SetReadyMessage;
 import mod.vemerion.minecard.network.SetResourcesMessage;
-import mod.vemerion.minecard.network.UpdateCardMessage;
 import mod.vemerion.minecard.network.UpdateCardTypesMessage;
+import mod.vemerion.minecard.network.UpdateCardsMessage;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
@@ -67,8 +67,8 @@ public class ModEventSubscriber {
 				SetPropertiesMessage::decode, SetPropertiesMessage::handle);
 		Network.INSTANCE.registerMessage(id++, CloseGameMessage.class, CloseGameMessage::encode,
 				CloseGameMessage::decode, CloseGameMessage::handle);
-		Network.INSTANCE.registerMessage(id++, UpdateCardMessage.class, UpdateCardMessage::encode,
-				UpdateCardMessage::decode, UpdateCardMessage::handle);
+		Network.INSTANCE.registerMessage(id++, UpdateCardsMessage.class, UpdateCardsMessage::encode,
+				UpdateCardsMessage::decode, UpdateCardsMessage::handle);
 		Network.INSTANCE.registerMessage(id++, AnimationMessage.class, AnimationMessage::encode,
 				AnimationMessage::decode, AnimationMessage::handle);
 

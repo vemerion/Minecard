@@ -12,7 +12,6 @@ import mod.vemerion.minecard.network.Network;
 import mod.vemerion.minecard.network.PlaceCardMessage;
 import mod.vemerion.minecard.network.SetPropertiesMessage;
 import mod.vemerion.minecard.network.SetResourcesMessage;
-import mod.vemerion.minecard.network.UpdateCardMessage;
 import net.minecraft.core.SerializableUUID;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.ExtraCodecs;
@@ -152,15 +151,14 @@ public class PlayerState {
 
 	public void hurt(List<ServerPlayer> receivers, Card card, int amount) {
 		card.hurt(amount);
+		
+		for (var receiver : receivers) {
+			game.updateCards(receiver, List.of(card));
+		}
 
 		if (card.isDead()) {
 			card.getAbility().onDeath(receivers, this, card);
 			board.remove(card);
-		}
-
-		var msg = new UpdateCardMessage(card);
-		for (var receiver : receivers) {
-			Network.INSTANCE.send(PacketDistributor.PLAYER.with(() -> receiver), msg);
 		}
 	}
 

@@ -11,13 +11,13 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import mod.vemerion.minecard.game.Card;
 import mod.vemerion.minecard.game.CardProperty;
+import mod.vemerion.minecard.game.CardVisibility;
 import mod.vemerion.minecard.game.GameUtil;
 import mod.vemerion.minecard.game.LazyCardType;
 import mod.vemerion.minecard.game.PlayerState;
 import mod.vemerion.minecard.init.ModCardAbilities;
 import mod.vemerion.minecard.network.AnimationMessage;
 import mod.vemerion.minecard.network.Network;
-import mod.vemerion.minecard.network.UpdateCardMessage;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
@@ -91,18 +91,18 @@ public class ModifyAbility extends CardAbility {
 			selected.getProperties().putAll(modification.getProperties());
 			if (modification.hasProperty(CardProperty.CHARGE))
 				selected.setReady(true);
+		}
 
-			var msg = new UpdateCardMessage(selected);
-			for (var receiver : receivers) {
-				Network.INSTANCE.send(PacketDistributor.PLAYER.with(() -> receiver), msg);
-			}
+		for (var receiver : receivers) {
+			state.getGame().updateCards(receiver, selectedCards);
 		}
 
 		animation.ifPresent(anim -> {
-			var msg = new AnimationMessage(card.getId(),
-					selectedCards.stream().map(c -> c.getId()).collect(Collectors.toList()), anim);
 			for (var receiver : receivers) {
-				Network.INSTANCE.send(PacketDistributor.PLAYER.with(() -> receiver), msg);
+				Network.INSTANCE.send(PacketDistributor.PLAYER.with(() -> receiver),
+						new AnimationMessage(card.getId(), selectedCards.stream().filter(
+								c -> state.getGame().calcVisibility(receiver.getUUID(), card) == CardVisibility.VISIBLE)
+								.map(c -> c.getId()).collect(Collectors.toList()), anim));
 			}
 		});
 	}
