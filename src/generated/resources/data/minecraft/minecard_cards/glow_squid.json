@@ -5,7 +5,10 @@
       "trigger": "summon",
       "animation": "minecard:glow",
       "selection": {
-        "group": "board",
+        "groups": [
+          "enemy_board",
+          "your_board"
+        ],
         "method": "all"
       },
       "modifications": [

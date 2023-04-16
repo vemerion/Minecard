@@ -60,7 +60,11 @@ public class ModifyAbility extends CardAbility {
 			var damageText = modifierText(card.getDamage());
 			var healthText = modifierText(card.getHealth());
 			elements.append(new TranslatableComponent(ModCardAbilities.MODIFY.get().getTranslationKey() + ".element",
-					GameUtil.propertiesToComponent(card.getProperties()), damageText, healthText));
+					GameUtil.propertiesToComponent(card.getProperties()), damageText, healthText,
+					card.getCost() == 0 ? TextComponent.EMPTY
+							: new TranslatableComponent(
+									ModCardAbilities.MODIFY.get().getTranslationKey() + ".element_cost",
+									modifierText(card.getCost()))));
 		}
 		return new Object[] { trigger.getText(),
 				modifications.size() == 1 ? TextComponent.EMPTY
@@ -87,6 +91,7 @@ public class ModifyAbility extends CardAbility {
 			selected.setDamage(selected.getDamage() + modification.getDamage());
 			selected.setMaxHealth(selected.getMaxHealth() + modification.getHealth());
 			selected.setMaxDamage(selected.getMaxDamage() + modification.getDamage());
+			selected.setCost(selected.getCost() + modification.getCost());
 
 			selected.getProperties().putAll(modification.getProperties());
 			if (modification.hasProperty(CardProperty.CHARGE))

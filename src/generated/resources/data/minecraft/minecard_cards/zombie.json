@@ -4,7 +4,9 @@
     "value": {
       "trigger": "summon",
       "selection": {
-        "group": "self",
+        "groups": [
+          "self"
+        ],
         "method": "all"
       },
       "modifications": [

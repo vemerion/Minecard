@@ -4,7 +4,9 @@
     "value": {
       "trigger": "attack",
       "selection": {
-        "group": "target",
+        "groups": [
+          "target"
+        ],
         "method": "all"
       },
       "modifications": [

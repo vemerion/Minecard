@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -19,6 +20,7 @@ import mod.vemerion.minecard.game.LazyCardType;
 import mod.vemerion.minecard.game.ability.AddCardsAbility;
 import mod.vemerion.minecard.game.ability.CardAbility;
 import mod.vemerion.minecard.game.ability.CardAbilityGroup;
+import mod.vemerion.minecard.game.ability.CardAbilityGroups;
 import mod.vemerion.minecard.game.ability.CardAbilitySelection;
 import mod.vemerion.minecard.game.ability.CardAbilityTrigger;
 import mod.vemerion.minecard.game.ability.CardCondition;
@@ -75,29 +77,37 @@ public class ModCardProvider implements DataProvider {
 		add(new Builder(EntityType.DONKEY, 3, 2, 2).setCardAbility(new DrawCardsAbility(CardAbilityTrigger.SUMMON, 1)));
 		add(new Builder(EntityType.ZOMBIE, 4, 4, 4)
 				.setCardAbility(new ModifyAbility(CardAbilityTrigger.SUMMON, Optional.empty(),
-						new CardAbilitySelection(CardAbilityGroup.SELF, CardSelectionMethod.ALL,
-								CardCondition.NoCondition.NO_CONDITION),
+						new CardAbilitySelection(new CardAbilityGroups(Set.of(CardAbilityGroup.SELF)),
+								CardSelectionMethod.ALL, CardCondition.NoCondition.NO_CONDITION),
 						List.of(new LazyCardType(mod("shield")), new LazyCardType(mod("iron_equipment")),
 								new LazyCardType(mod("diamond_sword"))))));
 		add(new Builder(EntityType.STRAY, 2, 2, 2)
 				.setCardAbility(new ModifyAbility(CardAbilityTrigger.ATTACK, Optional.empty(),
-						new CardAbilitySelection(CardAbilityGroup.TARGET, CardSelectionMethod.ALL,
-								CardCondition.NoCondition.NO_CONDITION),
+						new CardAbilitySelection(new CardAbilityGroups(Set.of(CardAbilityGroup.TARGET)),
+								CardSelectionMethod.ALL, CardCondition.NoCondition.NO_CONDITION),
 						List.of(new LazyCardType(
 								new Builder(EntityType.ITEM, 0, 0, 0).addProperty(CardProperty.FREEZE, 1).build())))));
 		add(new Builder(EntityType.VINDICATOR, 6, 4, 8).setCardAbility(new AddCardsAbility(CardAbilityTrigger.DEATH,
 				new LazyCardType(new Builder(EntityType.ITEM, 0, 0, 0)
 						.setCardAbility(new ResourceAbility(CardAbilityTrigger.SUMMON, 1, 0))
 						.setAdditionalData(new AdditionalCardData.ItemData(Items.EMERALD)).build()))));
-		add(new Builder(EntityType.ENDERMAN, 6, 4, 5).setCardAbility(
-				new CopyCardsAbility(CardAbilityTrigger.SUMMON, new CardAbilitySelection(CardAbilityGroup.ENEMY_HAND,
+		add(new Builder(EntityType.ENDERMAN, 6, 4, 5).setCardAbility(new CopyCardsAbility(CardAbilityTrigger.SUMMON,
+				new CardAbilitySelection(new CardAbilityGroups(Set.of(CardAbilityGroup.ENEMY_HAND)),
 						CardSelectionMethod.RANDOM, CardCondition.NoCondition.NO_CONDITION))));
-		add(new Builder(EntityType.GLOW_SQUID, 3, 2, 2).setCardAbility(
-				new ModifyAbility(CardAbilityTrigger.SUMMON, Optional.of(new ResourceLocation(Main.MODID, "glow")),
-						new CardAbilitySelection(CardAbilityGroup.BOARD, CardSelectionMethod.ALL,
-								CardCondition.NoCondition.NO_CONDITION),
-						List.of(new LazyCardType(
-								new Builder(EntityType.ITEM, 0, 0, 0).addProperty(CardProperty.STEALTH, 0).build())))));
+		add(new Builder(EntityType.GLOW_SQUID, 3, 2, 2).setCardAbility(new ModifyAbility(CardAbilityTrigger.SUMMON,
+				Optional.of(new ResourceLocation(Main.MODID, "glow")),
+				new CardAbilitySelection(
+						new CardAbilityGroups(Set.of(CardAbilityGroup.YOUR_BOARD, CardAbilityGroup.ENEMY_BOARD)),
+						CardSelectionMethod.ALL, CardCondition.NoCondition.NO_CONDITION),
+				List.of(new LazyCardType(
+						new Builder(EntityType.ITEM, 0, 0, 0).addProperty(CardProperty.STEALTH, 0).build())))));
+		add(new Builder(EntityType.WITHER_SKELETON, 5, 6, 4)
+				.setCardAbility(new ModifyAbility(CardAbilityTrigger.SUMMON, Optional.empty(),
+						new CardAbilitySelection(
+								new CardAbilityGroups(Set.of(CardAbilityGroup.YOUR_HAND, CardAbilityGroup.YOUR_DECK)),
+								CardSelectionMethod.ALL, new CardCondition.Entity(EntityType.WITHER)),
+						List.of(new LazyCardType(new Builder(EntityType.ITEM, -2, 0, 0).build())))));
+		add(new Builder(EntityType.WITHER, 12, 15, 15));
 
 		// Auxiliary cards
 		add(new Builder(EntityType.ITEM, 0, 1, 0).setKey(mod("shield")).addProperty(CardProperty.SHIELD, 1)

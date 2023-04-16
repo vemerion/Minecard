@@ -15,18 +15,18 @@ import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.util.ExtraCodecs;
 
-public record CardAbilitySelection(CardAbilityGroup group, CardSelectionMethod method, CardCondition condition) {
+public record CardAbilitySelection(CardAbilityGroups groups, CardSelectionMethod method, CardCondition condition) {
 
 	public static final Codec<CardAbilitySelection> CODEC = ExtraCodecs
 			.lazyInitializedCodec(() -> RecordCodecBuilder.create(instance -> instance
-					.group(CardAbilityGroup.CODEC.fieldOf("group").forGetter(CardAbilitySelection::group),
+					.group(CardAbilityGroups.CODEC.fieldOf("groups").forGetter(CardAbilitySelection::groups),
 							CardSelectionMethod.CODEC.fieldOf("method").forGetter(CardAbilitySelection::method),
 							CardCondition.CODEC.optionalFieldOf("condition", CardCondition.NoCondition.NO_CONDITION)
 									.forGetter(CardAbilitySelection::condition))
 					.apply(instance, CardAbilitySelection::new)));
 
 	public List<Card> select(GameState state, UUID id, Card self, Card target) {
-		List<Card> candidates = condition.filter(group.get(state, id, self, target));
+		List<Card> candidates = condition.filter(groups.get(state, id, self, target));
 
 		if (candidates.isEmpty())
 			return candidates;
@@ -46,8 +46,10 @@ public record CardAbilitySelection(CardAbilityGroup group, CardSelectionMethod m
 	public Component getText() {
 		var EMPTY = TextComponent.EMPTY;
 		return new TranslatableComponent(Helper.gui("card_ability_selection"),
-				!group.singular() ? method.getText() : EMPTY, group.getText(),
-				condition.isEmpty() ? EMPTY : (group.singular() ? Helper.gui("if") : Helper.gui("where")),
+				!groups.singular() ? method.getText() : EMPTY, groups.getText(),
+				condition.isEmpty() ? EMPTY
+						: (groups.singular() ? new TranslatableComponent(Helper.gui("if"))
+								: new TranslatableComponent(Helper.gui("where"))),
 				condition.getDescription());
 	}
 }

@@ -216,6 +216,21 @@ public class GameScreen extends Screen {
 					return card;
 				}
 			}
+			for (var card : playerState.hand) {
+				if (card.getId() == received.getId()) {
+					card.copy(received);
+
+					if (card.isDead()) {
+						animations.add(new DeathAnimation(minecraft, card, 0, () -> {
+							playerState.hand.removeIf(c -> card.getId() == c.getId());
+							card.remove();
+							resetPositions(playerState);
+						}));
+					}
+
+					return card;
+				}
+			}
 		}
 		return null;
 	}

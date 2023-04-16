@@ -1,0 +1,6 @@
+{
+  "entity": "minecraft:wither",
+  "cost": 12,
+  "health": 15,
+  "damage": 15
+}

@@ -52,10 +52,10 @@ public class ModLanguageProvider extends LanguageProvider {
 		add(CardAbilityGroup.ALL.getTextKey(), "anywhere");
 		add(CardAbilityGroup.SELF.getTextKey(), "self");
 		add(CardAbilityGroup.TARGET.getTextKey(), "target");
-		add(CardAbilityGroup.BOARD.getTextKey(), "the board");
+		add(CardAbilityGroup.ENEMY_DECK.getTextKey(), "the enemy deck");
 		add(CardAbilityGroup.ENEMY_BOARD.getTextKey(), "the enemy board");
 		add(CardAbilityGroup.YOUR_BOARD.getTextKey(), "your board");
-		add(CardAbilityGroup.HANDS.getTextKey(), "all hands");
+		add(CardAbilityGroup.YOUR_DECK.getTextKey(), "your deck");
 		add(CardAbilityGroup.ENEMY_HAND.getTextKey(), "the enemy hand");
 		add(CardAbilityGroup.YOUR_HAND.getTextKey(), "your hand");
 		add(CardAbilityGroup.ADJACENT.getTextKey(), "adjacent to this");
@@ -83,7 +83,8 @@ public class ModLanguageProvider extends LanguageProvider {
 		add(ModCardAbilities.DRAW_CARDS.get().getTranslationKey(), "%s draw %s card(s).");
 		add(ModCardAbilities.MODIFY.get().getTranslationKey(), "%s apply%s%s to %s.");
 		add(ModCardAbilities.MODIFY.get().getTranslationKey() + ".one_of", " one of");
-		add(ModCardAbilities.MODIFY.get().getTranslationKey() + ".element", " [%s%s/%s]");
+		add(ModCardAbilities.MODIFY.get().getTranslationKey() + ".element", " [%s%s/%s%s]");
+		add(ModCardAbilities.MODIFY.get().getTranslationKey() + ".element_cost", ", cost %s");
 		add(ModCardAbilities.ADD_CARDS.get().getTranslationKey(), "%s Add %s to your hand.");
 		add(ModCardAbilities.RESOURCE.get().getTranslationKey(),
 				"%s Gain %s temporary resources, and %s permanent resources.");

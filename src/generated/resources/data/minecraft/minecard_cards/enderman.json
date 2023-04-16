@@ -4,7 +4,9 @@
     "value": {
       "trigger": "summon",
       "selection": {
-        "group": "enemy_hand",
+        "groups": [
+          "enemy_hand"
+        ],
         "method": "random"
       }
     }
