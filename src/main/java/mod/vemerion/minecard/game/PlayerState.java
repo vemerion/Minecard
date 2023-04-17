@@ -151,7 +151,9 @@ public class PlayerState {
 
 	public void hurt(List<ServerPlayer> receivers, Card card, int amount) {
 		card.hurt(amount);
-		
+
+		card.getAbility().onHurt(receivers, this, card);
+
 		for (var receiver : receivers) {
 			game.updateCards(receiver, List.of(card));
 		}
@@ -208,6 +210,16 @@ public class PlayerState {
 		}
 
 		card.getAbility().onSummon(receivers, this, card);
+	}
+
+	// Completely remove the card without running onDeath
+	public void removeCard(List<ServerPlayer> receivers, Card card) {
+		card.setHealth(0);
+		for (var receiver : receivers)
+			game.updateCards(receiver, List.of(card));
+		hand.remove(card);
+		board.remove(card);
+		deck.remove(card);
 	}
 
 	public MessagePlayerState toMessage(boolean hide) {

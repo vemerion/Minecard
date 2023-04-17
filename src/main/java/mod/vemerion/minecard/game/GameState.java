@@ -4,10 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
+import java.util.stream.Collectors;
+
+import org.apache.commons.lang3.tuple.Pair;
 
 import mod.vemerion.minecard.network.CombatMessage;
 import mod.vemerion.minecard.network.Network;
 import mod.vemerion.minecard.network.UpdateCardsMessage;
+import mod.vemerion.minecard.network.UpdateDecksMessage;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EntityType;
 import net.minecraftforge.network.PacketDistributor;
@@ -75,8 +79,34 @@ public class GameState {
 	}
 
 	public void updateCards(ServerPlayer receiver, List<Card> cards) {
-		Network.INSTANCE.send(PacketDistributor.PLAYER.with(() -> receiver), new UpdateCardsMessage(cards.stream()
-				.filter(card -> calcVisibility(receiver.getUUID(), card) == CardVisibility.VISIBLE).toList()));
+		boolean updateDeckSizes = false;
+		List<Card> updated = new ArrayList<>();
+		for (var card : cards) {
+			var visibility = calcVisibility(receiver.getUUID(), card);
+			switch (visibility) {
+			case DECK:
+				updateDeckSizes = true;
+				break;
+			case ENEMY_HAND:
+				updated.add(Cards.EMPTY_CARD_TYPE.create().setId(card.getId()));
+				break;
+			case UNKNOWN:
+				break;
+			case VISIBLE:
+				updated.add(card);
+				break;
+
+			}
+		}
+
+		Network.INSTANCE.send(PacketDistributor.PLAYER.with(() -> receiver), new UpdateCardsMessage(updated));
+
+		if (updateDeckSizes) {
+			Network.INSTANCE.send(PacketDistributor.PLAYER.with(() -> receiver),
+					new UpdateDecksMessage(playerStates.stream()
+							.map(s -> Pair.of(s.getId(), (int) s.getDeck().stream().filter(c -> !c.isDead()).count()))
+							.collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue()))));
+		}
 	}
 
 	public void endTurn(List<ServerPlayer> receivers) {

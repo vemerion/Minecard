@@ -77,6 +77,7 @@ public class ModLanguageProvider extends LanguageProvider {
 		add(CardAbilityTrigger.SUMMON.getTextKey(), "Summon:");
 		add(CardAbilityTrigger.ATTACK.getTextKey(), "Attack:");
 		add(CardAbilityTrigger.DEATH.getTextKey(), "Death:");
+		add(CardAbilityTrigger.HURT.getTextKey(), "Hurt:");
 
 		// Card abilities
 		add(ModCardAbilities.NO_CARD_ABILITY.get().getTranslationKey(), "");
@@ -88,7 +89,10 @@ public class ModLanguageProvider extends LanguageProvider {
 		add(ModCardAbilities.ADD_CARDS.get().getTranslationKey(), "%s Add %s to your hand.");
 		add(ModCardAbilities.RESOURCE.get().getTranslationKey(),
 				"%s Gain %s temporary resources, and %s permanent resources.");
-		add(ModCardAbilities.COPY_CARDS.get().getTranslationKey(), "%s copy %s.");
+		add(ModCardAbilities.COPY_CARDS.get().getTranslationKey(), "%s copy %s.%s%s");
+		add(ModCardAbilities.COPY_CARDS.get().getTranslationKey() + ".destroy_original", " Destroy the original card.");
+		add(ModCardAbilities.COPY_CARDS.get().getTranslationKey() + ".restore_health",
+				" Restore the copy to full health.");
 		add(Helper.gui("card_ability_selection"), "%s%s%s%s");
 		add(Helper.gui("where"), " where ");
 		add(Helper.gui("if"), " if ");

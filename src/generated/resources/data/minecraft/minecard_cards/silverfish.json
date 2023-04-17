@@ -1,0 +1,26 @@
+{
+  "abilities": {
+    "type": "minecard:copy_cards",
+    "value": {
+      "trigger": "hurt",
+      "destroy_original": true,
+      "restore_health": false,
+      "selection": {
+        "groups": [
+          "your_deck"
+        ],
+        "method": "random",
+        "condition": {
+          "type": "minecard:entity",
+          "value": {
+            "inner": "minecraft:silverfish"
+          }
+        }
+      }
+    }
+  },
+  "entity": "minecraft:silverfish",
+  "cost": 1,
+  "health": 1,
+  "damage": 1
+}

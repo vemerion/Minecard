@@ -3,6 +3,8 @@
     "type": "minecard:copy_cards",
     "value": {
       "trigger": "summon",
+      "destroy_original": false,
+      "restore_health": false,
       "selection": {
         "groups": [
           "enemy_hand"

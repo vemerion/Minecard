@@ -20,6 +20,7 @@ import mod.vemerion.minecard.network.SetReadyMessage;
 import mod.vemerion.minecard.network.SetResourcesMessage;
 import mod.vemerion.minecard.network.UpdateCardTypesMessage;
 import mod.vemerion.minecard.network.UpdateCardsMessage;
+import mod.vemerion.minecard.network.UpdateDecksMessage;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
@@ -71,6 +72,7 @@ public class ModEventSubscriber {
 				UpdateCardsMessage::decode, UpdateCardsMessage::handle);
 		Network.INSTANCE.registerMessage(id++, AnimationMessage.class, AnimationMessage::encode,
 				AnimationMessage::decode, AnimationMessage::handle);
-
+		Network.INSTANCE.registerMessage(id++, UpdateDecksMessage.class, UpdateDecksMessage::encode,
+				UpdateDecksMessage::decode, UpdateDecksMessage::handle);
 	}
 }

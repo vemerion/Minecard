@@ -315,6 +315,11 @@ public class GameScreen extends Screen {
 		}
 	}
 
+	public void updateDecks(Map<UUID, Integer> sizes) {
+		for (var entry : sizes.entrySet())
+			state.get(entry.getKey()).deck = entry.getValue();
+	}
+
 	public void animation(int originId, List<Integer> targets, ResourceLocation rl) {
 		var animConfig = AnimationConfigs.getInstance().get(rl);
 		if (animConfig == null)

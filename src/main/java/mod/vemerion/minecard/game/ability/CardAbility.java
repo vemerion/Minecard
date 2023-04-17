@@ -65,4 +65,10 @@ public abstract class CardAbility {
 		}
 	}
 
+	public void onHurt(List<ServerPlayer> receivers, PlayerState state, Card card) {
+		if (trigger == CardAbilityTrigger.ALWAYS || trigger == CardAbilityTrigger.HURT) {
+			invoke(receivers, state, card, null);
+		}
+	}
+
 }
