@@ -137,7 +137,7 @@ public class PlayerState {
 				changed = true;
 			}
 			if (card.hasProperty(CardProperty.BURN)) {
-				hurt(receivers, card, 1);
+				game.hurt(receivers, card, 1);
 				card.decrementProperty(CardProperty.BURN);
 				changed = true;
 			}
@@ -146,21 +146,6 @@ public class PlayerState {
 				for (var receiver : receivers)
 					Network.INSTANCE.send(PacketDistributor.PLAYER.with(() -> receiver), msg);
 			}
-		}
-	}
-
-	public void hurt(List<ServerPlayer> receivers, Card card, int amount) {
-		card.hurt(amount);
-
-		card.getAbility().onHurt(receivers, this, card);
-
-		for (var receiver : receivers) {
-			game.updateCards(receiver, List.of(card));
-		}
-
-		if (card.isDead()) {
-			card.getAbility().onDeath(receivers, this, card);
-			board.remove(card);
 		}
 	}
 

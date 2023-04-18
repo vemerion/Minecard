@@ -79,14 +79,15 @@ public class ModCardProvider implements DataProvider {
 				.setCardAbility(new ModifyAbility(CardAbilityTrigger.SUMMON, Optional.empty(),
 						new CardAbilitySelection(new CardAbilityGroups(Set.of(CardAbilityGroup.SELF)),
 								CardSelectionMethod.ALL, CardCondition.NoCondition.NO_CONDITION),
-						List.of(new LazyCardType(mod("shield")), new LazyCardType(mod("iron_equipment")),
-								new LazyCardType(mod("diamond_sword"))))));
+						List.of(modification(0, new LazyCardType(mod("shield"))),
+								modification(0, new LazyCardType(mod("iron_equipment"))),
+								modification(0, new LazyCardType(mod("diamond_sword")))))));
 		add(new Builder(EntityType.STRAY, 2, 2, 2)
 				.setCardAbility(new ModifyAbility(CardAbilityTrigger.ATTACK, Optional.empty(),
 						new CardAbilitySelection(new CardAbilityGroups(Set.of(CardAbilityGroup.TARGET)),
 								CardSelectionMethod.ALL, CardCondition.NoCondition.NO_CONDITION),
-						List.of(new LazyCardType(
-								new Builder(EntityType.ITEM, 0, 0, 0).addProperty(CardProperty.FREEZE, 1).build())))));
+						List.of(modification(0, new LazyCardType(
+								new Builder(EntityType.ITEM, 0, 0, 0).addProperty(CardProperty.FREEZE, 1).build()))))));
 		add(new Builder(EntityType.VINDICATOR, 6, 4, 8).setCardAbility(new AddCardsAbility(CardAbilityTrigger.DEATH,
 				new LazyCardType(new Builder(EntityType.ITEM, 0, 0, 0)
 						.setCardAbility(new ResourceAbility(CardAbilityTrigger.SUMMON, 1, 0))
@@ -99,14 +100,14 @@ public class ModCardProvider implements DataProvider {
 				new CardAbilitySelection(
 						new CardAbilityGroups(Set.of(CardAbilityGroup.YOUR_BOARD, CardAbilityGroup.ENEMY_BOARD)),
 						CardSelectionMethod.ALL, CardCondition.NoCondition.NO_CONDITION),
-				List.of(new LazyCardType(
-						new Builder(EntityType.ITEM, 0, 0, 0).addProperty(CardProperty.STEALTH, 0).build())))));
-		add(new Builder(EntityType.WITHER_SKELETON, 5, 6, 4)
-				.setCardAbility(new ModifyAbility(CardAbilityTrigger.SUMMON, Optional.empty(),
-						new CardAbilitySelection(
-								new CardAbilityGroups(Set.of(CardAbilityGroup.YOUR_HAND, CardAbilityGroup.YOUR_DECK)),
+				List.of(modification(0, new LazyCardType(
+						new Builder(EntityType.ITEM, 0, 0, 0).addProperty(CardProperty.STEALTH, 0).build()))))));
+		add(new Builder(EntityType.WITHER_SKELETON, 5, 6, 4).setCardAbility(
+				new ModifyAbility(CardAbilityTrigger.SUMMON, Optional.empty(),
+						new CardAbilitySelection(new CardAbilityGroups(
+								Set.of(CardAbilityGroup.YOUR_HAND, CardAbilityGroup.YOUR_DECK)),
 								CardSelectionMethod.ALL, new CardCondition.Entity(EntityType.WITHER)),
-						List.of(new LazyCardType(new Builder(EntityType.ITEM, -2, 0, 0).build())))));
+						List.of(modification(0, new LazyCardType(new Builder(EntityType.ITEM, -2, 0, 0).build()))))));
 		add(new Builder(EntityType.WITHER, 12, 15, 15));
 		add(new Builder(EntityType.SQUID, 1, 1, 1).setCardAbility(new CopyCardsAbility(CardAbilityTrigger.HURT, true,
 				true, new CardAbilitySelection(new CardAbilityGroups(Set.of(CardAbilityGroup.SELF)),
@@ -114,6 +115,11 @@ public class ModCardProvider implements DataProvider {
 		add(new Builder(EntityType.SILVERFISH, 1, 1, 1).setCardAbility(new CopyCardsAbility(CardAbilityTrigger.HURT,
 				true, false, new CardAbilitySelection(new CardAbilityGroups(Set.of(CardAbilityGroup.YOUR_DECK)),
 						CardSelectionMethod.RANDOM, new CardCondition.Entity(EntityType.SILVERFISH)))));
+		add(new Builder(EntityType.EVOKER, 5, 2, 2)
+				.setCardAbility(new ModifyAbility(CardAbilityTrigger.SUMMON, Optional.of(mod("evoker_fangs")),
+						new CardAbilitySelection(new CardAbilityGroups(Set.of(CardAbilityGroup.ENEMY_BOARD)),
+								CardSelectionMethod.ALL, CardCondition.NoCondition.NO_CONDITION),
+						List.of(modification(-2, new LazyCardType(new Builder(EntityType.ITEM, 0, 0, 0).build()))))));
 
 		// Auxiliary cards
 		add(new Builder(EntityType.ITEM, 0, 1, 0).setKey(mod("shield")).addProperty(CardProperty.SHIELD, 1)
@@ -123,6 +129,10 @@ public class ModCardProvider implements DataProvider {
 				.addEquipment(EquipmentSlot.MAINHAND, Items.IRON_SHOVEL));
 		add(new Builder(EntityType.ITEM, 0, 0, 1).setKey(mod("diamond_sword")).addProperty(CardProperty.CHARGE, 1)
 				.addEquipment(EquipmentSlot.MAINHAND, Items.DIAMOND_SWORD));
+	}
+
+	private ModifyAbility.Modification modification(int healthChange, LazyCardType card) {
+		return new ModifyAbility.Modification(healthChange, card);
 	}
 
 	private ResourceLocation mod(String name) {

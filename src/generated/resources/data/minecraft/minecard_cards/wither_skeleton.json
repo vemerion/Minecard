@@ -5,8 +5,8 @@
       "trigger": "summon",
       "selection": {
         "groups": [
-          "your_deck",
-          "your_hand"
+          "your_hand",
+          "your_deck"
         ],
         "method": "all",
         "condition": {
@@ -18,10 +18,13 @@
       },
       "modifications": [
         {
-          "entity": "minecraft:item",
-          "cost": -2,
-          "health": 0,
-          "damage": 0
+          "health_change": 0,
+          "modifications": {
+            "entity": "minecraft:item",
+            "cost": -2,
+            "health": 0,
+            "damage": 0
+          }
         }
       ]
     }

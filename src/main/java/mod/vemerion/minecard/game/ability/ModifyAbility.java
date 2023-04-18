@@ -27,20 +27,30 @@ import net.minecraftforge.network.PacketDistributor;
 
 public class ModifyAbility extends CardAbility {
 
+	public static record Modification(int healthChange, LazyCardType modifications) {
+		public static final Codec<Modification> CODEC = ExtraCodecs
+				.lazyInitializedCodec(
+						() -> RecordCodecBuilder.create(instance -> instance
+								.group(Codec.INT.fieldOf("health_change").forGetter(Modification::healthChange),
+										LazyCardType.CODEC.fieldOf("modifications")
+												.forGetter(Modification::modifications))
+								.apply(instance, Modification::new)));
+	}
+
 	public static final Codec<ModifyAbility> CODEC = ExtraCodecs.lazyInitializedCodec(() -> RecordCodecBuilder.create(
 			instance -> instance.group(CardAbilityTrigger.CODEC.fieldOf("trigger").forGetter(CardAbility::getTrigger),
 					ResourceLocation.CODEC.optionalFieldOf("animation").forGetter(ModifyAbility::getAnimation),
 					CardAbilitySelection.CODEC.fieldOf("selection").forGetter(ModifyAbility::getSelection),
-					ExtraCodecs.nonEmptyList(Codec.list(LazyCardType.CODEC)).fieldOf("modifications")
+					ExtraCodecs.nonEmptyList(Codec.list(Modification.CODEC)).fieldOf("modifications")
 							.forGetter(ModifyAbility::getModifications))
 					.apply(instance, ModifyAbility::new)));
 
 	private final Optional<ResourceLocation> animation;
 	private final CardAbilitySelection selection;
-	private final List<LazyCardType> modifications;
+	private final List<Modification> modifications;
 
 	public ModifyAbility(CardAbilityTrigger trigger, Optional<ResourceLocation> animation,
-			CardAbilitySelection selection, List<LazyCardType> modifications) {
+			CardAbilitySelection selection, List<Modification> modifications) {
 		super(trigger);
 		this.animation = animation;
 		this.selection = selection;
@@ -56,15 +66,20 @@ public class ModifyAbility extends CardAbility {
 	protected Object[] getDescriptionArgs() {
 		var elements = TextComponent.EMPTY.copy();
 		for (var m : modifications) {
-			var card = m.get(true);
+			var card = m.modifications.get(true);
+			var healthChangeText = m.healthChange == 0 ? TextComponent.EMPTY
+					: new TranslatableComponent(
+							ModCardAbilities.MODIFY.get().getTranslationKey()
+									+ (m.healthChange > 0 ? ".element_heal" : ".element_hurt"),
+							Math.abs(m.healthChange));
 			var damageText = modifierText(card.getDamage());
 			var healthText = modifierText(card.getHealth());
+			var costText = card.getCost() == 0 ? TextComponent.EMPTY
+					: new TranslatableComponent(ModCardAbilities.MODIFY.get().getTranslationKey() + ".element_cost",
+							modifierText(card.getCost()));
 			elements.append(new TranslatableComponent(ModCardAbilities.MODIFY.get().getTranslationKey() + ".element",
-					GameUtil.propertiesToComponent(card.getProperties()), damageText, healthText,
-					card.getCost() == 0 ? TextComponent.EMPTY
-							: new TranslatableComponent(
-									ModCardAbilities.MODIFY.get().getTranslationKey() + ".element_cost",
-									modifierText(card.getCost()))));
+					GameUtil.propertiesToComponent(card.getProperties()), damageText, healthText, costText,
+					healthChangeText));
 		}
 		return new Object[] { trigger.getText(),
 				modifications.size() == 1 ? TextComponent.EMPTY
@@ -78,24 +93,33 @@ public class ModifyAbility extends CardAbility {
 
 	@Override
 	protected void invoke(List<ServerPlayer> receivers, PlayerState state, Card card, @Nullable Card other) {
-		var modification = modifications.get(state.getGame().getRandom().nextInt(modifications.size())).get(false);
-		if (modification == null) {
+		var modification = modifications.get(state.getGame().getRandom().nextInt(modifications.size()));
+		var cardType = modification.modifications.get(false);
+
+		if (cardType == null) {
 			return;
 		}
 
 		var selectedCards = selection.select(state.getGame(), state.getId(), card, other);
 
 		for (var selected : selectedCards) {
-			selected.getEquipment().putAll(modification.getEquipment());
-			selected.setHealth(selected.getHealth() + modification.getHealth());
-			selected.setDamage(selected.getDamage() + modification.getDamage());
-			selected.setMaxHealth(selected.getMaxHealth() + modification.getHealth());
-			selected.setMaxDamage(selected.getMaxDamage() + modification.getDamage());
-			selected.setCost(selected.getCost() + modification.getCost());
+			selected.getEquipment().putAll(cardType.getEquipment());
+			selected.setHealth(selected.getHealth() + cardType.getHealth());
+			selected.setDamage(selected.getDamage() + cardType.getDamage());
+			selected.setMaxHealth(selected.getMaxHealth() + cardType.getHealth());
+			selected.setMaxDamage(selected.getMaxDamage() + cardType.getDamage());
+			selected.setCost(selected.getCost() + cardType.getCost());
 
-			selected.getProperties().putAll(modification.getProperties());
-			if (modification.hasProperty(CardProperty.CHARGE))
+			selected.getProperties().putAll(cardType.getProperties());
+			if (cardType.hasProperty(CardProperty.CHARGE))
 				selected.setReady(true);
+
+			var healthChange = modification.healthChange;
+			if (healthChange < 0) {
+				state.getGame().hurt(receivers, selected, -healthChange);
+			} else if (healthChange > 0) {
+				state.getGame().heal(receivers, selected, healthChange);
+			}
 		}
 
 		for (var receiver : receivers) {
@@ -116,7 +140,7 @@ public class ModifyAbility extends CardAbility {
 		return animation;
 	}
 
-	public List<LazyCardType> getModifications() {
+	public List<Modification> getModifications() {
 		return modifications;
 	}
 

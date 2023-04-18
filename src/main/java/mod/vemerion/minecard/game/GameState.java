@@ -109,6 +109,48 @@ public class GameState {
 		}
 	}
 
+	public void hurt(List<ServerPlayer> receivers, Card card, int amount) {
+		card.hurt(amount);
+
+		PlayerState owner = null;
+		List<Card> container = null;
+
+		for (var playerState : getPlayerStates()) {
+			for (var list : List.of(playerState.getBoard(), playerState.getHand(), playerState.getDeck())) {
+				if (list.stream().anyMatch(c -> c.getId() == card.getId())) {
+					owner = playerState;
+					container = list;
+					break;
+				}
+			}
+		}
+
+		if (owner == null || container == null)
+			return;
+
+		card.getAbility().onHurt(receivers, owner, card);
+
+		for (var receiver : receivers) {
+			updateCards(receiver, List.of(card));
+		}
+
+		if (card.isDead()) {
+			card.getAbility().onDeath(receivers, owner, card);
+			container.remove(card);
+		}
+	}
+
+	public void heal(List<ServerPlayer> receivers, Card card, int amount) {
+		var healthBefore = card.getHealth();
+		card.setHealth(Math.min(card.getMaxHealth(), card.getHealth() + amount));
+
+		if (healthBefore != card.getHealth()) {
+			for (var receiver : receivers) {
+				updateCards(receiver, List.of(card));
+			}
+		}
+	}
+
 	public void endTurn(List<ServerPlayer> receivers) {
 		getCurrentPlayerState().endTurn(receivers);
 		turn++;
@@ -133,8 +175,8 @@ public class GameState {
 
 		attackerCard.setReady(false);
 		attackerCard.removeProperty(CardProperty.STEALTH);
-		current.hurt(receivers, attackerCard, targetCard.getDamage());
-		enemy.hurt(receivers, targetCard, attackerCard.getDamage());
+		hurt(receivers, attackerCard, targetCard.getDamage());
+		hurt(receivers, targetCard, attackerCard.getDamage());
 
 		for (var receiver : receivers) {
 			Network.INSTANCE.send(PacketDistributor.PLAYER.with(() -> receiver),

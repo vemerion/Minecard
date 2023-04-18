@@ -10,9 +10,18 @@
         "method": "all"
       },
       "modifications": [
-        "minecard:shield",
-        "minecard:iron_equipment",
-        "minecard:diamond_sword"
+        {
+          "health_change": 0,
+          "modifications": "minecard:shield"
+        },
+        {
+          "health_change": 0,
+          "modifications": "minecard:iron_equipment"
+        },
+        {
+          "health_change": 0,
+          "modifications": "minecard:diamond_sword"
+        }
       ]
     }
   },

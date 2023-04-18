@@ -5,5 +5,8 @@
   },
   "glow": {
     "type": "minecard:glow"
+  },
+  "evoker_fangs": {
+    "type": "minecard:evoker_fangs"
   }
 }
