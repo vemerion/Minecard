@@ -176,13 +176,21 @@ public class GameScreen extends Screen {
 		playerState.maxResources = maxResources;
 	}
 
-	public void placeCard(UUID id, Card card, int position) {
+	public void placeCard(UUID id, Card card, int leftId) {
 		var playerState = state.get(id);
 
 		if (!card.isSpell()) {
 			var placed = new ClientCard(card, withId(playerState.hand, card.getId()).getPosition(), this);
-			playerState.board.add(position, placed);
-
+			if (leftId == -1) {
+				playerState.board.add(0, placed);
+			} else {
+				for (int i = 0; i < playerState.board.size(); i++) {
+					if (playerState.board.get(i).getId() == leftId) {
+						playerState.board.add(i + 1, placed);
+						break;
+					}
+				}
+			}
 			updatePropertiesAnimations(null, placed);
 		}
 		playerState.hand.removeIf(c -> c.getId() == card.getId());
@@ -355,17 +363,18 @@ public class GameScreen extends Screen {
 					}
 				} else {
 					if (pMouseY + CARD_HEIGHT / 2 < height - CARD_HEIGHT && pMouseY > height - CARD_HEIGHT * 2) {
-						int order = 0;
-						for (int i = 0; i < yourState().board.size(); i++) {
-							var card = yourState().board.get(i);
+						int leftId = -1;
+						for (var card : yourState().board) {
+							if (card.isDead())
+								continue;
+
 							if (pMouseX < card.getPosition().x + CARD_WIDTH / 2) {
-								order = i;
 								break;
 							} else {
-								order = i + 1;
+								leftId = card.getId();
 							}
 						}
-						Network.INSTANCE.sendToServer(new PlayCardMessage(pos, selectedCard.getId(), order));
+						Network.INSTANCE.sendToServer(new PlayCardMessage(pos, selectedCard.getId(), leftId));
 						selectedCard = null;
 						return true;
 					}

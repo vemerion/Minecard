@@ -70,8 +70,8 @@ public class GameBlockEntity extends BlockEntity {
 
 	}
 
-	public void playCard(ServerPlayer player, int card, int position) {
-		state.getCurrentPlayerState().playCard(getReceivers(), card, position);
+	public void playCard(ServerPlayer player, int card, int leftId) {
+		state.getCurrentPlayerState().playCard(getReceivers(), card, leftId);
 	}
 
 	public void attack(ServerPlayer player, int attacker, int target) {

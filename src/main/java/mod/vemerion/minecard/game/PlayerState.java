@@ -169,9 +169,10 @@ public class PlayerState {
 			Network.INSTANCE.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer) receiver), msg);
 	}
 
-	public void playCard(List<ServerPlayer> receivers, int cardId, int position) {
+	public void playCard(List<ServerPlayer> receivers, int cardId, int leftId) {
 		var card = findFromHand(cardId);
-		if (card == null || position < 0 || board.size() < position)
+		var left = findFromBoard(leftId);
+		if (card == null || (leftId != -1 && left == null))
 			return;
 
 		if (card.getCost() > resources)
@@ -182,8 +183,18 @@ public class PlayerState {
 
 		resources -= card.getCost();
 
-		if (!card.isSpell())
-			board.add(position, card);
+		if (!card.isSpell()) {
+			if (leftId == -1) {
+				board.add(0, card);
+			} else {
+				for (var i = 0; i < board.size(); i++) {
+					if (board.get(i).getId() == leftId) {
+						board.add(i, card);
+						break;
+					}
+				}
+			}
+		}
 
 		hand.remove(card);
 
@@ -191,7 +202,7 @@ public class PlayerState {
 			Network.INSTANCE.send(PacketDistributor.PLAYER.with(() -> receiver),
 					new SetResourcesMessage(id, resources, maxResources));
 			Network.INSTANCE.send(PacketDistributor.PLAYER.with(() -> receiver),
-					new PlaceCardMessage(id, card, position));
+					new PlaceCardMessage(id, card, leftId));
 		}
 
 		card.getAbility().onSummon(receivers, this, card);

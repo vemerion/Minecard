@@ -16,18 +16,18 @@ public class PlaceCardMessage {
 
 	private UUID id;
 	private Card card;
-	private int position;
+	private int leftId;
 
-	public PlaceCardMessage(UUID id, Card card, int position) {
+	public PlaceCardMessage(UUID id, Card card, int leftId) {
 		this.id = id;
 		this.card = card;
-		this.position = position;
+		this.leftId = leftId;
 	}
 
 	public void encode(final FriendlyByteBuf buffer) {
 		buffer.writeUUID(id);
 		MessageUtil.encodeCard(buffer, card);
-		buffer.writeInt(position);
+		buffer.writeInt(leftId);
 	}
 
 	public static PlaceCardMessage decode(final FriendlyByteBuf buffer) {
@@ -52,7 +52,7 @@ public class PlaceCardMessage {
 						return;
 
 					if (mc.screen instanceof GameScreen game) {
-						game.placeCard(message.id, message.card, message.position);
+						game.placeCard(message.id, message.card, message.leftId);
 					}
 				}
 			};
