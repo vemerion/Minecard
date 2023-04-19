@@ -16,6 +16,9 @@
   "card_ability_trigger.minecard.hurt": "Hurt:",
   "card_ability_trigger.minecard.never": "Never:",
   "card_ability_trigger.minecard.summon": "Summon:",
+  "card_placement.minecard.enemy": "for the enemy",
+  "card_placement.minecard.left": "to the left",
+  "card_placement.minecard.right": "to the right",
   "card_property.minecard.charge": "charge",
   "card_property.minecard.freeze": "freeze",
   "card_property.minecard.shield": "shield",
@@ -57,5 +60,7 @@
   "minecard.minecard.no_condition": "",
   "minecard.minecard.not": "not (%s)",
   "minecard.minecard.or": "(%s or %s)",
-  "minecard.minecard.resource": "%s Gain %s temporary resources, and %s permanent resources."
+  "minecard.minecard.resource": "%s Gain %s temporary resources, and %s permanent resources.",
+  "minecard.minecard.summon_card": "%s summon a %s %s.",
+  "minecard.minecard.summon_cardcard_text": "%s (%s/%s)"
 }

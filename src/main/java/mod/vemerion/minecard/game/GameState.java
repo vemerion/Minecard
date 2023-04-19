@@ -10,6 +10,7 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import mod.vemerion.minecard.network.CombatMessage;
 import mod.vemerion.minecard.network.Network;
+import mod.vemerion.minecard.network.PlaceCardMessage;
 import mod.vemerion.minecard.network.UpdateCardsMessage;
 import mod.vemerion.minecard.network.UpdateDecksMessage;
 import net.minecraft.server.level.ServerPlayer;
@@ -149,6 +150,32 @@ public class GameState {
 				updateCards(receiver, List.of(card));
 			}
 		}
+	}
+
+	public void summonCard(List<ServerPlayer> receivers, Card card, UUID id, int leftId) {
+		if (card.hasProperty(CardProperty.CHARGE))
+			card.setReady(true);
+
+		var playerState = getYourPlayerState(id);
+		var board = playerState.getBoard();
+
+		if (leftId == -1) {
+			board.add(0, card);
+		} else {
+			for (var i = 0; i < board.size(); i++) {
+				if (board.get(i).getId() == leftId) {
+					board.add(i, card);
+					break;
+				}
+			}
+		}
+
+		for (var receiver : receivers) {
+			Network.INSTANCE.send(PacketDistributor.PLAYER.with(() -> receiver),
+					new PlaceCardMessage(id, card, leftId));
+		}
+
+		card.getAbility().onSummon(receivers, playerState, card);
 	}
 
 	public void endTurn(List<ServerPlayer> receivers) {

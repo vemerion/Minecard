@@ -180,7 +180,12 @@ public class GameScreen extends Screen {
 		var playerState = state.get(id);
 
 		if (!card.isSpell()) {
-			var placed = new ClientCard(card, withId(playerState.hand, card.getId()).getPosition(), this);
+			var fromHand = withId(playerState.hand, card.getId());
+			var pos = fromHand == null ? new Vec2((width - CARD_WIDTH) / 2, (height - CARD_HEIGHT) / 2)
+					: fromHand.getPosition();
+			var placed = new ClientCard(card, pos, this);
+			if (fromHand == null)
+				placed.appear();
 			if (leftId == -1) {
 				playerState.board.add(0, placed);
 			} else {

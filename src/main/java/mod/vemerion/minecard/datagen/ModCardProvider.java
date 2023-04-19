@@ -24,12 +24,14 @@ import mod.vemerion.minecard.game.ability.CardAbilityGroups;
 import mod.vemerion.minecard.game.ability.CardAbilitySelection;
 import mod.vemerion.minecard.game.ability.CardAbilityTrigger;
 import mod.vemerion.minecard.game.ability.CardCondition;
+import mod.vemerion.minecard.game.ability.CardPlacement;
 import mod.vemerion.minecard.game.ability.CardSelectionMethod;
 import mod.vemerion.minecard.game.ability.CopyCardsAbility;
 import mod.vemerion.minecard.game.ability.DrawCardsAbility;
 import mod.vemerion.minecard.game.ability.ModifyAbility;
 import mod.vemerion.minecard.game.ability.NoCardAbility;
 import mod.vemerion.minecard.game.ability.ResourceAbility;
+import mod.vemerion.minecard.game.ability.SummonCardAbility;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.HashCache;
@@ -120,6 +122,11 @@ public class ModCardProvider implements DataProvider {
 						new CardAbilitySelection(new CardAbilityGroups(Set.of(CardAbilityGroup.ENEMY_BOARD)),
 								CardSelectionMethod.ALL, CardCondition.NoCondition.NO_CONDITION),
 						List.of(modification(-2, new LazyCardType(new Builder(EntityType.ITEM, 0, 0, 0).build()))))));
+		add(new Builder(EntityType.SHEEP, 2, 3, 2).setCardAbility(new SummonCardAbility(CardAbilityTrigger.DEATH,
+				CardPlacement.ENEMY, new LazyCardType(new Builder(EntityType.ITEM, 0, 3, 0)
+						.setAdditionalData(new AdditionalCardData.ItemData(Items.WHITE_WOOL)).build()))));
+		add(new Builder(EntityType.VILLAGER, 6, 3, 3).setCardAbility(new SummonCardAbility(CardAbilityTrigger.HURT,
+				CardPlacement.RIGHT, new LazyCardType(new Builder(EntityType.IRON_GOLEM, 0, 7, 7).build()))));
 
 		// Auxiliary cards
 		add(new Builder(EntityType.ITEM, 0, 1, 0).setKey(mod("shield")).addProperty(CardProperty.SHIELD, 1)

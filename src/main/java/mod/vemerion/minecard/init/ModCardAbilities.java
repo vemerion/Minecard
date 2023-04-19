@@ -11,6 +11,7 @@ import mod.vemerion.minecard.game.ability.DrawCardsAbility;
 import mod.vemerion.minecard.game.ability.ModifyAbility;
 import mod.vemerion.minecard.game.ability.NoCardAbility;
 import mod.vemerion.minecard.game.ability.ResourceAbility;
+import mod.vemerion.minecard.game.ability.SummonCardAbility;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.IForgeRegistry;
@@ -44,5 +45,7 @@ public class ModCardAbilities {
 			.register("resource", () -> new CardAbilityType<ResourceAbility>(ResourceAbility.CODEC));
 	public static final RegistryObject<CardAbilityType<? extends CardAbility>> COPY_CARDS = CARD_ABILITIES
 			.register("copy_cards", () -> new CardAbilityType<CopyCardsAbility>(CopyCardsAbility.CODEC));
+	public static final RegistryObject<CardAbilityType<? extends CardAbility>> SUMMON_CARD = CARD_ABILITIES
+			.register("summon_card", () -> new CardAbilityType<SummonCardAbility>(SummonCardAbility.CODEC));
 
 }

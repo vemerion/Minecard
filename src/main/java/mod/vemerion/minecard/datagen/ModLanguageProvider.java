@@ -4,6 +4,7 @@ import mod.vemerion.minecard.Main;
 import mod.vemerion.minecard.game.CardProperty;
 import mod.vemerion.minecard.game.ability.CardAbilityGroup;
 import mod.vemerion.minecard.game.ability.CardAbilityTrigger;
+import mod.vemerion.minecard.game.ability.CardPlacement;
 import mod.vemerion.minecard.game.ability.CardSelectionMethod;
 import mod.vemerion.minecard.helper.Helper;
 import mod.vemerion.minecard.init.ModBlocks;
@@ -79,6 +80,11 @@ public class ModLanguageProvider extends LanguageProvider {
 		add(CardAbilityTrigger.DEATH.getTextKey(), "Death:");
 		add(CardAbilityTrigger.HURT.getTextKey(), "Hurt:");
 
+		// Card placements
+		add(CardPlacement.LEFT.getTextKey(), "to the left");
+		add(CardPlacement.RIGHT.getTextKey(), "to the right");
+		add(CardPlacement.ENEMY.getTextKey(), "for the enemy");
+
 		// Card abilities
 		add(ModCardAbilities.NO_CARD_ABILITY.get().getTranslationKey(), "");
 		add(ModCardAbilities.DRAW_CARDS.get().getTranslationKey(), "%s draw %s card(s).");
@@ -95,6 +101,8 @@ public class ModLanguageProvider extends LanguageProvider {
 		add(ModCardAbilities.COPY_CARDS.get().getTranslationKey() + ".destroy_original", " Destroy the original card.");
 		add(ModCardAbilities.COPY_CARDS.get().getTranslationKey() + ".restore_health",
 				" Restore the copy to full health.");
+		add(ModCardAbilities.SUMMON_CARD.get().getTranslationKey(), "%s summon a %s %s.");
+		add(ModCardAbilities.SUMMON_CARD.get().getTranslationKey() + "card_text", "%s (%s/%s)");
 		add(Helper.gui("card_ability_selection"), "%s%s%s%s");
 		add(Helper.gui("where"), " where ");
 		add(Helper.gui("if"), " if ");

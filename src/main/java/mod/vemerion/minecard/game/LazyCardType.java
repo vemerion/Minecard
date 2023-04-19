@@ -6,12 +6,14 @@ import com.mojang.serialization.Codec;
 
 import mod.vemerion.minecard.Main;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.ExtraCodecs;
 
 public class LazyCardType {
 
-	public static final Codec<LazyCardType> CODEC = Codec.either(ResourceLocation.CODEC, CardType.CODEC).xmap(
-			either -> either.map(LazyCardType::new, LazyCardType::new),
-			lazy -> lazy.location != null ? Either.left(lazy.location) : Either.right(lazy.cardType));
+	public static final Codec<LazyCardType> CODEC = ExtraCodecs
+			.lazyInitializedCodec(() -> Codec.either(ResourceLocation.CODEC, CardType.CODEC).xmap(
+					either -> either.map(LazyCardType::new, LazyCardType::new),
+					lazy -> lazy.location != null ? Either.left(lazy.location) : Either.right(lazy.cardType)));
 
 	private ResourceLocation location;
 	private CardType cardType;
