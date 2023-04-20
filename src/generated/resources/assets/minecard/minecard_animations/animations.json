@@ -1,4 +1,10 @@
 {
+  "ender_dragon": {
+    "red": 0.8,
+    "green": 0.0,
+    "blue": 0.9,
+    "type": "minecard:potion"
+  },
   "throw_carrot": {
     "item": "minecraft:carrot",
     "type": "minecard:throw_item"

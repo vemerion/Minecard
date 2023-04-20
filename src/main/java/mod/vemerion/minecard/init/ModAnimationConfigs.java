@@ -8,6 +8,7 @@ import mod.vemerion.minecard.screen.animation.config.AnimationConfigType;
 import mod.vemerion.minecard.screen.animation.config.EvokerFangsAnimationConfig;
 import mod.vemerion.minecard.screen.animation.config.GlowAnimationConfig;
 import mod.vemerion.minecard.screen.animation.config.NoAnimationConfig;
+import mod.vemerion.minecard.screen.animation.config.PotionAnimationConfig;
 import mod.vemerion.minecard.screen.animation.config.ThrowItemAnimationConfig;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.registries.DeferredRegister;
@@ -38,6 +39,9 @@ public class ModAnimationConfigs {
 	public static final RegistryObject<AnimationConfigType<? extends AnimationConfig>> GLOW = ANIMATION_CONFIGS
 			.register("glow", () -> new AnimationConfigType<GlowAnimationConfig>(GlowAnimationConfig.CODEC));
 	public static final RegistryObject<AnimationConfigType<? extends AnimationConfig>> EVOKER_FANGS = ANIMATION_CONFIGS
-			.register(
-					"evoker_fangs", () -> new AnimationConfigType<EvokerFangsAnimationConfig>(EvokerFangsAnimationConfig.CODEC));
+			.register("evoker_fangs",
+					() -> new AnimationConfigType<EvokerFangsAnimationConfig>(EvokerFangsAnimationConfig.CODEC));
+	public static final RegistryObject<AnimationConfigType<? extends AnimationConfig>> POTION = ANIMATION_CONFIGS
+			.register("potion", () -> new AnimationConfigType<PotionAnimationConfig>(PotionAnimationConfig.CODEC));
+
 }

@@ -8,7 +8,6 @@ import mod.vemerion.minecard.init.ModAnimationConfigs;
 import mod.vemerion.minecard.screen.ClientCard;
 import mod.vemerion.minecard.screen.GameScreen;
 import mod.vemerion.minecard.screen.animation.ParticlesAnimation;
-import net.minecraft.world.phys.AABB;
 
 public class GlowAnimationConfig extends AnimationConfig {
 
@@ -23,23 +22,6 @@ public class GlowAnimationConfig extends AnimationConfig {
 	@Override
 	protected AnimationConfigType<?> getType() {
 		return ModAnimationConfigs.GLOW.get();
-	}
-
-	private static AABB calcArea(List<ClientCard> cards) {
-		if (cards.isEmpty())
-			return new AABB(0, 0, 0, 0, 0, 0);
-
-		var area = fromCard(cards.get(0));
-
-		for (var card : cards)
-			area = area.minmax(fromCard(card));
-
-		return area;
-	}
-
-	private static AABB fromCard(ClientCard card) {
-		var p = card.getPosition();
-		return new AABB(p.x, p.y, 0, p.x + ClientCard.CARD_WIDTH, p.y + ClientCard.CARD_HEIGHT, 0);
 	}
 
 	@Override

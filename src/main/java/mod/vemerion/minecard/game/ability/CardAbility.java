@@ -71,4 +71,10 @@ public abstract class CardAbility {
 		}
 	}
 
+	public void onTick(List<ServerPlayer> receivers, PlayerState state, Card card) {
+		if (trigger == CardAbilityTrigger.ALWAYS || trigger == CardAbilityTrigger.TICK) {
+			invoke(receivers, state, card, null);
+		}
+	}
+
 }

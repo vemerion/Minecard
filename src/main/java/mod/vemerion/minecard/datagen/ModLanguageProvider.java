@@ -79,6 +79,7 @@ public class ModLanguageProvider extends LanguageProvider {
 		add(CardAbilityTrigger.ATTACK.getTextKey(), "Attack:");
 		add(CardAbilityTrigger.DEATH.getTextKey(), "Death:");
 		add(CardAbilityTrigger.HURT.getTextKey(), "Hurt:");
+		add(CardAbilityTrigger.TICK.getTextKey(), "Tick:");
 
 		// Card placements
 		add(CardPlacement.LEFT.getTextKey(), "to the left");
@@ -103,6 +104,7 @@ public class ModLanguageProvider extends LanguageProvider {
 				" Restore the copy to full health.");
 		add(ModCardAbilities.SUMMON_CARD.get().getTranslationKey(), "%s summon a %s %s.");
 		add(ModCardAbilities.SUMMON_CARD.get().getTranslationKey() + "card_text", "%s (%s/%s)");
+		add(ModCardAbilities.MULTI.get().getTranslationKey(), "%s");
 		add(Helper.gui("card_ability_selection"), "%s%s%s%s");
 		add(Helper.gui("where"), " where ");
 		add(Helper.gui("if"), " if ");

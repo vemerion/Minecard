@@ -29,6 +29,7 @@ import mod.vemerion.minecard.game.ability.CardSelectionMethod;
 import mod.vemerion.minecard.game.ability.CopyCardsAbility;
 import mod.vemerion.minecard.game.ability.DrawCardsAbility;
 import mod.vemerion.minecard.game.ability.ModifyAbility;
+import mod.vemerion.minecard.game.ability.MultiAbility;
 import mod.vemerion.minecard.game.ability.NoCardAbility;
 import mod.vemerion.minecard.game.ability.ResourceAbility;
 import mod.vemerion.minecard.game.ability.SummonCardAbility;
@@ -127,6 +128,15 @@ public class ModCardProvider implements DataProvider {
 						.setAdditionalData(new AdditionalCardData.ItemData(Items.WHITE_WOOL)).build()))));
 		add(new Builder(EntityType.VILLAGER, 6, 3, 3).setCardAbility(new SummonCardAbility(CardAbilityTrigger.HURT,
 				CardPlacement.RIGHT, new LazyCardType(new Builder(EntityType.IRON_GOLEM, 0, 7, 7).build()))));
+		add(new Builder(EntityType.ENDER_DRAGON, 10, 13, 5).setCardAbility(new MultiAbility(List.of(
+				new SummonCardAbility(CardAbilityTrigger.SUMMON, CardPlacement.LEFT,
+						new LazyCardType(mod("end_crystal"))),
+				new SummonCardAbility(CardAbilityTrigger.SUMMON, CardPlacement.RIGHT,
+						new LazyCardType(mod("end_crystal"))),
+				new ModifyAbility(CardAbilityTrigger.TICK, Optional.of(mod("ender_dragon")),
+						new CardAbilitySelection(new CardAbilityGroups(Set.of(CardAbilityGroup.ENEMY_BOARD)),
+								CardSelectionMethod.ALL, CardCondition.NoCondition.NO_CONDITION),
+						List.of(modification(-1, new LazyCardType(new Builder(EntityType.ITEM, 0, 0, 0).build()))))))));
 
 		// Auxiliary cards
 		add(new Builder(EntityType.ITEM, 0, 1, 0).setKey(mod("shield")).addProperty(CardProperty.SHIELD, 1)
@@ -136,6 +146,13 @@ public class ModCardProvider implements DataProvider {
 				.addEquipment(EquipmentSlot.MAINHAND, Items.IRON_SHOVEL));
 		add(new Builder(EntityType.ITEM, 0, 0, 1).setKey(mod("diamond_sword")).addProperty(CardProperty.CHARGE, 1)
 				.addEquipment(EquipmentSlot.MAINHAND, Items.DIAMOND_SWORD));
+		add(new Builder(EntityType.ITEM, 0, 5, 0).setKey(mod("end_crystal"))
+				.setAdditionalData(new AdditionalCardData.ItemData(Items.END_CRYSTAL))
+				.setCardAbility(new ModifyAbility(CardAbilityTrigger.TICK, Optional.empty(),
+						new CardAbilitySelection(new CardAbilityGroups(Set.of(CardAbilityGroup.ADJACENT)),
+								CardSelectionMethod.ALL, new CardCondition.Entity(EntityType.ENDER_DRAGON)),
+						List.of(modification(4, new LazyCardType(new Builder(EntityType.ITEM, 0, 0, 0).build()))))));
+
 	}
 
 	private ModifyAbility.Modification modification(int healthChange, LazyCardType card) {

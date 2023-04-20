@@ -164,12 +164,12 @@ public class GameState {
 		} else {
 			for (var i = 0; i < board.size(); i++) {
 				if (board.get(i).getId() == leftId) {
-					board.add(i, card);
+					board.add(i + 1, card);
 					break;
 				}
 			}
 		}
-
+		
 		for (var receiver : receivers) {
 			Network.INSTANCE.send(PacketDistributor.PLAYER.with(() -> receiver),
 					new PlaceCardMessage(id, card, leftId));

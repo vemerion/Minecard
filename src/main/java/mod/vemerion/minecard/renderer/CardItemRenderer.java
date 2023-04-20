@@ -147,17 +147,16 @@ public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 		var widthScale = Math.min(1, maxWidth / dimensions.width);
 		var heightScale = Math.min(1, maxHeight / dimensions.height);
 		var scale = Math.min(widthScale, heightScale);
-	
+
 		pose.pushPose();
 		pose.translate(0.4, -0.43, 0);
 		pose.scale(0.15f * scale, 0.15f * scale, 0.15f * scale);
 		pose.mulPose(new Quaternion(0, 20, 0, true));
-		
+
 		if (type == EntityType.ITEM) {
-			pose.mulPose(new Quaternion(0, 70, 0, true));
 			pose.scale(3, 3, 3);
 		}
-		
+
 		((EntityRenderer) mc.getEntityRenderDispatcher().getRenderer(entity)).render(entity, 0, 0, pose, buffer, light);
 		pose.popPose();
 	}
@@ -198,6 +197,8 @@ public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 
 	public static Entity getEntity(Card card, ClientLevel level) {
 		var type = card.getType();
+
+		// Find actual player
 		if (type == EntityType.PLAYER) {
 			if (card.getAdditionalData() instanceof AdditionalCardData.IdData idData) {
 				for (var player : level.players())
@@ -207,9 +208,20 @@ public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 			return level.players().get(0);
 		}
 
-		var entity = CACHE.computeIfAbsent(type, t -> t.create(level));
+		var entity = CACHE.computeIfAbsent(type, t -> {
+			// Special case for item to prevent spin
+			if (t == EntityType.ITEM) {
+				return new ItemEntity(EntityType.ITEM, level) {
+					@Override
+					public float getSpin(float partialTick) {
+						return 0;
+					}
+				};
+			}
+			return t.create(level);
+		});
 
-		if (entity instanceof LivingEntity living) {
+		if (entity instanceof LivingEntity living) { // Change equipment
 			for (var slot : EquipmentSlot.values()) {
 				living.setItemSlot(slot, ItemStack.EMPTY);
 			}
@@ -217,7 +229,9 @@ public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 				living.setItemSlot(equipment.getKey(), equipment.getValue().getDefaultInstance());
 			}
 		} else if (entity instanceof ItemEntity itemEntity
-				&& card.getAdditionalData() instanceof AdditionalCardData.ItemData itemData) {
+				&& card.getAdditionalData() instanceof AdditionalCardData.ItemData itemData) { // Update item
+			itemEntity.setExtendedLifetime();
+
 			itemEntity.setItem(itemData.getItem().getDefaultInstance());
 		}
 

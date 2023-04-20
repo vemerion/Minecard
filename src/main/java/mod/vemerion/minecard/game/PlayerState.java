@@ -146,6 +146,8 @@ public class PlayerState {
 				for (var receiver : receivers)
 					Network.INSTANCE.send(PacketDistributor.PLAYER.with(() -> receiver), msg);
 			}
+
+			card.getAbility().onTick(receivers, this, card);
 		}
 	}
 
@@ -189,7 +191,7 @@ public class PlayerState {
 			} else {
 				for (var i = 0; i < board.size(); i++) {
 					if (board.get(i).getId() == leftId) {
-						board.add(i, card);
+						board.add(i + 1, card);
 						break;
 					}
 				}
