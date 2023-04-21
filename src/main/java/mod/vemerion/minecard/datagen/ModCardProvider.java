@@ -111,7 +111,11 @@ public class ModCardProvider implements DataProvider {
 								Set.of(CardAbilityGroup.YOUR_HAND, CardAbilityGroup.YOUR_DECK)),
 								CardSelectionMethod.ALL, new CardCondition.Entity(EntityType.WITHER)),
 						List.of(modification(0, new LazyCardType(new Builder(EntityType.ITEM, -2, 0, 0).build()))))));
-		add(new Builder(EntityType.WITHER, 12, 15, 15));
+		add(new Builder(EntityType.WITHER, 12, 10, 10)
+				.setCardAbility(new ModifyAbility(CardAbilityTrigger.TICK, Optional.of(mod("wither_projectile")),
+						new CardAbilitySelection(new CardAbilityGroups(Set.of(CardAbilityGroup.ENEMY_BOARD)),
+								CardSelectionMethod.RANDOM, CardCondition.NoCondition.NO_CONDITION),
+						List.of(modification(-4, new LazyCardType(new Builder(EntityType.ITEM, 0, 0, 0).build()))))));
 		add(new Builder(EntityType.SQUID, 1, 1, 1).setCardAbility(new CopyCardsAbility(CardAbilityTrigger.HURT, true,
 				true, new CardAbilitySelection(new CardAbilityGroups(Set.of(CardAbilityGroup.SELF)),
 						CardSelectionMethod.ALL, CardCondition.NoCondition.NO_CONDITION))));

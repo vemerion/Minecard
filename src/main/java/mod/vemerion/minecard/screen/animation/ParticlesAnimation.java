@@ -24,12 +24,14 @@ public class ParticlesAnimation extends Animation {
 
 	}
 
-	public static record ParticleConfig(Color color, List<ResourceLocation> textures) {
+	public static record ParticleConfig(Color color, float minSize, float maxSize, List<ResourceLocation> textures) {
 		public static final List<ResourceLocation> POTION_TEXTURES = IntStream.range(0, 8)
 				.mapToObj(i -> new ResourceLocation("textures/particle/effect_" + String.valueOf(i) + ".png")).toList();
 		public static final List<ResourceLocation> GLOW_TEXTURES = List
 				.of(new ResourceLocation("textures/particle/glow.png"));
-
+		public static final List<ResourceLocation> EXPLOSION_TEXTURES = IntStream.range(0, 16)
+				.mapToObj(i -> new ResourceLocation("textures/particle/explosion_" + String.valueOf(i) + ".png"))
+				.toList();
 	}
 
 	private List<GameParticle> particles = new ArrayList<>();
@@ -92,7 +94,7 @@ public class ParticlesAnimation extends Animation {
 		private GameParticle(ParticleConfig config, Random rand, Vec2 pos) {
 			this.config = config;
 			this.pos = pos;
-			this.startSize = rand.nextInt(15, 25);
+			this.startSize = rand.nextFloat(config.minSize, config.maxSize);
 			this.duration = rand.nextInt(15, 30);
 		}
 

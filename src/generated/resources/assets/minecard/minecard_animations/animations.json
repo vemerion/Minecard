@@ -5,6 +5,21 @@
     "blue": 0.9,
     "type": "minecard:potion"
   },
+  "target_explosion": {
+    "apply_to_targets": true,
+    "apply_to_origin": false,
+    "type": "minecard:explosion"
+  },
+  "wither_projectile": {
+    "item": "minecraft:wither_skeleton_skull",
+    "end_animation": "minecard:target_explosion",
+    "type": "minecard:throw_item"
+  },
+  "origin_explosion": {
+    "apply_to_targets": false,
+    "apply_to_origin": true,
+    "type": "minecard:explosion"
+  },
   "throw_carrot": {
     "item": "minecraft:carrot",
     "type": "minecard:throw_item"

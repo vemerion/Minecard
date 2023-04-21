@@ -198,6 +198,9 @@ public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 	public static Entity getEntity(Card card, ClientLevel level) {
 		var type = card.getType();
 
+		if (type == null)
+			return null;
+
 		// Find actual player
 		if (type == EntityType.PLAYER) {
 			if (card.getAdditionalData() instanceof AdditionalCardData.IdData idData) {

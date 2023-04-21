@@ -89,7 +89,9 @@ public class GameState {
 				updateDeckSizes = true;
 				break;
 			case ENEMY_HAND:
-				updated.add(Cards.EMPTY_CARD_TYPE.create().setId(card.getId()));
+				if (card.isDead()) {
+					updated.add(Cards.EMPTY_CARD_TYPE.create().setId(card.getId()));
+				}
 				break;
 			case UNKNOWN:
 				break;
@@ -169,7 +171,7 @@ public class GameState {
 				}
 			}
 		}
-		
+
 		for (var receiver : receivers) {
 			Network.INSTANCE.send(PacketDistributor.PLAYER.with(() -> receiver),
 					new PlaceCardMessage(id, card, leftId));

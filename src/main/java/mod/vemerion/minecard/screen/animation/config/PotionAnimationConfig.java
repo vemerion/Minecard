@@ -37,8 +37,8 @@ public class PotionAnimationConfig extends AnimationConfig {
 	public void invoke(GameScreen game, ClientCard origin, List<ClientCard> targets) {
 		if (targets.isEmpty())
 			return;
-		var particleConfig = new ParticlesAnimation.ParticleConfig(new ParticlesAnimation.Color(red, green, blue),
-				ParticlesAnimation.ParticleConfig.POTION_TEXTURES);
+		var particleConfig = new ParticlesAnimation.ParticleConfig(new ParticlesAnimation.Color(red, green, blue), 15,
+				25, ParticlesAnimation.ParticleConfig.POTION_TEXTURES);
 		targets.remove(origin);
 		var area = calcArea(targets);
 		int count = (int) ((area.maxX - area.minX) * (area.maxY - area.minY) * 0.001);

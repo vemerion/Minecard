@@ -6,6 +6,7 @@ import mod.vemerion.minecard.Main;
 import mod.vemerion.minecard.screen.animation.config.AnimationConfig;
 import mod.vemerion.minecard.screen.animation.config.AnimationConfigType;
 import mod.vemerion.minecard.screen.animation.config.EvokerFangsAnimationConfig;
+import mod.vemerion.minecard.screen.animation.config.ExplosionAnimationConfig;
 import mod.vemerion.minecard.screen.animation.config.GlowAnimationConfig;
 import mod.vemerion.minecard.screen.animation.config.NoAnimationConfig;
 import mod.vemerion.minecard.screen.animation.config.PotionAnimationConfig;
@@ -43,5 +44,8 @@ public class ModAnimationConfigs {
 					() -> new AnimationConfigType<EvokerFangsAnimationConfig>(EvokerFangsAnimationConfig.CODEC));
 	public static final RegistryObject<AnimationConfigType<? extends AnimationConfig>> POTION = ANIMATION_CONFIGS
 			.register("potion", () -> new AnimationConfigType<PotionAnimationConfig>(PotionAnimationConfig.CODEC));
+	public static final RegistryObject<AnimationConfigType<? extends AnimationConfig>> EXPLOSION = ANIMATION_CONFIGS
+			.register("explosion",
+					() -> new AnimationConfigType<ExplosionAnimationConfig>(ExplosionAnimationConfig.CODEC));
 
 }
