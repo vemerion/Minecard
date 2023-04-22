@@ -26,6 +26,7 @@ import mod.vemerion.minecard.game.ability.CardAbilityTrigger;
 import mod.vemerion.minecard.game.ability.CardCondition;
 import mod.vemerion.minecard.game.ability.CardPlacement;
 import mod.vemerion.minecard.game.ability.CardSelectionMethod;
+import mod.vemerion.minecard.game.ability.ChanceAbility;
 import mod.vemerion.minecard.game.ability.CopyCardsAbility;
 import mod.vemerion.minecard.game.ability.DrawCardsAbility;
 import mod.vemerion.minecard.game.ability.ModifyAbility;
@@ -141,6 +142,12 @@ public class ModCardProvider implements DataProvider {
 						new CardAbilitySelection(new CardAbilityGroups(Set.of(CardAbilityGroup.ENEMY_BOARD)),
 								CardSelectionMethod.ALL, CardCondition.NoCondition.NO_CONDITION),
 						List.of(modification(-1, new LazyCardType(new Builder(EntityType.ITEM, 0, 0, 0).build()))))))));
+		add(new Builder(EntityType.RABBIT, 1, 2, 1).setCardAbility(new ChanceAbility(30, new ModifyAbility(
+				CardAbilityTrigger.SUMMON, Optional.empty(),
+				new CardAbilitySelection(new CardAbilityGroups(Set.of(CardAbilityGroup.SELF)), CardSelectionMethod.ALL,
+						CardCondition.NoCondition.NO_CONDITION),
+				List.of(modification(0, new LazyCardType(
+						new Builder(EntityType.ITEM, 0, 1, 1).addProperty(CardProperty.SPECIAL, 1).build())))))));
 
 		// Auxiliary cards
 		add(new Builder(EntityType.ITEM, 0, 1, 0).setKey(mod("shield")).addProperty(CardProperty.SHIELD, 1)

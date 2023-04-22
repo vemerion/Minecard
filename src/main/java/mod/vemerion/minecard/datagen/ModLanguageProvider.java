@@ -48,6 +48,7 @@ public class ModLanguageProvider extends LanguageProvider {
 		add(CardProperty.SHIELD.getTextKey(), "shield");
 		add(CardProperty.STEALTH.getTextKey(), "stealth");
 		add(CardProperty.TAUNT.getTextKey(), "taunt");
+		add(CardProperty.SPECIAL.getTextKey(), "special");
 
 		// Card ability groups
 		add(CardAbilityGroup.ALL.getTextKey(), "anywhere");
@@ -105,6 +106,7 @@ public class ModLanguageProvider extends LanguageProvider {
 		add(ModCardAbilities.SUMMON_CARD.get().getTranslationKey(), "%s summon a %s %s.");
 		add(ModCardAbilities.SUMMON_CARD.get().getTranslationKey() + "card_text", "%s (%s/%s)");
 		add(ModCardAbilities.MULTI.get().getTranslationKey(), "%s");
+		add(ModCardAbilities.CHANCE.get().getTranslationKey(), "%s%% chance: %s");
 		add(Helper.gui("card_ability_selection"), "%s%s%s%s");
 		add(Helper.gui("where"), " where ");
 		add(Helper.gui("if"), " if ");

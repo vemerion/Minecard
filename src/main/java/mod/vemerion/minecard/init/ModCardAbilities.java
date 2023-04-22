@@ -6,6 +6,7 @@ import mod.vemerion.minecard.Main;
 import mod.vemerion.minecard.game.ability.AddCardsAbility;
 import mod.vemerion.minecard.game.ability.CardAbility;
 import mod.vemerion.minecard.game.ability.CardAbilityType;
+import mod.vemerion.minecard.game.ability.ChanceAbility;
 import mod.vemerion.minecard.game.ability.CopyCardsAbility;
 import mod.vemerion.minecard.game.ability.DrawCardsAbility;
 import mod.vemerion.minecard.game.ability.ModifyAbility;
@@ -50,5 +51,7 @@ public class ModCardAbilities {
 			.register("summon_card", () -> new CardAbilityType<SummonCardAbility>(SummonCardAbility.CODEC));
 	public static final RegistryObject<CardAbilityType<? extends CardAbility>> MULTI = CARD_ABILITIES.register("multi",
 			() -> new CardAbilityType<MultiAbility>(MultiAbility.CODEC));
+	public static final RegistryObject<CardAbilityType<? extends CardAbility>> CHANCE = CARD_ABILITIES
+			.register("chance", () -> new CardAbilityType<ChanceAbility>(ChanceAbility.CODEC));
 
 }

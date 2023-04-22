@@ -323,6 +323,8 @@ public class GameScreen extends Screen {
 					animations.add(new BurnAnimation(minecraft, card, () -> {
 					}));
 					break;
+				case SPECIAL:
+					break;
 				}
 			}
 		}

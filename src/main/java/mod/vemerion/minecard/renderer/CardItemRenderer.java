@@ -11,6 +11,7 @@ import com.mojang.math.Quaternion;
 import mod.vemerion.minecard.Main;
 import mod.vemerion.minecard.game.AdditionalCardData;
 import mod.vemerion.minecard.game.Card;
+import mod.vemerion.minecard.game.CardProperty;
 import mod.vemerion.minecard.game.Cards;
 import mod.vemerion.minecard.item.CardItem;
 import net.minecraft.client.Minecraft;
@@ -30,6 +31,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.animal.Rabbit;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -238,7 +240,15 @@ public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 			itemEntity.setItem(itemData.getItem().getDefaultInstance());
 		}
 
+		setSpecialAttributes(card, entity);
+
 		return entity;
+	}
+
+	private static void setSpecialAttributes(Card card, Entity entity) {
+		if (entity instanceof Rabbit rabbit) {
+			rabbit.setRabbitType(card.hasProperty(CardProperty.SPECIAL) ? Rabbit.TYPE_EVIL : Rabbit.TYPE_BROWN);
+		}
 	}
 
 	@Override
