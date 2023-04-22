@@ -142,6 +142,10 @@ public class Card {
 	public boolean hasProperty(CardProperty property) {
 		return properties.getOrDefault(property, 0) > 0;
 	}
+	
+	public void putProperty(CardProperty property, int value) {
+		properties.put(property, value);
+	}
 
 	public void removeProperty(CardProperty property) {
 		properties.remove(property);

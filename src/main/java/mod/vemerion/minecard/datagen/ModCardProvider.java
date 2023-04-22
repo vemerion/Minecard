@@ -148,6 +148,12 @@ public class ModCardProvider implements DataProvider {
 						CardCondition.NoCondition.NO_CONDITION),
 				List.of(modification(0, new LazyCardType(
 						new Builder(EntityType.ITEM, 0, 1, 1).addProperty(CardProperty.SPECIAL, 1).build())))))));
+		add(new Builder(EntityType.POLAR_BEAR, 3, 4, 2).addProperty(CardProperty.BABY, 1)
+				.setCardAbility(new ModifyAbility(CardAbilityTrigger.GROW, Optional.empty(),
+						new CardAbilitySelection(new CardAbilityGroups(Set.of(CardAbilityGroup.SELF)),
+								CardSelectionMethod.ALL, CardCondition.NoCondition.NO_CONDITION),
+						List.of(modification(0, new LazyCardType(
+								new Builder(EntityType.ITEM, 0, 3, 1).addProperty(CardProperty.TAUNT, 1).build()))))));
 
 		// Auxiliary cards
 		add(new Builder(EntityType.ITEM, 0, 1, 0).setKey(mod("shield")).addProperty(CardProperty.SHIELD, 1)

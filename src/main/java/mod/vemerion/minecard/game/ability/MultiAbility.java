@@ -89,6 +89,14 @@ public class MultiAbility extends CardAbility {
 				ability.onTick(receivers, state, card);
 		}
 	}
+	
+	@Override
+	public void onGrow(List<ServerPlayer> receivers, PlayerState state, Card card) {
+		if (trigger == CardAbilityTrigger.ALWAYS || trigger == CardAbilityTrigger.GROW) {
+			for (var ability : abilities)
+				ability.onGrow(receivers, state, card);
+		}
+	}
 
 	public List<CardAbility> getAbilities() {
 		return abilities;

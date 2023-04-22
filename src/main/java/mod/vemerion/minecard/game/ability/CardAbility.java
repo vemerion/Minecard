@@ -76,5 +76,11 @@ public abstract class CardAbility {
 			invoke(receivers, state, card, null);
 		}
 	}
+	
+	public void onGrow(List<ServerPlayer> receivers, PlayerState state, Card card) {
+		if (trigger == CardAbilityTrigger.ALWAYS || trigger == CardAbilityTrigger.GROW) {
+			invoke(receivers, state, card, null);
+		}
+	}
 
 }

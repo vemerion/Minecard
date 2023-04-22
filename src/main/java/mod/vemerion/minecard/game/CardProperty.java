@@ -17,7 +17,8 @@ public enum CardProperty {
 	FREEZE("freeze", Lazy.of(() -> new ItemStack(Items.ICE))),
 	SHIELD("shield", Lazy.of(() -> new ItemStack(Items.DIAMOND_CHESTPLATE))),
 	BURN("burn", Lazy.of(() -> new ItemStack(Items.LAVA_BUCKET))),
-	SPECIAL("special", Lazy.of(() -> new ItemStack(Items.ENCHANTED_GOLDEN_APPLE)));
+	SPECIAL("special", Lazy.of(() -> new ItemStack(Items.ENCHANTED_GOLDEN_APPLE))),
+	BABY("baby", Lazy.of(() -> new ItemStack(Items.EGG)));
 
 	public static final Codec<Map<CardProperty, Integer>> CODEC_MAP = GameUtil
 			.toMutable(Codec.unboundedMap(GameUtil.enumCodec(CardProperty.class, CardProperty::getName), Codec.INT));

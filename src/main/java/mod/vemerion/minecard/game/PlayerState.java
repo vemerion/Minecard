@@ -154,9 +154,24 @@ public class PlayerState {
 	public void newTurn(List<ServerPlayer> receivers) {
 		maxResources = Math.min(10, maxResources + 1);
 		resources = maxResources;
-		for (var card : board)
+
+		List<Card> updated = new ArrayList<>();
+		for (var card : board) {
 			if (!card.hasProperty(CardProperty.FREEZE))
 				card.setReady(true);
+
+			if (card.hasProperty(CardProperty.BABY)) {
+				card.decrementProperty(CardProperty.BABY);
+				if (!card.hasProperty(CardProperty.BABY)) {
+					card.getAbility().onGrow(receivers, this, card);
+				}
+				updated.add(card);
+			}
+		}
+
+		if (!updated.isEmpty())
+			for (var receiver : receivers)
+				game.updateCards(receiver, updated);
 
 		drawCards(receivers, 1);
 	}

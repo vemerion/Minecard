@@ -1,10 +1,10 @@
 {
   "properties": {
     "charge": 1,
-    "freeze": 1,
-    "burn": 3,
+    "taunt": 1,
     "stealth": 1,
-    "taunt": 1
+    "freeze": 1,
+    "burn": 3
   },
   "entity": "minecraft:creeper",
   "cost": 5,

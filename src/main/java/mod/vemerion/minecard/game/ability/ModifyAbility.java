@@ -110,7 +110,15 @@ public class ModifyAbility extends CardAbility {
 			selected.setMaxDamage(selected.getMaxDamage() + cardType.getDamage());
 			selected.setCost(selected.getCost() + cardType.getCost());
 
-			selected.getProperties().putAll(cardType.getProperties());
+			// Properties
+			for (var entry : cardType.getProperties().entrySet()) {
+				if (entry.getKey() == CardProperty.BABY && entry.getValue() == 0
+						&& selected.hasProperty(CardProperty.BABY)) {
+					selected.getAbility().onGrow(receivers, state, card);
+				}
+
+				selected.putProperty(entry.getKey(), entry.getValue());
+			}
 			if (cardType.hasProperty(CardProperty.CHARGE))
 				selected.setReady(true);
 

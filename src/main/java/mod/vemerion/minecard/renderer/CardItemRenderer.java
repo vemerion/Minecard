@@ -31,6 +31,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.animal.Rabbit;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.Item;
@@ -248,6 +249,9 @@ public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 	private static void setSpecialAttributes(Card card, Entity entity) {
 		if (entity instanceof Rabbit rabbit) {
 			rabbit.setRabbitType(card.hasProperty(CardProperty.SPECIAL) ? Rabbit.TYPE_EVIL : Rabbit.TYPE_BROWN);
+		}
+		if (entity instanceof Mob mob) {
+			mob.setBaby(card.hasProperty(CardProperty.BABY));
 		}
 	}
 

@@ -49,6 +49,7 @@ public class ModLanguageProvider extends LanguageProvider {
 		add(CardProperty.STEALTH.getTextKey(), "stealth");
 		add(CardProperty.TAUNT.getTextKey(), "taunt");
 		add(CardProperty.SPECIAL.getTextKey(), "special");
+		add(CardProperty.BABY.getTextKey(), "baby");
 
 		// Card ability groups
 		add(CardAbilityGroup.ALL.getTextKey(), "anywhere");
@@ -81,6 +82,7 @@ public class ModLanguageProvider extends LanguageProvider {
 		add(CardAbilityTrigger.DEATH.getTextKey(), "Death:");
 		add(CardAbilityTrigger.HURT.getTextKey(), "Hurt:");
 		add(CardAbilityTrigger.TICK.getTextKey(), "Tick:");
+		add(CardAbilityTrigger.GROW.getTextKey(), "Grow:");
 
 		// Card placements
 		add(CardPlacement.LEFT.getTextKey(), "to the left");
