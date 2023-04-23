@@ -1,0 +1,101 @@
+{
+  "abilities": {
+    "type": "minecard:chance",
+    "value": {
+      "chance": 50,
+      "ability": {
+        "type": "minecard:summon_card",
+        "value": {
+          "trigger": "summon",
+          "placement": "right",
+          "card": {
+            "abilities": {
+              "type": "minecard:chance",
+              "value": {
+                "chance": 40,
+                "ability": {
+                  "type": "minecard:summon_card",
+                  "value": {
+                    "trigger": "summon",
+                    "placement": "right",
+                    "card": {
+                      "abilities": {
+                        "type": "minecard:chance",
+                        "value": {
+                          "chance": 30,
+                          "ability": {
+                            "type": "minecard:summon_card",
+                            "value": {
+                              "trigger": "summon",
+                              "placement": "right",
+                              "card": {
+                                "abilities": {
+                                  "type": "minecard:chance",
+                                  "value": {
+                                    "chance": 20,
+                                    "ability": {
+                                      "type": "minecard:summon_card",
+                                      "value": {
+                                        "trigger": "summon",
+                                        "placement": "right",
+                                        "card": {
+                                          "abilities": {
+                                            "type": "minecard:chance",
+                                            "value": {
+                                              "chance": 10,
+                                              "ability": {
+                                                "type": "minecard:summon_card",
+                                                "value": {
+                                                  "trigger": "summon",
+                                                  "placement": "right",
+                                                  "card": {
+                                                    "entity": "minecraft:cod",
+                                                    "cost": 1,
+                                                    "health": 1,
+                                                    "damage": 1
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          },
+                                          "entity": "minecraft:cod",
+                                          "cost": 1,
+                                          "health": 1,
+                                          "damage": 1
+                                        }
+                                      }
+                                    }
+                                  }
+                                },
+                                "entity": "minecraft:cod",
+                                "cost": 1,
+                                "health": 1,
+                                "damage": 1
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "entity": "minecraft:cod",
+                      "cost": 1,
+                      "health": 1,
+                      "damage": 1
+                    }
+                  }
+                }
+              }
+            },
+            "entity": "minecraft:cod",
+            "cost": 1,
+            "health": 1,
+            "damage": 1
+          }
+        }
+      }
+    }
+  },
+  "entity": "minecraft:cod",
+  "cost": 1,
+  "health": 1,
+  "damage": 1
+}

@@ -15,6 +15,10 @@
     "end_animation": "minecard:target_explosion",
     "type": "minecard:throw_item"
   },
+  "throw_bamboo": {
+    "item": "minecraft:bamboo",
+    "type": "minecard:throw_item"
+  },
   "origin_explosion": {
     "apply_to_targets": false,
     "apply_to_origin": true,
@@ -29,5 +33,13 @@
   },
   "evoker_fangs": {
     "type": "minecard:evoker_fangs"
+  },
+  "fireball": {
+    "item": "minecraft:fire_charge",
+    "type": "minecard:throw_item"
+  },
+  "throw_pork": {
+    "item": "minecraft:porkchop",
+    "type": "minecard:throw_item"
   }
 }

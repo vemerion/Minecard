@@ -1,0 +1,9 @@
+{
+  "properties": {
+    "charge": 1
+  },
+  "entity": "minecraft:vex",
+  "cost": 2,
+  "health": 1,
+  "damage": 2
+}

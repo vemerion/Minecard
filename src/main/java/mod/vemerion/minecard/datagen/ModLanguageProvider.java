@@ -50,6 +50,7 @@ public class ModLanguageProvider extends LanguageProvider {
 		add(CardProperty.TAUNT.getTextKey(), "taunt");
 		add(CardProperty.SPECIAL.getTextKey(), "special");
 		add(CardProperty.BABY.getTextKey(), "baby");
+		add(CardProperty.BURN.getTextKey(), "burn");
 
 		// Card ability groups
 		add(CardAbilityGroup.ALL.getTextKey(), "anywhere");

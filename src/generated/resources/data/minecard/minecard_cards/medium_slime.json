@@ -1,0 +1,32 @@
+{
+  "abilities": {
+    "type": "minecard:multi",
+    "value": {
+      "abilities": [
+        {
+          "type": "minecard:no_card_ability"
+        },
+        {
+          "type": "minecard:summon_card",
+          "value": {
+            "trigger": "death",
+            "placement": "left",
+            "card": "minecard:small_slime"
+          }
+        },
+        {
+          "type": "minecard:summon_card",
+          "value": {
+            "trigger": "death",
+            "placement": "right",
+            "card": "minecard:small_slime"
+          }
+        }
+      ]
+    }
+  },
+  "entity": "minecraft:slime",
+  "cost": 0,
+  "health": 2,
+  "damage": 2
+}

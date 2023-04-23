@@ -113,6 +113,9 @@ public class GameState {
 	}
 
 	public void hurt(List<ServerPlayer> receivers, Card card, int amount) {
+		if (card.isDead())
+			return;
+
 		card.hurt(amount);
 
 		PlayerState owner = null;

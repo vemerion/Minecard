@@ -1,0 +1,14 @@
+{
+  "properties": {
+    "baby": 1
+  },
+  "abilities": {
+    "trigger": "grow",
+    "count": 2,
+    "type": "minecard:draw_cards"
+  },
+  "entity": "minecraft:mule",
+  "cost": 4,
+  "health": 4,
+  "damage": 4
+}

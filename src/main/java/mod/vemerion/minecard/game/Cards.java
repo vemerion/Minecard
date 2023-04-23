@@ -63,7 +63,8 @@ public class Cards extends SimpleJsonResourceReloadListener {
 	}
 
 	public static boolean isAllowed(EntityType<?> type) {
-		return type.getCategory() != MobCategory.MISC || type == EntityType.VILLAGER;
+		return type.getCategory() != MobCategory.MISC || type == EntityType.VILLAGER || type == EntityType.IRON_GOLEM
+				|| type == EntityType.SNOW_GOLEM;
 	}
 
 	private CardType generateCardType(EntityType<?> type) {

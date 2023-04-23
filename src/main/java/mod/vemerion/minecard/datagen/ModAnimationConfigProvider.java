@@ -63,6 +63,10 @@ public class ModAnimationConfigProvider implements DataProvider {
 		animations.put("origin_explosion", new ExplosionAnimationConfig(false, true));
 		animations.put("wither_projectile", new ThrowItemAnimationConfig(Items.WITHER_SKELETON_SKULL,
 				Optional.of(new ResourceLocation(Main.MODID, "target_explosion"))));
+		animations.put("throw_pork", new ThrowItemAnimationConfig(Items.PORKCHOP, Optional.empty()));
+		animations.put("fireball", new ThrowItemAnimationConfig(Items.FIRE_CHARGE, Optional.empty()));
+		animations.put("throw_bamboo", new ThrowItemAnimationConfig(Items.BAMBOO, Optional.empty()));
+
 	}
 
 	@Override

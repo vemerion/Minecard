@@ -1,0 +1,55 @@
+{
+  "abilities": {
+    "type": "minecard:multi",
+    "value": {
+      "abilities": [
+        {
+          "type": "minecard:modify",
+          "value": {
+            "trigger": "attack",
+            "selection": {
+              "groups": [
+                "target"
+              ],
+              "method": "all"
+            },
+            "modifications": [
+              {
+                "health_change": 0,
+                "modifications": {
+                  "properties": {
+                    "burn": 2
+                  },
+                  "entity": "minecraft:item",
+                  "cost": 0,
+                  "health": 0,
+                  "damage": 0
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "minecard:summon_card",
+          "value": {
+            "trigger": "death",
+            "placement": "left",
+            "card": "minecard:medium_magma_cube"
+          }
+        },
+        {
+          "type": "minecard:summon_card",
+          "value": {
+            "trigger": "death",
+            "placement": "right",
+            "card": "minecard:medium_magma_cube"
+          }
+        }
+      ]
+    }
+  },
+  "entity": "minecraft:magma_cube",
+  "cost": 9,
+  "health": 4,
+  "damage": 4
+}

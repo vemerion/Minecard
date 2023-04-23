@@ -130,7 +130,8 @@ public class PlayerState {
 	}
 
 	public void endTurn(List<ServerPlayer> receivers) {
-		for (var card : board) {
+		for (int i = board.size() - 1; i >= 0; i--) {
+			var card = board.get(i);
 			boolean changed = false;
 			if (card.hasProperty(CardProperty.FREEZE)) {
 				card.removeProperty(CardProperty.FREEZE);

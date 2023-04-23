@@ -2,8 +2,7 @@
   "abilities": {
     "type": "minecard:modify",
     "value": {
-      "trigger": "death",
-      "animation": "minecard:origin_explosion",
+      "trigger": "summon",
       "selection": {
         "groups": [
           "adjacent"
@@ -12,8 +11,11 @@
       },
       "modifications": [
         {
-          "health_change": -3,
+          "health_change": 0,
           "modifications": {
+            "properties": {
+              "burn": 0
+            },
             "entity": "minecraft:item",
             "cost": 0,
             "health": 0,
@@ -23,8 +25,8 @@
       ]
     }
   },
-  "entity": "minecraft:creeper",
-  "cost": 1,
-  "health": 3,
-  "damage": 2
+  "entity": "minecraft:strider",
+  "cost": 4,
+  "health": 5,
+  "damage": 4
 }

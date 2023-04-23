@@ -136,7 +136,12 @@ public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 				pose.pushPose();
 				pose.translate(0.74, propertyY, 0);
 				pose.scale(0.7f, 0.7f, 0.7f);
-				renderItem(itemRenderer, entry.getKey().getIcon(), light, overlay, pose, buffer);
+				if (entry.getValue() == 1) {
+					renderItem(itemRenderer, entry.getKey().getIcon(), light, overlay, pose, buffer);
+				} else {
+					renderValue(itemRenderer, mc.font, entry.getKey().getIcon().getItem(), entry.getValue(), 0, 0,
+							light, overlay, pose, buffer);
+				}
 				pose.popPose();
 				propertyY -= 0.15f;
 			}
