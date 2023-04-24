@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 
 import org.lwjgl.glfw.GLFW;
 
+import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 
@@ -85,6 +86,7 @@ public class GameScreen extends Screen {
 	private PopupText popup;
 	private List<Animation> animations;
 	private List<Resources> resources;
+	private GameBackground background;
 
 	private Card selectedCard;
 	private Card attackingCard;
@@ -128,6 +130,9 @@ public class GameScreen extends Screen {
 	protected void init() {
 		super.init();
 		resources = new ArrayList<>();
+
+		background = addWidget(new GameBackground(this));
+
 		for (var playerState : state.values()) {
 			resetPositions(playerState);
 
@@ -325,6 +330,8 @@ public class GameScreen extends Screen {
 					break;
 				case SPECIAL:
 					break;
+				case BABY:
+					break;
 				}
 			}
 		}
@@ -436,8 +443,11 @@ public class GameScreen extends Screen {
 
 	@Override
 	public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTicks) {
+		Lighting.setupForFlatItems();
 		partialTicks = this.minecraft.getFrameTime(); // s
 		var source = minecraft.renderBuffers().bufferSource();
+
+		background.render(poseStack, mouseX, mouseY, source, partialTicks);
 
 		for (var playerState : state.values()) {
 			boolean enemy = !playerState.id.equals(minecraft.player.getUUID());
@@ -498,6 +508,8 @@ public class GameScreen extends Screen {
 	@Override
 	public void tick() {
 		super.tick();
+
+		background.tick();
 
 		for (var playerState : state.values()) {
 			// Cards
