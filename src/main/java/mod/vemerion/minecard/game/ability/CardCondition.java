@@ -47,7 +47,7 @@ public abstract class CardCondition implements Predicate<Card> {
 		return cards.stream().filter(this::test).collect(Collectors.toCollection(() -> new ArrayList<>()));
 	}
 
-	public static class CardConditionType<T extends CardCondition> extends ForgeRegistryEntry<CardConditionType<T>> {
+	public static class CardConditionType<T extends CardCondition> extends ForgeRegistryEntry<CardConditionType<?>> {
 		private final Codec<T> codec;
 
 		public CardConditionType(Codec<T> codec) {

@@ -18,11 +18,11 @@ public class ModCardConditions {
 			Main.MODID);
 
 	@SuppressWarnings("unchecked")
-	private static Supplier<IForgeRegistry<CardConditionType<? extends CardCondition>>> supplier = CARD_CONDITIONS
-			.makeRegistry((Class<CardConditionType<? extends CardCondition>>) (Class<?>) CardConditionType.class,
-					() -> new RegistryBuilder<CardConditionType<? extends CardCondition>>().setName(REGISTRY_NAME));
+	private static Supplier<IForgeRegistry<CardConditionType<?>>> supplier = CARD_CONDITIONS.makeRegistry(
+			(Class<CardConditionType<?>>) (Class<?>) CardConditionType.class,
+			() -> new RegistryBuilder<CardConditionType<?>>().setName(REGISTRY_NAME));
 
-	public static IForgeRegistry<CardConditionType<? extends CardCondition>> getRegistry() {
+	public static IForgeRegistry<CardConditionType<?>> getRegistry() {
 		return supplier.get();
 	}
 

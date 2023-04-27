@@ -12,6 +12,10 @@ import mod.vemerion.minecard.init.ModCardConditions;
 import mod.vemerion.minecard.init.ModItems;
 import mod.vemerion.minecard.init.ModLootModifiers;
 import mod.vemerion.minecard.init.ModMenus;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.DistExecutor;
+import net.minecraftforge.fml.DistExecutor.SafeRunnable;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
@@ -30,6 +34,19 @@ public class Main {
 		ModMenus.MENUS.register(bus);
 		ModCardAbilities.CARD_ABILITIES.register(bus);
 		ModCardConditions.CARD_CONDITIONS.register(bus);
-		ModAnimationConfigs.ANIMATION_CONFIGS.register(bus);
+		DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> Client.register(bus));
+	}
+
+	private static class Client {
+		private static SafeRunnable register(IEventBus bus) {
+			return new SafeRunnable() {
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				public void run() {
+					ModAnimationConfigs.ANIMATION_CONFIGS.register(bus);
+				}
+			};
+		}
 	}
 }

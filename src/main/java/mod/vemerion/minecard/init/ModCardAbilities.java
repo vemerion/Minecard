@@ -27,11 +27,11 @@ public class ModCardAbilities {
 			Main.MODID);
 
 	@SuppressWarnings("unchecked")
-	private static Supplier<IForgeRegistry<CardAbilityType<? extends CardAbility>>> supplier = CARD_ABILITIES
-			.makeRegistry((Class<CardAbilityType<? extends CardAbility>>) (Class<?>) CardAbilityType.class,
-					() -> new RegistryBuilder<CardAbilityType<? extends CardAbility>>().setName(REGISTRY_NAME));
+	private static Supplier<IForgeRegistry<CardAbilityType<?>>> supplier = CARD_ABILITIES.makeRegistry(
+			(Class<CardAbilityType<?>>) (Class<?>) CardAbilityType.class,
+			() -> new RegistryBuilder<CardAbilityType<?>>().setName(REGISTRY_NAME));
 
-	public static IForgeRegistry<CardAbilityType<? extends CardAbility>> getRegistry() {
+	public static IForgeRegistry<CardAbilityType<?>> getRegistry() {
 		return supplier.get();
 	}
 
