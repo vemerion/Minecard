@@ -58,6 +58,8 @@ public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 			.text(new ResourceLocation(Main.MODID, "textures/item/card_back.png"));
 	private static final RenderType CARD_READY = RenderType
 			.text(new ResourceLocation(Main.MODID, "textures/item/card_ready.png"));
+	private static final RenderType CARD_BACK_FULL = RenderType
+			.text(new ResourceLocation(Main.MODID, "textures/item/card_back_full.png"));
 
 	public CardItemRenderer(BlockEntityRenderDispatcher dispatcher, EntityModelSet modelSet) {
 		super(dispatcher, modelSet);
@@ -84,7 +86,7 @@ public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 		}
 		pose.scale(-1, 1, 1);
 		pose.translate(-32, 0, 0);
-		renderCard(pose, CARD_BACK, buffer, light, 32);
+		renderCard(pose, card.getType() == null ? CARD_BACK_FULL : CARD_BACK, buffer, light, 32);
 		pose.popPose();
 
 		var type = card.getType();
