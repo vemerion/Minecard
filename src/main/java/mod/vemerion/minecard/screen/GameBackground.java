@@ -10,6 +10,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Quaternion;
 import com.mojang.math.Vector3f;
 
+import mod.vemerion.minecard.screen.animation.ParticlesAnimation;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.narration.NarratableEntry;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
@@ -31,6 +32,7 @@ import net.minecraft.world.entity.animal.Dolphin;
 import net.minecraft.world.entity.monster.Skeleton;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -90,12 +92,14 @@ public class GameBackground implements GuiEventListener, NarratableEntry {
 					'g', 'g', 'g', 'g', 'g', 'g', 'g', 'g', 'g', 'g', 'g' } };
 
 	private GameScreen screen;
+	private Random rand;
 	private float blockWidth;
 	private float blockHeight;
 	private List<BackgroundObject> objects;
 
 	public GameBackground(GameScreen screen) {
 		this.screen = screen;
+		this.rand = new Random();
 		this.blockWidth = screen.width / (float) (GRID_WIDTH * 2);
 		this.blockHeight = screen.height / (float) (GRID_HEIGHT * 2);
 		this.objects = new ArrayList<>();
@@ -124,12 +128,37 @@ public class GameBackground implements GuiEventListener, NarratableEntry {
 		for (var object : objects)
 			if (object.click(pMouseX, pMouseY, pButton))
 				return true;
+
+		if (pButton == InputConstants.MOUSE_BUTTON_LEFT)
+			clickGround(pMouseX, pMouseY);
+
 		return GuiEventListener.super.mouseReleased(pMouseX, pMouseY, pButton);
+	}
+
+	private void clickGround(double pMouseX, double pMouseY) {
+		int x = (int) (pMouseX / blockWidth);
+		int y = (int) (pMouseY / blockHeight);
+		if (y < 0 || y >= GRID.length || x < 0 || x >= GRID[y].length)
+			return;
+
+		var block = SYMBOLS.get(GRID[y][x]);
+		var sound = block.getBlock() == Blocks.WATER ? SoundEvents.PLAYER_SPLASH_HIGH_SPEED
+				: block.getSoundType().getBreakSound();
+		screen.getMinecraft().getSoundManager().play(SimpleSoundInstance.forUI(sound, 1));
+
+		for (int i = 0; i < rand.nextInt(3, 6); i++) {
+			objects.add(new GroundParticle(new Vector3f((float) pMouseX + rand.nextFloat(-4, 4),
+					(float) pMouseY + rand.nextFloat(-4, 4), BASE_Z + 2), block));
+		}
 	}
 
 	public void tick() {
 		for (var object : objects)
 			object.tick();
+
+		for (int i = objects.size() - 1; i >= 0; i--)
+			if (objects.get(i).isDone())
+				objects.remove(i);
 	}
 
 	private int light(float x, float y) {
@@ -220,6 +249,10 @@ public class GameBackground implements GuiEventListener, NarratableEntry {
 
 		protected int getLight(float x, float y) {
 			return BASE_LIGHT;
+		}
+
+		protected boolean isDone() {
+			return false;
 		}
 
 		protected boolean contains(double x, double y) {
@@ -423,14 +456,12 @@ public class GameBackground implements GuiEventListener, NarratableEntry {
 	private class Cactus extends BackgroundObject {
 
 		private Vector3f startPos;
-		private Random rand;
 		private BlockState state;
 
 		protected Cactus(Vector3f pos) {
 			super(pos);
 			this.startPos = new Vector3f(pos.x(), pos.y(), pos.z());
 			this.state = Blocks.CACTUS.defaultBlockState();
-			this.rand = new Random();
 		}
 
 		@Override
@@ -448,6 +479,61 @@ public class GameBackground implements GuiEventListener, NarratableEntry {
 		protected void render(PoseStack poseStack, BufferSource source) {
 			renderBlock(poseStack, null, state, source, pos.x(), pos.y(), pos.z());
 		}
+	}
+
+	private class GroundParticle extends BackgroundObject {
+
+		private static final Map<Block, ParticlesAnimation.Color> COLORS = Map.of(Blocks.SAND,
+				new ParticlesAnimation.Color(0.89f, 0.86f, 0.69f), Blocks.GRASS_BLOCK,
+				new ParticlesAnimation.Color(0.49f, 0.74f, 0.42f), Blocks.WATER,
+				new ParticlesAnimation.Color(0, 0.4f, 1f));
+		private static final ParticlesAnimation.Color WHITE = new ParticlesAnimation.Color(1, 1, 1);
+		private static final ResourceLocation TEXTURE = new ResourceLocation("textures/particle/generic_0.png");
+
+		private int timer;
+		private int duration;
+		private ParticlesAnimation.Color color;
+
+		protected GroundParticle(Vector3f pos, BlockState state) {
+			super(pos);
+			this.duration = rand.nextInt(10, 20);
+			this.color = COLORS.getOrDefault(state.getBlock(), WHITE);
+		}
+
+		@Override
+		protected void tick() {
+			timer++;
+		}
+
+		@Override
+		protected boolean isDone() {
+			return timer >= duration;
+		}
+
+		@Override
+		protected void render(PoseStack poseStack, BufferSource source) {
+			var mc = screen.getMinecraft();
+			var bufferbuilder = source.getBuffer(RenderType.text(TEXTURE));
+
+			var progress = (timer + mc.getFrameTime()) / duration;
+			var alpha = 1;
+			var scale = progress * progress - 1;
+
+			var light = light(pos.x(), pos.y());
+			var x = pos.x() - blockWidth / 2 * scale;
+			var y = pos.y() - blockHeight / 2 * scale;
+			var width = blockWidth * scale;
+			var height = blockHeight * scale;
+			bufferbuilder.vertex(x, y + height, pos.z()).color(color.red(), color.green(), color.blue(), alpha).uv(0, 1)
+					.uv2(light).endVertex();
+			bufferbuilder.vertex(x + width, y + height, pos.z()).color(color.red(), color.green(), color.blue(), alpha)
+					.uv(1, 1).uv2(light).endVertex();
+			bufferbuilder.vertex(x + width, y, pos.z()).color(color.red(), color.green(), color.blue(), alpha).uv(1, 0)
+					.uv2(light).endVertex();
+			bufferbuilder.vertex(x, y, pos.z()).color(color.red(), color.green(), color.blue(), alpha).uv(0, 0)
+					.uv2(light).endVertex();
+		}
+
 	}
 
 }

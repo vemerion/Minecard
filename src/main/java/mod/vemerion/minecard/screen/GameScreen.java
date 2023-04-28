@@ -131,8 +131,6 @@ public class GameScreen extends Screen {
 		super.init();
 		resources = new ArrayList<>();
 
-		background = addWidget(new GameBackground(this));
-
 		for (var playerState : state.values()) {
 			resetPositions(playerState);
 
@@ -141,6 +139,8 @@ public class GameScreen extends Screen {
 		}
 		addRenderableWidget(new NextTurnButton((int) (width * 0.75), height / 2 - NEXT_TURN_BUTTON_SIZE / 2,
 				NEXT_TURN_BUTTON_SIZE, NEXT_TURN_BUTTON_SIZE, TextComponent.EMPTY));
+		
+		background = addWidget(new GameBackground(this));
 
 		animations = new ArrayList<>();
 		for (var playerState : state.values())
