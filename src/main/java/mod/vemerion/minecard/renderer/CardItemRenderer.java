@@ -56,6 +56,8 @@ public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 			.text(new ResourceLocation(Main.MODID, "textures/item/card_front.png"));
 	private static final RenderType CARD_BACK = RenderType
 			.text(new ResourceLocation(Main.MODID, "textures/item/card_back.png"));
+	private static final RenderType CARD_READY = RenderType
+			.text(new ResourceLocation(Main.MODID, "textures/item/card_ready.png"));
 
 	public CardItemRenderer(BlockEntityRenderDispatcher dispatcher, EntityModelSet modelSet) {
 		super(dispatcher, modelSet);
@@ -73,10 +75,16 @@ public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 			pose.translate(0.1, 1, 0.45);
 		pose.pushPose();
 		pose.scale(CARD_SIZE, -CARD_SIZE, CARD_SIZE);
-		renderCard(pose, CARD_FRONT, buffer, light);
+		renderCard(pose, CARD_FRONT, buffer, light, 32);
+		if (card.isReady()) {
+			pose.pushPose();
+			pose.translate(-1, -1, 0);
+			renderCard(pose, CARD_READY, buffer, light, 34);
+			pose.popPose();
+		}
 		pose.scale(-1, 1, 1);
 		pose.translate(-32, 0, 0);
-		renderCard(pose, CARD_BACK, buffer, light);
+		renderCard(pose, CARD_BACK, buffer, light, 32);
 		pose.popPose();
 
 		var type = card.getType();
@@ -117,16 +125,6 @@ public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 					buffer);
 			renderValue(itemRenderer, mc.font, Items.GLISTERING_MELON_SLICE, card.getHealth(), 0.6f, -0.42f, light,
 					overlay, pose, buffer);
-		}
-
-		// Ready
-		if (card.isReady()) {
-			pose.pushPose();
-			pose.translate(0.43, 0.07, 0);
-			pose.scale(0.3f, 0.3f, 0.3f);
-			itemRenderer.renderStatic(new ItemStack(Items.CARROT_ON_A_STICK), TransformType.NONE, light, overlay, pose,
-					buffer, 0);
-			pose.popPose();
 		}
 
 		// Properties
@@ -271,12 +269,12 @@ public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 				light, overlay);
 	}
 
-	private static void renderCard(PoseStack pose, RenderType card, MultiBufferSource buffer, int light) {
+	private static void renderCard(PoseStack pose, RenderType card, MultiBufferSource buffer, int light, int size) {
 		Matrix4f matrix = pose.last().pose();
 		VertexConsumer consumer = buffer.getBuffer(card);
-		consumer.vertex(matrix, 0, 32, 0).color(255, 255, 255, 255).uv(0, 1).uv2(light).endVertex();
-		consumer.vertex(matrix, 32, 32, 0).color(255, 255, 255, 255).uv(1, 1).uv2(light).endVertex();
-		consumer.vertex(matrix, 32, 0, 0).color(255, 255, 255, 255).uv(1, 0).uv2(light).endVertex();
+		consumer.vertex(matrix, 0, size, 0).color(255, 255, 255, 255).uv(0, 1).uv2(light).endVertex();
+		consumer.vertex(matrix, size, size, 0).color(255, 255, 255, 255).uv(1, 1).uv2(light).endVertex();
+		consumer.vertex(matrix, size, 0, 0).color(255, 255, 255, 255).uv(1, 0).uv2(light).endVertex();
 		consumer.vertex(matrix, 0, 0, 0).color(255, 255, 255, 255).uv(0, 0).uv2(light).endVertex();
 	}
 }
