@@ -15,15 +15,13 @@ import mod.vemerion.minecard.game.CardVisibility;
 import mod.vemerion.minecard.game.GameUtil;
 import mod.vemerion.minecard.game.LazyCardType;
 import mod.vemerion.minecard.game.PlayerState;
+import mod.vemerion.minecard.game.Receiver;
 import mod.vemerion.minecard.init.ModCardAbilities;
 import mod.vemerion.minecard.network.AnimationMessage;
-import mod.vemerion.minecard.network.Network;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.ExtraCodecs;
-import net.minecraftforge.network.PacketDistributor;
 
 public class ModifyAbility extends CardAbility {
 
@@ -92,7 +90,7 @@ public class ModifyAbility extends CardAbility {
 	}
 
 	@Override
-	protected void invoke(List<ServerPlayer> receivers, PlayerState state, Card card, @Nullable Card other) {
+	protected void invoke(List<Receiver> receivers, PlayerState state, Card card, @Nullable Card other) {
 		var modification = modifications.get(state.getGame().getRandom().nextInt(modifications.size()));
 		var cardType = modification.modifications.get(false);
 
@@ -136,10 +134,9 @@ public class ModifyAbility extends CardAbility {
 
 		animation.ifPresent(anim -> {
 			for (var receiver : receivers) {
-				Network.INSTANCE.send(PacketDistributor.PLAYER.with(() -> receiver),
-						new AnimationMessage(card.getId(), selectedCards.stream().filter(
-								c -> state.getGame().calcVisibility(receiver.getUUID(), card) == CardVisibility.VISIBLE)
-								.map(c -> c.getId()).collect(Collectors.toList()), anim));
+				receiver.receiver(new AnimationMessage(card.getId(), selectedCards.stream()
+						.filter(c -> state.getGame().calcVisibility(receiver.getId(), card) == CardVisibility.VISIBLE)
+						.map(c -> c.getId()).collect(Collectors.toList()), anim));
 			}
 		});
 	}

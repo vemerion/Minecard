@@ -1,17 +1,10 @@
 package mod.vemerion.minecard.network;
 
 import java.util.UUID;
-import java.util.function.Supplier;
 
-import mod.vemerion.minecard.screen.GameScreen;
-import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.fml.DistExecutor.SafeRunnable;
-import net.minecraftforge.network.NetworkEvent;
 
-public class CombatMessage {
+public class CombatMessage extends ServerToClientMessage {
 
 	private UUID attackerId;
 	private int attackerCardId;
@@ -25,6 +18,7 @@ public class CombatMessage {
 		this.targetCardId = targetCardId;
 	}
 
+	@Override
 	public void encode(final FriendlyByteBuf buffer) {
 		buffer.writeUUID(attackerId);
 		buffer.writeInt(attackerCardId);
@@ -36,28 +30,13 @@ public class CombatMessage {
 		return new CombatMessage(buffer.readUUID(), buffer.readInt(), buffer.readUUID(), buffer.readInt());
 	}
 
-	public void handle(final Supplier<NetworkEvent.Context> supplier) {
-		final NetworkEvent.Context context = supplier.get();
-		context.setPacketHandled(true);
-		context.enqueueWork(() -> DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> Handle.handle(this)));
+	@Override
+	public ServerToClientMessage create(FriendlyByteBuf buffer) {
+		return decode(buffer);
 	}
 
-	private static class Handle {
-		private static SafeRunnable handle(CombatMessage message) {
-			return new SafeRunnable() {
-				private static final long serialVersionUID = 1L;
-
-				@Override
-				public void run() {
-					var mc = Minecraft.getInstance();
-					if (mc == null)
-						return;
-
-					if (mc.screen instanceof GameScreen game) {
-						game.combat(message.attackerId, message.attackerCardId, message.targetId, message.targetCardId);
-					}
-				}
-			};
-		}
+	@Override
+	public void handle(GameClient client) {
+		client.combat(attackerId, attackerCardId, targetId, targetCardId);
 	}
 }

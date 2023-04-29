@@ -13,6 +13,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -45,12 +47,21 @@ public class GameBlock extends Block implements EntityBlock {
 	public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {
 		return new GameBlockEntity(pPos, pState);
 	}
-	
+
+	@Override
+	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level pLevel, BlockState pState,
+			BlockEntityType<T> pBlockEntityType) {
+		return pLevel.isClientSide ? null
+				: pBlockEntityType == ModBlockEntities.GAME.get()
+						? (level, pos, state, tileEntity) -> ((GameBlockEntity) tileEntity).tick()
+						: null;
+	}
+
 	@Override
 	public int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
 		return 20;
 	}
-	
+
 	@Override
 	public int getFireSpreadSpeed(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
 		return 5;

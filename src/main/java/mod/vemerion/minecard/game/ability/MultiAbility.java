@@ -9,9 +9,9 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import mod.vemerion.minecard.game.Card;
 import mod.vemerion.minecard.game.PlayerState;
+import mod.vemerion.minecard.game.Receiver;
 import mod.vemerion.minecard.init.ModCardAbilities;
 import net.minecraft.network.chat.TextComponent;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.ExtraCodecs;
 
 public class MultiAbility extends CardAbility {
@@ -47,11 +47,11 @@ public class MultiAbility extends CardAbility {
 	}
 
 	@Override
-	protected void invoke(List<ServerPlayer> receivers, PlayerState state, Card card, @Nullable Card other) {
+	protected void invoke(List<Receiver> receivers, PlayerState state, Card card, @Nullable Card other) {
 	}
 
 	@Override
-	public void onSummon(List<ServerPlayer> receivers, PlayerState state, Card card) {
+	public void onSummon(List<Receiver> receivers, PlayerState state, Card card) {
 		if (trigger == CardAbilityTrigger.ALWAYS || trigger == CardAbilityTrigger.SUMMON) {
 			for (var ability : abilities)
 				ability.onSummon(receivers, state, card);
@@ -59,7 +59,7 @@ public class MultiAbility extends CardAbility {
 	}
 
 	@Override
-	public void onAttack(List<ServerPlayer> receivers, PlayerState state, Card card, Card target) {
+	public void onAttack(List<Receiver> receivers, PlayerState state, Card card, Card target) {
 		if (trigger == CardAbilityTrigger.ALWAYS || trigger == CardAbilityTrigger.ATTACK) {
 			for (var ability : abilities)
 				ability.onAttack(receivers, state, card, target);
@@ -67,7 +67,7 @@ public class MultiAbility extends CardAbility {
 	}
 
 	@Override
-	public void onDeath(List<ServerPlayer> receivers, PlayerState state, Card card) {
+	public void onDeath(List<Receiver> receivers, PlayerState state, Card card) {
 		if (trigger == CardAbilityTrigger.ALWAYS || trigger == CardAbilityTrigger.DEATH) {
 			for (var ability : abilities)
 				ability.onDeath(receivers, state, card);
@@ -75,7 +75,7 @@ public class MultiAbility extends CardAbility {
 	}
 
 	@Override
-	public void onHurt(List<ServerPlayer> receivers, PlayerState state, Card card) {
+	public void onHurt(List<Receiver> receivers, PlayerState state, Card card) {
 		if (trigger == CardAbilityTrigger.ALWAYS || trigger == CardAbilityTrigger.HURT) {
 			for (var ability : abilities)
 				ability.onHurt(receivers, state, card);
@@ -83,7 +83,7 @@ public class MultiAbility extends CardAbility {
 	}
 
 	@Override
-	public void onTick(List<ServerPlayer> receivers, PlayerState state, Card card) {
+	public void onTick(List<Receiver> receivers, PlayerState state, Card card) {
 		if (trigger == CardAbilityTrigger.ALWAYS || trigger == CardAbilityTrigger.TICK) {
 			for (var ability : abilities)
 				ability.onTick(receivers, state, card);
@@ -91,7 +91,7 @@ public class MultiAbility extends CardAbility {
 	}
 	
 	@Override
-	public void onGrow(List<ServerPlayer> receivers, PlayerState state, Card card) {
+	public void onGrow(List<Receiver> receivers, PlayerState state, Card card) {
 		if (trigger == CardAbilityTrigger.ALWAYS || trigger == CardAbilityTrigger.GROW) {
 			for (var ability : abilities)
 				ability.onGrow(receivers, state, card);

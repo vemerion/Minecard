@@ -17,7 +17,7 @@ public class EndTurnMessage extends ClientToServerMessage {
 
 	@Override
 	protected void handle(GameBlockEntity game, ServerPlayer sender) {
-		game.endTurn(sender);
+		game.endTurn();
 	}
 
 }

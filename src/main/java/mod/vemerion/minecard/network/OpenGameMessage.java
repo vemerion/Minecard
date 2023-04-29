@@ -15,7 +15,7 @@ import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.DistExecutor.SafeRunnable;
 import net.minecraftforge.network.NetworkEvent;
 
-public class OpenGameMessage {
+public class OpenGameMessage extends ServerToClientMessage {
 
 	private List<MessagePlayerState> state;
 	private BlockPos pos;
@@ -25,6 +25,7 @@ public class OpenGameMessage {
 		this.pos = pos;
 	}
 
+	@Override
 	public void encode(final FriendlyByteBuf buffer) {
 		for (var player : state)
 			writePlayer(buffer, player);
@@ -65,6 +66,17 @@ public class OpenGameMessage {
 		return new OpenGameMessage(List.of(readPlayer(buffer), readPlayer(buffer)), buffer.readBlockPos());
 	}
 
+	@Override
+	public ServerToClientMessage create(FriendlyByteBuf buffer) {
+		return decode(buffer);
+	}
+
+	@Override
+	public void handle(GameClient client) {
+		client.openGame(state, pos);
+	}
+
+	@Override
 	public void handle(final Supplier<NetworkEvent.Context> supplier) {
 		final NetworkEvent.Context context = supplier.get();
 		context.setPacketHandled(true);

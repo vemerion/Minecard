@@ -9,16 +9,12 @@ import java.util.stream.Collectors;
 import org.apache.commons.lang3.tuple.Pair;
 
 import mod.vemerion.minecard.network.CombatMessage;
-import mod.vemerion.minecard.network.Network;
 import mod.vemerion.minecard.network.PlaceCardMessage;
 import mod.vemerion.minecard.network.UpdateCardsMessage;
 import mod.vemerion.minecard.network.UpdateDecksMessage;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EntityType;
-import net.minecraftforge.network.PacketDistributor;
 
 public class GameState {
-
 	private List<PlayerState> playerStates;
 	private int turn;
 	private Random random;
@@ -79,11 +75,11 @@ public class GameState {
 		return CardVisibility.UNKNOWN;
 	}
 
-	public void updateCards(ServerPlayer receiver, List<Card> cards) {
+	public void updateCards(Receiver receiver, List<Card> cards) {
 		boolean updateDeckSizes = false;
 		List<Card> updated = new ArrayList<>();
 		for (var card : cards) {
-			var visibility = calcVisibility(receiver.getUUID(), card);
+			var visibility = calcVisibility(receiver.getId(), card);
 			switch (visibility) {
 			case DECK:
 				updateDeckSizes = true;
@@ -102,17 +98,16 @@ public class GameState {
 			}
 		}
 
-		Network.INSTANCE.send(PacketDistributor.PLAYER.with(() -> receiver), new UpdateCardsMessage(updated));
+		receiver.receiver(new UpdateCardsMessage(updated));
 
 		if (updateDeckSizes) {
-			Network.INSTANCE.send(PacketDistributor.PLAYER.with(() -> receiver),
-					new UpdateDecksMessage(playerStates.stream()
-							.map(s -> Pair.of(s.getId(), (int) s.getDeck().stream().filter(c -> !c.isDead()).count()))
-							.collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue()))));
+			receiver.receiver(new UpdateDecksMessage(playerStates.stream()
+					.map(s -> Pair.of(s.getId(), (int) s.getDeck().stream().filter(c -> !c.isDead()).count()))
+					.collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue()))));
 		}
 	}
 
-	public void hurt(List<ServerPlayer> receivers, Card card, int amount) {
+	public void hurt(List<Receiver> receivers, Card card, int amount) {
 		if (card.isDead())
 			return;
 
@@ -146,7 +141,7 @@ public class GameState {
 		}
 	}
 
-	public void heal(List<ServerPlayer> receivers, Card card, int amount) {
+	public void heal(List<Receiver> receivers, Card card, int amount) {
 		var healthBefore = card.getHealth();
 		card.setHealth(Math.min(card.getMaxHealth(), card.getHealth() + amount));
 
@@ -157,7 +152,7 @@ public class GameState {
 		}
 	}
 
-	public void summonCard(List<ServerPlayer> receivers, Card card, UUID id, int leftId) {
+	public void summonCard(List<Receiver> receivers, Card card, UUID id, int leftId) {
 		if (card.hasProperty(CardProperty.CHARGE))
 			card.setReady(true);
 
@@ -176,20 +171,19 @@ public class GameState {
 		}
 
 		for (var receiver : receivers) {
-			Network.INSTANCE.send(PacketDistributor.PLAYER.with(() -> receiver),
-					new PlaceCardMessage(id, card, leftId));
+			receiver.receiver(new PlaceCardMessage(id, card, leftId));
 		}
 
 		card.getAbility().onSummon(receivers, playerState, card);
 	}
 
-	public void endTurn(List<ServerPlayer> receivers) {
+	public void endTurn(List<Receiver> receivers) {
 		getCurrentPlayerState().endTurn(receivers);
 		turn++;
 		getCurrentPlayerState().newTurn(receivers);
 	}
 
-	public void attack(List<ServerPlayer> receivers, int attackerId, int targetId) {
+	public void attack(List<Receiver> receivers, int attackerId, int targetId) {
 		var current = getCurrentPlayerState();
 		var enemy = getEnemyPlayerState();
 
@@ -211,7 +205,7 @@ public class GameState {
 		hurt(receivers, targetCard, attackerCard.getDamage());
 
 		for (var receiver : receivers) {
-			Network.INSTANCE.send(PacketDistributor.PLAYER.with(() -> receiver),
+			receiver.receiver(
 					new CombatMessage(current.getId(), attackerCard.getId(), enemy.getId(), targetCard.getId()));
 		}
 	}

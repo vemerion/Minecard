@@ -23,6 +23,7 @@ import mod.vemerion.minecard.helper.Helper;
 import mod.vemerion.minecard.network.AttackMessage;
 import mod.vemerion.minecard.network.CloseGameMessage;
 import mod.vemerion.minecard.network.EndTurnMessage;
+import mod.vemerion.minecard.network.GameClient;
 import mod.vemerion.minecard.network.Network;
 import mod.vemerion.minecard.network.PlayCardMessage;
 import mod.vemerion.minecard.screen.animation.Animation;
@@ -56,7 +57,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.Vec2;
 
-public class GameScreen extends Screen {
+public class GameScreen extends Screen implements GameClient {
 
 	public static final Component TITLE = new TranslatableComponent("gui." + Main.MODID + ".game");
 
@@ -101,6 +102,15 @@ public class GameScreen extends Screen {
 		this.popup = new PopupText();
 	}
 
+	@Override
+	public boolean isPauseScreen() {
+		return false;
+	}
+
+	@Override
+	public void openGame(List<MessagePlayerState> state, BlockPos pos) {
+	}
+
 	public Card getSelectedCard() {
 		return selectedCard;
 	}
@@ -139,7 +149,7 @@ public class GameScreen extends Screen {
 		}
 		addRenderableWidget(new NextTurnButton((int) (width * 0.75), height / 2 - NEXT_TURN_BUTTON_SIZE / 2,
 				NEXT_TURN_BUTTON_SIZE, NEXT_TURN_BUTTON_SIZE, TextComponent.EMPTY));
-		
+
 		background = addWidget(new GameBackground(this));
 
 		animations = new ArrayList<>();
@@ -170,17 +180,20 @@ public class GameScreen extends Screen {
 		return list.stream().filter(c -> c.getId() == id).findFirst().orElse(null);
 	}
 
+	@Override
 	public void setCurrent(UUID current) {
 		this.current = current;
 		popup.popup(current.equals(minecraft.player.getUUID()) ? YOUR_TURN : ENEMY_TURN);
 	}
 
+	@Override
 	public void setResources(UUID id, int resources, int maxResources) {
 		var playerState = state.get(id);
 		playerState.resources = resources;
 		playerState.maxResources = maxResources;
 	}
 
+	@Override
 	public void placeCard(UUID id, Card card, int leftId) {
 		var playerState = state.get(id);
 
@@ -207,6 +220,7 @@ public class GameScreen extends Screen {
 		resetPositions(playerState);
 	}
 
+	@Override
 	public void setReady(UUID id, List<Integer> cards) {
 		var playerState = state.get(id);
 		for (var card : playerState.board)
@@ -214,7 +228,8 @@ public class GameScreen extends Screen {
 				card.setReady(true);
 	}
 
-	public ClientCard updateCard(Card received) {
+	@Override
+	public void updateCard(Card received) {
 		for (var playerState : state.values()) {
 			for (var card : playerState.board) {
 				if (card.getId() == received.getId()) {
@@ -231,7 +246,7 @@ public class GameScreen extends Screen {
 
 					updatePropertiesAnimations(old, card);
 
-					return card;
+					return;
 				}
 			}
 			for (var card : playerState.hand) {
@@ -246,13 +261,13 @@ public class GameScreen extends Screen {
 						}));
 					}
 
-					return card;
+					return;
 				}
 			}
 		}
-		return null;
 	}
 
+	@Override
 	public void drawCards(UUID id, List<Card> cards, boolean shrinkDeck) {
 		var playerState = state.get(id);
 		boolean enemy = !minecraft.player.getUUID().equals(id);
@@ -278,10 +293,12 @@ public class GameScreen extends Screen {
 		}
 	}
 
+	@Override
 	public void gameOver() {
 		popup.popup(GAME_OVER);
 	}
 
+	@Override
 	public void combat(UUID attackerId, int attackerCardId, UUID targetId, int targetCardId) {
 		var attacker = withId(state.get(attackerId).board, attackerCardId);
 		var target = withId(state.get(targetId).board, targetCardId);
@@ -293,6 +310,7 @@ public class GameScreen extends Screen {
 				}));
 	}
 
+	@Override
 	public void setProperties(UUID id, int cardId, Map<CardProperty, Integer> properties) {
 		var card = withId(state.get(id).board, cardId);
 		var old = new HashMap<>(card.getProperties());
@@ -337,11 +355,13 @@ public class GameScreen extends Screen {
 		}
 	}
 
+	@Override
 	public void updateDecks(Map<UUID, Integer> sizes) {
 		for (var entry : sizes.entrySet())
 			state.get(entry.getKey()).deck = entry.getValue();
 	}
 
+	@Override
 	public void animation(int originId, List<Integer> targets, ResourceLocation rl) {
 		var animConfig = AnimationConfigs.getInstance().get(rl);
 		if (animConfig == null)

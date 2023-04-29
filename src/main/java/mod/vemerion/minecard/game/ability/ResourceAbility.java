@@ -9,8 +9,8 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import mod.vemerion.minecard.game.Card;
 import mod.vemerion.minecard.game.PlayerState;
+import mod.vemerion.minecard.game.Receiver;
 import mod.vemerion.minecard.init.ModCardAbilities;
-import net.minecraft.server.level.ServerPlayer;
 
 public class ResourceAbility extends CardAbility {
 
@@ -40,7 +40,7 @@ public class ResourceAbility extends CardAbility {
 	}
 
 	@Override
-	protected void invoke(List<ServerPlayer> receivers, PlayerState state, Card card, @Nullable Card other) {
+	protected void invoke(List<Receiver> receivers, PlayerState state, Card card, @Nullable Card other) {
 		state.addResources(receivers, temporaryResources, permanentResources);
 	}
 

@@ -8,15 +8,12 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import mod.vemerion.minecard.network.DrawCardsMessage;
-import mod.vemerion.minecard.network.Network;
 import mod.vemerion.minecard.network.PlaceCardMessage;
 import mod.vemerion.minecard.network.SetPropertiesMessage;
 import mod.vemerion.minecard.network.SetResourcesMessage;
 import net.minecraft.core.SerializableUUID;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.util.Mth;
-import net.minecraftforge.network.PacketDistributor;
 
 public class PlayerState {
 
@@ -100,7 +97,7 @@ public class PlayerState {
 		return list;
 	}
 
-	public void drawCards(List<ServerPlayer> receivers, int count) {
+	public void drawCards(List<Receiver> receivers, int count) {
 		List<Card> cards = new ArrayList<>();
 		List<Card> fakes = new ArrayList<>();
 		while (!deck.isEmpty() && count > 0) {
@@ -112,24 +109,22 @@ public class PlayerState {
 		}
 
 		for (var receiver : receivers) {
-			Network.INSTANCE.send(PacketDistributor.PLAYER.with(() -> receiver),
-					new DrawCardsMessage(id, receiver.getUUID().equals(id) ? cards : fakes, true));
+			receiver.receiver(new DrawCardsMessage(id, receiver.getId().equals(id) ? cards : fakes, true));
 		}
 	}
 
-	public void addCards(List<ServerPlayer> receivers, List<Card> cards) {
+	public void addCards(List<Receiver> receivers, List<Card> cards) {
 		List<Card> fakes = new ArrayList<>();
 		for (var card : cards)
 			fakes.add(Cards.EMPTY_CARD_TYPE.create().setId(card.getId()));
 
 		hand.addAll(cards);
 		for (var receiver : receivers) {
-			Network.INSTANCE.send(PacketDistributor.PLAYER.with(() -> receiver),
-					new DrawCardsMessage(id, receiver.getUUID().equals(id) ? cards : fakes, false));
+			receiver.receiver(new DrawCardsMessage(id, receiver.getId().equals(id) ? cards : fakes, false));
 		}
 	}
 
-	public void endTurn(List<ServerPlayer> receivers) {
+	public void endTurn(List<Receiver> receivers) {
 		for (int i = board.size() - 1; i >= 0; i--) {
 			var card = board.get(i);
 			boolean changed = false;
@@ -145,14 +140,14 @@ public class PlayerState {
 			if (changed && !card.isDead()) {
 				var msg = new SetPropertiesMessage(id, card.getId(), card.getProperties());
 				for (var receiver : receivers)
-					Network.INSTANCE.send(PacketDistributor.PLAYER.with(() -> receiver), msg);
+					receiver.receiver(msg);
 			}
 
 			card.getAbility().onTick(receivers, this, card);
 		}
 	}
 
-	public void newTurn(List<ServerPlayer> receivers) {
+	public void newTurn(List<Receiver> receivers) {
 		maxResources = Math.min(10, maxResources + 1);
 		resources = maxResources;
 
@@ -177,17 +172,17 @@ public class PlayerState {
 		drawCards(receivers, 1);
 	}
 
-	public void addResources(List<ServerPlayer> receivers, int temporaryResources, int permanentResources) {
+	public void addResources(List<Receiver> receivers, int temporaryResources, int permanentResources) {
 		resources = Mth.clamp(resources + temporaryResources, 0, 10);
 		maxResources = Mth.clamp(maxResources + permanentResources, 0, 10);
 
 		var msg = new SetResourcesMessage(id, resources, maxResources);
 
 		for (var receiver : receivers)
-			Network.INSTANCE.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer) receiver), msg);
+			receiver.receiver(msg);
 	}
 
-	public void playCard(List<ServerPlayer> receivers, int cardId, int leftId) {
+	public void playCard(List<Receiver> receivers, int cardId, int leftId) {
 		var card = findFromHand(cardId);
 		var left = findFromBoard(leftId);
 		if (card == null || (leftId != -1 && left == null))
@@ -217,17 +212,15 @@ public class PlayerState {
 		hand.remove(card);
 
 		for (var receiver : receivers) {
-			Network.INSTANCE.send(PacketDistributor.PLAYER.with(() -> receiver),
-					new SetResourcesMessage(id, resources, maxResources));
-			Network.INSTANCE.send(PacketDistributor.PLAYER.with(() -> receiver),
-					new PlaceCardMessage(id, card, leftId));
+			receiver.receiver(new SetResourcesMessage(id, resources, maxResources));
+			receiver.receiver(new PlaceCardMessage(id, card, leftId));
 		}
 
 		card.getAbility().onSummon(receivers, this, card);
 	}
 
 	// Completely remove the card without running onDeath
-	public void removeCard(List<ServerPlayer> receivers, Card card) {
+	public void removeCard(List<Receiver> receivers, Card card) {
 		card.setHealth(0);
 		for (var receiver : receivers)
 			game.updateCards(receiver, List.of(card));

@@ -30,10 +30,10 @@ public class ModLanguageProvider extends LanguageProvider {
 
 		add("gui." + Main.MODID + ".game", "Minecard Game");
 
-		add(Helper.chat("not_enough_players"), "Need one more player to start the game.");
 		add(Helper.chat("game_ongoing"), "A game is already ongoing.");
-		add(Helper.chat("need_deck"), "Right-click with a deck to enter the game.");
 		add(Helper.chat("not_enough_cards"), "You need a full deck to enter the game.");
+		add(Helper.chat("game_interactions"),
+				"Use [item] to interact with game:\n* Deck item: Enter the game\n* Redstone dust: Add an AI opponent to the game");
 
 		add(Helper.gui("your_turn"), "Your Turn");
 		add(Helper.gui("enemy_turn"), "Enemy Turn");

@@ -2,18 +2,11 @@ package mod.vemerion.minecard.network;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.function.Supplier;
 
 import mod.vemerion.minecard.game.Card;
-import mod.vemerion.minecard.screen.GameScreen;
-import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.fml.DistExecutor.SafeRunnable;
-import net.minecraftforge.network.NetworkEvent;
 
-public class DrawCardsMessage {
+public class DrawCardsMessage extends ServerToClientMessage {
 
 	private UUID id;
 	private List<Card> cards;
@@ -25,6 +18,7 @@ public class DrawCardsMessage {
 		this.shrinkDeck = shrinkDeck;
 	}
 
+	@Override
 	public void encode(final FriendlyByteBuf buffer) {
 		buffer.writeUUID(id);
 		buffer.writeCollection(cards, MessageUtil::encodeCard);
@@ -35,28 +29,13 @@ public class DrawCardsMessage {
 		return new DrawCardsMessage(buffer.readUUID(), buffer.readList(MessageUtil::decodeCard), buffer.readBoolean());
 	}
 
-	public void handle(final Supplier<NetworkEvent.Context> supplier) {
-		final NetworkEvent.Context context = supplier.get();
-		context.setPacketHandled(true);
-		context.enqueueWork(() -> DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> Handle.handle(this)));
+	@Override
+	public ServerToClientMessage create(FriendlyByteBuf buffer) {
+		return decode(buffer);
 	}
 
-	private static class Handle {
-		private static SafeRunnable handle(DrawCardsMessage message) {
-			return new SafeRunnable() {
-				private static final long serialVersionUID = 1L;
-
-				@Override
-				public void run() {
-					var mc = Minecraft.getInstance();
-					if (mc == null)
-						return;
-
-					if (mc.screen instanceof GameScreen game) {
-						game.drawCards(message.id, message.cards, message.shrinkDeck);
-					}
-				}
-			};
-		}
+	@Override
+	public void handle(GameClient client) {
+		client.drawCards(id, cards, shrinkDeck);
 	}
 }

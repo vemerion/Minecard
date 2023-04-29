@@ -9,11 +9,13 @@ import java.util.UUID;
 
 import mod.vemerion.minecard.capability.CardData;
 import mod.vemerion.minecard.capability.DeckData;
+import mod.vemerion.minecard.game.AIPlayer;
 import mod.vemerion.minecard.game.AdditionalCardData;
 import mod.vemerion.minecard.game.Card;
 import mod.vemerion.minecard.game.Cards;
 import mod.vemerion.minecard.game.GameState;
 import mod.vemerion.minecard.game.PlayerState;
+import mod.vemerion.minecard.game.Receiver;
 import mod.vemerion.minecard.helper.Helper;
 import mod.vemerion.minecard.init.ModBlockEntities;
 import mod.vemerion.minecard.init.ModItems;
@@ -28,22 +30,30 @@ import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.network.PacketDistributor;
+import net.minecraftforge.registries.ForgeRegistries;
 
 public class GameBlockEntity extends BlockEntity {
 
 	private static final int START_HAND_SIZE = 5;
 
-	GameState state;
-
+	private GameState state;
 	private Set<UUID> receivers;
+	private AIPlayer aiPlayer;
 
 	public GameBlockEntity(BlockPos pWorldPosition, BlockState pBlockState) {
 		super(ModBlockEntities.GAME.get(), pWorldPosition, pBlockState);
 		receivers = new HashSet<>();
 		state = new GameState();
+	}
+
+	public void tick() {
+		if (aiPlayer != null) {
+			aiPlayer.tick();
+		}
 	}
 
 	public boolean canReceiveMessage(ServerPlayer player) {
@@ -54,35 +64,34 @@ public class GameBlockEntity extends BlockEntity {
 		return state.getCurrentPlayer().equals(player.getUUID());
 	}
 
-	public void endTurn(ServerPlayer player) {
+	public void endTurn() {
 		state.endTurn(getReceivers());
 		var current = state.getCurrentPlayerState();
 		for (var receiver : getReceivers()) {
-			Network.INSTANCE.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer) receiver),
-					new NewTurnMessage(state.getCurrentPlayer()));
-			Network.INSTANCE.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer) receiver), new SetResourcesMessage(
-					state.getCurrentPlayer(), current.getResources(), current.getMaxResources()));
+			receiver.receiver(new NewTurnMessage(state.getCurrentPlayer()));
+			receiver.receiver(new SetResourcesMessage(state.getCurrentPlayer(), current.getResources(),
+					current.getMaxResources()));
 			if (!current.getBoard().isEmpty()) {
-				Network.INSTANCE.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer) receiver),
-						new SetReadyMessage(current.getId(), current.getReady()));
+				receiver.receiver(new SetReadyMessage(current.getId(), current.getReady()));
 			}
 		}
 
 	}
 
-	public void playCard(ServerPlayer player, int card, int leftId) {
+	public void playCard(int card, int leftId) {
 		state.getCurrentPlayerState().playCard(getReceivers(), card, leftId);
 	}
 
-	public void attack(ServerPlayer player, int attacker, int target) {
+	public void attack(int attacker, int target) {
 		state.attack(getReceivers(), attacker, target);
 
 		if (state.isGameOver()) {
 			for (var receiver : getReceivers()) {
-				Network.INSTANCE.send(PacketDistributor.PLAYER.with(() -> receiver), new GameOverMessage());
+				receiver.receiver(new GameOverMessage());
 			}
 
 			state = new GameState();
+			aiPlayer = null;
 		}
 	}
 
@@ -90,37 +99,89 @@ public class GameBlockEntity extends BlockEntity {
 		receivers.remove(sender.getUUID());
 	}
 
-	private List<ServerPlayer> getReceivers() {
-		var list = new ArrayList<ServerPlayer>();
+	private List<Receiver> getReceivers() {
+		var list = new ArrayList<Receiver>();
 		for (var id : receivers) {
-			var player = level.getPlayerByUUID(id);
-			if (player != null)
-				list.add((ServerPlayer) player);
+			if (id.equals(AIPlayer.ID)) {
+				list.add(new Receiver.AI(aiPlayer));
+			} else {
+				var player = level.getPlayerByUUID(id);
+				if (player != null) {
+					list.add(new Receiver.Player((ServerPlayer) player));
+				}
+			}
 		}
 		return list;
 	}
 
 	public void open(ServerPlayer player, ItemStack stack) {
 		var id = player.getUUID();
-		if (state.getPlayerStates().stream().anyMatch(s -> s.getId() == id)) {
-			if (state.getPlayerStates().size() == 1) {
-				player.sendMessage(new TranslatableComponent(Helper.chat("not_enough_players")), id);
-			} else {
-				receivers.add(player.getUUID());
-				Network.INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), createOpenGameMessage(id));
-				Network.INSTANCE.send(PacketDistributor.PLAYER.with(() -> player),
-						new NewTurnMessage(state.getCurrentPlayer()));
-			}
+		if (state.getPlayerStates().stream().anyMatch(s -> s.getId().equals(id))
+				&& state.getPlayerStates().size() > 1) {
+			receivers.add(player.getUUID());
+			Network.INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), createOpenGameMessage(id));
+			Network.INSTANCE.send(PacketDistributor.PLAYER.with(() -> player),
+					new NewTurnMessage(state.getCurrentPlayer()));
 		} else if (state.getPlayerStates().size() > 1) {
 			player.sendMessage(new TranslatableComponent(Helper.chat("game_ongoing")), id);
-		} else if (stack.is(ModItems.DECK.get())) {
-			addPlayer(player, stack);
+		} else if (stack.is(ModItems.DECK.get())
+				&& state.getPlayerStates().stream().noneMatch(s -> s.getId().equals(player.getUUID()))) {
+			addRealPlayer(player, stack);
+		} else if (stack.is(Items.REDSTONE)
+				&& state.getPlayerStates().stream().noneMatch(s -> s.getId().equals(AIPlayer.ID))) {
+			addAIPlayer();
 		} else {
-			player.sendMessage(new TranslatableComponent(Helper.chat("need_deck")), id);
+			player.sendMessage(new TranslatableComponent(Helper.chat("game_interactions")), id);
 		}
 	}
 
-	private void addPlayer(ServerPlayer player, ItemStack stack) {
+	private void addPlayer(UUID id, List<Card> deck) {
+		Collections.shuffle(deck);
+		List<Card> hand = new ArrayList<>();
+		for (int i = 0; i < START_HAND_SIZE; i++) {
+			hand.add(deck.remove(deck.size() - 1));
+		}
+
+		List<Card> board = new ArrayList<>();
+		var playerCard = Cards.getInstance(false).get(EntityType.PLAYER).create();
+		playerCard.setAdditionalData(new AdditionalCardData.IdData(id));
+		board.add(playerCard);
+
+		var playerState = new PlayerState(id, deck, hand, board, 1, 1);
+		playerState.setGame(state);
+		state.getPlayerStates().add(playerState);
+
+		if (state.getPlayerStates().size() > 1 && aiPlayer != null) {
+			var receiver = new Receiver.AI(aiPlayer);
+			receiver.receiver(createOpenGameMessage(receiver.getId()));
+			receiver.receiver(new NewTurnMessage(state.getCurrentPlayer()));
+		}
+	}
+
+	private void addAIPlayer() {
+		List<Card> deck = new ArrayList<>();
+
+		var entities = ForgeRegistries.ENTITIES.getValues();
+
+		while (deck.size() < DeckData.CAPACITY) {
+			int i = level.random.nextInt(entities.size());
+			for (var entity : entities) {
+				if (i == 0) {
+					if (Cards.isAllowed(entity)) {
+						deck.add(Cards.getInstance(false).get(entity).create());
+					}
+					break;
+				}
+				i--;
+			}
+		}
+
+		aiPlayer = new AIPlayer(this);
+		receivers.add(AIPlayer.ID);
+		addPlayer(AIPlayer.ID, deck);
+	}
+
+	private void addRealPlayer(ServerPlayer player, ItemStack stack) {
 		var id = player.getUUID();
 		DeckData.get(stack).ifPresent(data -> {
 			List<Card> deck = new ArrayList<>();
@@ -138,26 +199,13 @@ public class GameBlockEntity extends BlockEntity {
 				return;
 			}
 
-			Collections.shuffle(deck);
-			List<Card> hand = new ArrayList<>();
-			for (int i = 0; i < START_HAND_SIZE; i++) {
-				hand.add(deck.remove(deck.size() - 1));
-			}
-
-			List<Card> board = new ArrayList<>();
-			var playerCard = Cards.getInstance(false).get(EntityType.PLAYER).create();
-			playerCard.setAdditionalData(new AdditionalCardData.IdData(player.getUUID()));
-			board.add(playerCard);
-
-			var playerState = new PlayerState(id, deck, hand, board, 1, 1);
-			playerState.setGame(state);
-			state.getPlayerStates().add(playerState);
+			addPlayer(id, deck);
 		});
 	}
 
 	private OpenGameMessage createOpenGameMessage(UUID id) {
-		var yourState = state.getPlayerStates().stream().filter(s -> s.getId() == id).findAny().get();
-		var enemyState = state.getPlayerStates().stream().filter(s -> s.getId() != id).findAny().get();
+		var yourState = state.getPlayerStates().stream().filter(s -> s.getId().equals(id)).findAny().get();
+		var enemyState = state.getPlayerStates().stream().filter(s -> !s.getId().equals(id)).findAny().get();
 
 		return new OpenGameMessage(List.of(yourState.toMessage(false), enemyState.toMessage(true)), getBlockPos());
 	}

@@ -8,10 +8,10 @@ import com.mojang.serialization.Codec;
 
 import mod.vemerion.minecard.game.Card;
 import mod.vemerion.minecard.game.PlayerState;
+import mod.vemerion.minecard.game.Receiver;
 import mod.vemerion.minecard.init.ModCardAbilities;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.ExtraCodecs;
 
 public abstract class CardAbility {
@@ -34,7 +34,7 @@ public abstract class CardAbility {
 		return NO_ARGS;
 	}
 
-	protected abstract void invoke(List<ServerPlayer> receivers, PlayerState state, Card card, @Nullable Card other);
+	protected abstract void invoke(List<Receiver> receivers, PlayerState state, Card card, @Nullable Card other);
 
 	public Component getDescription() {
 		if (description == null) {
@@ -47,37 +47,37 @@ public abstract class CardAbility {
 		return trigger;
 	}
 
-	public void onSummon(List<ServerPlayer> receivers, PlayerState state, Card card) {
+	public void onSummon(List<Receiver> receivers, PlayerState state, Card card) {
 		if (trigger == CardAbilityTrigger.ALWAYS || trigger == CardAbilityTrigger.SUMMON) {
 			invoke(receivers, state, card, null);
 		}
 	}
 
-	public void onAttack(List<ServerPlayer> receivers, PlayerState state, Card card, Card target) {
+	public void onAttack(List<Receiver> receivers, PlayerState state, Card card, Card target) {
 		if (trigger == CardAbilityTrigger.ALWAYS || trigger == CardAbilityTrigger.ATTACK) {
 			invoke(receivers, state, card, target);
 		}
 	}
 
-	public void onDeath(List<ServerPlayer> receivers, PlayerState state, Card card) {
+	public void onDeath(List<Receiver> receivers, PlayerState state, Card card) {
 		if (trigger == CardAbilityTrigger.ALWAYS || trigger == CardAbilityTrigger.DEATH) {
 			invoke(receivers, state, card, null);
 		}
 	}
 
-	public void onHurt(List<ServerPlayer> receivers, PlayerState state, Card card) {
+	public void onHurt(List<Receiver> receivers, PlayerState state, Card card) {
 		if (trigger == CardAbilityTrigger.ALWAYS || trigger == CardAbilityTrigger.HURT) {
 			invoke(receivers, state, card, null);
 		}
 	}
 
-	public void onTick(List<ServerPlayer> receivers, PlayerState state, Card card) {
+	public void onTick(List<Receiver> receivers, PlayerState state, Card card) {
 		if (trigger == CardAbilityTrigger.ALWAYS || trigger == CardAbilityTrigger.TICK) {
 			invoke(receivers, state, card, null);
 		}
 	}
 	
-	public void onGrow(List<ServerPlayer> receivers, PlayerState state, Card card) {
+	public void onGrow(List<Receiver> receivers, PlayerState state, Card card) {
 		if (trigger == CardAbilityTrigger.ALWAYS || trigger == CardAbilityTrigger.GROW) {
 			invoke(receivers, state, card, null);
 		}

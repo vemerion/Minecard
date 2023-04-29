@@ -28,6 +28,6 @@ public class PlayCardMessage extends ClientToServerMessage {
 
 	@Override
 	protected void handle(GameBlockEntity game, ServerPlayer sender) {
-		game.playCard(sender, cardId, leftId);
+		game.playCard(cardId, leftId);
 	}
 }

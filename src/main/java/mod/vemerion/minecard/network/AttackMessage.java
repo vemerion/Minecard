@@ -28,6 +28,6 @@ public class AttackMessage extends ClientToServerMessage {
 
 	@Override
 	protected void handle(GameBlockEntity game, ServerPlayer sender) {
-		game.attack(sender, attacker, target);
+		game.attack(attacker, target);
 	}
 }
