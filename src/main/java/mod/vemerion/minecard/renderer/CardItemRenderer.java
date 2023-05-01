@@ -9,10 +9,12 @@ import com.mojang.math.Matrix4f;
 import com.mojang.math.Quaternion;
 
 import mod.vemerion.minecard.Main;
+import mod.vemerion.minecard.game.AIPlayer;
 import mod.vemerion.minecard.game.AdditionalCardData;
 import mod.vemerion.minecard.game.Card;
 import mod.vemerion.minecard.game.CardProperty;
 import mod.vemerion.minecard.game.Cards;
+import mod.vemerion.minecard.init.ModEntities;
 import mod.vemerion.minecard.item.CardItem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -49,7 +51,7 @@ public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 	private static final Map<EntityType<?>, Entity> CACHE = new HashMap<>();
 
 	private static final float TEXT_SIZE = 0.01f;
-	private static final float TITLE_SIZE = 0.005f;
+	private static final float TITLE_SIZE = 0.006f;
 	private static final float CARD_SIZE = 0.025f;
 
 	private static final RenderType CARD_FRONT = RenderType
@@ -96,9 +98,9 @@ public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 
 		// Render title
 		pose.pushPose();
-		pose.translate(0.2, -0.065, 0.01);
+		pose.translate(0.13 + (0.56 - mc.font.width(entity.getDisplayName()) * TITLE_SIZE) / 2f, -0.065, 0.01);
 		pose.scale(TITLE_SIZE, -TITLE_SIZE, TITLE_SIZE);
-		mc.font.draw(pose, card.getName(), 0, 0, 0x000000);
+		mc.font.draw(pose, entity.getDisplayName(), 0, 0, 0x000000);
 		pose.popPose();
 
 		// Render text
@@ -121,7 +123,7 @@ public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 
 		// Render values
 		var itemRenderer = mc.getItemRenderer();
-		renderValue(itemRenderer, mc.font, Items.EMERALD, card.getCost(), 0.62f, -0.14f, light, overlay, pose, buffer);
+		renderValue(itemRenderer, mc.font, Items.EMERALD, card.getCost(), 0.62f, -0.18f, light, overlay, pose, buffer);
 		if (!card.isSpell()) {
 			renderValue(itemRenderer, mc.font, Items.STONE_SWORD, card.getDamage(), 0.21f, -0.42f, light, overlay, pose,
 					buffer);
@@ -149,21 +151,23 @@ public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 
 		// Render entity
 		float maxWidth = 2;
-		float maxHeight = 2;
+		float maxHeight = 2.3f;
 
-		var dimensions = type.getDimensions();
+		var dimensions = entity.getType().getDimensions();
 		var widthScale = Math.min(1, maxWidth / dimensions.width);
 		var heightScale = Math.min(1, maxHeight / dimensions.height);
 		var scale = Math.min(widthScale, heightScale);
+		var scaleFactor = entity.getType() == EntityType.ITEM ? 3 : 1;
+		var drawingScale = scale * scaleFactor * 0.15f;
+
+		if (entity.getType() == EntityType.ITEM) {
+			scale *= 3;
+		}
 
 		pose.pushPose();
-		pose.translate(0.4, -0.43, 0);
-		pose.scale(0.15f * scale, 0.15f * scale, 0.15f * scale);
+		pose.translate(0.4, -0.47 + (0.34f - dimensions.height * drawingScale * scaleFactor) / 2f, 0);
+		pose.scale(drawingScale, drawingScale, drawingScale);
 		pose.mulPose(new Quaternion(0, 20, 0, true));
-
-		if (type == EntityType.ITEM) {
-			pose.scale(3, 3, 3);
-		}
 
 		((EntityRenderer) mc.getEntityRenderDispatcher().getRenderer(entity)).render(entity, 0, 0, pose, buffer, light);
 		pose.popPose();
@@ -212,8 +216,13 @@ public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 		// Find actual player
 		if (type == EntityType.PLAYER) {
 			if (card.getAdditionalData() instanceof AdditionalCardData.IdData idData) {
+				var id = idData.getId();
+				if (id.equals(AIPlayer.ID)) {
+					return CACHE.computeIfAbsent(ModEntities.CARD_GAME_ROBOT.get(), t -> t.create(level));
+				}
+
 				for (var player : level.players())
-					if (player.getUUID().equals(idData.getId()))
+					if (player.getUUID().equals(id))
 						return player;
 			}
 			return level.players().get(0);

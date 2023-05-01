@@ -10,6 +10,7 @@ import mod.vemerion.minecard.helper.Helper;
 import mod.vemerion.minecard.init.ModBlocks;
 import mod.vemerion.minecard.init.ModCardAbilities;
 import mod.vemerion.minecard.init.ModCardConditions;
+import mod.vemerion.minecard.init.ModEntities;
 import mod.vemerion.minecard.init.ModItems;
 import net.minecraft.data.DataGenerator;
 import net.minecraftforge.common.data.LanguageProvider;
@@ -27,6 +28,7 @@ public class ModLanguageProvider extends LanguageProvider {
 
 		add(ModBlocks.GAME.get(), "Game Board");
 		add(ModItems.DECK.get(), "Deck");
+		add(ModEntities.CARD_GAME_ROBOT.get(), "Card Player 9000");
 
 		add("gui." + Main.MODID + ".game", "Minecard Game");
 

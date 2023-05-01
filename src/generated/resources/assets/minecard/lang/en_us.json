@@ -34,6 +34,7 @@
   "chat.minecard.game_interactions": "Use [item] to interact with game:\n* Deck item: Enter the game\n* Redstone dust: Add an AI opponent to the game",
   "chat.minecard.game_ongoing": "A game is already ongoing.",
   "chat.minecard.not_enough_cards": "You need a full deck to enter the game.",
+  "entity.minecard.card_game_robot": "Card Player 9000",
   "gui.minecard.card_ability_selection": "%s%s%s%s",
   "gui.minecard.deck_count": "%s",
   "gui.minecard.enemy_turn": "Enemy Turn",
