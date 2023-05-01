@@ -134,6 +134,10 @@ public class Card {
 	public void setReady(boolean b) {
 		this.ready = b;
 	}
+	
+	public boolean canAttack() {
+		return isReady() && getDamage() > 0;
+	}
 
 	public Map<CardProperty, Integer> getProperties() {
 		return properties;

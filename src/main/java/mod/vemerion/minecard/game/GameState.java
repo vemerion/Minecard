@@ -189,7 +189,7 @@ public class GameState {
 
 		var attackerCard = current.findFromBoard(attackerId);
 		var targetCard = enemy.findFromBoard(targetId);
-		if (attackerCard == null || targetCard == null || !attackerCard.isReady())
+		if (attackerCard == null || targetCard == null || !attackerCard.canAttack())
 			return;
 
 		// Can't be targeted

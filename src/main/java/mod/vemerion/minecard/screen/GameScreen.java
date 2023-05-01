@@ -417,7 +417,7 @@ public class GameScreen extends Screen implements GameClient {
 				// Attack
 				if (selectedCard == null && attackingCard == null) {
 					for (var card : yourState().board) {
-						if (card.contains(pMouseX, pMouseY) && card.isReady()) {
+						if (card.contains(pMouseX, pMouseY) && card.canAttack()) {
 							attackingCard = card;
 							return true;
 						}

@@ -41,7 +41,7 @@ public class AIPlayer implements GameClient {
 
 		for (int i = 0; i < yourBoard.size(); i++) {
 			var attacker = yourBoard.get(i);
-			if (attacker.isReady()) {
+			if (attacker.canAttack()) {
 				for (int j = 0; j < enemyBoard.size(); j++) {
 					var target = enemyBoard.get(j);
 					if (GameUtil.canBeAttacked(target, enemyBoard)) {

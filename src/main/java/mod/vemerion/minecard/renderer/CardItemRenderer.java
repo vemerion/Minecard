@@ -78,7 +78,7 @@ public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 		pose.pushPose();
 		pose.scale(CARD_SIZE, -CARD_SIZE, CARD_SIZE);
 		renderCard(pose, CARD_FRONT, buffer, light, 32);
-		if (card.isReady()) {
+		if (card.canAttack()) {
 			pose.pushPose();
 			pose.translate(-1, -1, 0);
 			renderCard(pose, CARD_READY, buffer, light, 34);
