@@ -1,14 +1,18 @@
 package mod.vemerion.minecard.game;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import mod.vemerion.minecard.blockentity.GameBlockEntity;
 import mod.vemerion.minecard.network.GameClient;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.EntityType;
 
 public class AIPlayer implements GameClient {
 
@@ -22,9 +26,11 @@ public class AIPlayer implements GameClient {
 	private boolean isCurrent;
 	private int timer;
 	private GameBlockEntity game;
-	
+	private Random rand;
+
 	public AIPlayer(GameBlockEntity game) {
 		this.game = game;
+		this.rand = new Random();
 	}
 
 	public void tick() {
@@ -34,7 +40,8 @@ public class AIPlayer implements GameClient {
 
 		for (int i = 0; i < yourHand.size(); i++) {
 			if (yourHand.get(i).getCost() <= resources) {
-				game.playCard(yourHand.get(i).getId(), -1);
+				game.playCard(yourHand.get(i).getId(),
+						yourBoard.isEmpty() || rand.nextBoolean() ? -1 : yourBoard.get(yourBoard.size() - 1).getId());
 				return;
 			}
 		}
@@ -42,17 +49,61 @@ public class AIPlayer implements GameClient {
 		for (int i = 0; i < yourBoard.size(); i++) {
 			var attacker = yourBoard.get(i);
 			if (attacker.canAttack()) {
-				for (int j = 0; j < enemyBoard.size(); j++) {
-					var target = enemyBoard.get(j);
-					if (GameUtil.canBeAttacked(target, enemyBoard)) {
-						game.attack(attacker.getId(), target.getId());
-						return;
-					}
+				var target = findTarget(attacker);
+				if (target != null) {
+					game.attack(attacker.getId(), target.getId());
+					return;
 				}
 			}
 		}
 
 		game.endTurn();
+	}
+
+	private Card findTarget(Card attacker) {
+		var totalDamage = yourBoard.stream().mapToInt(c -> c.canAttack() ? c.getDamage() : 0).sum();
+		var enemyPlayer = enemyBoard.stream().dropWhile(c -> c.getType() != EntityType.PLAYER).findFirst().get();
+
+		// Attack player if it leads to win or with small random chance
+		if (GameUtil.canBeAttacked(enemyPlayer, enemyBoard)
+				&& (totalDamage >= enemyPlayer.getHealth() || rand.nextDouble() < 0.1)) {
+			return enemyPlayer;
+		}
+
+		var candidates = enemyBoard.stream()
+				.filter(c -> c.getType() != EntityType.PLAYER && GameUtil.canBeAttacked(c, enemyBoard))
+				.collect(Collectors.toCollection(() -> new ArrayList<>()));
+		Collections.shuffle(candidates);
+
+		// Can kill without dying
+		for (var card : candidates) {
+			if (card.getDamage() < attacker.getHealth() && card.getHealth() <= attacker.getDamage()) {
+				return card;
+			}
+		}
+
+		// Can kill but dies
+		for (var card : candidates) {
+			if (card.getHealth() <= attacker.getDamage()) {
+				return card;
+			}
+		}
+
+		// Can't kill but does not die
+		for (var card : candidates) {
+			if (card.getDamage() < attacker.getHealth()) {
+				return card;
+			}
+		}
+
+		if (GameUtil.canBeAttacked(enemyPlayer, enemyBoard))
+			candidates.add(enemyPlayer);
+
+		// A random target
+		if (!candidates.isEmpty())
+			return candidates.get(rand.nextInt(candidates.size()));
+
+		return null;
 	}
 
 	private Card find(int id, List<Card> list) {
