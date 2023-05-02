@@ -9,6 +9,7 @@ import com.mojang.math.Matrix4f;
 import com.mojang.math.Quaternion;
 
 import mod.vemerion.minecard.Main;
+import mod.vemerion.minecard.entity.CardGameRobot;
 import mod.vemerion.minecard.game.AIPlayer;
 import mod.vemerion.minecard.game.AdditionalCardData;
 import mod.vemerion.minecard.game.Card;
@@ -39,6 +40,7 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.Level;
 
 public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 
@@ -65,6 +67,10 @@ public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 
 	public CardItemRenderer(BlockEntityRenderDispatcher dispatcher, EntityModelSet modelSet) {
 		super(dispatcher, modelSet);
+	}
+
+	public static CardGameRobot getRobot(Level level) {
+		return (CardGameRobot) CACHE.computeIfAbsent(ModEntities.CARD_GAME_ROBOT.get(), t -> t.create(level));
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })

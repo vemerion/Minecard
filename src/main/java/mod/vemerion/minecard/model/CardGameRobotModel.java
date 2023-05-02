@@ -21,10 +21,17 @@ import net.minecraft.resources.ResourceLocation;
 public class CardGameRobotModel extends EntityModel<CardGameRobot> {
 	public static final ModelLayerLocation LAYER = new ModelLayerLocation(
 			new ResourceLocation(Main.MODID, "card_game_robot"), "main");
+
 	private final ModelPart base;
+	private final ModelPart head;
+	private final ModelPart leftLeg1;
+	private final ModelPart rightLeg1;
 
 	public CardGameRobotModel(ModelPart root) {
 		this.base = root.getChild("base");
+		this.head = base.getChild("head");
+		this.leftLeg1 = base.getChild("leftLeg1");
+		this.rightLeg1 = base.getChild("rightLeg1");
 	}
 
 	public static LayerDefinition createBodyLayer() {
@@ -82,7 +89,19 @@ public class CardGameRobotModel extends EntityModel<CardGameRobot> {
 	@Override
 	public void setupAnim(CardGameRobot entity, float limbSwing, float limbSwingAmount, float ageInTicks,
 			float netHeadYaw, float headPitch) {
+	}
 
+	@Override
+	public void prepareMobModel(CardGameRobot entity, float pLimbSwing, float pLimbSwingAmount, float pPartialTick) {
+		head.yRot = entity.getHeadRot(pPartialTick);
+		leftLeg1.y = -7;
+		rightLeg1.y = -7;
+
+		if (entity.getLegTimer() < 50) {
+			leftLeg1.y = -7 - entity.getLegOffset(pPartialTick);
+		} else {
+			rightLeg1.y = -7 - entity.getLegOffset(pPartialTick);
+		}
 	}
 
 	@Override

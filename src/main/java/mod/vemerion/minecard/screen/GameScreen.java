@@ -26,6 +26,7 @@ import mod.vemerion.minecard.network.EndTurnMessage;
 import mod.vemerion.minecard.network.GameClient;
 import mod.vemerion.minecard.network.Network;
 import mod.vemerion.minecard.network.PlayCardMessage;
+import mod.vemerion.minecard.renderer.CardItemRenderer;
 import mod.vemerion.minecard.screen.animation.Animation;
 import mod.vemerion.minecard.screen.animation.BurnAnimation;
 import mod.vemerion.minecard.screen.animation.DeathAnimation;
@@ -528,6 +529,8 @@ public class GameScreen extends Screen implements GameClient {
 	@Override
 	public void tick() {
 		super.tick();
+
+		CardItemRenderer.getRobot(minecraft.level).guiTick();
 
 		background.tick();
 
