@@ -33,6 +33,7 @@ import mod.vemerion.minecard.screen.animation.DeathAnimation;
 import mod.vemerion.minecard.screen.animation.FreezeAnimation;
 import mod.vemerion.minecard.screen.animation.StealthAnimation;
 import mod.vemerion.minecard.screen.animation.TauntAnimation;
+import mod.vemerion.minecard.screen.animation.ThornsAnimation;
 import mod.vemerion.minecard.screen.animation.ThrowItemAnimation;
 import mod.vemerion.minecard.screen.animation.WallAnimation;
 import mod.vemerion.minecard.screen.animation.config.AnimationConfigs;
@@ -345,6 +346,10 @@ public class GameScreen extends Screen implements GameClient {
 					break;
 				case BURN:
 					animations.add(new BurnAnimation(minecraft, card, () -> {
+					}));
+					break;
+				case THORNS:
+					animations.add(new ThornsAnimation(minecraft, card, () -> {
 					}));
 					break;
 				case SPECIAL:

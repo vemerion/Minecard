@@ -24,6 +24,12 @@
     "apply_to_origin": true,
     "type": "minecard:explosion"
   },
+  "elder_guardian": {
+    "red": 0.29,
+    "green": 0.26,
+    "blue": 0.09,
+    "type": "minecard:potion"
+  },
   "throw_carrot": {
     "item": "minecraft:carrot",
     "type": "minecard:throw_item"

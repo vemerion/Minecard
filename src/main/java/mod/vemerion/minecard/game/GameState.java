@@ -201,7 +201,7 @@ public class GameState {
 
 		attackerCard.setReady(false);
 		attackerCard.removeProperty(CardProperty.STEALTH);
-		hurt(receivers, attackerCard, targetCard.getDamage());
+		hurt(receivers, attackerCard, targetCard.getDamage() + targetCard.getProperty(CardProperty.THORNS));
 		hurt(receivers, targetCard, attackerCard.getDamage());
 
 		for (var receiver : receivers) {

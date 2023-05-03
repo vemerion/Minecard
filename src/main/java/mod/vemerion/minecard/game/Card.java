@@ -74,9 +74,9 @@ public class Card {
 	public int getCost() {
 		return cost;
 	}
-	
+
 	public void setCost(int cost) {
-		this.cost = cost;
+		this.cost = Math.max(0, cost);
 	}
 
 	public int getHealth() {
@@ -84,7 +84,7 @@ public class Card {
 	}
 
 	public void setHealth(int health) {
-		this.health = health;
+		this.health = Math.max(0, health);
 	}
 
 	public int getMaxHealth() {
@@ -92,7 +92,7 @@ public class Card {
 	}
 
 	public void setMaxHealth(int maxHealth) {
-		this.maxHealth = maxHealth;
+		this.maxHealth = Math.max(0, maxHealth);
 	}
 
 	public void hurt(int amount) {
@@ -116,7 +116,7 @@ public class Card {
 	}
 
 	public void setDamage(int damage) {
-		this.damage = damage;
+		this.damage = Math.max(0, damage);
 	}
 
 	public int getMaxDamage() {
@@ -124,7 +124,7 @@ public class Card {
 	}
 
 	public void setMaxDamage(int maxDamage) {
-		this.maxDamage = maxDamage;
+		this.maxDamage = Math.max(0, maxDamage);
 	}
 
 	public boolean isReady() {
@@ -134,7 +134,7 @@ public class Card {
 	public void setReady(boolean b) {
 		this.ready = b;
 	}
-	
+
 	public boolean canAttack() {
 		return isReady() && getDamage() > 0;
 	}
@@ -144,9 +144,13 @@ public class Card {
 	}
 
 	public boolean hasProperty(CardProperty property) {
-		return properties.getOrDefault(property, 0) > 0;
+		return getProperty(property) > 0;
 	}
-	
+
+	public int getProperty(CardProperty property) {
+		return properties.getOrDefault(property, 0);
+	}
+
 	public void putProperty(CardProperty property, int value) {
 		properties.put(property, value);
 	}

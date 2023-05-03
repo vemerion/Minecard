@@ -29,6 +29,7 @@
   "card_property.minecard.special": "special",
   "card_property.minecard.stealth": "stealth",
   "card_property.minecard.taunt": "taunt",
+  "card_property.minecard.thorns": "thorns",
   "card_selection_method.minecard.all": "all cards from ",
   "card_selection_method.minecard.random": "a random card from ",
   "chat.minecard.game_interactions": "Use [item] to interact with game:\n* Deck item: Enter the game\n* Redstone dust: Add an AI opponent to the game",

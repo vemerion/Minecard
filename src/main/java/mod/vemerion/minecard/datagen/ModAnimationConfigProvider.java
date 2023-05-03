@@ -66,6 +66,7 @@ public class ModAnimationConfigProvider implements DataProvider {
 		animations.put("throw_pork", new ThrowItemAnimationConfig(Items.PORKCHOP, Optional.empty()));
 		animations.put("fireball", new ThrowItemAnimationConfig(Items.FIRE_CHARGE, Optional.empty()));
 		animations.put("throw_bamboo", new ThrowItemAnimationConfig(Items.BAMBOO, Optional.empty()));
+		animations.put("elder_guardian", new PotionAnimationConfig(0.29f, 0.26f, 0.09f));
 
 	}
 
