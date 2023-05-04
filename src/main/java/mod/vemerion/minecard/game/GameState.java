@@ -210,6 +210,18 @@ public class GameState {
 		}
 	}
 
+	// Completely remove the card without running onDeath
+	public void removeCard(List<Receiver> receivers, Card card) {
+		card.setHealth(0);
+		for (var receiver : receivers)
+			updateCards(receiver, List.of(card));
+		for (var playerState : playerStates) {
+			playerState.getHand().remove(card);
+			playerState.getBoard().remove(card);
+			playerState.getDeck().remove(card);
+		}
+	}
+
 	public boolean isGameOver() {
 		int count = 0;
 		for (var playerState : playerStates) {

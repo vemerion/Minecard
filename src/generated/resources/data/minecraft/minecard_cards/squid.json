@@ -2,15 +2,16 @@
   "abilities": {
     "type": "minecard:copy_cards",
     "value": {
-      "trigger": "hurt",
-      "destroy_original": true,
-      "restore_health": true,
+      "give_to_enemy": false,
       "selection": {
         "groups": [
           "self"
         ],
         "method": "all"
-      }
+      },
+      "trigger": "hurt",
+      "destroy_original": true,
+      "restore_health": true
     }
   },
   "entity": "minecraft:squid",

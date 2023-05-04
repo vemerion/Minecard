@@ -13,6 +13,7 @@ import com.mojang.serialization.JsonOps;
 import mod.vemerion.minecard.Main;
 import mod.vemerion.minecard.screen.animation.config.AnimationConfig;
 import mod.vemerion.minecard.screen.animation.config.AnimationConfigs;
+import mod.vemerion.minecard.screen.animation.config.ChargeAnimationConfig;
 import mod.vemerion.minecard.screen.animation.config.EvokerFangsAnimationConfig;
 import mod.vemerion.minecard.screen.animation.config.ExplosionAnimationConfig;
 import mod.vemerion.minecard.screen.animation.config.GlowAnimationConfig;
@@ -22,6 +23,7 @@ import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.HashCache;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Items;
 
 public class ModAnimationConfigProvider implements DataProvider {
@@ -67,6 +69,7 @@ public class ModAnimationConfigProvider implements DataProvider {
 		animations.put("fireball", new ThrowItemAnimationConfig(Items.FIRE_CHARGE, Optional.empty()));
 		animations.put("throw_bamboo", new ThrowItemAnimationConfig(Items.BAMBOO, Optional.empty()));
 		animations.put("elder_guardian", new PotionAnimationConfig(0.29f, 0.26f, 0.09f));
+		animations.put("goat_charge", new ChargeAnimationConfig(EntityType.GOAT));
 
 	}
 

@@ -1,0 +1,33 @@
+{
+  "abilities": {
+    "type": "minecard:copy_cards",
+    "value": {
+      "give_to_enemy": true,
+      "animation": "minecard:goat_charge",
+      "selection": {
+        "groups": [
+          "enemy_board"
+        ],
+        "method": "random",
+        "condition": {
+          "type": "minecard:not",
+          "value": {
+            "inner": {
+              "type": "minecard:entity",
+              "value": {
+                "inner": "minecraft:player"
+              }
+            }
+          }
+        }
+      },
+      "trigger": "summon",
+      "destroy_original": true,
+      "restore_health": false
+    }
+  },
+  "entity": "minecraft:goat",
+  "cost": 5,
+  "health": 4,
+  "damage": 4
+}

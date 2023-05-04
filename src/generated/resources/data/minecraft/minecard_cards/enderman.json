@@ -2,15 +2,16 @@
   "abilities": {
     "type": "minecard:copy_cards",
     "value": {
-      "trigger": "summon",
-      "destroy_original": false,
-      "restore_health": false,
+      "give_to_enemy": false,
       "selection": {
         "groups": [
           "enemy_hand"
         ],
         "method": "random"
-      }
+      },
+      "trigger": "summon",
+      "destroy_original": false,
+      "restore_health": false
     }
   },
   "entity": "minecraft:enderman",

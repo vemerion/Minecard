@@ -2,9 +2,7 @@
   "abilities": {
     "type": "minecard:copy_cards",
     "value": {
-      "trigger": "hurt",
-      "destroy_original": true,
-      "restore_health": false,
+      "give_to_enemy": false,
       "selection": {
         "groups": [
           "your_deck"
@@ -16,7 +14,10 @@
             "inner": "minecraft:silverfish"
           }
         }
-      }
+      },
+      "trigger": "hurt",
+      "destroy_original": true,
+      "restore_health": false
     }
   },
   "entity": "minecraft:silverfish",

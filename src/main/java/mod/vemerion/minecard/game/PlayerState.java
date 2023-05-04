@@ -219,16 +219,6 @@ public class PlayerState {
 		card.getAbility().onSummon(receivers, this, card);
 	}
 
-	// Completely remove the card without running onDeath
-	public void removeCard(List<Receiver> receivers, Card card) {
-		card.setHealth(0);
-		for (var receiver : receivers)
-			game.updateCards(receiver, List.of(card));
-		hand.remove(card);
-		board.remove(card);
-		deck.remove(card);
-	}
-
 	public MessagePlayerState toMessage(boolean hide) {
 		List<Card> hand = this.hand;
 		if (hide) {

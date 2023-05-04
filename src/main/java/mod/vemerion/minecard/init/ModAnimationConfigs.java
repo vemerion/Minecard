@@ -5,6 +5,7 @@ import java.util.function.Supplier;
 import mod.vemerion.minecard.Main;
 import mod.vemerion.minecard.screen.animation.config.AnimationConfig;
 import mod.vemerion.minecard.screen.animation.config.AnimationConfigType;
+import mod.vemerion.minecard.screen.animation.config.ChargeAnimationConfig;
 import mod.vemerion.minecard.screen.animation.config.EvokerFangsAnimationConfig;
 import mod.vemerion.minecard.screen.animation.config.ExplosionAnimationConfig;
 import mod.vemerion.minecard.screen.animation.config.GlowAnimationConfig;
@@ -47,5 +48,7 @@ public class ModAnimationConfigs {
 	public static final RegistryObject<AnimationConfigType<? extends AnimationConfig>> EXPLOSION = ANIMATION_CONFIGS
 			.register("explosion",
 					() -> new AnimationConfigType<ExplosionAnimationConfig>(ExplosionAnimationConfig.CODEC));
+	public static final RegistryObject<AnimationConfigType<? extends AnimationConfig>> CHARGE = ANIMATION_CONFIGS
+			.register("charge", () -> new AnimationConfigType<ChargeAnimationConfig>(ChargeAnimationConfig.CODEC));
 
 }

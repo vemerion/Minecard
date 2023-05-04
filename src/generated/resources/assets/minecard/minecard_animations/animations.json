@@ -1,4 +1,8 @@
 {
+  "goat_charge": {
+    "entity": "minecraft:goat",
+    "type": "minecard:charge"
+  },
   "ender_dragon": {
     "red": 0.8,
     "green": 0.0,

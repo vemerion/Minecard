@@ -105,10 +105,12 @@ public class ModLanguageProvider extends LanguageProvider {
 		add(ModCardAbilities.ADD_CARDS.get().getTranslationKey(), "%s Add %s to your hand.");
 		add(ModCardAbilities.RESOURCE.get().getTranslationKey(),
 				"%s Gain %s temporary resources, and %s permanent resources.");
-		add(ModCardAbilities.COPY_CARDS.get().getTranslationKey(), "%s copy %s.%s%s");
+		add(ModCardAbilities.COPY_CARDS.get().getTranslationKey(), "%s copy %s and give it to %s.%s%s");
 		add(ModCardAbilities.COPY_CARDS.get().getTranslationKey() + ".destroy_original", " Destroy the original card.");
 		add(ModCardAbilities.COPY_CARDS.get().getTranslationKey() + ".restore_health",
 				" Restore the copy to full health.");
+		add(ModCardAbilities.COPY_CARDS.get().getTranslationKey() + ".you", "you");
+		add(ModCardAbilities.COPY_CARDS.get().getTranslationKey() + ".enemy", "the enemy");
 		add(ModCardAbilities.SUMMON_CARD.get().getTranslationKey(), "%s summon a %s %s.");
 		add(ModCardAbilities.SUMMON_CARD.get().getTranslationKey() + "card_text", "%s (%s/%s)");
 		add(ModCardAbilities.MULTI.get().getTranslationKey(), "%s");

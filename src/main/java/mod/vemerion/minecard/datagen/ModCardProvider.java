@@ -100,9 +100,10 @@ public class ModCardProvider implements DataProvider {
 				new LazyCardType(new Builder(EntityType.ITEM, 0, 0, 0)
 						.setCardAbility(new ResourceAbility(CardAbilityTrigger.SUMMON, 1, 0))
 						.setAdditionalData(new AdditionalCardData.ItemData(Items.EMERALD)).build()))));
-		add(new Builder(EntityType.ENDERMAN, 6, 4, 5).setCardAbility(new CopyCardsAbility(CardAbilityTrigger.SUMMON,
-				false, false, new CardAbilitySelection(new CardAbilityGroups(Set.of(CardAbilityGroup.ENEMY_HAND)),
-						CardSelectionMethod.RANDOM, CardCondition.NoCondition.NO_CONDITION))));
+		add(new Builder(EntityType.ENDERMAN, 6, 4, 5)
+				.setCardAbility(new CopyCardsAbility(CardAbilityTrigger.SUMMON, false, false, false, Optional.empty(),
+						new CardAbilitySelection(new CardAbilityGroups(Set.of(CardAbilityGroup.ENEMY_HAND)),
+								CardSelectionMethod.RANDOM, CardCondition.NoCondition.NO_CONDITION))));
 		add(new Builder(EntityType.GLOW_SQUID, 3, 2, 2).setCardAbility(new ModifyAbility(CardAbilityTrigger.SUMMON,
 				Optional.of(new ResourceLocation(Main.MODID, "glow")),
 				new CardAbilitySelection(
@@ -121,12 +122,14 @@ public class ModCardProvider implements DataProvider {
 						new CardAbilitySelection(new CardAbilityGroups(Set.of(CardAbilityGroup.ENEMY_BOARD)),
 								CardSelectionMethod.RANDOM, CardCondition.NoCondition.NO_CONDITION),
 						List.of(modification(-4, new LazyCardType(new Builder(EntityType.ITEM, 0, 0, 0).build()))))));
-		add(new Builder(EntityType.SQUID, 1, 1, 1).setCardAbility(new CopyCardsAbility(CardAbilityTrigger.HURT, true,
-				true, new CardAbilitySelection(new CardAbilityGroups(Set.of(CardAbilityGroup.SELF)),
-						CardSelectionMethod.ALL, CardCondition.NoCondition.NO_CONDITION))));
-		add(new Builder(EntityType.SILVERFISH, 1, 1, 1).setCardAbility(new CopyCardsAbility(CardAbilityTrigger.HURT,
-				true, false, new CardAbilitySelection(new CardAbilityGroups(Set.of(CardAbilityGroup.YOUR_DECK)),
-						CardSelectionMethod.RANDOM, new CardCondition.Entity(EntityType.SILVERFISH)))));
+		add(new Builder(EntityType.SQUID, 1, 1, 1)
+				.setCardAbility(new CopyCardsAbility(CardAbilityTrigger.HURT, true, true, false, Optional.empty(),
+						new CardAbilitySelection(new CardAbilityGroups(Set.of(CardAbilityGroup.SELF)),
+								CardSelectionMethod.ALL, CardCondition.NoCondition.NO_CONDITION))));
+		add(new Builder(EntityType.SILVERFISH, 1, 1, 1)
+				.setCardAbility(new CopyCardsAbility(CardAbilityTrigger.HURT, true, false, false, Optional.empty(),
+						new CardAbilitySelection(new CardAbilityGroups(Set.of(CardAbilityGroup.YOUR_DECK)),
+								CardSelectionMethod.RANDOM, new CardCondition.Entity(EntityType.SILVERFISH)))));
 		add(new Builder(EntityType.EVOKER, 5, 2, 2)
 				.setCardAbility(new ModifyAbility(CardAbilityTrigger.SUMMON, Optional.of(mod("evoker_fangs")),
 						new CardAbilitySelection(new CardAbilityGroups(Set.of(CardAbilityGroup.ENEMY_BOARD)),
@@ -244,6 +247,11 @@ public class ModCardProvider implements DataProvider {
 						new CardAbilitySelection(new CardAbilityGroups(Set.of(CardAbilityGroup.ENEMY_BOARD)),
 								CardSelectionMethod.ALL, CardCondition.NoCondition.NO_CONDITION),
 						List.of(modification(0, new LazyCardType(new Builder(EntityType.ITEM, 0, 0, -1).build()))))));
+		add(new Builder(EntityType.GOAT, 5, 4, 4).setCardAbility(
+				new CopyCardsAbility(CardAbilityTrigger.SUMMON, true, false, true, Optional.of(mod("goat_charge")),
+						new CardAbilitySelection(new CardAbilityGroups(Set.of(CardAbilityGroup.ENEMY_BOARD)),
+								CardSelectionMethod.RANDOM,
+								new CardCondition.Not(new CardCondition.Entity(EntityType.PLAYER))))));
 
 		// Auxiliary cards
 		add(new Builder(EntityType.ITEM, 0, 1, 0).setKey(mod("shield")).addProperty(CardProperty.SHIELD, 1)
