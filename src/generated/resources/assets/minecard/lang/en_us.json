@@ -7,6 +7,7 @@
   "card_ability_group.minecard.enemy_hand": "the enemy hand",
   "card_ability_group.minecard.self": "self",
   "card_ability_group.minecard.target": "target",
+  "card_ability_group.minecard.target_adjacent": "adjacent to the target",
   "card_ability_group.minecard.your_board": "your board",
   "card_ability_group.minecard.your_deck": "your deck",
   "card_ability_group.minecard.your_hand": "your hand",

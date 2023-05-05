@@ -159,8 +159,11 @@ public class AIPlayer implements GameClient {
 	@Override
 	public void updateCard(Card received) {
 		var card = find(received.getId());
-		if (card != null)
+		if (card != null) {
 			card.copy(received);
+			if (card.isDead())
+				List.of(yourHand, yourBoard, enemyBoard).forEach(l -> l.remove(card));
+		}
 	}
 
 	@Override

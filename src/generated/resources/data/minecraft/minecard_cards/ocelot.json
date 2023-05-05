@@ -1,0 +1,38 @@
+{
+  "abilities": {
+    "type": "minecard:copy_cards",
+    "value": {
+      "give_to_enemy": true,
+      "selection": {
+        "groups": [
+          "enemy_board"
+        ],
+        "method": "all",
+        "condition": {
+          "type": "minecard:or",
+          "value": {
+            "left": {
+              "type": "minecard:entity",
+              "value": {
+                "inner": "minecraft:creeper"
+              }
+            },
+            "right": {
+              "type": "minecard:entity",
+              "value": {
+                "inner": "minecraft:phantom"
+              }
+            }
+          }
+        }
+      },
+      "trigger": "summon",
+      "destroy_original": true,
+      "restore_health": false
+    }
+  },
+  "entity": "minecraft:ocelot",
+  "cost": 3,
+  "health": 3,
+  "damage": 3
+}

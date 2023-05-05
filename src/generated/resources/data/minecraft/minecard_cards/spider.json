@@ -2,22 +2,20 @@
   "abilities": {
     "type": "minecard:modify",
     "value": {
-      "trigger": "attack",
+      "trigger": "death",
+      "animation": "minecard:throw_web",
       "selection": {
         "groups": [
-          "target"
+          "enemy_hand"
         ],
-        "method": "all"
+        "method": "random"
       },
       "modifications": [
         {
           "health_change": 0,
           "modifications": {
-            "properties": {
-              "freeze": 2
-            },
             "entity": "minecraft:item",
-            "cost": 0,
+            "cost": 1,
             "health": 0,
             "damage": 0
           }
@@ -25,7 +23,7 @@
       ]
     }
   },
-  "entity": "minecraft:stray",
+  "entity": "minecraft:spider",
   "cost": 2,
   "health": 2,
   "damage": 2

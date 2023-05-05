@@ -2,6 +2,7 @@ package mod.vemerion.minecard.renderer;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -26,7 +27,6 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.ItemTransforms.TransformType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
-import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
@@ -36,6 +36,7 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.animal.Rabbit;
+import net.minecraft.world.entity.animal.TropicalFish;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -73,7 +74,6 @@ public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 		return (CardGameRobot) CACHE.computeIfAbsent(ModEntities.CARD_GAME_ROBOT.get(), t -> t.create(level));
 	}
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public static void renderCard(Card card, TransformType transform, PoseStack pose, MultiBufferSource buffer,
 			int light, int overlay) {
 		Minecraft mc = Minecraft.getInstance();
@@ -175,7 +175,7 @@ public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 		pose.scale(drawingScale, drawingScale, drawingScale);
 		pose.mulPose(new Quaternion(0, 20, 0, true));
 
-		((EntityRenderer) mc.getEntityRenderDispatcher().getRenderer(entity)).render(entity, 0, 0, pose, buffer, light);
+		mc.getEntityRenderDispatcher().getRenderer(entity).render(entity, 0, 0, pose, buffer, light);
 		pose.popPose();
 	}
 
@@ -243,6 +243,13 @@ public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 						return 0;
 					}
 				};
+			} else if (t == EntityType.TROPICAL_FISH) {
+				return new TropicalFish(EntityType.TROPICAL_FISH, level) {
+					@Override
+					public boolean isInWater() {
+						return true;
+					}
+				};
 			}
 			return t.create(level);
 		});
@@ -272,6 +279,10 @@ public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 		}
 		if (entity instanceof Mob mob) {
 			mob.setBaby(card.hasProperty(CardProperty.BABY));
+		}
+		if (entity instanceof TropicalFish fish) {
+			var rand = new Random(card.getId());
+			fish.setVariant(rand.nextInt(2) | rand.nextInt(6) << 8 | rand.nextInt(15) << 16 | rand.nextInt(15) << 24);
 		}
 	}
 

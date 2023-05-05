@@ -91,9 +91,10 @@ public class CopyCardsAbility extends CardAbility {
 
 		animation.ifPresent(anim -> {
 			for (var receiver : receivers) {
-				receiver.receiver(new AnimationMessage(card.getId(), selected.stream()
-						.filter(c -> state.getGame().calcVisibility(receiver.getId(), card) == CardVisibility.VISIBLE)
-						.map(c -> c.getId()).collect(Collectors.toList()), anim));
+				receiver.receiver(new AnimationMessage(card.getId(), selected.stream().filter(c -> {
+					return state.getGame().calcVisibility(receiver.getId(), c) == CardVisibility.VISIBLE
+							|| state.getGame().calcVisibility(state.getId(), c) == CardVisibility.ENEMY_HAND;
+				}).map(c -> c.getId()).collect(Collectors.toList()), anim));
 			}
 		});
 

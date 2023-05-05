@@ -66,6 +66,7 @@ public class ModLanguageProvider extends LanguageProvider {
 		add(CardAbilityGroup.ENEMY_HAND.getTextKey(), "the enemy hand");
 		add(CardAbilityGroup.YOUR_HAND.getTextKey(), "your hand");
 		add(CardAbilityGroup.ADJACENT.getTextKey(), "adjacent to this");
+		add(CardAbilityGroup.TARGET_ADJACENT.getTextKey(), "adjacent to the target");
 
 		// Card selection methods
 		add(CardSelectionMethod.ALL.getTextKey(), "all cards from ");

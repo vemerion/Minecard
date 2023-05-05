@@ -1,0 +1,27 @@
+{
+  "abilities": {
+    "type": "minecard:copy_cards",
+    "value": {
+      "give_to_enemy": false,
+      "selection": {
+        "groups": [
+          "your_deck"
+        ],
+        "method": "random",
+        "condition": {
+          "type": "minecard:entity",
+          "value": {
+            "inner": "minecraft:enderman"
+          }
+        }
+      },
+      "trigger": "summon",
+      "destroy_original": true,
+      "restore_health": false
+    }
+  },
+  "entity": "minecraft:endermite",
+  "cost": 3,
+  "health": 1,
+  "damage": 2
+}

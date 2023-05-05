@@ -95,7 +95,7 @@ public class ModCardProvider implements DataProvider {
 						new CardAbilitySelection(new CardAbilityGroups(Set.of(CardAbilityGroup.TARGET)),
 								CardSelectionMethod.ALL, CardCondition.NoCondition.NO_CONDITION),
 						List.of(modification(0, new LazyCardType(
-								new Builder(EntityType.ITEM, 0, 0, 0).addProperty(CardProperty.FREEZE, 1).build()))))));
+								new Builder(EntityType.ITEM, 0, 0, 0).addProperty(CardProperty.FREEZE, 2).build()))))));
 		add(new Builder(EntityType.VINDICATOR, 6, 4, 8).setCardAbility(new AddCardsAbility(CardAbilityTrigger.DEATH,
 				new LazyCardType(new Builder(EntityType.ITEM, 0, 0, 0)
 						.setCardAbility(new ResourceAbility(CardAbilityTrigger.SUMMON, 1, 0))
@@ -252,6 +252,51 @@ public class ModCardProvider implements DataProvider {
 						new CardAbilitySelection(new CardAbilityGroups(Set.of(CardAbilityGroup.ENEMY_BOARD)),
 								CardSelectionMethod.RANDOM,
 								new CardCondition.Not(new CardCondition.Entity(EntityType.PLAYER))))));
+		add(new Builder(EntityType.ENDERMITE, 3, 1, 2)
+				.setCardAbility(new CopyCardsAbility(CardAbilityTrigger.SUMMON, true, false, false, Optional.empty(),
+						new CardAbilitySelection(new CardAbilityGroups(Set.of(CardAbilityGroup.YOUR_DECK)),
+								CardSelectionMethod.RANDOM, new CardCondition.Entity(EntityType.ENDERMAN)))));
+		add(new Builder(EntityType.PIGLIN_BRUTE, 6, 5, 6).addProperty(CardProperty.TAUNT, 1));
+		add(new Builder(EntityType.PILLAGER, 4, 2, 2)
+				.setCardAbility(new ModifyAbility(CardAbilityTrigger.SUMMON, Optional.of(mod("throw_shield")),
+						new CardAbilitySelection(new CardAbilityGroups(Set.of(CardAbilityGroup.ADJACENT)),
+								CardSelectionMethod.ALL, CardCondition.NoCondition.NO_CONDITION),
+						List.of(modification(0, new LazyCardType(
+								new Builder(EntityType.ITEM, 0, 1, 1).addProperty(CardProperty.TAUNT, 1).build()))))));
+		add(new Builder(EntityType.RAVAGER, 9, 10, 4)
+				.setCardAbility(new ModifyAbility(CardAbilityTrigger.ATTACK, Optional.of(mod("ravager_charge")),
+						new CardAbilitySelection(new CardAbilityGroups(Set.of(CardAbilityGroup.TARGET_ADJACENT)),
+								CardSelectionMethod.ALL, CardCondition.NoCondition.NO_CONDITION),
+						List.of(modification(-4, new LazyCardType(new Builder(EntityType.ITEM, 0, 0, 0).build()))))));
+		add(new Builder(EntityType.SKELETON, 4, 4, 1)
+				.setCardAbility(new ModifyAbility(CardAbilityTrigger.TICK, Optional.of(mod("shoot_arrow")),
+						new CardAbilitySelection(new CardAbilityGroups(Set.of(CardAbilityGroup.ENEMY_BOARD)),
+								CardSelectionMethod.RANDOM, CardCondition.NoCondition.NO_CONDITION),
+						List.of(modification(-1, new LazyCardType(new Builder(EntityType.ITEM, 0, 0, 0).build()))))));
+		add(new Builder(EntityType.SPIDER, 2, 2, 2)
+				.setCardAbility(new ModifyAbility(CardAbilityTrigger.DEATH, Optional.of(mod("throw_web")),
+						new CardAbilitySelection(new CardAbilityGroups(Set.of(CardAbilityGroup.ENEMY_HAND)),
+								CardSelectionMethod.RANDOM, CardCondition.NoCondition.NO_CONDITION),
+						List.of(modification(0, new LazyCardType(new Builder(EntityType.ITEM, 1, 0, 0).build()))))));
+		add(new Builder(EntityType.TROPICAL_FISH, 0, 1, 1));
+		add(new Builder(EntityType.SKELETON_HORSE, 4, 4, 4)
+				.setCardAbility(new ModifyAbility(CardAbilityTrigger.SUMMON, Optional.of(mod("lightning_bolt")),
+						new CardAbilitySelection(new CardAbilityGroups(Set.of(CardAbilityGroup.ENEMY_BOARD)),
+								CardSelectionMethod.RANDOM, CardCondition.NoCondition.NO_CONDITION),
+						List.of(modification(-2, new LazyCardType(
+								new Builder(EntityType.ITEM, 0, 0, 0).addProperty(CardProperty.BURN, 2).build()))))));
+		add(new Builder(EntityType.SALMON, 1, 1, 1).setCardAbility(new ChanceAbility(50,
+				new AddCardsAbility(CardAbilityTrigger.DEATH,
+						new LazyCardType(new Builder(EntityType.ITEM, 0, 0, 0)
+								.setAdditionalData(new AdditionalCardData.ItemData(Items.SALMON_BUCKET))
+								.setCardAbility(new SummonCardAbility(CardAbilityTrigger.SUMMON, CardPlacement.RIGHT,
+										new LazyCardType(EntityType.SALMON.getRegistryName())))
+								.build())))));
+		add(new Builder(EntityType.OCELOT, 3, 3, 3).setCardAbility(new CopyCardsAbility(CardAbilityTrigger.SUMMON, true,
+				false, true, Optional.empty(),
+				new CardAbilitySelection(new CardAbilityGroups(Set.of(CardAbilityGroup.ENEMY_BOARD)),
+						CardSelectionMethod.ALL, new CardCondition.Or(new CardCondition.Entity(EntityType.CREEPER),
+								new CardCondition.Entity(EntityType.PHANTOM))))));
 
 		// Auxiliary cards
 		add(new Builder(EntityType.ITEM, 0, 1, 0).setKey(mod("shield")).addProperty(CardProperty.SHIELD, 1)

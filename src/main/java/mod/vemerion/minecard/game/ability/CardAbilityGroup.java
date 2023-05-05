@@ -9,8 +9,8 @@ import net.minecraft.network.chat.TranslatableComponent;
 
 public enum CardAbilityGroup {
 	ALL("all"), SELF("self"), TARGET("target"), ENEMY_BOARD("enemy_board"), YOUR_BOARD("your_board"),
-	ENEMY_HAND("enemy_hand"), YOUR_HAND("your_hand"), ADJACENT("adjacent"), ENEMY_DECK("enemy_deck"),
-	YOUR_DECK("your_deck");
+	ENEMY_HAND("enemy_hand"), YOUR_HAND("your_hand"), ADJACENT("adjacent"), TARGET_ADJACENT("target_adjacent"),
+	ENEMY_DECK("enemy_deck"), YOUR_DECK("your_deck");
 
 	public static final Codec<CardAbilityGroup> CODEC = GameUtil.enumCodec(CardAbilityGroup.class,
 			CardAbilityGroup::getName);

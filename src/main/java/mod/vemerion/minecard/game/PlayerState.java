@@ -129,7 +129,7 @@ public class PlayerState {
 			var card = board.get(i);
 			boolean changed = false;
 			if (card.hasProperty(CardProperty.FREEZE)) {
-				card.removeProperty(CardProperty.FREEZE);
+				card.decrementProperty(CardProperty.FREEZE);
 				changed = true;
 			}
 			if (card.hasProperty(CardProperty.BURN)) {

@@ -3,19 +3,17 @@
     "type": "minecard:modify",
     "value": {
       "trigger": "attack",
+      "animation": "minecard:ravager_charge",
       "selection": {
         "groups": [
-          "target"
+          "target_adjacent"
         ],
         "method": "all"
       },
       "modifications": [
         {
-          "health_change": 0,
+          "health_change": -4,
           "modifications": {
-            "properties": {
-              "freeze": 2
-            },
             "entity": "minecraft:item",
             "cost": 0,
             "health": 0,
@@ -25,8 +23,8 @@
       ]
     }
   },
-  "entity": "minecraft:stray",
-  "cost": 2,
-  "health": 2,
-  "damage": 2
+  "entity": "minecraft:ravager",
+  "cost": 9,
+  "health": 10,
+  "damage": 4
 }

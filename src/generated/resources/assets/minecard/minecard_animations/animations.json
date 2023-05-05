@@ -1,7 +1,33 @@
 {
   "goat_charge": {
+    "size": 25,
+    "sound": "minecraft:entity.horse.gallop",
+    "impact_sound": "minecraft:entity.goat.ram_impact",
     "entity": "minecraft:goat",
+    "duration": 25,
     "type": "minecard:charge"
+  },
+  "wither_projectile": {
+    "item": "minecraft:wither_skeleton_skull",
+    "end_animation": "minecard:target_explosion",
+    "type": "minecard:throw_item"
+  },
+  "throw_bamboo": {
+    "item": "minecraft:bamboo",
+    "type": "minecard:throw_item"
+  },
+  "elder_guardian": {
+    "red": 0.29,
+    "green": 0.26,
+    "blue": 0.09,
+    "type": "minecard:potion"
+  },
+  "evoker_fangs": {
+    "type": "minecard:evoker_fangs"
+  },
+  "throw_shield": {
+    "item": "minecraft:shield",
+    "type": "minecard:throw_item"
   },
   "ender_dragon": {
     "red": 0.8,
@@ -14,25 +40,25 @@
     "apply_to_origin": false,
     "type": "minecard:explosion"
   },
-  "wither_projectile": {
-    "item": "minecraft:wither_skeleton_skull",
-    "end_animation": "minecard:target_explosion",
-    "type": "minecard:throw_item"
+  "shoot_arrow": {
+    "size": 25,
+    "impact_sound": "minecraft:entity.arrow.hit",
+    "entity": "minecraft:arrow",
+    "duration": 12,
+    "type": "minecard:charge"
   },
-  "throw_bamboo": {
-    "item": "minecraft:bamboo",
-    "type": "minecard:throw_item"
+  "ravager_charge": {
+    "size": 15,
+    "sound": "minecraft:entity.ravager.step",
+    "impact_sound": "minecraft:entity.ravager.attack",
+    "entity": "minecraft:ravager",
+    "duration": 25,
+    "type": "minecard:charge"
   },
   "origin_explosion": {
     "apply_to_targets": false,
     "apply_to_origin": true,
     "type": "minecard:explosion"
-  },
-  "elder_guardian": {
-    "red": 0.29,
-    "green": 0.26,
-    "blue": 0.09,
-    "type": "minecard:potion"
   },
   "throw_carrot": {
     "item": "minecraft:carrot",
@@ -41,12 +67,16 @@
   "glow": {
     "type": "minecard:glow"
   },
-  "evoker_fangs": {
-    "type": "minecard:evoker_fangs"
+  "throw_web": {
+    "item": "minecraft:cobweb",
+    "type": "minecard:throw_item"
   },
   "fireball": {
     "item": "minecraft:fire_charge",
     "type": "minecard:throw_item"
+  },
+  "lightning_bolt": {
+    "type": "minecard:lightning_bolt"
   },
   "throw_pork": {
     "item": "minecraft:porkchop",

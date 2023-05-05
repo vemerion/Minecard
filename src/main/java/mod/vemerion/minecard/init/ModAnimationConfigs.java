@@ -9,6 +9,7 @@ import mod.vemerion.minecard.screen.animation.config.ChargeAnimationConfig;
 import mod.vemerion.minecard.screen.animation.config.EvokerFangsAnimationConfig;
 import mod.vemerion.minecard.screen.animation.config.ExplosionAnimationConfig;
 import mod.vemerion.minecard.screen.animation.config.GlowAnimationConfig;
+import mod.vemerion.minecard.screen.animation.config.LightningBoltAnimationConfig;
 import mod.vemerion.minecard.screen.animation.config.NoAnimationConfig;
 import mod.vemerion.minecard.screen.animation.config.PotionAnimationConfig;
 import mod.vemerion.minecard.screen.animation.config.ThrowItemAnimationConfig;
@@ -50,5 +51,8 @@ public class ModAnimationConfigs {
 					() -> new AnimationConfigType<ExplosionAnimationConfig>(ExplosionAnimationConfig.CODEC));
 	public static final RegistryObject<AnimationConfigType<? extends AnimationConfig>> CHARGE = ANIMATION_CONFIGS
 			.register("charge", () -> new AnimationConfigType<ChargeAnimationConfig>(ChargeAnimationConfig.CODEC));
+	public static final RegistryObject<AnimationConfigType<? extends AnimationConfig>> LIGHTNING_BOLT = ANIMATION_CONFIGS
+			.register("lightning_bolt",
+					() -> new AnimationConfigType<LightningBoltAnimationConfig>(LightningBoltAnimationConfig.CODEC));
 
 }

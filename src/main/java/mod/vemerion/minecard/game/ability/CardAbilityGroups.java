@@ -21,7 +21,8 @@ public class CardAbilityGroups {
 	private static final List<Pair<CardAbilityGroup, CardAbilityGroup>> INCOMPATIBLE = List.of(
 			Pair.of(CardAbilityGroup.ADJACENT, CardAbilityGroup.YOUR_BOARD),
 			Pair.of(CardAbilityGroup.SELF, CardAbilityGroup.YOUR_BOARD),
-			Pair.of(CardAbilityGroup.TARGET, CardAbilityGroup.ENEMY_BOARD));
+			Pair.of(CardAbilityGroup.TARGET, CardAbilityGroup.ENEMY_BOARD),
+			Pair.of(CardAbilityGroup.TARGET_ADJACENT, CardAbilityGroup.ENEMY_BOARD));
 
 	public static final Codec<CardAbilityGroups> CODEC = Codec.list(CardAbilityGroup.CODEC).comapFlatMap(list -> {
 		Set<CardAbilityGroup> groups = EnumSet.copyOf(list);
@@ -48,7 +49,7 @@ public class CardAbilityGroups {
 	}, a -> List.copyOf(a.groups));
 
 	private final Set<CardAbilityGroup> groups;
-	
+
 	public CardAbilityGroups(Set<CardAbilityGroup> groups) {
 		this.groups = groups;
 	}
@@ -86,6 +87,20 @@ public class CardAbilityGroups {
 							result.add(board.get(i - 1));
 						if (i != board.size() - 1)
 							result.add(board.get(i + 1));
+					}
+				}
+				break;
+			}
+			case TARGET_ADJACENT: {
+				if (target != null) {
+					var board = enemyState.getBoard();
+					for (int i = 0; i < board.size(); i++) {
+						if (board.get(i) == target) {
+							if (i != 0)
+								result.add(board.get(i - 1));
+							if (i != board.size() - 1)
+								result.add(board.get(i + 1));
+						}
 					}
 				}
 				break;

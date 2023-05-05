@@ -2,19 +2,20 @@
   "abilities": {
     "type": "minecard:modify",
     "value": {
-      "trigger": "attack",
+      "trigger": "summon",
+      "animation": "minecard:lightning_bolt",
       "selection": {
         "groups": [
-          "target"
+          "enemy_board"
         ],
-        "method": "all"
+        "method": "random"
       },
       "modifications": [
         {
-          "health_change": 0,
+          "health_change": -2,
           "modifications": {
             "properties": {
-              "freeze": 2
+              "burn": 2
             },
             "entity": "minecraft:item",
             "cost": 0,
@@ -25,8 +26,8 @@
       ]
     }
   },
-  "entity": "minecraft:stray",
-  "cost": 2,
-  "health": 2,
-  "damage": 2
+  "entity": "minecraft:skeleton_horse",
+  "cost": 4,
+  "health": 4,
+  "damage": 4
 }

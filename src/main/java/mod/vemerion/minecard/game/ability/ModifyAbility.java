@@ -100,6 +100,15 @@ public class ModifyAbility extends CardAbility {
 
 		var selectedCards = selection.select(state.getGame(), state.getId(), card, other);
 
+		animation.ifPresent(anim -> {
+			for (var receiver : receivers) {
+				receiver.receiver(new AnimationMessage(card.getId(), selectedCards.stream().filter(c -> {
+					return state.getGame().calcVisibility(receiver.getId(), c) == CardVisibility.VISIBLE
+							|| state.getGame().calcVisibility(state.getId(), c) == CardVisibility.ENEMY_HAND;
+				}).map(c -> c.getId()).collect(Collectors.toList()), anim));
+			}
+		});
+
 		for (var selected : selectedCards) {
 			selected.getEquipment().putAll(cardType.getEquipment());
 			selected.setHealth(selected.getHealth() + cardType.getHealth());
@@ -131,14 +140,6 @@ public class ModifyAbility extends CardAbility {
 		for (var receiver : receivers) {
 			state.getGame().updateCards(receiver, selectedCards);
 		}
-
-		animation.ifPresent(anim -> {
-			for (var receiver : receivers) {
-				receiver.receiver(new AnimationMessage(card.getId(), selectedCards.stream()
-						.filter(c -> state.getGame().calcVisibility(receiver.getId(), card) == CardVisibility.VISIBLE)
-						.map(c -> c.getId()).collect(Collectors.toList()), anim));
-			}
-		});
 	}
 
 	private Optional<ResourceLocation> getAnimation() {
