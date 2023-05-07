@@ -15,9 +15,10 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.projectile.EvokerFangs;
 import net.minecraft.world.phys.Vec2;
 
-public class ChargeAnimation extends Animation {
+public class EntityAnimation extends Animation {
 
 	private final Vec2 start;
 	private ClientCard card;
@@ -25,19 +26,36 @@ public class ChargeAnimation extends Animation {
 	private Entity entity;
 	private final int duration;
 	private final int size;
-	private Optional<SoundEvent> sound;
+	private final int soundDelay;
+	private Optional<SoundEvent> startSound;
+	private Optional<SoundEvent> durationSound;
 	private Optional<SoundEvent> impactSound;
 
-	public ChargeAnimation(Minecraft mc, Vec2 start, ClientCard card, EntityType<?> type, int duration, int size,
-			Optional<SoundEvent> sound, Optional<SoundEvent> impactSound, Runnable onDone) {
+	public EntityAnimation(Minecraft mc, Vec2 start, ClientCard card, EntityType<?> type, int duration, int size,
+			int soundDelay, Optional<SoundEvent> startSound, Optional<SoundEvent> durationSound,
+			Optional<SoundEvent> impactSound, Runnable onDone) {
 		super(mc, onDone);
 		this.start = start;
 		this.card = card;
-		this.entity = type.create(mc.level);
 		this.duration = duration;
 		this.size = size;
-		this.sound = sound;
+		this.soundDelay = soundDelay;
+		this.startSound = startSound;
+		this.durationSound = durationSound;
 		this.impactSound = impactSound;
+		this.entity = create(type);
+	}
+
+	private Entity create(EntityType<?> type) {
+		if (type == EntityType.EVOKER_FANGS) {
+			return new EvokerFangs(EntityType.EVOKER_FANGS, mc.level) {
+				@Override
+				public float getAnimationProgress(float pPartialTicks) {
+					return (timer + pPartialTicks) / duration;
+				};
+			};
+		}
+		return type.create(mc.level);
 	}
 
 	@Override
@@ -51,7 +69,8 @@ public class ChargeAnimation extends Animation {
 		float progress = (timer + partialTick) / duration;
 		var target = new Vec2(card.getPosition().x + ClientCard.CARD_WIDTH / 2,
 				card.getPosition().y + ClientCard.CARD_HEIGHT / 2);
-		var pos = new Vec2(Mth.lerp(progress, start.x, target.x), Mth.lerp(progress, start.y, target.y));
+		var pos = start == null ? target
+				: new Vec2(Mth.lerp(progress, start.x, target.x), Mth.lerp(progress, start.y, target.y));
 		poseStack.translate(pos.x, pos.y, 0);
 		poseStack.scale(size, -size, size);
 		poseStack.mulPose(new Quaternion(Mth.HALF_PI,
@@ -64,8 +83,10 @@ public class ChargeAnimation extends Animation {
 	@Override
 	public void tick() {
 		timer++;
-		if (timer % 10 == 1 && sound.isPresent())
-			mc.getSoundManager().play(SimpleSoundInstance.forUI(sound.get(), 1));
+		if (timer == soundDelay && startSound.isPresent())
+			mc.getSoundManager().play(SimpleSoundInstance.forUI(startSound.get(), 1));
+		if (timer % 10 == 1 && durationSound.isPresent())
+			mc.getSoundManager().play(SimpleSoundInstance.forUI(durationSound.get(), 1));
 		if (timer == duration && impactSound.isPresent())
 			mc.getSoundManager().play(SimpleSoundInstance.forUI(impactSound.get(), 1));
 

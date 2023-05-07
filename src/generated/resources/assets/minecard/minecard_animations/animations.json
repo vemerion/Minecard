@@ -1,10 +1,12 @@
 {
   "goat_charge": {
-    "size": 25,
-    "sound": "minecraft:entity.horse.gallop",
+    "sound_delay": 0,
+    "duration_sound": "minecraft:entity.horse.gallop",
     "impact_sound": "minecraft:entity.goat.ram_impact",
     "entity": "minecraft:goat",
+    "moving": true,
     "duration": 25,
+    "size": 25,
     "type": "minecard:charge"
   },
   "wither_projectile": {
@@ -23,7 +25,13 @@
     "type": "minecard:potion"
   },
   "evoker_fangs": {
-    "type": "minecard:evoker_fangs"
+    "sound_delay": 10,
+    "start_sound": "minecraft:entity.evoker_fangs.attack",
+    "entity": "minecraft:evoker_fangs",
+    "moving": false,
+    "duration": 30,
+    "size": 30,
+    "type": "minecard:charge"
   },
   "throw_shield": {
     "item": "minecraft:shield",
@@ -41,18 +49,22 @@
     "type": "minecard:explosion"
   },
   "shoot_arrow": {
-    "size": 25,
+    "start_sound": "minecraft:entity.arrow.shoot",
     "impact_sound": "minecraft:entity.arrow.hit",
     "entity": "minecraft:arrow",
+    "moving": true,
     "duration": 12,
+    "size": 25,
     "type": "minecard:charge"
   },
   "ravager_charge": {
-    "size": 15,
-    "sound": "minecraft:entity.ravager.step",
+    "sound_delay": 0,
+    "duration_sound": "minecraft:entity.ravager.step",
     "impact_sound": "minecraft:entity.ravager.attack",
     "entity": "minecraft:ravager",
+    "moving": true,
     "duration": 25,
+    "size": 15,
     "type": "minecard:charge"
   },
   "origin_explosion": {
@@ -76,7 +88,12 @@
     "type": "minecard:throw_item"
   },
   "lightning_bolt": {
-    "type": "minecard:lightning_bolt"
+    "start_sound": "minecraft:entity.lightning_bolt.impact",
+    "entity": "minecraft:lightning_bolt",
+    "moving": false,
+    "duration": 30,
+    "size": 15,
+    "type": "minecard:charge"
   },
   "throw_pork": {
     "item": "minecraft:porkchop",

@@ -13,11 +13,9 @@ import com.mojang.serialization.JsonOps;
 import mod.vemerion.minecard.Main;
 import mod.vemerion.minecard.screen.animation.config.AnimationConfig;
 import mod.vemerion.minecard.screen.animation.config.AnimationConfigs;
-import mod.vemerion.minecard.screen.animation.config.ChargeAnimationConfig;
-import mod.vemerion.minecard.screen.animation.config.EvokerFangsAnimationConfig;
+import mod.vemerion.minecard.screen.animation.config.EntityAnimationConfig;
 import mod.vemerion.minecard.screen.animation.config.ExplosionAnimationConfig;
 import mod.vemerion.minecard.screen.animation.config.GlowAnimationConfig;
-import mod.vemerion.minecard.screen.animation.config.LightningBoltAnimationConfig;
 import mod.vemerion.minecard.screen.animation.config.PotionAnimationConfig;
 import mod.vemerion.minecard.screen.animation.config.ThrowItemAnimationConfig;
 import net.minecraft.data.DataGenerator;
@@ -61,7 +59,6 @@ public class ModAnimationConfigProvider implements DataProvider {
 	private void addAnimations() {
 		animations.put("throw_carrot", new ThrowItemAnimationConfig(Items.CARROT, Optional.empty()));
 		animations.put("glow", GlowAnimationConfig.INSTANCE);
-		animations.put("evoker_fangs", EvokerFangsAnimationConfig.INSTANCE);
 		animations.put("ender_dragon", new PotionAnimationConfig(0.8f, 0, 0.9f));
 		animations.put("target_explosion", new ExplosionAnimationConfig(true, false));
 		animations.put("origin_explosion", new ExplosionAnimationConfig(false, true));
@@ -71,15 +68,18 @@ public class ModAnimationConfigProvider implements DataProvider {
 		animations.put("fireball", new ThrowItemAnimationConfig(Items.FIRE_CHARGE, Optional.empty()));
 		animations.put("throw_bamboo", new ThrowItemAnimationConfig(Items.BAMBOO, Optional.empty()));
 		animations.put("elder_guardian", new PotionAnimationConfig(0.29f, 0.26f, 0.09f));
-		animations.put("goat_charge", new ChargeAnimationConfig(EntityType.GOAT, 25, 25,
+		animations.put("goat_charge", new EntityAnimationConfig(EntityType.GOAT, true, 25, 25, 0, Optional.empty(),
 				Optional.of(SoundEvents.HORSE_GALLOP), Optional.of(SoundEvents.GOAT_RAM_IMPACT)));
 		animations.put("throw_shield", new ThrowItemAnimationConfig(Items.SHIELD, Optional.empty()));
-		animations.put("shoot_arrow", new ChargeAnimationConfig(EntityType.ARROW, 12, 25, Optional.empty(),
-				Optional.of(SoundEvents.ARROW_HIT)));
-		animations.put("ravager_charge", new ChargeAnimationConfig(EntityType.RAVAGER, 25, 15,
-				Optional.of(SoundEvents.RAVAGER_STEP), Optional.of(SoundEvents.RAVAGER_ATTACK)));
+		animations.put("shoot_arrow", new EntityAnimationConfig(EntityType.ARROW, true, 12, 25, 1,
+				Optional.of(SoundEvents.ARROW_SHOOT), Optional.empty(), Optional.of(SoundEvents.ARROW_HIT)));
+		animations.put("ravager_charge", new EntityAnimationConfig(EntityType.RAVAGER, true, 25, 15, 0,
+				Optional.empty(), Optional.of(SoundEvents.RAVAGER_STEP), Optional.of(SoundEvents.RAVAGER_ATTACK)));
 		animations.put("throw_web", new ThrowItemAnimationConfig(Items.COBWEB, Optional.empty()));
-		animations.put("lightning_bolt", LightningBoltAnimationConfig.INSTANCE);
+		animations.put("evoker_fangs", new EntityAnimationConfig(EntityType.EVOKER_FANGS, false, 30, 30, 10,
+				Optional.of(SoundEvents.EVOKER_FANGS_ATTACK), Optional.empty(), Optional.empty()));
+		animations.put("lightning_bolt", new EntityAnimationConfig(EntityType.LIGHTNING_BOLT, false, 30, 15, 1,
+				Optional.of(SoundEvents.LIGHTNING_BOLT_IMPACT), Optional.empty(), Optional.empty()));
 
 	}
 
