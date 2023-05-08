@@ -116,14 +116,11 @@ public class GameBlockEntity extends BlockEntity {
 
 	public void open(ServerPlayer player, ItemStack stack) {
 		var id = player.getUUID();
-		if (state.getPlayerStates().stream().anyMatch(s -> s.getId().equals(id))
-				&& state.getPlayerStates().size() > 1) {
+		if (state.getPlayerStates().size() > 1) {
 			receivers.add(player.getUUID());
 			Network.INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), createOpenGameMessage(id));
 			Network.INSTANCE.send(PacketDistributor.PLAYER.with(() -> player),
 					new NewTurnMessage(state.getCurrentPlayer()));
-		} else if (state.getPlayerStates().size() > 1) {
-			player.sendMessage(new TranslatableComponent(Helper.chat("game_ongoing")), id);
 		} else if (stack.is(ModItems.DECK.get())
 				&& state.getPlayerStates().stream().noneMatch(s -> s.getId().equals(player.getUUID()))) {
 			addRealPlayer(player, stack);
@@ -204,9 +201,11 @@ public class GameBlockEntity extends BlockEntity {
 	}
 
 	private OpenGameMessage createOpenGameMessage(UUID id) {
-		var yourState = state.getPlayerStates().stream().filter(s -> s.getId().equals(id)).findAny().get();
-		var enemyState = state.getPlayerStates().stream().filter(s -> !s.getId().equals(id)).findAny().get();
+		var state1 = state.getPlayerStates().get(0);
+		var state2 = state.getPlayerStates().get(1);
 
-		return new OpenGameMessage(List.of(yourState.toMessage(false), enemyState.toMessage(true)), getBlockPos());
+		return new OpenGameMessage(
+				List.of(state1.toMessage(!state1.getId().equals(id)), state2.toMessage(!state2.getId().equals(id))),
+				getBlockPos());
 	}
 }

@@ -37,6 +37,7 @@ import mod.vemerion.minecard.screen.animation.ThornsAnimation;
 import mod.vemerion.minecard.screen.animation.ThrowItemAnimation;
 import mod.vemerion.minecard.screen.animation.WallAnimation;
 import mod.vemerion.minecard.screen.animation.config.AnimationConfigs;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.AbstractButton;
 import net.minecraft.client.gui.components.Widget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
@@ -63,8 +64,7 @@ public class GameScreen extends Screen implements GameClient {
 
 	public static final Component TITLE = new TranslatableComponent("gui." + Main.MODID + ".game");
 
-	private static Component YOUR_TURN = new TranslatableComponent(Helper.gui("your_turn"));
-	private static Component ENEMY_TURN = new TranslatableComponent(Helper.gui("enemy_turn"));
+	private static Component NEXT_TURN = new TranslatableComponent(Helper.gui("next_turn"));
 	private static Component GAME_OVER = new TranslatableComponent(Helper.gui("game_over"));
 
 	public static final int CARD_SCALE = 60;
@@ -84,6 +84,7 @@ public class GameScreen extends Screen implements GameClient {
 	Map<UUID, ClientPlayerState> state;
 	private UUID current = UUID.randomUUID();
 	private BlockPos pos;
+	private boolean isSpectator = true;
 
 	// Widgets
 	private PopupText popup;
@@ -126,15 +127,21 @@ public class GameScreen extends Screen implements GameClient {
 	}
 
 	private Map<UUID, ClientPlayerState> initState(List<MessagePlayerState> list) {
+		isSpectator = list.stream().noneMatch(s -> s.id.equals(Minecraft.getInstance().player.getUUID()));
+
 		Map<UUID, ClientPlayerState> map = new HashMap<>();
-		for (var messageState : list)
+		boolean isTop = false;
+		for (var messageState : list) {
 			map.put(messageState.id,
 					new ClientPlayerState(messageState.id, messageState.deck,
 							messageState.hand.stream().map(c -> new ClientCard(c, Vec2.ZERO, this))
 									.collect(Collectors.toList()),
 							messageState.board.stream().map(c -> new ClientCard(c, Vec2.ZERO, this))
 									.collect(Collectors.toList()),
-							messageState.resources, messageState.maxResources));
+							messageState.resources, messageState.maxResources,
+							isSpectator ? isTop : !messageState.id.equals(Minecraft.getInstance().player.getUUID())));
+			isTop = !isTop;
+		}
 		return map;
 	}
 
@@ -146,11 +153,12 @@ public class GameScreen extends Screen implements GameClient {
 		for (var playerState : state.values()) {
 			resetPositions(playerState);
 
-			boolean enemy = !playerState.id.equals(minecraft.player.getUUID());
-			resources.add(new Resources(playerState.id, enemy));
+			resources.add(new Resources(playerState.id, playerState.isTop));
 		}
-		addRenderableWidget(new NextTurnButton((int) (width * 0.75), height / 2 - NEXT_TURN_BUTTON_SIZE / 2,
-				NEXT_TURN_BUTTON_SIZE, NEXT_TURN_BUTTON_SIZE, TextComponent.EMPTY));
+
+		if (!isSpectator)
+			addRenderableWidget(new NextTurnButton((int) (width * 0.75), height / 2 - NEXT_TURN_BUTTON_SIZE / 2,
+					NEXT_TURN_BUTTON_SIZE, NEXT_TURN_BUTTON_SIZE, TextComponent.EMPTY));
 
 		background = addWidget(new GameBackground(this));
 
@@ -185,7 +193,7 @@ public class GameScreen extends Screen implements GameClient {
 	@Override
 	public void setCurrent(UUID current) {
 		this.current = current;
-		popup.popup(current.equals(minecraft.player.getUUID()) ? YOUR_TURN : ENEMY_TURN);
+		popup.popup(NEXT_TURN);
 	}
 
 	@Override
@@ -272,7 +280,7 @@ public class GameScreen extends Screen implements GameClient {
 	@Override
 	public void drawCards(UUID id, List<Card> cards, boolean shrinkDeck) {
 		var playerState = state.get(id);
-		boolean enemy = !minecraft.player.getUUID().equals(id);
+		boolean enemy = playerState.isTop;
 		float x = enemy ? DECK_HORIZONTAL_OFFSET : width - DECK_HORIZONTAL_OFFSET - CARD_WIDTH;
 		float y = enemy ? DECK_VERTICAL_OFFSET : height - DECK_VERTICAL_OFFSET - CARD_HEIGHT;
 
@@ -390,7 +398,7 @@ public class GameScreen extends Screen implements GameClient {
 
 	@Override
 	public boolean mouseClicked(double pMouseX, double pMouseY, int pButton) {
-		if (isCurrentActive()) {
+		if (isCurrentActive() && !isSpectator) {
 			if (pButton == GLFW.GLFW_MOUSE_BUTTON_LEFT) {
 
 				// Play card
@@ -446,7 +454,7 @@ public class GameScreen extends Screen implements GameClient {
 	}
 
 	private void resetPositions(ClientPlayerState playerState) {
-		boolean enemy = !playerState.id.equals(minecraft.player.getUUID());
+		boolean enemy = playerState.isTop;
 		for (int i = 0; i < playerState.hand.size(); i++) {
 			int x = cardRowX(playerState.hand.size(), enemy ? playerState.hand.size() - i - 1 : i);
 			int y = enemy ? 5 : height - CARD_HEIGHT - 5;
@@ -476,7 +484,7 @@ public class GameScreen extends Screen implements GameClient {
 		background.render(poseStack, mouseX, mouseY, source, partialTicks);
 
 		for (var playerState : state.values()) {
-			boolean enemy = !playerState.id.equals(minecraft.player.getUUID());
+			boolean enemy = playerState.isTop;
 
 			// Cards
 			for (var card : playerState.board) {
@@ -609,7 +617,7 @@ public class GameScreen extends Screen implements GameClient {
 		private float scale;
 
 		private PopupText() {
-			this.text = YOUR_TURN;
+			this.text = NEXT_TURN;
 		}
 
 		@Override

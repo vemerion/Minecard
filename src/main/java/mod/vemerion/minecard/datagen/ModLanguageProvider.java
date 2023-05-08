@@ -37,8 +37,6 @@ public class ModLanguageProvider extends LanguageProvider {
 		add(Helper.chat("game_interactions"),
 				"Use [item] to interact with game:\n* Deck item: Enter the game\n* Redstone dust: Add an AI opponent to the game");
 
-		add(Helper.gui("your_turn"), "Your Turn");
-		add(Helper.gui("enemy_turn"), "Enemy Turn");
 		add(Helper.gui("next_turn"), "Next Turn");
 		add(Helper.gui("game_over"), "Game Over");
 		add(Helper.gui("resources_count"), "%s/%s");
