@@ -26,6 +26,7 @@ import mod.vemerion.minecard.network.EndTurnMessage;
 import mod.vemerion.minecard.network.GameClient;
 import mod.vemerion.minecard.network.Network;
 import mod.vemerion.minecard.network.PlayCardMessage;
+import mod.vemerion.minecard.network.PlayerChoiceResponseMessage;
 import mod.vemerion.minecard.renderer.CardItemRenderer;
 import mod.vemerion.minecard.screen.animation.Animation;
 import mod.vemerion.minecard.screen.animation.BurnAnimation;
@@ -66,6 +67,7 @@ public class GameScreen extends Screen implements GameClient {
 
 	private static Component NEXT_TURN = new TranslatableComponent(Helper.gui("next_turn"));
 	private static Component GAME_OVER = new TranslatableComponent(Helper.gui("game_over"));
+	private static Component CHOOSE_TEXT = new TranslatableComponent(Helper.gui("choose"));
 
 	public static final int CARD_SCALE = 60;
 	public static final int CARD_LIGHT = LightTexture.FULL_BRIGHT;
@@ -85,6 +87,7 @@ public class GameScreen extends Screen implements GameClient {
 	private UUID current = UUID.randomUUID();
 	private BlockPos pos;
 	private boolean isSpectator = true;
+	private List<Choice> choices = new ArrayList<>();
 
 	// Widgets
 	private PopupText popup;
@@ -329,6 +332,11 @@ public class GameScreen extends Screen implements GameClient {
 		updatePropertiesAnimations(old, card);
 	}
 
+	@Override
+	public void playerChoice(Choice choice) {
+		choices.add(choice);
+	}
+
 	private void updatePropertiesAnimations(Map<CardProperty, Integer> old, ClientCard card) {
 		for (var entry : card.getProperties().entrySet()) {
 			if ((old == null || old.getOrDefault(entry.getKey(), 0) < 1) && entry.getValue() > 0) {
@@ -401,47 +409,68 @@ public class GameScreen extends Screen implements GameClient {
 		if (isCurrentActive() && !isSpectator) {
 			if (pButton == GLFW.GLFW_MOUSE_BUTTON_LEFT) {
 
-				// Play card
-				if (selectedCard == null) {
-					for (var card : yourState().hand) {
-						if (card.contains(pMouseX, pMouseY)) {
-							selectedCard = card;
-							return true;
-						}
-					}
-				} else {
-					if (pMouseY + CARD_HEIGHT / 2 < height - CARD_HEIGHT && pMouseY > height - CARD_HEIGHT * 2) {
-						int leftId = -1;
-						for (var card : yourState().board) {
-							if (card.isDead())
-								continue;
+				// Player choice
+				if (!choices.isEmpty()) {
+					selectedCard = null;
+					attackingCard = null;
 
-							if (pMouseX < card.getPosition().x + CARD_WIDTH / 2) {
-								break;
-							} else {
-								leftId = card.getId();
+					for (var playerState : state.values()) {
+						for (var list : List.of(playerState.board, playerState.hand)) {
+							for (var card : list) {
+								if (card.contains(pMouseX, pMouseY) && choices.get(0).cards().contains(card.getId())) {
+									Network.INSTANCE.sendToServer(
+											new PlayerChoiceResponseMessage(pos, choices.get(0).id(), card.getId()));
+									choices.remove(0);
+									return true;
+								}
 							}
 						}
-						Network.INSTANCE.sendToServer(new PlayCardMessage(pos, selectedCard.getId(), leftId));
-						selectedCard = null;
-						return true;
 					}
-				}
 
-				// Attack
-				if (selectedCard == null && attackingCard == null) {
-					for (var card : yourState().board) {
-						if (card.contains(pMouseX, pMouseY) && card.canAttack()) {
-							attackingCard = card;
+				} else {
+					// Play card
+					if (selectedCard == null) {
+						for (var card : yourState().hand) {
+							if (card.contains(pMouseX, pMouseY)) {
+								selectedCard = card;
+								return true;
+							}
+						}
+					} else {
+						if (pMouseY + CARD_HEIGHT / 2 < height - CARD_HEIGHT && pMouseY > height - CARD_HEIGHT * 2) {
+							int leftId = -1;
+							for (var card : yourState().board) {
+								if (card.isDead())
+									continue;
+
+								if (pMouseX < card.getPosition().x + CARD_WIDTH / 2) {
+									break;
+								} else {
+									leftId = card.getId();
+								}
+							}
+							Network.INSTANCE.sendToServer(new PlayCardMessage(pos, selectedCard.getId(), leftId));
+							selectedCard = null;
 							return true;
 						}
 					}
-				} else if (attackingCard != null) {
-					for (var card : enemyState().board) {
-						if (card.contains(pMouseX, pMouseY)) {
-							Network.INSTANCE.sendToServer(new AttackMessage(pos, attackingCard.getId(), card.getId()));
-							attackingCard = null;
-							return true;
+
+					// Attack
+					if (selectedCard == null && attackingCard == null) {
+						for (var card : yourState().board) {
+							if (card.contains(pMouseX, pMouseY) && card.canAttack()) {
+								attackingCard = card;
+								return true;
+							}
+						}
+					} else if (attackingCard != null) {
+						for (var card : enemyState().board) {
+							if (card.contains(pMouseX, pMouseY)) {
+								Network.INSTANCE
+										.sendToServer(new AttackMessage(pos, attackingCard.getId(), card.getId()));
+								attackingCard = null;
+								return true;
+							}
 						}
 					}
 				}
@@ -511,17 +540,21 @@ public class GameScreen extends Screen implements GameClient {
 		// Indicate which cards can't be attacked
 		if (attackingCard != null) {
 			var enemyState = enemyState();
-			var stack = Items.BARRIER.getDefaultInstance();
-			for (var card : enemyState.board) {
+			for (var card : enemyState.board)
+				if (!GameUtil.canBeAttacked(card, enemyState.board))
+					drawBarrier(poseStack, source, card);
+		}
 
-				if (!GameUtil.canBeAttacked(card, enemyState.board)) {
-					poseStack.pushPose();
-					poseStack.translate(card.getPosition().x + CARD_WIDTH / 2, card.getPosition().y + CARD_HEIGHT / 2,
-							10);
-					poseStack.scale(30, -30, 30);
-					itemRenderer.renderStatic(stack, ItemTransforms.TransformType.GUI, LightTexture.FULL_BRIGHT,
-							OverlayTexture.NO_OVERLAY, poseStack, source, 0);
-					poseStack.popPose();
+		// Indicate which cards can't be chosen
+		if (!choices.isEmpty()) {
+			var candidates = choices.get(0).cards();
+			for (var playerState : state.values()) {
+				for (var list : List.of(playerState.board, playerState.hand)) {
+					for (var card : list) {
+						if (!candidates.contains(card.getId())) {
+							drawBarrier(poseStack, source, card);
+						}
+					}
 				}
 			}
 		}
@@ -536,7 +569,37 @@ public class GameScreen extends Screen implements GameClient {
 
 		popup.render(poseStack, mouseX, mouseY, partialTicks);
 
+		// Player choice
+		if (!choices.isEmpty()) {
+			poseStack.pushPose();
+			poseStack.scale(1, 1, 1);
+			poseStack.translate(0, 0, 20);
+
+			poseStack.pushPose();
+			poseStack.translate((width - font.width(CHOOSE_TEXT) * 1.5f) / 2, 2, 0);
+			poseStack.scale(1.5f, 1.5f, 1.5f);
+			font.drawShadow(poseStack, CHOOSE_TEXT, 0, 0, 0xffffff);
+			poseStack.popPose();
+
+			var lines = font.split(choices.get(0).ability().getDescription(), 200);
+			float y = 18;
+			for (var line : lines) {
+				font.drawShadow(poseStack, line, (width - font.width(line)) / 2, y, 0xffffff);
+				y += 9.5;
+			}
+			poseStack.popPose();
+		}
+
 		super.render(poseStack, mouseX, mouseY, partialTicks);
+	}
+
+	private void drawBarrier(PoseStack poseStack, BufferSource source, ClientCard card) {
+		poseStack.pushPose();
+		poseStack.translate(card.getPosition().x + CARD_WIDTH / 2, card.getPosition().y + CARD_HEIGHT / 2, 10);
+		poseStack.scale(30, -30, 30);
+		itemRenderer.renderStatic(Items.BARRIER.getDefaultInstance(), ItemTransforms.TransformType.GUI,
+				LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY, poseStack, source, 0);
+		poseStack.popPose();
 	}
 
 	@Override
@@ -588,7 +651,7 @@ public class GameScreen extends Screen implements GameClient {
 
 		@Override
 		public void onPress() {
-			if (isCurrentActive()) {
+			if (isCurrentActive() && choices.isEmpty()) {
 				Network.INSTANCE.sendToServer(new EndTurnMessage(pos));
 				selectedCard = null;
 				attackingCard = null;

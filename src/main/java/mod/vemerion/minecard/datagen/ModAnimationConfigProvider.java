@@ -80,6 +80,7 @@ public class ModAnimationConfigProvider implements DataProvider {
 				Optional.of(SoundEvents.EVOKER_FANGS_ATTACK), Optional.empty(), Optional.empty()));
 		animations.put("lightning_bolt", new EntityAnimationConfig(EntityType.LIGHTNING_BOLT, false, 30, 15, 1,
 				Optional.of(SoundEvents.LIGHTNING_BOLT_IMPACT), Optional.empty(), Optional.empty()));
+		animations.put("throw_snowball", new ThrowItemAnimationConfig(Items.SNOWBALL, Optional.empty()));
 
 	}
 

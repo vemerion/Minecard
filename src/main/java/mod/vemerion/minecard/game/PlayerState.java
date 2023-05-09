@@ -33,6 +33,7 @@ public class PlayerState {
 	private List<Card> board;
 	private int resources;
 	private int maxResources;
+	private PlayerChoices choices;
 	private GameState game;
 
 	public PlayerState(UUID id, List<Card> deck, List<Card> hand, List<Card> board, int resources, int maxResources) {
@@ -74,6 +75,14 @@ public class PlayerState {
 
 	public int getMaxResources() {
 		return maxResources;
+	}
+
+	public PlayerChoices getChoices() {
+		return choices;
+	}
+
+	public void resetChoices() {
+		choices = null;
 	}
 
 	private Card withId(List<Card> list, int id) {
@@ -191,6 +200,16 @@ public class PlayerState {
 		if (card.getCost() > resources)
 			return;
 
+		if (choices == null) {
+			choices = new PlayerChoices(getId(), card, leftId);
+		}
+
+		card.getAbility().createChoices(receivers, this, card);
+
+		if (choices.getPendingCount() != 0) {
+			return;
+		}
+
 		if (card.hasProperty(CardProperty.CHARGE))
 			card.setReady(true);
 
@@ -217,6 +236,8 @@ public class PlayerState {
 		}
 
 		card.getAbility().onSummon(receivers, this, card);
+
+		choices = null;
 	}
 
 	public MessagePlayerState toMessage(boolean hide) {

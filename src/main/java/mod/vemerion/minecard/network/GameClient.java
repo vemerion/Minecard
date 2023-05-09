@@ -7,10 +7,14 @@ import java.util.UUID;
 import mod.vemerion.minecard.game.Card;
 import mod.vemerion.minecard.game.CardProperty;
 import mod.vemerion.minecard.game.MessagePlayerState;
+import mod.vemerion.minecard.game.ability.CardAbility;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 
 public interface GameClient {
+	
+	public static record Choice(int id, CardAbility ability, List<Integer> cards) {
+	}
 
 	public void animation(int originId, List<Integer> targets, ResourceLocation rl);
 
@@ -35,4 +39,7 @@ public interface GameClient {
 	public void setCurrent(UUID current);
 
 	public void openGame(List<MessagePlayerState> state, BlockPos pos);
+
+	public void playerChoice(Choice choice);
+
 }

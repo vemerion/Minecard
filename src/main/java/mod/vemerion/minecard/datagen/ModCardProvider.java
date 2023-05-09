@@ -297,6 +297,12 @@ public class ModCardProvider implements DataProvider {
 				new CardAbilitySelection(new CardAbilityGroups(Set.of(CardAbilityGroup.ENEMY_BOARD)),
 						CardSelectionMethod.ALL, new CardCondition.Or(new CardCondition.Entity(EntityType.CREEPER),
 								new CardCondition.Entity(EntityType.PHANTOM))))));
+		add(new Builder(EntityType.SNOW_GOLEM, 4, 4, 4)
+				.setCardAbility(new ModifyAbility(CardAbilityTrigger.SUMMON, Optional.of(mod("throw_snowball")),
+						new CardAbilitySelection(new CardAbilityGroups(Set.of(CardAbilityGroup.ENEMY_BOARD)),
+								CardSelectionMethod.CHOICE, CardCondition.NoCondition.NO_CONDITION),
+						List.of(modification(-2, new LazyCardType(
+								new Builder(EntityType.ITEM, 0, 0, 0).addProperty(CardProperty.FREEZE, 1).build()))))));
 
 		// Auxiliary cards
 		add(new Builder(EntityType.ITEM, 0, 1, 0).setKey(mod("shield")).addProperty(CardProperty.SHIELD, 1)

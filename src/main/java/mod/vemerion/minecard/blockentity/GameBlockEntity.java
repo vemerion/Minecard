@@ -65,6 +65,9 @@ public class GameBlockEntity extends BlockEntity {
 	}
 
 	public void endTurn() {
+		if (state.getCurrentPlayerState().getChoices() != null)
+			return;
+
 		state.endTurn(getReceivers());
 		var current = state.getCurrentPlayerState();
 		for (var receiver : getReceivers()) {
@@ -79,10 +82,16 @@ public class GameBlockEntity extends BlockEntity {
 	}
 
 	public void playCard(int card, int leftId) {
+		if (state.getCurrentPlayerState().getChoices() != null)
+			return;
+
 		state.getCurrentPlayerState().playCard(getReceivers(), card, leftId);
 	}
 
 	public void attack(int attacker, int target) {
+		if (state.getCurrentPlayerState().getChoices() != null)
+			return;
+
 		state.attack(getReceivers(), attacker, target);
 
 		if (state.isGameOver()) {
@@ -95,8 +104,15 @@ public class GameBlockEntity extends BlockEntity {
 		}
 	}
 
+	public void choice(int choiceId, int selected) {
+		state.choice(getReceivers(), choiceId, selected);
+	}
+
 	public void closeGame(ServerPlayer sender) {
 		receivers.remove(sender.getUUID());
+		if (sender.getUUID().equals(state.getCurrentPlayer())) {
+			state.getCurrentPlayerState().resetChoices();
+		}
 	}
 
 	private List<Receiver> getReceivers() {

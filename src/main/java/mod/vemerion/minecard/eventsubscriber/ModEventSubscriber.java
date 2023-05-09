@@ -15,6 +15,8 @@ import mod.vemerion.minecard.network.NewTurnMessage;
 import mod.vemerion.minecard.network.OpenGameMessage;
 import mod.vemerion.minecard.network.PlaceCardMessage;
 import mod.vemerion.minecard.network.PlayCardMessage;
+import mod.vemerion.minecard.network.PlayerChoiceMessage;
+import mod.vemerion.minecard.network.PlayerChoiceResponseMessage;
 import mod.vemerion.minecard.network.SetPropertiesMessage;
 import mod.vemerion.minecard.network.SetReadyMessage;
 import mod.vemerion.minecard.network.SetResourcesMessage;
@@ -74,5 +76,10 @@ public class ModEventSubscriber {
 				AnimationMessage::decode, AnimationMessage::handle);
 		Network.INSTANCE.registerMessage(id++, UpdateDecksMessage.class, UpdateDecksMessage::encode,
 				UpdateDecksMessage::decode, UpdateDecksMessage::handle);
+		Network.INSTANCE.registerMessage(id++, PlayerChoiceMessage.class, PlayerChoiceMessage::encode,
+				PlayerChoiceMessage::decode, PlayerChoiceMessage::handle);
+		Network.INSTANCE.registerMessage(id++, PlayerChoiceResponseMessage.class, PlayerChoiceResponseMessage::encode,
+				PlayerChoiceResponseMessage::decode, PlayerChoiceResponseMessage::handle);
+
 	}
 }

@@ -8,7 +8,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 
 public enum CardSelectionMethod {
-	ALL("all"), RANDOM("random");
+	ALL("all"), RANDOM("random"), CHOICE("choice");
 
 	public static final Codec<CardSelectionMethod> CODEC = GameUtil.enumCodec(CardSelectionMethod.class,
 			CardSelectionMethod::getName);

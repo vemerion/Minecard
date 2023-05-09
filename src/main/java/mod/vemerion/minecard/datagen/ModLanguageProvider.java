@@ -41,6 +41,7 @@ public class ModLanguageProvider extends LanguageProvider {
 		add(Helper.gui("game_over"), "Game Over");
 		add(Helper.gui("resources_count"), "%s/%s");
 		add(Helper.gui("deck_count"), "%s");
+		add(Helper.gui("choose"), "Choose a card for ability:");
 
 		// Card properties
 		add(CardProperty.CHARGE.getTextKey(), "charge");
@@ -69,6 +70,7 @@ public class ModLanguageProvider extends LanguageProvider {
 		// Card selection methods
 		add(CardSelectionMethod.ALL.getTextKey(), "all cards from ");
 		add(CardSelectionMethod.RANDOM.getTextKey(), "a random card from ");
+		add(CardSelectionMethod.CHOICE.getTextKey(), "a selected card from ");
 
 		// Card conditions
 		add(ModCardConditions.NO_CONDITION.get().getTranslationKey(), "");

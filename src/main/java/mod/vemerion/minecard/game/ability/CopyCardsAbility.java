@@ -72,8 +72,13 @@ public class CopyCardsAbility extends CardAbility {
 	}
 
 	@Override
+	public void createChoices(List<Receiver> receivers, PlayerState state, Card card) {
+		selection.createChoice(receivers, this, state, card);
+	}
+
+	@Override
 	protected void invoke(List<Receiver> receivers, PlayerState state, Card card, @Nullable Card other) {
-		var selected = selection.select(state.getGame(), state.getId(), card, other);
+		var selected = selection.select(state.getGame(), this, state.getId(), card, other);
 
 		var copies = selected.stream()
 				.map(c -> new Card(c.getType(), c.getCost(), c.getHealth(), c.getDamage(), c.getMaxHealth(),

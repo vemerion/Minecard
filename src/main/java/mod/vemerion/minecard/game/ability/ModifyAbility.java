@@ -90,6 +90,11 @@ public class ModifyAbility extends CardAbility {
 	}
 
 	@Override
+	public void createChoices(List<Receiver> receivers, PlayerState state, Card card) {
+		selection.createChoice(receivers, this, state, card);
+	}
+
+	@Override
 	protected void invoke(List<Receiver> receivers, PlayerState state, Card card, @Nullable Card other) {
 		var modification = modifications.get(state.getGame().getRandom().nextInt(modifications.size()));
 		var cardType = modification.modifications.get(false);
@@ -98,7 +103,7 @@ public class ModifyAbility extends CardAbility {
 			return;
 		}
 
-		var selectedCards = selection.select(state.getGame(), state.getId(), card, other);
+		var selectedCards = selection.select(state.getGame(), this, state.getId(), card, other);
 
 		animation.ifPresent(anim -> {
 			for (var receiver : receivers) {

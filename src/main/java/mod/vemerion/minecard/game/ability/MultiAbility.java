@@ -47,6 +47,12 @@ public class MultiAbility extends CardAbility {
 	}
 
 	@Override
+	public void createChoices(List<Receiver> receivers, PlayerState state, Card card) {
+		for (var ability : abilities)
+			ability.createChoices(receivers, state, card);
+	}
+
+	@Override
 	protected void invoke(List<Receiver> receivers, PlayerState state, Card card, @Nullable Card other) {
 	}
 
@@ -89,7 +95,7 @@ public class MultiAbility extends CardAbility {
 				ability.onTick(receivers, state, card);
 		}
 	}
-	
+
 	@Override
 	public void onGrow(List<Receiver> receivers, PlayerState state, Card card) {
 		if (trigger == CardAbilityTrigger.ALWAYS || trigger == CardAbilityTrigger.GROW) {

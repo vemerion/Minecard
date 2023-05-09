@@ -27,6 +27,7 @@ public class AIPlayer implements GameClient {
 	private int timer;
 	private GameBlockEntity game;
 	private Random rand;
+	private List<Choice> choices = new ArrayList<>();
 
 	public AIPlayer(GameBlockEntity game) {
 		this.game = game;
@@ -37,6 +38,12 @@ public class AIPlayer implements GameClient {
 		timer++;
 		if (isGameOver || !isCurrent || timer % 8 != 0)
 			return;
+
+		if (!choices.isEmpty()) {
+			var choice = choices.get(0);
+			game.choice(choice.id(), choice.cards().get(rand.nextInt(choice.cards().size())));
+			choices.remove(0);
+		}
 
 		for (int i = 0; i < yourHand.size(); i++) {
 			if (yourHand.get(i).getCost() <= resources) {
@@ -216,4 +223,8 @@ public class AIPlayer implements GameClient {
 		}
 	}
 
+	@Override
+	public void playerChoice(Choice choice) {
+		choices.add(choice);
+	}
 }

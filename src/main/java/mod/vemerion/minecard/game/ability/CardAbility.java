@@ -47,6 +47,10 @@ public abstract class CardAbility {
 		return trigger;
 	}
 
+	public void createChoices(List<Receiver> receivers, PlayerState state, Card card) {
+
+	}
+
 	public void onSummon(List<Receiver> receivers, PlayerState state, Card card) {
 		if (trigger == CardAbilityTrigger.ALWAYS || trigger == CardAbilityTrigger.SUMMON) {
 			invoke(receivers, state, card, null);
@@ -76,7 +80,7 @@ public abstract class CardAbility {
 			invoke(receivers, state, card, null);
 		}
 	}
-	
+
 	public void onGrow(List<Receiver> receivers, PlayerState state, Card card) {
 		if (trigger == CardAbilityTrigger.ALWAYS || trigger == CardAbilityTrigger.GROW) {
 			invoke(receivers, state, card, null);

@@ -211,6 +211,15 @@ public class GameState {
 		}
 	}
 
+	public void choice(List<Receiver> receivers, int choiceId, int selected) {
+		var choices = getCurrentPlayerState().getChoices();
+		if (choices == null)
+			return;
+		choices.makeChoice(choiceId, selected);
+
+		getCurrentPlayerState().playCard(receivers, choices.getCard().getId(), choices.getLeftId());
+	}
+
 	// Completely remove the card without running onDeath
 	public void removeCard(List<Receiver> receivers, Card card) {
 		card.setHealth(0);
