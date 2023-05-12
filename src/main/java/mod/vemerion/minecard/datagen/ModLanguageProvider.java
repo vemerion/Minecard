@@ -104,6 +104,9 @@ public class ModLanguageProvider extends LanguageProvider {
 		add(ModCardAbilities.MODIFY.get().getTranslationKey() + ".element_heal", ", restoring %s health");
 		add(ModCardAbilities.MODIFY.get().getTranslationKey() + ".element_hurt", ", taking %s damage");
 		add(ModCardAbilities.ADD_CARDS.get().getTranslationKey(), "%s Add %s to your hand.");
+		add(ModCardAbilities.ADD_CARDS.get().getTranslationKey() + ".one_of", "one of");
+		add(ModCardAbilities.ADD_CARDS.get().getTranslationKey() + ".element", " [%s]");
+
 		add(ModCardAbilities.RESOURCE.get().getTranslationKey(),
 				"%s Gain %s temporary resources, and %s permanent resources.");
 		add(ModCardAbilities.COPY_CARDS.get().getTranslationKey(), "%s copy %s and give it to %s.%s%s");

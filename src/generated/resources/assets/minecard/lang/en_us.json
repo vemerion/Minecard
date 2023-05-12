@@ -51,6 +51,8 @@
   "item.minecard.deck": "Deck",
   "itemGroup.minecard": "Minecard",
   "minecard.minecard.add_cards": "%s Add %s to your hand.",
+  "minecard.minecard.add_cards.element": " [%s]",
+  "minecard.minecard.add_cards.one_of": "one of",
   "minecard.minecard.and": "(%s and %s)",
   "minecard.minecard.chance": "%s%% chance: %s",
   "minecard.minecard.copy_cards": "%s copy %s and give it to %s.%s%s",

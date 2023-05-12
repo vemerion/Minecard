@@ -1,0 +1,13 @@
+{
+  "abilities": {
+    "trigger": "death",
+    "cards": [
+      "minecard:trident"
+    ],
+    "type": "minecard:add_cards"
+  },
+  "entity": "minecraft:drowned",
+  "cost": 7,
+  "health": 5,
+  "damage": 9
+}

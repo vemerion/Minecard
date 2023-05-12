@@ -48,7 +48,7 @@ public class ThrowItemAnimationConfig extends AnimationConfig {
 	public void invoke(GameScreen game, ClientCard origin, List<ClientCard> targets) {
 		var pos = origin != null
 				? origin.getPosition().add(new Vec2(ClientCard.CARD_WIDTH / 2, ClientCard.CARD_HEIGHT / 2))
-				: Vec2.ZERO;
+				: new Vec2(game.width / 2, game.height / 2);
 
 		var stack = item.getDefaultInstance();
 		for (var target : targets)

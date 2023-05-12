@@ -1,0 +1,14 @@
+{
+  "abilities": {
+    "type": "minecard:summon_card",
+    "value": {
+      "trigger": "summon",
+      "placement": "right",
+      "card": "minecard:sweet_berries"
+    }
+  },
+  "entity": "minecraft:fox",
+  "cost": 4,
+  "health": 3,
+  "damage": 2
+}

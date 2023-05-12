@@ -12,17 +12,20 @@ import mod.vemerion.minecard.game.LazyCardType;
 import mod.vemerion.minecard.game.PlayerState;
 import mod.vemerion.minecard.game.Receiver;
 import mod.vemerion.minecard.init.ModCardAbilities;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.util.ExtraCodecs;
 
 public class AddCardsAbility extends CardAbility {
 
 	public static final Codec<AddCardsAbility> CODEC = RecordCodecBuilder.create(instance -> instance
-			.group(CardAbilityTrigger.CODEC.fieldOf("trigger").forGetter(CardAbility::getTrigger),
-					LazyCardType.CODEC.fieldOf("card").forGetter(AddCardsAbility::getCard))
+			.group(CardAbilityTrigger.CODEC.fieldOf("trigger").forGetter(CardAbility::getTrigger), ExtraCodecs
+					.nonEmptyList(Codec.list(LazyCardType.CODEC)).fieldOf("cards").forGetter(AddCardsAbility::getCards))
 			.apply(instance, AddCardsAbility::new));
 
-	private final LazyCardType toAdd;
+	private final List<LazyCardType> toAdd;
 
-	public AddCardsAbility(CardAbilityTrigger trigger, LazyCardType toAdd) {
+	public AddCardsAbility(CardAbilityTrigger trigger, List<LazyCardType> toAdd) {
 		super(trigger);
 		this.toAdd = toAdd;
 	}
@@ -34,15 +37,22 @@ public class AddCardsAbility extends CardAbility {
 
 	@Override
 	protected Object[] getDescriptionArgs() {
-		return new Object[] { trigger.getText(), toAdd.get(true).getName() };
+		var text = TextComponent.EMPTY.copy();
+		if (toAdd.size() > 1)
+			text.append(new TranslatableComponent(ModCardAbilities.ADD_CARDS.get().getTranslationKey() + ".one_of"));
+		for (var card : toAdd)
+			text.append(new TranslatableComponent(ModCardAbilities.ADD_CARDS.get().getTranslationKey() + ".element",
+					card.get(true).getName()));
+		return new Object[] { trigger.getText(), text };
 	}
 
 	@Override
 	protected void invoke(List<Receiver> receivers, PlayerState state, Card card, @Nullable Card other) {
-		state.addCards(receivers, List.of(toAdd.get(false).create()));
+		state.addCards(receivers,
+				List.of(toAdd.get(state.getGame().getRandom().nextInt(toAdd.size())).get(false).create()));
 	}
 
-	public LazyCardType getCard() {
+	public List<LazyCardType> getCards() {
 		return toAdd;
 	}
 

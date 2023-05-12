@@ -1,0 +1,20 @@
+{
+  "abilities": {
+    "type": "minecard:chance",
+    "value": {
+      "chance": 50,
+      "ability": {
+        "trigger": "tick",
+        "cards": [
+          "minecard:rotten_flesh",
+          "minecard:rabbit_foot"
+        ],
+        "type": "minecard:add_cards"
+      }
+    }
+  },
+  "entity": "minecraft:cat",
+  "cost": 3,
+  "health": 3,
+  "damage": 1
+}

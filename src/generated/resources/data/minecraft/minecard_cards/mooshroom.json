@@ -1,0 +1,49 @@
+{
+  "abilities": {
+    "trigger": "summon",
+    "cards": [
+      {
+        "abilities": {
+          "type": "minecard:modify",
+          "value": {
+            "trigger": "summon",
+            "animation": "minecard:throw_mushroom_stew",
+            "selection": {
+              "groups": [
+                "your_board",
+                "enemy_board"
+              ],
+              "method": "choice"
+            },
+            "modifications": [
+              {
+                "health_change": 0,
+                "modifications": {
+                  "properties": {
+                    "baby": 0
+                  },
+                  "entity": "minecraft:item",
+                  "cost": 0,
+                  "health": 0,
+                  "damage": 0
+                }
+              }
+            ]
+          }
+        },
+        "additional_data": {
+          "item": "minecraft:mushroom_stew"
+        },
+        "entity": "minecraft:item",
+        "cost": 0,
+        "health": 0,
+        "damage": 0
+      }
+    ],
+    "type": "minecard:add_cards"
+  },
+  "entity": "minecraft:mooshroom",
+  "cost": 2,
+  "health": 2,
+  "damage": 2
+}

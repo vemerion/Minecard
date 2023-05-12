@@ -3,32 +3,32 @@
     "type": "minecard:modify",
     "value": {
       "trigger": "summon",
-      "animation": "minecard:glow",
+      "animation": "minecard:throw_rabbit_foot",
       "selection": {
         "groups": [
-          "your_board",
-          "enemy_board"
+          "enemy_board",
+          "your_board"
         ],
-        "method": "all"
+        "method": "choice"
       },
       "modifications": [
         {
           "health_change": 0,
           "modifications": {
-            "properties": {
-              "stealth": 0
-            },
             "entity": "minecraft:item",
             "cost": 0,
-            "health": 0,
+            "health": 1,
             "damage": 0
           }
         }
       ]
     }
   },
-  "entity": "minecraft:glow_squid",
-  "cost": 3,
-  "health": 2,
-  "damage": 2
+  "additional_data": {
+    "item": "minecraft:rabbit_foot"
+  },
+  "entity": "minecraft:item",
+  "cost": 0,
+  "health": 0,
+  "damage": 0
 }

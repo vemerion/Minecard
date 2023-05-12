@@ -9,20 +9,17 @@
     "size": 25,
     "type": "minecard:charge"
   },
-  "wither_projectile": {
-    "item": "minecraft:wither_skeleton_skull",
-    "end_animation": "minecard:target_explosion",
-    "type": "minecard:throw_item"
-  },
   "throw_bamboo": {
     "item": "minecraft:bamboo",
     "type": "minecard:throw_item"
   },
-  "elder_guardian": {
-    "red": 0.29,
-    "green": 0.26,
-    "blue": 0.09,
-    "type": "minecard:potion"
+  "throw_scute": {
+    "item": "minecraft:scute",
+    "type": "minecard:throw_item"
+  },
+  "throw_egg": {
+    "item": "minecraft:egg",
+    "type": "minecard:throw_item"
   },
   "evoker_fangs": {
     "sound_delay": 10,
@@ -33,29 +30,13 @@
     "size": 30,
     "type": "minecard:charge"
   },
-  "throw_shield": {
-    "item": "minecraft:shield",
+  "throw_rabbit_foot": {
+    "item": "minecraft:rabbit_foot",
     "type": "minecard:throw_item"
   },
-  "ender_dragon": {
-    "red": 0.8,
-    "green": 0.0,
-    "blue": 0.9,
-    "type": "minecard:potion"
-  },
-  "target_explosion": {
-    "apply_to_targets": true,
-    "apply_to_origin": false,
-    "type": "minecard:explosion"
-  },
-  "shoot_arrow": {
-    "start_sound": "minecraft:entity.arrow.shoot",
-    "impact_sound": "minecraft:entity.arrow.hit",
-    "entity": "minecraft:arrow",
-    "moving": true,
-    "duration": 12,
-    "size": 25,
-    "type": "minecard:charge"
+  "throw_mushroom_stew": {
+    "item": "minecraft:mushroom_stew",
+    "type": "minecard:throw_item"
   },
   "ravager_charge": {
     "sound_delay": 0,
@@ -72,16 +53,13 @@
     "apply_to_origin": true,
     "type": "minecard:explosion"
   },
-  "throw_snowball": {
-    "item": "minecraft:snowball",
+  "throw_sweet_berries": {
+    "item": "minecraft:sweet_berries",
     "type": "minecard:throw_item"
   },
   "throw_carrot": {
     "item": "minecraft:carrot",
     "type": "minecard:throw_item"
-  },
-  "glow": {
-    "type": "minecard:glow"
   },
   "throw_web": {
     "item": "minecraft:cobweb",
@@ -91,6 +69,69 @@
     "item": "minecraft:fire_charge",
     "type": "minecard:throw_item"
   },
+  "throw_pork": {
+    "item": "minecraft:porkchop",
+    "type": "minecard:throw_item"
+  },
+  "wither_projectile": {
+    "item": "minecraft:wither_skeleton_skull",
+    "end_animation": "minecard:target_explosion",
+    "type": "minecard:throw_item"
+  },
+  "elder_guardian": {
+    "red": 0.29,
+    "green": 0.26,
+    "blue": 0.09,
+    "type": "minecard:potion"
+  },
+  "throw_shield": {
+    "item": "minecraft:shield",
+    "type": "minecard:throw_item"
+  },
+  "ender_dragon": {
+    "red": 0.8,
+    "green": 0.0,
+    "blue": 0.9,
+    "type": "minecard:potion"
+  },
+  "throw_trident": {
+    "item": "minecraft:trident",
+    "end_animation": "minecard:lightning_bolt",
+    "type": "minecard:throw_item"
+  },
+  "target_explosion": {
+    "apply_to_targets": true,
+    "apply_to_origin": false,
+    "type": "minecard:explosion"
+  },
+  "shoot_arrow": {
+    "start_sound": "minecraft:entity.arrow.shoot",
+    "impact_sound": "minecraft:entity.arrow.hit",
+    "entity": "minecraft:arrow",
+    "moving": true,
+    "duration": 12,
+    "size": 25,
+    "type": "minecard:charge"
+  },
+  "throw_milk": {
+    "item": "minecraft:milk_bucket",
+    "type": "minecard:throw_item"
+  },
+  "llama_spit": {
+    "start_sound": "minecraft:entity.llama.spit",
+    "entity": "minecraft:llama_spit",
+    "moving": true,
+    "duration": 15,
+    "size": 25,
+    "type": "minecard:charge"
+  },
+  "throw_snowball": {
+    "item": "minecraft:snowball",
+    "type": "minecard:throw_item"
+  },
+  "glow": {
+    "type": "minecard:glow"
+  },
   "lightning_bolt": {
     "start_sound": "minecraft:entity.lightning_bolt.impact",
     "entity": "minecraft:lightning_bolt",
@@ -99,8 +140,8 @@
     "size": 15,
     "type": "minecard:charge"
   },
-  "throw_pork": {
-    "item": "minecraft:porkchop",
+  "throw_rotten_flesh": {
+    "item": "minecraft:rotten_flesh",
     "type": "minecard:throw_item"
   }
 }

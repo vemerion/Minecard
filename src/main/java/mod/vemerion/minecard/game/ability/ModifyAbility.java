@@ -126,7 +126,7 @@ public class ModifyAbility extends CardAbility {
 			for (var entry : cardType.getProperties().entrySet()) {
 				if (entry.getKey() == CardProperty.BABY && entry.getValue() == 0
 						&& selected.hasProperty(CardProperty.BABY)) {
-					selected.getAbility().onGrow(receivers, state, card);
+					selected.getAbility().onGrow(receivers, state, selected);
 				}
 
 				selected.putProperty(entry.getKey(), entry.getValue());

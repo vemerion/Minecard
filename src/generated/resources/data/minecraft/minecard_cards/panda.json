@@ -15,8 +15,8 @@
             "animation": "minecard:bamboo",
             "selection": {
               "groups": [
-                "enemy_board",
-                "your_board"
+                "your_board",
+                "enemy_board"
               ],
               "method": "all",
               "condition": {

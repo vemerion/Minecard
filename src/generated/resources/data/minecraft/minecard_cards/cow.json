@@ -1,0 +1,54 @@
+{
+  "abilities": {
+    "trigger": "summon",
+    "cards": [
+      {
+        "abilities": {
+          "type": "minecard:modify",
+          "value": {
+            "trigger": "summon",
+            "animation": "minecard:throw_milk",
+            "selection": {
+              "groups": [
+                "your_board",
+                "enemy_board"
+              ],
+              "method": "choice"
+            },
+            "modifications": [
+              {
+                "health_change": 0,
+                "modifications": {
+                  "properties": {
+                    "taunt": 0,
+                    "shield": 0,
+                    "thorns": 0,
+                    "stealth": 0,
+                    "burn": 0,
+                    "freeze": 0
+                  },
+                  "entity": "minecraft:item",
+                  "cost": 0,
+                  "health": 0,
+                  "damage": 0
+                }
+              }
+            ]
+          }
+        },
+        "additional_data": {
+          "item": "minecraft:milk_bucket"
+        },
+        "entity": "minecraft:item",
+        "cost": 0,
+        "health": 0,
+        "damage": 0
+      }
+    ],
+    "type": "minecard:add_cards"
+  },
+  "entity": "minecraft:cow",
+  "cost": 2,
+  "health": 2,
+  "damage": 2
+}

@@ -81,6 +81,17 @@ public class ModAnimationConfigProvider implements DataProvider {
 		animations.put("lightning_bolt", new EntityAnimationConfig(EntityType.LIGHTNING_BOLT, false, 30, 15, 1,
 				Optional.of(SoundEvents.LIGHTNING_BOLT_IMPACT), Optional.empty(), Optional.empty()));
 		animations.put("throw_snowball", new ThrowItemAnimationConfig(Items.SNOWBALL, Optional.empty()));
+		animations.put("throw_egg", new ThrowItemAnimationConfig(Items.EGG, Optional.empty()));
+		animations.put("throw_scute", new ThrowItemAnimationConfig(Items.SCUTE, Optional.empty()));
+		animations.put("throw_trident", new ThrowItemAnimationConfig(Items.TRIDENT,
+				Optional.of(new ResourceLocation(Main.MODID, "lightning_bolt"))));
+		animations.put("throw_milk", new ThrowItemAnimationConfig(Items.MILK_BUCKET, Optional.empty()));
+		animations.put("throw_sweet_berries", new ThrowItemAnimationConfig(Items.SWEET_BERRIES, Optional.empty()));
+		animations.put("throw_mushroom_stew", new ThrowItemAnimationConfig(Items.MUSHROOM_STEW, Optional.empty()));
+		animations.put("llama_spit", new EntityAnimationConfig(EntityType.LLAMA_SPIT, true, 15, 25, 1,
+				Optional.of(SoundEvents.LLAMA_SPIT), Optional.empty(), Optional.empty()));
+		animations.put("throw_rotten_flesh", new ThrowItemAnimationConfig(Items.ROTTEN_FLESH, Optional.empty()));
+		animations.put("throw_rabbit_foot", new ThrowItemAnimationConfig(Items.RABBIT_FOOT, Optional.empty()));
 
 	}
 
