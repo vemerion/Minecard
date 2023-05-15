@@ -53,6 +53,7 @@ public class ModLanguageProvider extends LanguageProvider {
 		add(CardProperty.BABY.getTextKey(), "baby");
 		add(CardProperty.BURN.getTextKey(), "burn");
 		add(CardProperty.THORNS.getTextKey(), "thorns");
+		add(CardProperty.POISON.getTextKey(), "poison");
 
 		// Card ability groups
 		add(CardAbilityGroup.ALL.getTextKey(), "anywhere");

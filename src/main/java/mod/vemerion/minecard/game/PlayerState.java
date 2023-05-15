@@ -146,6 +146,10 @@ public class PlayerState {
 				card.decrementProperty(CardProperty.BURN);
 				changed = true;
 			}
+			if (card.hasProperty(CardProperty.POISON) && card.getHealth() > 1) {
+				game.hurt(receivers, card, 1);
+				changed = true;
+			}
 			if (changed && !card.isDead()) {
 				var msg = new SetPropertiesMessage(id, card.getId(), card.getProperties());
 				for (var receiver : receivers)

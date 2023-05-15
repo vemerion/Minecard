@@ -26,6 +26,7 @@
   "card_property.minecard.burn": "burn",
   "card_property.minecard.charge": "charge",
   "card_property.minecard.freeze": "freeze",
+  "card_property.minecard.poison": "poison",
   "card_property.minecard.shield": "shield",
   "card_property.minecard.special": "special",
   "card_property.minecard.stealth": "stealth",

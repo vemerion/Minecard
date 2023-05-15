@@ -20,11 +20,12 @@
                 "health_change": 0,
                 "modifications": {
                   "properties": {
-                    "taunt": 0,
                     "shield": 0,
+                    "taunt": 0,
+                    "burn": 0,
                     "thorns": 0,
                     "stealth": 0,
-                    "burn": 0,
+                    "poison": 0,
                     "freeze": 0
                   },
                   "entity": "minecraft:item",

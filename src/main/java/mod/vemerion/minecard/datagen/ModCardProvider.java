@@ -347,12 +347,11 @@ public class ModCardProvider implements DataProvider {
 										new CardAbilityGroups(
 												Set.of(CardAbilityGroup.YOUR_BOARD, CardAbilityGroup.ENEMY_BOARD)),
 										CardSelectionMethod.CHOICE, CardCondition.NoCondition.NO_CONDITION),
-								List.of(modification(0,
-										new LazyCardType(new Builder(EntityType.ITEM, 0, 0, 0)
-												.addProperty(CardProperty.BURN, 0).addProperty(CardProperty.FREEZE, 0)
-												.addProperty(CardProperty.SHIELD, 0)
-												.addProperty(CardProperty.STEALTH, 0).addProperty(CardProperty.TAUNT, 0)
-												.addProperty(CardProperty.THORNS, 0).build())))))
+								List.of(modification(0, new LazyCardType(new Builder(EntityType.ITEM, 0, 0, 0)
+										.addProperty(CardProperty.BURN, 0).addProperty(CardProperty.FREEZE, 0)
+										.addProperty(CardProperty.SHIELD, 0).addProperty(CardProperty.STEALTH, 0)
+										.addProperty(CardProperty.TAUNT, 0).addProperty(CardProperty.THORNS, 0)
+										.addProperty(CardProperty.POISON, 0).build())))))
 						.build())))));
 		add(new Builder(EntityType.FOX, 4, 3, 2).setCardAbility(new SummonCardAbility(CardAbilityTrigger.SUMMON,
 				CardPlacement.RIGHT, new LazyCardType(mod("sweet_berries")))));
@@ -379,6 +378,12 @@ public class ModCardProvider implements DataProvider {
 		add(new Builder(EntityType.CAT, 3, 3, 1)
 				.setCardAbility(new ChanceAbility(50, new AddCardsAbility(CardAbilityTrigger.TICK,
 						List.of(new LazyCardType(mod("rotten_flesh")), new LazyCardType(mod("rabbit_foot")))))));
+		add(new Builder(EntityType.CAVE_SPIDER, 3, 2, 2).setCardAbility(new ChanceAbility(50, new ModifyAbility(
+				CardAbilityTrigger.ATTACK, Optional.empty(),
+				new CardAbilitySelection(new CardAbilityGroups(Set.of(CardAbilityGroup.TARGET)),
+						CardSelectionMethod.ALL, CardCondition.NoCondition.NO_CONDITION),
+				List.of(modification(0, new LazyCardType(
+						new Builder(EntityType.ITEM, 0, 0, 0).addProperty(CardProperty.POISON, 1).build())))))));
 
 		// Auxiliary cards
 		add(new Builder(EntityType.ITEM, 0, 1, 0).setKey(mod("shield")).addProperty(CardProperty.SHIELD, 1)
