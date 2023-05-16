@@ -15,8 +15,8 @@
             "animation": "minecard:bamboo",
             "selection": {
               "groups": [
-                "your_board",
-                "enemy_board"
+                "enemy_board",
+                "your_board"
               ],
               "method": "all",
               "condition": {
@@ -40,7 +40,10 @@
           }
         },
         "additional_data": {
-          "item": "minecraft:bamboo"
+          "item": {
+            "id": "minecraft:bamboo",
+            "Count": 1
+          }
         },
         "entity": "minecraft:item",
         "cost": 0,

@@ -1,0 +1,15 @@
+{
+  "abilities": {
+    "trigger": "summon",
+    "cards": [
+      "minecard:absorption_potion",
+      "minecard:poison_potion",
+      "minecard:healing_potion"
+    ],
+    "type": "minecard:add_cards"
+  },
+  "entity": "minecraft:witch",
+  "cost": 6,
+  "health": 5,
+  "damage": 4
+}

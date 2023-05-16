@@ -29,7 +29,10 @@
     }
   },
   "additional_data": {
-    "item": "minecraft:end_crystal"
+    "item": {
+      "id": "minecraft:end_crystal",
+      "Count": 1
+    }
   },
   "entity": "minecraft:item",
   "cost": 0,

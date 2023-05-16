@@ -43,6 +43,8 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.alchemy.PotionUtils;
+import net.minecraft.world.item.alchemy.Potions;
 import net.minecraftforge.registries.ForgeRegistries;
 
 public class ModCardProvider implements DataProvider {
@@ -384,6 +386,9 @@ public class ModCardProvider implements DataProvider {
 						CardSelectionMethod.ALL, CardCondition.NoCondition.NO_CONDITION),
 				List.of(modification(0, new LazyCardType(
 						new Builder(EntityType.ITEM, 0, 0, 0).addProperty(CardProperty.POISON, 1).build())))))));
+		add(new Builder(EntityType.WITCH, 6, 5, 4).setCardAbility(
+				new AddCardsAbility(CardAbilityTrigger.SUMMON, List.of(new LazyCardType(mod("absorption_potion")),
+						new LazyCardType(mod("poison_potion")), new LazyCardType(mod("healing_potion"))))));
 
 		// Auxiliary cards
 		add(new Builder(EntityType.ITEM, 0, 1, 0).setKey(mod("shield")).addProperty(CardProperty.SHIELD, 1)
@@ -444,9 +449,38 @@ public class ModCardProvider implements DataProvider {
 										Set.of(CardAbilityGroup.ENEMY_BOARD, CardAbilityGroup.YOUR_BOARD)),
 								CardSelectionMethod.CHOICE, CardCondition.NoCondition.NO_CONDITION),
 						List.of(modification(0, new LazyCardType(new Builder(EntityType.ITEM, 0, 1, 0).build()))))));
+		add(new Builder(EntityType.ITEM, 0, 0, 0).setKey(mod("absorption_potion"))
+				.setAdditionalData(new AdditionalCardData.ItemData(
+						PotionUtils.setPotion(Items.POTION.getDefaultInstance(), Potions.TURTLE_MASTER)))
+				.setCardAbility(
+						new ModifyAbility(CardAbilityTrigger.SUMMON, Optional.of(mod("throw_absorption_potion")),
+								new CardAbilitySelection(
+										new CardAbilityGroups(
+												Set.of(CardAbilityGroup.ENEMY_BOARD, CardAbilityGroup.YOUR_BOARD)),
+										CardSelectionMethod.CHOICE, CardCondition.NoCondition.NO_CONDITION),
+								List.of(modification(0, new LazyCardType(new Builder(EntityType.ITEM, 0, 0, 0)
+										.addProperty(CardProperty.SHIELD, 1).build()))))));
+		add(new Builder(EntityType.ITEM, 0, 0, 0).setKey(mod("poison_potion"))
+				.setAdditionalData(new AdditionalCardData.ItemData(
+						PotionUtils.setPotion(Items.POTION.getDefaultInstance(), Potions.POISON)))
+				.setCardAbility(new ModifyAbility(CardAbilityTrigger.SUMMON, Optional.of(mod("throw_poison_potion")),
+						new CardAbilitySelection(
+								new CardAbilityGroups(
+										Set.of(CardAbilityGroup.ENEMY_BOARD, CardAbilityGroup.YOUR_BOARD)),
+								CardSelectionMethod.CHOICE, CardCondition.NoCondition.NO_CONDITION),
+						List.of(modification(0, new LazyCardType(
+								new Builder(EntityType.ITEM, 0, 0, 0).addProperty(CardProperty.POISON, 1).build()))))));
+		add(new Builder(EntityType.ITEM, 0, 0, 0).setKey(mod("healing_potion"))
+				.setAdditionalData(new AdditionalCardData.ItemData(
+						PotionUtils.setPotion(Items.POTION.getDefaultInstance(), Potions.HEALING)))
+				.setCardAbility(new ModifyAbility(CardAbilityTrigger.SUMMON, Optional.of(mod("throw_healing_potion")),
+						new CardAbilitySelection(
+								new CardAbilityGroups(
+										Set.of(CardAbilityGroup.ENEMY_BOARD, CardAbilityGroup.YOUR_BOARD)),
+								CardSelectionMethod.CHOICE, CardCondition.NoCondition.NO_CONDITION),
+						List.of(modification(5, new LazyCardType(new Builder(EntityType.ITEM, 0, 0, 0).build()))))));
 
 		printStatistics();
-
 	}
 
 	private void printStatistics() {

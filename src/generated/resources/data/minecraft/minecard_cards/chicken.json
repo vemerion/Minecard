@@ -47,7 +47,10 @@
               }
             },
             "additional_data": {
-              "item": "minecraft:egg"
+              "item": {
+                "id": "minecraft:egg",
+                "Count": 1
+              }
             },
             "entity": "minecraft:item",
             "cost": 0,

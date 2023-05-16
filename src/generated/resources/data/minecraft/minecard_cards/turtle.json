@@ -34,7 +34,10 @@
           }
         },
         "additional_data": {
-          "item": "minecraft:scute"
+          "item": {
+            "id": "minecraft:scute",
+            "Count": 1
+          }
         },
         "entity": "minecraft:item",
         "cost": 0,

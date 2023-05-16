@@ -6,8 +6,8 @@
       "animation": "minecard:throw_rotten_flesh",
       "selection": {
         "groups": [
-          "enemy_board",
-          "your_board"
+          "your_board",
+          "enemy_board"
         ],
         "method": "choice"
       },
@@ -34,7 +34,10 @@
     }
   },
   "additional_data": {
-    "item": "minecraft:rotten_flesh"
+    "item": {
+      "id": "minecraft:rotten_flesh",
+      "Count": 1
+    }
   },
   "entity": "minecraft:item",
   "cost": 0,

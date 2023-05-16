@@ -10,8 +10,8 @@
             "animation": "minecard:throw_mushroom_stew",
             "selection": {
               "groups": [
-                "your_board",
-                "enemy_board"
+                "enemy_board",
+                "your_board"
               ],
               "method": "choice"
             },
@@ -32,7 +32,10 @@
           }
         },
         "additional_data": {
-          "item": "minecraft:mushroom_stew"
+          "item": {
+            "id": "minecraft:mushroom_stew",
+            "Count": 1
+          }
         },
         "entity": "minecraft:item",
         "cost": 0,

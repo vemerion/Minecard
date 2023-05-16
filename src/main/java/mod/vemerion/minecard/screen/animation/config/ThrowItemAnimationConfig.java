@@ -12,23 +12,27 @@ import mod.vemerion.minecard.screen.GameScreen;
 import mod.vemerion.minecard.screen.animation.ThrowItemAnimation;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec2;
-import net.minecraftforge.registries.ForgeRegistries;
 
 public class ThrowItemAnimationConfig extends AnimationConfig {
 
 	public static final Codec<ThrowItemAnimationConfig> CODEC = RecordCodecBuilder.create(instance -> instance
-			.group(ForgeRegistries.ITEMS.getCodec().fieldOf("item").forGetter(ThrowItemAnimationConfig::getItem),
+			.group(ItemStack.CODEC.fieldOf("item").forGetter(ThrowItemAnimationConfig::getStack),
 					ResourceLocation.CODEC.optionalFieldOf("end_animation")
 							.forGetter(ThrowItemAnimationConfig::getEndAnimation))
 			.apply(instance, ThrowItemAnimationConfig::new));
 
-	private final Item item;
+	private final ItemStack stack;
 	private final Optional<ResourceLocation> endAnimation;
 
-	public ThrowItemAnimationConfig(Item item, Optional<ResourceLocation> endAnimation) {
-		this.item = item;
+	public ThrowItemAnimationConfig(ItemStack stack, Optional<ResourceLocation> endAnimation) {
+		this.stack = stack;
 		this.endAnimation = endAnimation;
+	}
+
+	public ThrowItemAnimationConfig(Item item, Optional<ResourceLocation> endAnimation) {
+		this(item.getDefaultInstance(), endAnimation);
 	}
 
 	@Override
@@ -36,8 +40,8 @@ public class ThrowItemAnimationConfig extends AnimationConfig {
 		return ModAnimationConfigs.THROW_ITEM.get();
 	}
 
-	public Item getItem() {
-		return item;
+	public ItemStack getStack() {
+		return stack;
 	}
 
 	public Optional<ResourceLocation> getEndAnimation() {
@@ -50,7 +54,6 @@ public class ThrowItemAnimationConfig extends AnimationConfig {
 				? origin.getPosition().add(new Vec2(ClientCard.CARD_WIDTH / 2, ClientCard.CARD_HEIGHT / 2))
 				: new Vec2(game.width / 2, game.height / 2);
 
-		var stack = item.getDefaultInstance();
 		for (var target : targets)
 			game.addAnimation(
 					new ThrowItemAnimation(game.getMinecraft(), stack, pos, target, endAnimation.isPresent() ? () -> {

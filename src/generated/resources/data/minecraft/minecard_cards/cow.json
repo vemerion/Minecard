@@ -10,8 +10,8 @@
             "animation": "minecard:throw_milk",
             "selection": {
               "groups": [
-                "your_board",
-                "enemy_board"
+                "enemy_board",
+                "your_board"
               ],
               "method": "choice"
             },
@@ -20,13 +20,13 @@
                 "health_change": 0,
                 "modifications": {
                   "properties": {
-                    "shield": 0,
                     "taunt": 0,
+                    "freeze": 0,
+                    "poison": 0,
+                    "shield": 0,
                     "burn": 0,
                     "thorns": 0,
-                    "stealth": 0,
-                    "poison": 0,
-                    "freeze": 0
+                    "stealth": 0
                   },
                   "entity": "minecraft:item",
                   "cost": 0,
@@ -38,7 +38,10 @@
           }
         },
         "additional_data": {
-          "item": "minecraft:milk_bucket"
+          "item": {
+            "id": "minecraft:milk_bucket",
+            "Count": 1
+          }
         },
         "entity": "minecraft:item",
         "cost": 0,

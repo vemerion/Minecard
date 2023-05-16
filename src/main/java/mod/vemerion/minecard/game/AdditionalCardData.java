@@ -11,7 +11,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import net.minecraft.core.SerializableUUID;
 import net.minecraft.world.item.Item;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraft.world.item.ItemStack;
 
 public class AdditionalCardData {
 
@@ -47,17 +47,20 @@ public class AdditionalCardData {
 	public static class ItemData extends AdditionalCardData {
 
 		public static final Codec<ItemData> CODEC = RecordCodecBuilder.create(instance -> instance
-				.group(ForgeRegistries.ITEMS.getCodec().fieldOf("item").forGetter(ItemData::getItem))
-				.apply(instance, ItemData::new));
+				.group(ItemStack.CODEC.fieldOf("item").forGetter(ItemData::getStack)).apply(instance, ItemData::new));
 
-		private Item item;
+		private ItemStack stack;
 
-		public ItemData(Item item) {
-			this.item = item;
+		public ItemData(ItemStack stack) {
+			this.stack = stack;
 		}
 
-		public Item getItem() {
-			return item;
+		public ItemData(Item item) {
+			this.stack = item.getDefaultInstance();
+		}
+
+		public ItemStack getStack() {
+			return stack;
 		}
 	}
 

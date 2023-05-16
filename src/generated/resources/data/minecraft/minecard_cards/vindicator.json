@@ -10,7 +10,10 @@
           "type": "minecard:resource"
         },
         "additional_data": {
-          "item": "minecraft:emerald"
+          "item": {
+            "id": "minecraft:emerald",
+            "Count": 1
+          }
         },
         "entity": "minecraft:item",
         "cost": 0,

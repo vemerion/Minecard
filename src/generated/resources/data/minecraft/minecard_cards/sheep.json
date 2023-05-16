@@ -6,7 +6,10 @@
       "placement": "enemy",
       "card": {
         "additional_data": {
-          "item": "minecraft:white_wool"
+          "item": {
+            "id": "minecraft:white_wool",
+            "Count": 1
+          }
         },
         "entity": "minecraft:item",
         "cost": 0,

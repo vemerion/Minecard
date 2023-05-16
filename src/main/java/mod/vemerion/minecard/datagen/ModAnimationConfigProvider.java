@@ -25,6 +25,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.alchemy.PotionUtils;
+import net.minecraft.world.item.alchemy.Potions;
 
 public class ModAnimationConfigProvider implements DataProvider {
 	private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
@@ -92,6 +94,19 @@ public class ModAnimationConfigProvider implements DataProvider {
 				Optional.of(SoundEvents.LLAMA_SPIT), Optional.empty(), Optional.empty()));
 		animations.put("throw_rotten_flesh", new ThrowItemAnimationConfig(Items.ROTTEN_FLESH, Optional.empty()));
 		animations.put("throw_rabbit_foot", new ThrowItemAnimationConfig(Items.RABBIT_FOOT, Optional.empty()));
+		animations.put("absorption_potion", new PotionAnimationConfig(0.46f, 0.36f, 0.38f));
+		animations.put("poison_potion", new PotionAnimationConfig(0.31f, 0.58f, 0.19f));
+		animations.put("healing_potion", new PotionAnimationConfig(0.97f, 0.14f, 0.14f));
+		animations.put("throw_absorption_potion",
+				new ThrowItemAnimationConfig(
+						PotionUtils.setPotion(Items.POTION.getDefaultInstance(), Potions.TURTLE_MASTER),
+						Optional.of(new ResourceLocation(Main.MODID, "absorption_potion"))));
+		animations.put("throw_poison_potion",
+				new ThrowItemAnimationConfig(PotionUtils.setPotion(Items.POTION.getDefaultInstance(), Potions.POISON),
+						Optional.of(new ResourceLocation(Main.MODID, "poison_potion"))));
+		animations.put("throw_healing_potion",
+				new ThrowItemAnimationConfig(PotionUtils.setPotion(Items.POTION.getDefaultInstance(), Potions.HEALING),
+						Optional.of(new ResourceLocation(Main.MODID, "healing_potion"))));
 
 	}
 

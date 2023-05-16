@@ -10,8 +10,8 @@
             "animation": "minecard:throw_trident",
             "selection": {
               "groups": [
-                "enemy_board",
-                "your_board"
+                "your_board",
+                "enemy_board"
               ],
               "method": "choice"
             },
@@ -48,7 +48,13 @@
     }
   },
   "additional_data": {
-    "item": "minecraft:trident"
+    "item": {
+      "id": "minecraft:trident",
+      "Count": 1,
+      "tag": {
+        "Damage": 0
+      }
+    }
   },
   "entity": "minecraft:item",
   "cost": 0,

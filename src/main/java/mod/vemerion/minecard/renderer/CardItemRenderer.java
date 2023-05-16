@@ -265,7 +265,7 @@ public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 				&& card.getAdditionalData() instanceof AdditionalCardData.ItemData itemData) { // Update item
 			itemEntity.setExtendedLifetime();
 
-			itemEntity.setItem(itemData.getItem().getDefaultInstance());
+			itemEntity.setItem(itemData.getStack());
 		}
 
 		setSpecialAttributes(card, entity);

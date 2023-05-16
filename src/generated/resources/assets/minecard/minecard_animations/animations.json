@@ -10,15 +10,52 @@
     "type": "minecard:charge"
   },
   "throw_bamboo": {
-    "item": "minecraft:bamboo",
+    "item": {
+      "id": "minecraft:bamboo",
+      "Count": 1
+    },
     "type": "minecard:throw_item"
   },
   "throw_scute": {
-    "item": "minecraft:scute",
+    "item": {
+      "id": "minecraft:scute",
+      "Count": 1
+    },
     "type": "minecard:throw_item"
   },
   "throw_egg": {
-    "item": "minecraft:egg",
+    "item": {
+      "id": "minecraft:egg",
+      "Count": 1
+    },
+    "type": "minecard:throw_item"
+  },
+  "throw_poison_potion": {
+    "item": {
+      "id": "minecraft:potion",
+      "Count": 1,
+      "tag": {
+        "Potion": "minecraft:poison"
+      }
+    },
+    "end_animation": "minecard:poison_potion",
+    "type": "minecard:throw_item"
+  },
+  "absorption_potion": {
+    "red": 0.46,
+    "green": 0.36,
+    "blue": 0.38,
+    "type": "minecard:potion"
+  },
+  "throw_healing_potion": {
+    "item": {
+      "id": "minecraft:potion",
+      "Count": 1,
+      "tag": {
+        "Potion": "minecraft:healing"
+      }
+    },
+    "end_animation": "minecard:healing_potion",
     "type": "minecard:throw_item"
   },
   "evoker_fangs": {
@@ -31,11 +68,17 @@
     "type": "minecard:charge"
   },
   "throw_rabbit_foot": {
-    "item": "minecraft:rabbit_foot",
+    "item": {
+      "id": "minecraft:rabbit_foot",
+      "Count": 1
+    },
     "type": "minecard:throw_item"
   },
   "throw_mushroom_stew": {
-    "item": "minecraft:mushroom_stew",
+    "item": {
+      "id": "minecraft:mushroom_stew",
+      "Count": 1
+    },
     "type": "minecard:throw_item"
   },
   "ravager_charge": {
@@ -53,28 +96,63 @@
     "apply_to_origin": true,
     "type": "minecard:explosion"
   },
+  "throw_absorption_potion": {
+    "item": {
+      "id": "minecraft:potion",
+      "Count": 1,
+      "tag": {
+        "Potion": "minecraft:turtle_master"
+      }
+    },
+    "end_animation": "minecard:absorption_potion",
+    "type": "minecard:throw_item"
+  },
+  "poison_potion": {
+    "red": 0.31,
+    "green": 0.58,
+    "blue": 0.19,
+    "type": "minecard:potion"
+  },
   "throw_sweet_berries": {
-    "item": "minecraft:sweet_berries",
+    "item": {
+      "id": "minecraft:sweet_berries",
+      "Count": 1
+    },
     "type": "minecard:throw_item"
   },
   "throw_carrot": {
-    "item": "minecraft:carrot",
+    "item": {
+      "id": "minecraft:carrot",
+      "Count": 1
+    },
     "type": "minecard:throw_item"
   },
   "throw_web": {
-    "item": "minecraft:cobweb",
+    "item": {
+      "id": "minecraft:cobweb",
+      "Count": 1
+    },
     "type": "minecard:throw_item"
   },
   "fireball": {
-    "item": "minecraft:fire_charge",
+    "item": {
+      "id": "minecraft:fire_charge",
+      "Count": 1
+    },
     "type": "minecard:throw_item"
   },
   "throw_pork": {
-    "item": "minecraft:porkchop",
+    "item": {
+      "id": "minecraft:porkchop",
+      "Count": 1
+    },
     "type": "minecard:throw_item"
   },
   "wither_projectile": {
-    "item": "minecraft:wither_skeleton_skull",
+    "item": {
+      "id": "minecraft:wither_skeleton_skull",
+      "Count": 1
+    },
     "end_animation": "minecard:target_explosion",
     "type": "minecard:throw_item"
   },
@@ -85,8 +163,20 @@
     "type": "minecard:potion"
   },
   "throw_shield": {
-    "item": "minecraft:shield",
+    "item": {
+      "id": "minecraft:shield",
+      "Count": 1,
+      "tag": {
+        "Damage": 0
+      }
+    },
     "type": "minecard:throw_item"
+  },
+  "healing_potion": {
+    "red": 0.97,
+    "green": 0.14,
+    "blue": 0.14,
+    "type": "minecard:potion"
   },
   "ender_dragon": {
     "red": 0.8,
@@ -95,7 +185,13 @@
     "type": "minecard:potion"
   },
   "throw_trident": {
-    "item": "minecraft:trident",
+    "item": {
+      "id": "minecraft:trident",
+      "Count": 1,
+      "tag": {
+        "Damage": 0
+      }
+    },
     "end_animation": "minecard:lightning_bolt",
     "type": "minecard:throw_item"
   },
@@ -114,7 +210,10 @@
     "type": "minecard:charge"
   },
   "throw_milk": {
-    "item": "minecraft:milk_bucket",
+    "item": {
+      "id": "minecraft:milk_bucket",
+      "Count": 1
+    },
     "type": "minecard:throw_item"
   },
   "llama_spit": {
@@ -126,7 +225,10 @@
     "type": "minecard:charge"
   },
   "throw_snowball": {
-    "item": "minecraft:snowball",
+    "item": {
+      "id": "minecraft:snowball",
+      "Count": 1
+    },
     "type": "minecard:throw_item"
   },
   "glow": {
@@ -141,7 +243,10 @@
     "type": "minecard:charge"
   },
   "throw_rotten_flesh": {
-    "item": "minecraft:rotten_flesh",
+    "item": {
+      "id": "minecraft:rotten_flesh",
+      "Count": 1
+    },
     "type": "minecard:throw_item"
   }
 }

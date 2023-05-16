@@ -181,7 +181,7 @@ public class Card {
 	}
 
 	public Component getName() {
-		return getAdditionalData() instanceof AdditionalCardData.ItemData itemData ? itemData.getItem().getDescription()
+		return getAdditionalData() instanceof AdditionalCardData.ItemData itemData ? itemData.getStack().getHoverName()
 				: getType().getDescription();
 	}
 

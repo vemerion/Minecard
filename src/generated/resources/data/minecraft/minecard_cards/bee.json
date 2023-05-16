@@ -19,7 +19,10 @@
           }
         },
         "additional_data": {
-          "item": "minecraft:bee_nest"
+          "item": {
+            "id": "minecraft:bee_nest",
+            "Count": 1
+          }
         },
         "entity": "minecraft:item",
         "cost": 0,
