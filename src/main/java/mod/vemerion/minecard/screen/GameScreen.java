@@ -88,7 +88,7 @@ public class GameScreen extends Screen implements GameClient {
 	private UUID current = UUID.randomUUID();
 	private BlockPos pos;
 	private boolean isSpectator = true;
-	private List<Choice> choices = new ArrayList<>();
+	private Choices choices = new Choices();
 
 	// Widgets
 	private PopupText popup;
@@ -170,6 +170,8 @@ public class GameScreen extends Screen implements GameClient {
 		for (var playerState : state.values())
 			for (var card : playerState.board)
 				updatePropertiesAnimations(null, card);
+
+		choices.update();
 	}
 
 	@Override
@@ -217,7 +219,7 @@ public class GameScreen extends Screen implements GameClient {
 					: fromHand.getPosition();
 			var placed = new ClientCard(card, pos, this);
 			if (fromHand == null)
-				placed.appear();
+				placed.appear(1);
 			if (leftId == -1) {
 				playerState.board.add(0, placed);
 			} else {
@@ -302,7 +304,7 @@ public class GameScreen extends Screen implements GameClient {
 		} else {
 			for (var card : added) {
 				card.resetPosition();
-				card.appear();
+				card.appear(1);
 			}
 		}
 	}
@@ -415,23 +417,8 @@ public class GameScreen extends Screen implements GameClient {
 			if (pButton == GLFW.GLFW_MOUSE_BUTTON_LEFT) {
 
 				// Player choice
-				if (!choices.isEmpty()) {
-					selectedCard = null;
-					attackingCard = null;
-
-					for (var playerState : state.values()) {
-						for (var list : List.of(playerState.board, playerState.hand)) {
-							for (var card : list) {
-								if (card.contains(pMouseX, pMouseY) && choices.get(0).cards().contains(card.getId())) {
-									Network.INSTANCE.sendToServer(
-											new PlayerChoiceResponseMessage(pos, choices.get(0).id(), card.getId()));
-									choices.remove(0);
-									return true;
-								}
-							}
-						}
-					}
-
+				if (choices.mouseClicked(pMouseX, pMouseY)) {
+					return true;
 				} else {
 					// Play card
 					if (selectedCard == null) {
@@ -550,50 +537,17 @@ public class GameScreen extends Screen implements GameClient {
 					drawBarrier(poseStack, source, card);
 		}
 
-		// Indicate which cards can't be chosen
-		if (!choices.isEmpty()) {
-			var candidates = choices.get(0).cards();
-			for (var playerState : state.values()) {
-				for (var list : List.of(playerState.board, playerState.hand)) {
-					for (var card : list) {
-						if (!candidates.contains(card.getId())) {
-							drawBarrier(poseStack, source, card);
-						}
-					}
-				}
-			}
-		}
-
 		for (var r : resources)
 			r.render(new PoseStack(), mouseX, mouseY, partialTicks, source);
 
 		for (var animation : animations)
 			animation.render(mouseX, mouseY, source, partialTicks);
 
+		choices.render(poseStack, mouseX, mouseY, source, partialTicks);
+
 		source.endBatch();
 
 		popup.render(poseStack, mouseX, mouseY, partialTicks);
-
-		// Player choice
-		if (!choices.isEmpty()) {
-			poseStack.pushPose();
-			poseStack.scale(1, 1, 1);
-			poseStack.translate(0, 0, 20);
-
-			poseStack.pushPose();
-			poseStack.translate((width - font.width(CHOOSE_TEXT) * 1.5f) / 2, 2, 0);
-			poseStack.scale(1.5f, 1.5f, 1.5f);
-			font.drawShadow(poseStack, CHOOSE_TEXT, 0, 0, 0xffffff);
-			poseStack.popPose();
-
-			var lines = font.split(choices.get(0).ability().getDescription(), 200);
-			float y = 18;
-			for (var line : lines) {
-				font.drawShadow(poseStack, line, (width - font.width(line)) / 2, y, 0xffffff);
-				y += 9.5;
-			}
-			poseStack.popPose();
-		}
 
 		super.render(poseStack, mouseX, mouseY, partialTicks);
 	}
@@ -636,6 +590,8 @@ public class GameScreen extends Screen implements GameClient {
 			}
 
 		popup.tick();
+
+		choices.tick();
 
 		fovModifier = (float) Mth.lerp(0.08, fovModifier, 1);
 	}
@@ -777,6 +733,126 @@ public class GameScreen extends Screen implements GameClient {
 				scales[index] = (float) Mth.lerp(0.1, scales[index], 0);
 		}
 
+	}
+
+	private class Choices {
+		private static final int CARD_DISTANCE = 100;
+		private List<Choice> choices = new ArrayList<>();
+		private List<ClientCard> cards = new ArrayList<>();
+
+		private void add(Choice choice) {
+			choices.add(choice);
+			if (choices.size() == 1) {
+				update();
+			}
+		}
+
+		private void pop() {
+			choices.remove(0);
+			update();
+		}
+
+		private void update() {
+			cards = new ArrayList<>();
+			if (!isEmpty() && !choices.get(0).targeting()) {
+				var selectable = choices.get(0).cards();
+				var startX = (width - CARD_WIDTH) / 2 - (selectable.size() - 1) * CARD_DISTANCE / 2;
+				for (int i = 0; i < selectable.size(); i++) {
+					var card = new ClientCard(selectable.get(i),
+							new Vec2(startX + i * CARD_DISTANCE, (height - CARD_HEIGHT) / 2), GameScreen.this);
+					card.appear(2);
+					cards.add(card);
+				}
+			}
+		}
+
+		private boolean isEmpty() {
+			return choices.isEmpty();
+		}
+
+		private void tick() {
+			for (var card : cards)
+				card.tick();
+		}
+
+		private void render(PoseStack poseStack, int mouseX, int mouseY, BufferSource source, float partialTick) {
+			poseStack.pushPose();
+			poseStack.translate(0, 0, 15);
+			for (var card : cards)
+				card.render(poseStack, mouseX, mouseY, source, partialTick);
+			poseStack.popPose();
+
+			if (!isEmpty()) {
+
+				// Indicate which cards can't be chosen
+				var choice = choices.get(0);
+				var candidates = choice.cards();
+				if (choice.targeting()) {
+					for (var playerState : state.values()) {
+						for (var list : List.of(playerState.board, playerState.hand)) {
+							for (var card : list) {
+								if (!candidates.stream().anyMatch(c -> c.getId() == card.getId())) {
+									drawBarrier(poseStack, source, card);
+								}
+							}
+						}
+					}
+				}
+
+				// Text
+				poseStack.pushPose();
+				poseStack.scale(1, 1, 1);
+				poseStack.translate(0, 0, 20);
+
+				poseStack.pushPose();
+				poseStack.translate((width - font.width(CHOOSE_TEXT) * 1.5f) / 2, 2, 0);
+				poseStack.scale(1.5f, 1.5f, 1.5f);
+				font.drawShadow(poseStack, CHOOSE_TEXT, 0, 0, 0xffffff);
+				poseStack.popPose();
+
+				var lines = font.split(choices.get(0).ability().getDescription(), 200);
+				float y = 18;
+				for (var line : lines) {
+					font.drawShadow(poseStack, line, (width - font.width(line)) / 2, y, 0xffffff);
+					y += 9.5;
+				}
+				poseStack.popPose();
+			}
+		}
+
+		private boolean mouseClicked(double pMouseX, double pMouseY) {
+			if (choices.isEmpty())
+				return false;
+
+			selectedCard = null;
+			attackingCard = null;
+
+			var choice = choices.get(0);
+			if (choice.targeting()) { // Select target on board/in hand
+				for (var playerState : state.values()) {
+					for (var list : List.of(playerState.board, playerState.hand)) {
+						for (var card : list) {
+							if (card.contains(pMouseX, pMouseY)
+									&& choice.cards().stream().anyMatch(c -> c.getId() == card.getId())) {
+								Network.INSTANCE
+										.sendToServer(new PlayerChoiceResponseMessage(pos, choice.id(), card.getId()));
+								pop();
+								return true;
+							}
+						}
+					}
+				}
+			} else { // Select choice from sent cards
+				for (var card : cards) {
+					if (card.contains(pMouseX, pMouseY)) {
+						Network.INSTANCE.sendToServer(new PlayerChoiceResponseMessage(pos, choice.id(), card.getId()));
+						pop();
+						return true;
+					}
+				}
+			}
+			return false;
+		}
 	}
 
 	public float getFovModifier() {

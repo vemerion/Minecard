@@ -32,7 +32,7 @@ public record CardAbilitySelection(CardAbilityGroups groups, CardSelectionMethod
 		if (method == CardSelectionMethod.CHOICE) {
 			var candidates = condition.filter(groups.get(state.getGame(), state.getId(), card, null));
 			if (!candidates.isEmpty())
-				state.getChoices().addChoice(receivers, ability, candidates);
+				state.getChoices().addChoice(receivers, ability, candidates, true);
 		}
 	}
 

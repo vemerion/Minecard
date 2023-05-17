@@ -13,7 +13,7 @@ import net.minecraft.resources.ResourceLocation;
 
 public interface GameClient {
 	
-	public static record Choice(int id, CardAbility ability, List<Integer> cards) {
+	public static record Choice(int id, CardAbility ability, List<Card> cards, boolean targeting) {
 	}
 
 	public void animation(int originId, List<Integer> targets, ResourceLocation rl);

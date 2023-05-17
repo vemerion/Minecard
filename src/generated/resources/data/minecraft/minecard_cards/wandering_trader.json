@@ -1,0 +1,34 @@
+{
+  "abilities": {
+    "type": "minecard:choice",
+    "value": {
+      "abilities": [
+        {
+          "trigger": "summon",
+          "cards": [
+            "minecard:pufferfish_bucket"
+          ],
+          "type": "minecard:add_cards"
+        },
+        {
+          "trigger": "summon",
+          "cards": [
+            "minecard:packed_ice"
+          ],
+          "type": "minecard:add_cards"
+        },
+        {
+          "trigger": "summon",
+          "cards": [
+            "minecard:pointed_dripstone"
+          ],
+          "type": "minecard:add_cards"
+        }
+      ]
+    }
+  },
+  "entity": "minecraft:wandering_trader",
+  "cost": 7,
+  "health": 7,
+  "damage": 4
+}

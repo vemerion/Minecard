@@ -56,6 +56,7 @@
   "minecard.minecard.add_cards.one_of": "one of",
   "minecard.minecard.and": "(%s and %s)",
   "minecard.minecard.chance": "%s%% chance: %s",
+  "minecard.minecard.choice": "Choice of: %s",
   "minecard.minecard.copy_cards": "%s copy %s and give it to %s.%s%s",
   "minecard.minecard.copy_cards.destroy_original": " Destroy the original card.",
   "minecard.minecard.copy_cards.enemy": "the enemy",

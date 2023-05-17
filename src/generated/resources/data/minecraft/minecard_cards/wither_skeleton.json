@@ -5,8 +5,8 @@
       "trigger": "summon",
       "selection": {
         "groups": [
-          "your_deck",
-          "your_hand"
+          "your_hand",
+          "your_deck"
         ],
         "method": "all",
         "condition": {

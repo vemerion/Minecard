@@ -6,8 +6,8 @@
       "animation": "minecard:throw_rotten_flesh",
       "selection": {
         "groups": [
-          "your_board",
-          "enemy_board"
+          "enemy_board",
+          "your_board"
         ],
         "method": "choice"
       },

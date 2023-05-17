@@ -41,6 +41,13 @@
     "end_animation": "minecard:poison_potion",
     "type": "minecard:throw_item"
   },
+  "throw_pointed_dripstone": {
+    "item": {
+      "id": "minecraft:pointed_dripstone",
+      "Count": 1
+    },
+    "type": "minecard:throw_item"
+  },
   "absorption_potion": {
     "red": 0.46,
     "green": 0.36,
@@ -116,6 +123,13 @@
   "throw_sweet_berries": {
     "item": {
       "id": "minecraft:sweet_berries",
+      "Count": 1
+    },
+    "type": "minecard:throw_item"
+  },
+  "throw_packed_ice": {
+    "item": {
+      "id": "minecraft:packed_ice",
       "Count": 1
     },
     "type": "minecard:throw_item"

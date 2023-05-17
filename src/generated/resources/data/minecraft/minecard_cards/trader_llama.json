@@ -1,0 +1,43 @@
+{
+  "abilities": {
+    "type": "minecard:choice",
+    "value": {
+      "abilities": [
+        {
+          "type": "minecard:modify",
+          "value": {
+            "trigger": "summon",
+            "animation": "minecard:llama_spit",
+            "selection": {
+              "groups": [
+                "enemy_board",
+                "your_board"
+              ],
+              "method": "choice"
+            },
+            "modifications": [
+              {
+                "health_change": -2,
+                "modifications": {
+                  "entity": "minecraft:item",
+                  "cost": 0,
+                  "health": 0,
+                  "damage": 0
+                }
+              }
+            ]
+          }
+        },
+        {
+          "trigger": "summon",
+          "count": 1,
+          "type": "minecard:draw_cards"
+        }
+      ]
+    }
+  },
+  "entity": "minecraft:trader_llama",
+  "cost": 5,
+  "health": 4,
+  "damage": 4
+}

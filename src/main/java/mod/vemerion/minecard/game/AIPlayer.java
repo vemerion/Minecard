@@ -41,7 +41,7 @@ public class AIPlayer implements GameClient {
 
 		if (!choices.isEmpty()) {
 			var choice = choices.get(0);
-			game.choice(choice.id(), choice.cards().get(rand.nextInt(choice.cards().size())));
+			game.choice(choice.id(), choice.cards().get(rand.nextInt(choice.cards().size())).getId());
 			choices.remove(0);
 		}
 

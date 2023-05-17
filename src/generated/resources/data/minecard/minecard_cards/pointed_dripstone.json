@@ -3,7 +3,7 @@
     "type": "minecard:modify",
     "value": {
       "trigger": "summon",
-      "animation": "minecard:throw_poison_potion",
+      "animation": "minecard:throw_pointed_dripstone",
       "selection": {
         "groups": [
           "enemy_board",
@@ -16,7 +16,7 @@
           "health_change": 0,
           "modifications": {
             "properties": {
-              "poison": 1
+              "thorns": 3
             },
             "entity": "minecraft:item",
             "cost": 0,
@@ -29,11 +29,8 @@
   },
   "additional_data": {
     "item": {
-      "id": "minecraft:potion",
-      "Count": 1,
-      "tag": {
-        "Potion": "minecraft:poison"
-      }
+      "id": "minecraft:pointed_dripstone",
+      "Count": 1
     }
   },
   "entity": "minecraft:item",

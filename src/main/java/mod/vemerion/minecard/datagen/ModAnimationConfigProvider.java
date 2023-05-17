@@ -107,6 +107,9 @@ public class ModAnimationConfigProvider implements DataProvider {
 		animations.put("throw_healing_potion",
 				new ThrowItemAnimationConfig(PotionUtils.setPotion(Items.POTION.getDefaultInstance(), Potions.HEALING),
 						Optional.of(new ResourceLocation(Main.MODID, "healing_potion"))));
+		animations.put("throw_packed_ice", new ThrowItemAnimationConfig(Items.PACKED_ICE, Optional.empty()));
+		animations.put("throw_pointed_dripstone",
+				new ThrowItemAnimationConfig(Items.POINTED_DRIPSTONE, Optional.empty()));
 
 	}
 

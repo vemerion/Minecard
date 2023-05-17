@@ -30,6 +30,7 @@ public class ClientCard extends Card {
 	private boolean removed;
 	private float size = 1;
 	private float size0 = 1;
+	private float maxSize = 1;
 
 	public ClientCard(Card card, Vec2 position, GameScreen screen) {
 		super(card.getType(), card.getCost(), card.getHealth(), card.getDamage(), card.getMaxHealth(),
@@ -47,7 +48,7 @@ public class ClientCard extends Card {
 		position = new Vec2((float) Mth.lerp(0.9, position.x, targetPosition.x),
 				(float) Mth.lerp(0.9, position.y, targetPosition.y));
 		size0 = size;
-		size = Mth.lerp(0.1f, size, 1);
+		size = Mth.lerp(0.1f, size, maxSize);
 	}
 
 	private Vec2 getPosition(float partialTick) {
@@ -79,14 +80,13 @@ public class ClientCard extends Card {
 		return removed;
 	}
 
-	public void appear() {
+	public void appear(float maxSize) {
 		size = 0;
 		size0 = 0;
+		this.maxSize = maxSize;
 	}
 
 	public void render(PoseStack ps, int mouseX, int mouseY, BufferSource source, float partialTick) {
-//		GuiComponent.fill(ps, (int)getPosition().x, (int)getPosition().y, (int)getPosition().x + CARD_WIDTH, (int)getPosition().y + CARD_HEIGHT, FastColor.ARGB32.color(255, 255, 255, 255));
-
 		ps.pushPose();
 		ps.translate(-LEFT_OFFSET, 0, 0);
 
@@ -106,7 +106,7 @@ public class ClientCard extends Card {
 		ps.translate((1 - getSize(partialTick)) * CARD_WIDTH / 2, (1 - getSize(partialTick)) * CARD_HEIGHT / 2, 0);
 		ps.scale(currentSize, -currentSize, currentSize);
 
-		int light = contains(mouseX, mouseY) ? CARD_LIGHT : CARD_LIGHT_HOVER;
+		int light = (contains(mouseX, mouseY) ? CARD_LIGHT : CARD_LIGHT_HOVER);
 		CardItemRenderer.renderCard(this, TransformType.NONE, ps, source, light, OverlayTexture.NO_OVERLAY);
 		ps.popPose();
 
@@ -122,11 +122,15 @@ public class ClientCard extends Card {
 					TransformType.NONE, LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY, ps, source, 0);
 			ps.popPose();
 		}
-
+//		GuiComponent.fill(ps, (int) getPosition().x, (int) getPosition().y, (int) getPosition().x + CARD_WIDTH,
+//				(int) getPosition().y + CARD_HEIGHT, FastColor.ARGB32.color(255, 255, 255, 255));
 	}
 
 	public boolean contains(double pMouseX, double pMouseY) {
-		return pMouseX > position.x && pMouseX < position.x + CARD_WIDTH && pMouseY > position.y
-				&& pMouseY < position.y + CARD_HEIGHT;
+		var size = getSize(0);
+		var widthOffset = (size - 1) * CARD_WIDTH / 2;
+		var heightOffset = (size - 1) * CARD_HEIGHT / 2;
+		return pMouseX > position.x - widthOffset && pMouseX < position.x + CARD_WIDTH + widthOffset
+				&& pMouseY > position.y - heightOffset && pMouseY < position.y + CARD_HEIGHT + heightOffset;
 	}
 }

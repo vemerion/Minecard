@@ -21,15 +21,14 @@ public class PlayerChoices {
 		this.leftId = leftId;
 	}
 
-	public void addChoice(List<Receiver> receivers, CardAbility ability, List<Card> cards) {
+	public void addChoice(List<Receiver> receivers, CardAbility ability, List<Card> cards, boolean targeting) {
 		if (choices.stream().anyMatch(c -> c.ability == ability))
 			return;
 
 		choices.add(new Choice(ability, cards));
 		for (var receiver : receivers) {
 			if (receiver.getId().equals(player)) {
-				receiver.receiver(new PlayerChoiceMessage(choices.size() - 1, ability,
-						cards.stream().map(c -> c.getId()).toList()));
+				receiver.receiver(new PlayerChoiceMessage(choices.size() - 1, ability, cards, targeting));
 			}
 		}
 	}
