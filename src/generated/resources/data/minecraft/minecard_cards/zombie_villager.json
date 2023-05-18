@@ -1,0 +1,14 @@
+{
+  "abilities": {
+    "type": "minecard:summon_card",
+    "value": {
+      "trigger": "death",
+      "placement": "right",
+      "card": "minecraft:villager"
+    }
+  },
+  "entity": "minecraft:zombie_villager",
+  "cost": 6,
+  "health": 3,
+  "damage": 3
+}

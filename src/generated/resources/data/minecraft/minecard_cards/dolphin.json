@@ -1,0 +1,14 @@
+{
+  "abilities": {
+    "type": "minecard:summon_card",
+    "value": {
+      "trigger": "summon",
+      "placement": "right",
+      "card": "minecard:buried_treasure"
+    }
+  },
+  "entity": "minecraft:dolphin",
+  "cost": 3,
+  "health": 2,
+  "damage": 3
+}

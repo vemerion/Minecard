@@ -1,0 +1,15 @@
+{
+  "abilities": {
+    "trigger": "summon",
+    "cards": [
+      "minecard:iron_boots",
+      "minecard:ender_pearl",
+      "minecard:fire_charge"
+    ],
+    "type": "minecard:add_cards"
+  },
+  "entity": "minecraft:piglin",
+  "cost": 5,
+  "health": 4,
+  "damage": 4
+}

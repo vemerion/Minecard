@@ -1,0 +1,39 @@
+{
+  "abilities": {
+    "type": "minecard:copy_cards",
+    "value": {
+      "give_to_enemy": false,
+      "animation": "minecard:throw_ender_pearl",
+      "selection": {
+        "groups": [
+          "your_board"
+        ],
+        "method": "choice",
+        "condition": {
+          "type": "minecard:not",
+          "value": {
+            "inner": {
+              "type": "minecard:entity",
+              "value": {
+                "inner": "minecraft:player"
+              }
+            }
+          }
+        }
+      },
+      "trigger": "summon",
+      "destroy_original": true,
+      "restore_health": true
+    }
+  },
+  "additional_data": {
+    "item": {
+      "id": "minecraft:ender_pearl",
+      "Count": 1
+    }
+  },
+  "entity": "minecraft:item",
+  "cost": 0,
+  "health": 0,
+  "damage": 0
+}

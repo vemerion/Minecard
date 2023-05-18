@@ -1,0 +1,43 @@
+{
+  "abilities": {
+    "type": "minecard:modify",
+    "value": {
+      "trigger": "summon",
+      "animation": "minecard:throw_leather_chestplate",
+      "selection": {
+        "groups": [
+          "enemy_board",
+          "your_board"
+        ],
+        "method": "choice"
+      },
+      "modifications": [
+        {
+          "health_change": 0,
+          "modifications": {
+            "equipment": {
+              "mainhand": "minecraft:leather_chestplate"
+            },
+            "entity": "minecraft:item",
+            "cost": 0,
+            "health": 2,
+            "damage": 0
+          }
+        }
+      ]
+    }
+  },
+  "additional_data": {
+    "item": {
+      "id": "minecraft:leather_chestplate",
+      "Count": 1,
+      "tag": {
+        "Damage": 0
+      }
+    }
+  },
+  "entity": "minecraft:item",
+  "cost": 0,
+  "health": 0,
+  "damage": 0
+}

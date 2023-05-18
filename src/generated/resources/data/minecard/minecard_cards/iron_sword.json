@@ -1,0 +1,43 @@
+{
+  "abilities": {
+    "type": "minecard:modify",
+    "value": {
+      "trigger": "summon",
+      "animation": "minecard:throw_iron_sword",
+      "selection": {
+        "groups": [
+          "enemy_board",
+          "your_board"
+        ],
+        "method": "choice"
+      },
+      "modifications": [
+        {
+          "health_change": 0,
+          "modifications": {
+            "equipment": {
+              "mainhand": "minecraft:iron_sword"
+            },
+            "entity": "minecraft:item",
+            "cost": 0,
+            "health": 0,
+            "damage": 2
+          }
+        }
+      ]
+    }
+  },
+  "additional_data": {
+    "item": {
+      "id": "minecraft:iron_sword",
+      "Count": 1,
+      "tag": {
+        "Damage": 0
+      }
+    }
+  },
+  "entity": "minecraft:item",
+  "cost": 0,
+  "health": 0,
+  "damage": 0
+}

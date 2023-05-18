@@ -42,6 +42,7 @@ public class ModLanguageProvider extends LanguageProvider {
 		add(Helper.gui("resources_count"), "%s/%s");
 		add(Helper.gui("deck_count"), "%s");
 		add(Helper.gui("choose"), "Choose a card for ability:");
+		add(Helper.gui("buried_treasure"), "Buried Treasure");
 
 		// Card properties
 		add(CardProperty.CHARGE.getTextKey(), "charge");

@@ -3,9 +3,11 @@ package mod.vemerion.minecard.datagen;
 import java.io.IOException;
 import java.util.EnumSet;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.TreeMap;
 
 import com.google.gson.Gson;
@@ -36,9 +38,11 @@ import mod.vemerion.minecard.game.ability.MultiAbility;
 import mod.vemerion.minecard.game.ability.NoCardAbility;
 import mod.vemerion.minecard.game.ability.ResourceAbility;
 import mod.vemerion.minecard.game.ability.SummonCardAbility;
+import mod.vemerion.minecard.helper.Helper;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.HashCache;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -99,10 +103,8 @@ public class ModCardProvider implements DataProvider {
 								CardSelectionMethod.ALL, CardCondition.NoCondition.NO_CONDITION),
 						List.of(modification(0, new LazyCardType(
 								new Builder(EntityType.ITEM, 0, 0, 0).addProperty(CardProperty.FREEZE, 2).build()))))));
-		add(new Builder(EntityType.VINDICATOR, 6, 4, 8).setCardAbility(new AddCardsAbility(CardAbilityTrigger.DEATH,
-				List.of(new LazyCardType(new Builder(EntityType.ITEM, 0, 0, 0)
-						.setCardAbility(new ResourceAbility(CardAbilityTrigger.SUMMON, 1, 0))
-						.setAdditionalData(new AdditionalCardData.ItemData(Items.EMERALD)).build())))));
+		add(new Builder(EntityType.VINDICATOR, 6, 4, 8).setCardAbility(
+				new AddCardsAbility(CardAbilityTrigger.DEATH, List.of(new LazyCardType(mod("emerald"))))));
 		add(new Builder(EntityType.ENDERMAN, 6, 4, 5)
 				.setCardAbility(new CopyCardsAbility(CardAbilityTrigger.SUMMON, false, false, false, Optional.empty(),
 						new CardAbilitySelection(new CardAbilityGroups(EnumSet.of(CardAbilityGroup.ENEMY_HAND)),
@@ -405,6 +407,26 @@ public class ModCardProvider implements DataProvider {
 										List.of(modification(-2,
 												new LazyCardType(new Builder(EntityType.ITEM, 0, 0, 0).build())))),
 								new DrawCardsAbility(CardAbilityTrigger.SUMMON, 1)))));
+		add(new Builder(EntityType.DOLPHIN, 3, 2, 3).setCardAbility(new SummonCardAbility(CardAbilityTrigger.SUMMON,
+				CardPlacement.RIGHT, new LazyCardType(mod("buried_treasure")))));
+		add(new Builder(EntityType.ZOMBIE_VILLAGER, 6, 3, 3)
+				.setCardAbility(new SummonCardAbility(CardAbilityTrigger.DEATH, CardPlacement.RIGHT,
+						new LazyCardType(EntityType.VILLAGER.getRegistryName()))));
+		add(new Builder(EntityType.HOGLIN, 8, 5, 7)
+				.setCardAbility(new ChoiceCardAbility(List.of(
+						new SummonCardAbility(CardAbilityTrigger.SUMMON, CardPlacement.RIGHT,
+								new LazyCardType(new Builder(EntityType.HOGLIN, 0, 3, 4)
+										.addProperty(CardProperty.BABY, 1).build())),
+						new ModifyAbility(CardAbilityTrigger.SUMMON, Optional.empty(),
+								new CardAbilitySelection(new CardAbilityGroups(EnumSet.of(CardAbilityGroup.SELF)),
+										CardSelectionMethod.ALL, CardCondition.NoCondition.NO_CONDITION),
+								List.of(modification(0, new LazyCardType(new Builder(EntityType.ITEM, 0, 1, 1)
+										.addProperty(CardProperty.TAUNT, 1).build()))))))));
+		add(new Builder(EntityType.ZOGLIN, 9, 6, 12).setCardAbility(
+				new AddCardsAbility(CardAbilityTrigger.DEATH, List.of(new LazyCardType(mod("rotten_flesh"))))));
+		add(new Builder(EntityType.PIGLIN, 5, 4, 4).setCardAbility(
+				new AddCardsAbility(CardAbilityTrigger.SUMMON, List.of(new LazyCardType(mod("iron_boots")),
+						new LazyCardType(mod("ender_pearl")), new LazyCardType(mod("fire_charge"))))));
 
 		// Auxiliary cards
 		add(new Builder(EntityType.ITEM, 0, 1, 0).setKey(mod("shield")).addProperty(CardProperty.SHIELD, 1)
@@ -518,6 +540,57 @@ public class ModCardProvider implements DataProvider {
 								CardSelectionMethod.CHOICE, CardCondition.NoCondition.NO_CONDITION),
 						List.of(modification(0, new LazyCardType(
 								new Builder(EntityType.ITEM, 0, 0, 0).addProperty(CardProperty.THORNS, 3).build()))))));
+		add(new Builder(EntityType.ITEM, 0, 0, 0).setKey(mod("iron_sword"))
+				.setAdditionalData(new AdditionalCardData.ItemData(Items.IRON_SWORD))
+				.setCardAbility(new ModifyAbility(CardAbilityTrigger.SUMMON, Optional.of(mod("throw_iron_sword")),
+						new CardAbilitySelection(
+								new CardAbilityGroups(
+										EnumSet.of(CardAbilityGroup.ENEMY_BOARD, CardAbilityGroup.YOUR_BOARD)),
+								CardSelectionMethod.CHOICE, CardCondition.NoCondition.NO_CONDITION),
+						List.of(modification(0, new LazyCardType(new Builder(EntityType.ITEM, 0, 0, 2)
+								.addEquipment(EquipmentSlot.MAINHAND, Items.IRON_SWORD).build()))))));
+		add(new Builder(EntityType.ITEM, 0, 0, 0).setKey(mod("emerald"))
+				.setCardAbility(new ResourceAbility(CardAbilityTrigger.SUMMON, 1, 0))
+				.setAdditionalData(new AdditionalCardData.ItemData(Items.EMERALD)));
+		add(new Builder(EntityType.ITEM, 0, 0, 0).setKey(mod("leather_chestplate"))
+				.setAdditionalData(new AdditionalCardData.ItemData(Items.LEATHER_CHESTPLATE)).setCardAbility(
+						new ModifyAbility(CardAbilityTrigger.SUMMON, Optional.of(mod("throw_leather_chestplate")),
+								new CardAbilitySelection(
+										new CardAbilityGroups(
+												EnumSet.of(CardAbilityGroup.ENEMY_BOARD, CardAbilityGroup.YOUR_BOARD)),
+										CardSelectionMethod.CHOICE, CardCondition.NoCondition.NO_CONDITION),
+								List.of(modification(0, new LazyCardType(new Builder(EntityType.ITEM, 0, 2, 0)
+										.addEquipment(EquipmentSlot.MAINHAND, Items.LEATHER_CHESTPLATE).build()))))));
+		add(new Builder(EntityType.ITEM, 0, 2, 0).setKey(mod("buried_treasure"))
+				.setAdditionalData(new AdditionalCardData.ItemData(Items.CHEST.getDefaultInstance()
+						.setHoverName(new TranslatableComponent(Helper.gui("buried_treasure")))))
+				.setCardAbility(new AddCardsAbility(CardAbilityTrigger.DEATH, List.of(new LazyCardType(mod("emerald")),
+						new LazyCardType(mod("leather_chestplate")), new LazyCardType(mod("iron_sword"))))));
+		add(new Builder(EntityType.ITEM, 0, 0, 0).setKey(mod("iron_boots"))
+				.setAdditionalData(new AdditionalCardData.ItemData(Items.IRON_BOOTS))
+				.setCardAbility(new ModifyAbility(CardAbilityTrigger.SUMMON, Optional.of(mod("throw_iron_boots")),
+						new CardAbilitySelection(
+								new CardAbilityGroups(
+										EnumSet.of(CardAbilityGroup.ENEMY_BOARD, CardAbilityGroup.YOUR_BOARD)),
+								CardSelectionMethod.CHOICE, CardCondition.NoCondition.NO_CONDITION),
+						List.of(modification(0, new LazyCardType(new Builder(EntityType.ITEM, 0, 2, 0)
+								.addEquipment(EquipmentSlot.FEET, Items.IRON_BOOTS).build()))))));
+		add(new Builder(EntityType.ITEM, 0, 0, 0).setKey(mod("fire_charge"))
+				.setAdditionalData(new AdditionalCardData.ItemData(Items.FIRE_CHARGE))
+				.setCardAbility(new ModifyAbility(CardAbilityTrigger.SUMMON, Optional.of(mod("fireball")),
+						new CardAbilitySelection(
+								new CardAbilityGroups(
+										EnumSet.of(CardAbilityGroup.ENEMY_BOARD, CardAbilityGroup.YOUR_BOARD)),
+								CardSelectionMethod.CHOICE, CardCondition.NoCondition.NO_CONDITION),
+						List.of(modification(0, new LazyCardType(
+								new Builder(EntityType.ITEM, 0, 0, 0).addProperty(CardProperty.BURN, 3).build()))))));
+		add(new Builder(EntityType.ITEM, 0, 0, 0).setKey(mod("ender_pearl"))
+				.setAdditionalData(new AdditionalCardData.ItemData(Items.ENDER_PEARL))
+				.setCardAbility(new CopyCardsAbility(CardAbilityTrigger.SUMMON, true, true, false,
+						Optional.of(mod("throw_ender_pearl")),
+						new CardAbilitySelection(new CardAbilityGroups(EnumSet.of(CardAbilityGroup.YOUR_BOARD)),
+								CardSelectionMethod.CHOICE,
+								new CardCondition.Not(new CardCondition.Entity(EntityType.PLAYER))))));
 
 		printStatistics();
 	}
@@ -525,8 +598,10 @@ public class ModCardProvider implements DataProvider {
 	private void printStatistics() {
 		Map<Integer, Integer> costCounts = new TreeMap<>();
 		Map<CardProperty, Integer> propertyCounts = new TreeMap<>();
+		Set<EntityType<?>> types = new HashSet<>();
 		for (var entry : cards.entrySet()) {
 			var card = entry.getValue();
+			types.add(card.getType());
 			if (Cards.isAllowed(card.getType()) && ForgeRegistries.ENTITIES.containsKey(entry.getKey())) {
 				costCounts.compute(card.getCost(), (k, v) -> v == null ? 1 : v + 1);
 
@@ -545,6 +620,12 @@ public class ModCardProvider implements DataProvider {
 		System.out.println("Card properties:");
 		for (var entry : propertyCounts.entrySet())
 			System.out.println(entry.getKey().getName() + ": " + entry.getValue());
+
+		for (var entry : ForgeRegistries.ENTITIES.getEntries()) {
+			if (Cards.isAllowed(entry.getValue()) && !types.contains(entry.getValue())) {
+				System.out.println("Missing " + entry.getKey());
+			}
+		}
 	}
 
 	private void splitter(EntityType<?> entity, int cost, CardAbility ability) {

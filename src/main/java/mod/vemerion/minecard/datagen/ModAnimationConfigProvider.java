@@ -110,6 +110,11 @@ public class ModAnimationConfigProvider implements DataProvider {
 		animations.put("throw_packed_ice", new ThrowItemAnimationConfig(Items.PACKED_ICE, Optional.empty()));
 		animations.put("throw_pointed_dripstone",
 				new ThrowItemAnimationConfig(Items.POINTED_DRIPSTONE, Optional.empty()));
+		animations.put("throw_leather_chestplate",
+				new ThrowItemAnimationConfig(Items.LEATHER_CHESTPLATE, Optional.empty()));
+		animations.put("throw_iron_sword", new ThrowItemAnimationConfig(Items.IRON_SWORD, Optional.empty()));
+		animations.put("throw_iron_boots", new ThrowItemAnimationConfig(Items.IRON_BOOTS, Optional.empty()));
+		animations.put("throw_ender_pearl", new ThrowItemAnimationConfig(Items.ENDER_PEARL, Optional.empty()));
 
 	}
 

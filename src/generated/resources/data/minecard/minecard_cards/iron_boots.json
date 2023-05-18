@@ -1,0 +1,43 @@
+{
+  "abilities": {
+    "type": "minecard:modify",
+    "value": {
+      "trigger": "summon",
+      "animation": "minecard:throw_iron_boots",
+      "selection": {
+        "groups": [
+          "enemy_board",
+          "your_board"
+        ],
+        "method": "choice"
+      },
+      "modifications": [
+        {
+          "health_change": 0,
+          "modifications": {
+            "equipment": {
+              "feet": "minecraft:iron_boots"
+            },
+            "entity": "minecraft:item",
+            "cost": 0,
+            "health": 2,
+            "damage": 0
+          }
+        }
+      ]
+    }
+  },
+  "additional_data": {
+    "item": {
+      "id": "minecraft:iron_boots",
+      "Count": 1,
+      "tag": {
+        "Damage": 0
+      }
+    }
+  },
+  "entity": "minecraft:item",
+  "cost": 0,
+  "health": 0,
+  "damage": 0
+}

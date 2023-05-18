@@ -1,0 +1,13 @@
+{
+  "abilities": {
+    "trigger": "death",
+    "cards": [
+      "minecard:rotten_flesh"
+    ],
+    "type": "minecard:add_cards"
+  },
+  "entity": "minecraft:zoglin",
+  "cost": 9,
+  "health": 6,
+  "damage": 12
+}
