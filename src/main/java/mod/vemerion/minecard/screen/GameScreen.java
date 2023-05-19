@@ -1,5 +1,7 @@
 package mod.vemerion.minecard.screen;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -29,6 +31,7 @@ import mod.vemerion.minecard.network.PlayCardMessage;
 import mod.vemerion.minecard.network.PlayerChoiceResponseMessage;
 import mod.vemerion.minecard.renderer.CardItemRenderer;
 import mod.vemerion.minecard.screen.animation.Animation;
+import mod.vemerion.minecard.screen.animation.AttackAnimation;
 import mod.vemerion.minecard.screen.animation.BurnAnimation;
 import mod.vemerion.minecard.screen.animation.DeathAnimation;
 import mod.vemerion.minecard.screen.animation.FreezeAnimation;
@@ -36,7 +39,6 @@ import mod.vemerion.minecard.screen.animation.PoisonAnimation;
 import mod.vemerion.minecard.screen.animation.StealthAnimation;
 import mod.vemerion.minecard.screen.animation.TauntAnimation;
 import mod.vemerion.minecard.screen.animation.ThornsAnimation;
-import mod.vemerion.minecard.screen.animation.ThrowItemAnimation;
 import mod.vemerion.minecard.screen.animation.WallAnimation;
 import mod.vemerion.minecard.screen.animation.config.AnimationConfigs;
 import net.minecraft.client.Minecraft;
@@ -55,12 +57,14 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.FastColor;
 import net.minecraft.util.Mth;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.Vec2;
+import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 
 public class GameScreen extends Screen implements GameClient {
 
@@ -253,7 +257,7 @@ public class GameScreen extends Screen implements GameClient {
 					card.copy(received);
 
 					if (card.isDead()) {
-						animations.add(new DeathAnimation(minecraft, card, 40, () -> {
+						animations.add(new DeathAnimation(minecraft, card, 20, () -> {
 							playerState.board.removeIf(c -> card.getId() == c.getId());
 							card.remove();
 							resetPositions(playerState);
@@ -319,11 +323,7 @@ public class GameScreen extends Screen implements GameClient {
 		var attacker = withId(state.get(attackerId).board, attackerCardId);
 		var target = withId(state.get(targetId).board, targetCardId);
 
-		animations.add(new ThrowItemAnimation(minecraft, new ItemStack(Items.STONE_SWORD),
-				new Vec2(attacker.getPosition().x + CARD_WIDTH / 2, attacker.getPosition().y + CARD_HEIGHT / 2), target,
-				() -> {
-					minecraft.getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.PLAYER_ATTACK_SWEEP, 1));
-				}));
+		animations.add(new AttackAnimation(minecraft, attacker, target));
 	}
 
 	@Override
@@ -452,6 +452,7 @@ public class GameScreen extends Screen implements GameClient {
 						for (var card : yourState().board) {
 							if (card.contains(pMouseX, pMouseY) && card.canAttack()) {
 								attackingCard = card;
+								playAmbientSound(attackingCard);
 								return true;
 							}
 						}
@@ -594,6 +595,21 @@ public class GameScreen extends Screen implements GameClient {
 		choices.tick();
 
 		fovModifier = (float) Mth.lerp(0.08, fovModifier, 1);
+	}
+
+	private static final Method GET_AMBIENT_SOUND = ObfuscationReflectionHelper.findMethod(Mob.class, "m_7515_");
+
+	private void playAmbientSound(Card card) {
+		if (CardItemRenderer.getEntity(card, minecraft.level) instanceof Mob entity) {
+			try {
+				var sound = GET_AMBIENT_SOUND.invoke(entity) instanceof SoundEvent deathSound ? deathSound
+						: SoundEvents.ITEM_FRAME_ADD_ITEM;
+				minecraft.getSoundManager().play(SimpleSoundInstance.forUI(sound, 1));
+			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+				Main.LOGGER.error("Unable to play ambient sound for card " + card.getType().getRegistryName().toString()
+						+ ": " + e);
+			}
+		}
 	}
 
 	private class NextTurnButton extends AbstractButton {

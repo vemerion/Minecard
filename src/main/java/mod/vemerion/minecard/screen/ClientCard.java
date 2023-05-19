@@ -26,6 +26,7 @@ public class ClientCard extends Card {
 	private Vec2 position;
 	private Vec2 position0;
 	private Vec2 targetPosition;
+	private ClientCard attackingTarget;
 	private GameScreen screen;
 	private boolean removed;
 	private float size = 1;
@@ -45,10 +46,15 @@ public class ClientCard extends Card {
 
 	public void tick() {
 		position0 = position;
-		position = new Vec2((float) Mth.lerp(0.9, position.x, targetPosition.x),
-				(float) Mth.lerp(0.9, position.y, targetPosition.y));
+		lerpPos(attackingTarget != null ? Math.max(0.25 - getDamage() / 100f, 0.15) : 0.9,
+				attackingTarget != null ? attackingTarget.getPosition() : targetPosition);
 		size0 = size;
 		size = Mth.lerp(0.1f, size, maxSize);
+	}
+
+	private void lerpPos(double value, Vec2 target) {
+		position = new Vec2((float) Mth.lerp(value, position.x, target.x),
+				(float) Mth.lerp(value, position.y, target.y));
 	}
 
 	private Vec2 getPosition(float partialTick) {
@@ -66,6 +72,10 @@ public class ClientCard extends Card {
 
 	public void setPosition(Vec2 position) {
 		this.targetPosition = position;
+	}
+
+	public void setTarget(ClientCard target) {
+		this.attackingTarget = target;
 	}
 
 	public void resetPosition() {
@@ -126,11 +136,11 @@ public class ClientCard extends Card {
 //				(int) getPosition().y + CARD_HEIGHT, FastColor.ARGB32.color(255, 255, 255, 255));
 	}
 
-	public boolean contains(double pMouseX, double pMouseY) {
+	public boolean contains(double x, double y) {
 		var size = getSize(0);
 		var widthOffset = (size - 1) * CARD_WIDTH / 2;
 		var heightOffset = (size - 1) * CARD_HEIGHT / 2;
-		return pMouseX > position.x - widthOffset && pMouseX < position.x + CARD_WIDTH + widthOffset
-				&& pMouseY > position.y - heightOffset && pMouseY < position.y + CARD_HEIGHT + heightOffset;
+		return x > position.x - widthOffset && x < position.x + CARD_WIDTH + widthOffset
+				&& y > position.y - heightOffset && y < position.y + CARD_HEIGHT + heightOffset;
 	}
 }
