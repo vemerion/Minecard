@@ -80,10 +80,9 @@ public class GameScreen extends Screen implements GameClient {
 	public static final int CARD_WIDTH = 42;
 	public static final int CARD_HEIGHT = 48;
 	private static final int NEXT_TURN_BUTTON_SIZE = 20;
-	private static final int DECK_HORIZONTAL_OFFSET = 20;
-	private static final int DECK_VERTICAL_OFFSET = 20;
+	private static final int DECK_HORIZONTAL_OFFSET = 10;
+	private static final int DECK_VERTICAL_OFFSET = 55;
 	private static final int CARD_PADDING = 4;
-	private static final int CARD_WITH_PADDING = CARD_WIDTH + CARD_PADDING;
 
 	private static final Card EMPTY_CARD = Cards.EMPTY_CARD_TYPE.create();
 
@@ -165,7 +164,7 @@ public class GameScreen extends Screen implements GameClient {
 		}
 
 		if (!isSpectator)
-			addRenderableWidget(new NextTurnButton((int) (width * 0.75), height / 2 - NEXT_TURN_BUTTON_SIZE / 2,
+			addRenderableWidget(new NextTurnButton((int) (width * 0.9), height / 2 - NEXT_TURN_BUTTON_SIZE / 2,
 					NEXT_TURN_BUTTON_SIZE, NEXT_TURN_BUTTON_SIZE, TextComponent.EMPTY));
 
 		background = addWidget(new GameBackground(this));
@@ -478,19 +477,21 @@ public class GameScreen extends Screen implements GameClient {
 	private void resetPositions(ClientPlayerState playerState) {
 		boolean enemy = playerState.isTop;
 		for (int i = 0; i < playerState.hand.size(); i++) {
-			int x = cardRowX(playerState.hand.size(), enemy ? playerState.hand.size() - i - 1 : i);
+			int x = cardRowX(playerState.hand.size(), enemy ? playerState.hand.size() - i - 1 : i,
+					Mth.clamp(10 - playerState.hand.size(), 1, CARD_PADDING));
 			int y = enemy ? 5 : height - CARD_HEIGHT - 5;
 			playerState.hand.get(i).setPosition(new Vec2(x, y));
 		}
 		for (int i = 0; i < playerState.board.size(); i++) {
-			int x = cardRowX(playerState.board.size(), enemy ? playerState.board.size() - i - 1 : i);
+			int x = cardRowX(playerState.board.size(), enemy ? playerState.board.size() - i - 1 : i, CARD_PADDING);
 			int y = enemy ? CARD_HEIGHT + 20 : height - CARD_HEIGHT * 2 - 20;
 			playerState.board.get(i).setPosition(new Vec2(x, y));
 		}
 	}
 
-	private int cardRowX(int total, int i) {
-		return (width - (total - 1) * CARD_WITH_PADDING) / 2 + i * CARD_WITH_PADDING - CARD_WIDTH / 2;
+	private int cardRowX(int total, int i, int padding) {
+		int cardWidth = CARD_WIDTH + padding;
+		return (width - (total - 1) * cardWidth) / 2 + i * cardWidth - CARD_WIDTH / 2;
 	}
 
 	private boolean isCurrentActive() {

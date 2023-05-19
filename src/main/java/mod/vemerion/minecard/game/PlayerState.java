@@ -109,7 +109,7 @@ public class PlayerState {
 	public void drawCards(List<Receiver> receivers, int count) {
 		List<Card> cards = new ArrayList<>();
 		List<Card> fakes = new ArrayList<>();
-		while (!deck.isEmpty() && count > 0) {
+		while (!deck.isEmpty() && count > 0 && hand.size() < GameState.MAX_HAND_SIZE) {
 			var card = deck.remove(deck.size() - 1);
 			hand.add(card);
 			cards.add(card);
@@ -123,11 +123,16 @@ public class PlayerState {
 	}
 
 	public void addCards(List<Receiver> receivers, List<Card> cards) {
+		while (!cards.isEmpty() && hand.size() + cards.size() > GameState.MAX_HAND_SIZE) {
+			cards.remove(cards.size() - 1);
+		}
+
 		List<Card> fakes = new ArrayList<>();
 		for (var card : cards)
 			fakes.add(Cards.EMPTY_CARD_TYPE.create().setId(card.getId()));
 
 		hand.addAll(cards);
+
 		for (var receiver : receivers) {
 			receiver.receiver(new DrawCardsMessage(id, receiver.getId().equals(id) ? cards : fakes, false));
 		}
@@ -201,7 +206,7 @@ public class PlayerState {
 		if (card == null || (leftId != -1 && left == null))
 			return;
 
-		if (card.getCost() > resources)
+		if (card.getCost() > resources || board.size() >= GameState.MAX_BOARD_SIZE)
 			return;
 
 		if (choices == null) {

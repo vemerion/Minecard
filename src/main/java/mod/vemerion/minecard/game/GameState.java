@@ -15,6 +15,10 @@ import mod.vemerion.minecard.network.UpdateDecksMessage;
 import net.minecraft.world.entity.EntityType;
 
 public class GameState {
+
+	public static final int MAX_HAND_SIZE = 10;
+	public static final int MAX_BOARD_SIZE = 7;
+
 	private List<PlayerState> playerStates;
 	private int turn;
 	private Random random;
@@ -158,6 +162,9 @@ public class GameState {
 
 		var playerState = getYourPlayerState(id);
 		var board = playerState.getBoard();
+		
+		if (board.size() >= MAX_BOARD_SIZE)
+			return;
 
 		if (leftId == -1) {
 			board.add(0, card);

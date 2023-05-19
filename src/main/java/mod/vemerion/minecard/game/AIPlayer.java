@@ -45,11 +45,13 @@ public class AIPlayer implements GameClient {
 			choices.remove(0);
 		}
 
-		for (int i = 0; i < yourHand.size(); i++) {
-			if (yourHand.get(i).getCost() <= resources) {
-				game.playCard(yourHand.get(i).getId(),
-						yourBoard.isEmpty() || rand.nextBoolean() ? -1 : yourBoard.get(yourBoard.size() - 1).getId());
-				return;
+		if (yourBoard.size() < GameState.MAX_BOARD_SIZE) {
+			for (int i = 0; i < yourHand.size(); i++) {
+				if (yourHand.get(i).getCost() <= resources) {
+					game.playCard(yourHand.get(i).getId(), yourBoard.isEmpty() || rand.nextBoolean() ? -1
+							: yourBoard.get(yourBoard.size() - 1).getId());
+					return;
+				}
 			}
 		}
 
