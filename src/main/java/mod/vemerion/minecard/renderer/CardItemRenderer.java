@@ -4,12 +4,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
+import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Matrix4f;
 import com.mojang.math.Quaternion;
 
-import mod.vemerion.minecard.Main;
 import mod.vemerion.minecard.entity.CardGameRobot;
 import mod.vemerion.minecard.game.AIPlayer;
 import mod.vemerion.minecard.game.AdditionalCardData;
@@ -17,6 +15,7 @@ import mod.vemerion.minecard.game.Card;
 import mod.vemerion.minecard.game.CardProperty;
 import mod.vemerion.minecard.game.Cards;
 import mod.vemerion.minecard.init.ModEntities;
+import mod.vemerion.minecard.init.ModItems;
 import mod.vemerion.minecard.item.CardItem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -24,12 +23,11 @@ import net.minecraft.client.model.geom.EntityModelSet;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.ItemTransforms.TransformType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.ItemRenderer;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -55,16 +53,7 @@ public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 
 	private static final float TEXT_SIZE = 0.01f;
 	private static final float TITLE_SIZE = 0.006f;
-	private static final float CARD_SIZE = 0.025f;
-
-	private static final RenderType CARD_FRONT = RenderType
-			.text(new ResourceLocation(Main.MODID, "textures/item/card_front.png"));
-	private static final RenderType CARD_BACK = RenderType
-			.text(new ResourceLocation(Main.MODID, "textures/item/card_back.png"));
-	private static final RenderType CARD_READY = RenderType
-			.text(new ResourceLocation(Main.MODID, "textures/item/card_ready.png"));
-	private static final RenderType CARD_BACK_FULL = RenderType
-			.text(new ResourceLocation(Main.MODID, "textures/item/card_back_full.png"));
+	private static final float CARD_SIZE = 0.8f;
 
 	public CardItemRenderer(BlockEntityRenderDispatcher dispatcher, EntityModelSet modelSet) {
 		super(dispatcher, modelSet);
@@ -76,7 +65,9 @@ public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 
 	public static void renderCard(Card card, TransformType transform, PoseStack pose, MultiBufferSource buffer,
 			int light, int overlay) {
-		Minecraft mc = Minecraft.getInstance();
+		Lighting.setupForFlatItems();
+		var mc = Minecraft.getInstance();
+		var itemRenderer = mc.getItemRenderer();
 
 		// Render card
 		if (transform == TransformType.GUI)
@@ -84,17 +75,15 @@ public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 		if (transform != TransformType.NONE)
 			pose.translate(0.1, 1, 0.45);
 		pose.pushPose();
-		pose.scale(CARD_SIZE, -CARD_SIZE, CARD_SIZE);
-		renderCard(pose, CARD_FRONT, buffer, light, 32);
-		if (card.canAttack()) {
-			pose.pushPose();
-			pose.translate(-1, -1, 0);
-			renderCard(pose, CARD_READY, buffer, light, 34);
-			pose.popPose();
-		}
-		pose.scale(-1, 1, 1);
-		pose.translate(-32, 0, 0);
-		renderCard(pose, card.getType() == null ? CARD_BACK_FULL : CARD_BACK, buffer, light, 32);
+		pose.translate(0.4, -0.4, -0.03);
+		pose.scale(CARD_SIZE, CARD_SIZE, CARD_SIZE);
+		itemRenderer.renderStatic(ModItems.EMPTY_CARD_FRONT.get().getDefaultInstance(), TransformType.NONE, light,
+				overlay, pose, buffer, 0);
+		pose.translate(-0.001, -0.001, -0.001);
+		itemRenderer.renderStatic(
+				card.getType() == null ? ModItems.EMPTY_CARD_FULL.get().getDefaultInstance()
+						: ModItems.EMPTY_CARD_BACK.get().getDefaultInstance(),
+				TransformType.NONE, light, overlay, pose, buffer, 0);
 		pose.popPose();
 
 		var type = card.getType();
@@ -106,7 +95,7 @@ public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 		pose.pushPose();
 		pose.translate(0.13 + (0.56 - mc.font.width(entity.getDisplayName()) * TITLE_SIZE) / 2f, -0.065, 0.01);
 		pose.scale(TITLE_SIZE, -TITLE_SIZE, TITLE_SIZE);
-		mc.font.draw(pose, entity.getDisplayName(), 0, 0, 0x000000);
+		mc.font.draw(pose, entity.getDisplayName(), 0, 0, 0);
 		pose.popPose();
 
 		// Render text
@@ -128,11 +117,18 @@ public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 		}
 
 		// Render values
-		var itemRenderer = mc.getItemRenderer();
 		renderValue(itemRenderer, mc.font, Items.EMERALD, card.getCost(), 0.62f, -0.18f, light, overlay, pose, buffer);
 		if (!card.isSpell()) {
+			pose.pushPose();
+			if (card.canAttack()) {
+				float scale = Mth.sin((mc.level.getGameTime() + mc.getFrameTime()) / 10) * 0.2f + 1;
+				pose.translate(0.2, -0.5, 0);
+				pose.scale(scale, scale, 1);
+				pose.translate(-0.2, 0.5, 0);
+			}
 			renderValue(itemRenderer, mc.font, Items.STONE_SWORD, card.getDamage(), 0.21f, -0.42f, light, overlay, pose,
 					buffer);
+			pose.popPose();
 			renderValue(itemRenderer, mc.font, Items.GLISTERING_MELON_SLICE, card.getHealth(), 0.6f, -0.42f, light,
 					overlay, pose, buffer);
 		}
@@ -295,14 +291,5 @@ public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 
 		renderCard(Cards.getInstance(true).get(card.getType(stack)).getCardForRendering(), transform, pose, buffer,
 				light, overlay);
-	}
-
-	private static void renderCard(PoseStack pose, RenderType card, MultiBufferSource buffer, int light, int size) {
-		Matrix4f matrix = pose.last().pose();
-		VertexConsumer consumer = buffer.getBuffer(card);
-		consumer.vertex(matrix, 0, size, 0).color(255, 255, 255, 255).uv(0, 1).uv2(light).endVertex();
-		consumer.vertex(matrix, size, size, 0).color(255, 255, 255, 255).uv(1, 1).uv2(light).endVertex();
-		consumer.vertex(matrix, size, 0, 0).color(255, 255, 255, 255).uv(1, 0).uv2(light).endVertex();
-		consumer.vertex(matrix, 0, 0, 0).color(255, 255, 255, 255).uv(0, 0).uv2(light).endVertex();
 	}
 }

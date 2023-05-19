@@ -25,6 +25,9 @@ public class ModLanguageProvider extends LanguageProvider {
 	protected void addTranslations() {
 		add("itemGroup." + Main.MODID, "Minecard");
 		add(ModItems.CARD.get(), "%s Card");
+		add(ModItems.EMPTY_CARD_FRONT.get(), "Empty Card");
+		add(ModItems.EMPTY_CARD_BACK.get(), "Empty Card");
+		add(ModItems.EMPTY_CARD_FULL.get(), "Empty Card");
 
 		add(ModBlocks.GAME.get(), "Game Board");
 		add(ModItems.DECK.get(), "Deck");

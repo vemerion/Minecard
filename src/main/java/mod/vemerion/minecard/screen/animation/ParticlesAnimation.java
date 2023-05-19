@@ -5,15 +5,10 @@ import java.util.List;
 import java.util.Random;
 import java.util.stream.IntStream;
 
-import com.mojang.blaze3d.platform.GlStateManager;
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.DefaultVertexFormat;
-import com.mojang.blaze3d.vertex.Tesselator;
-import com.mojang.blaze3d.vertex.VertexFormat;
-
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource.BufferSource;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.AABB;
@@ -62,7 +57,7 @@ public class ParticlesAnimation extends Animation {
 	@Override
 	public void render(int mouseX, int mouseY, BufferSource source, float partialTick) {
 		for (var p : particles)
-			p.render(partialTick);
+			p.render(source, partialTick);
 	}
 
 	@Override
@@ -85,6 +80,9 @@ public class ParticlesAnimation extends Animation {
 	}
 
 	private static class GameParticle {
+
+		private static final float Z = 0.1f;
+
 		private Vec2 pos;
 		private float startSize;
 		private int timer;
@@ -106,15 +104,9 @@ public class ParticlesAnimation extends Animation {
 			return timer >= duration;
 		}
 
-		private void render(float partialTick) {
-			var tesselator = Tesselator.getInstance();
-			var bufferbuilder = tesselator.getBuilder();
-			RenderSystem.setShader(GameRenderer::getPositionTexColorShader);
-			RenderSystem.setShaderTexture(0, config.textures.get((timer / 2) % config.textures.size()));
-			RenderSystem.enableBlend();
-			RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA,
-					GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-			RenderSystem.setShaderColor(1, 1, 1, 1);
+		private void render(BufferSource source, float partialTick) {
+			var bufferbuilder = source
+					.getBuffer(RenderType.text(config.textures.get((timer / 2) % config.textures.size())));
 
 			float progress = (timer + partialTick) / duration;
 			float size = Mth.lerp(progress, startSize, 0);
@@ -122,12 +114,14 @@ public class ParticlesAnimation extends Animation {
 			var red = config.color.red;
 			var green = config.color.green;
 			var blue = config.color.blue;
-			bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR);
-			bufferbuilder.vertex(pos.x, pos.y + size, 0).uv(0, 1).color(red, green, blue, alpha).endVertex();
-			bufferbuilder.vertex(pos.x + size, pos.y + size, 0).uv(1, 1).color(red, green, blue, alpha).endVertex();
-			bufferbuilder.vertex(pos.x + size, pos.y, 0).uv(1, 0).color(red, green, blue, alpha).endVertex();
-			bufferbuilder.vertex(pos.x, pos.y, 0).uv(0, 0).color(red, green, blue, alpha).endVertex();
-			tesselator.end();
+			bufferbuilder.vertex(pos.x, pos.y + size, Z).color(red, green, blue, alpha).uv(0, 1)
+					.uv2(LightTexture.FULL_BRIGHT).endVertex();
+			bufferbuilder.vertex(pos.x + size, pos.y + size, Z).color(red, green, blue, alpha).uv(1, 1)
+					.uv2(LightTexture.FULL_BRIGHT).endVertex();
+			bufferbuilder.vertex(pos.x + size, pos.y, Z).color(red, green, blue, alpha).uv(1, 0)
+					.uv2(LightTexture.FULL_BRIGHT).endVertex();
+			bufferbuilder.vertex(pos.x, pos.y, Z).color(red, green, blue, alpha).uv(0, 0).uv2(LightTexture.FULL_BRIGHT)
+					.endVertex();
 		}
 	}
 }

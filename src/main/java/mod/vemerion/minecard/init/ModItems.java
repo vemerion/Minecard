@@ -18,6 +18,10 @@ import net.minecraftforge.registries.RegistryObject;
 public class ModItems {
 	public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, Main.MODID);
 
+	public static final RegistryObject<Item> EMPTY_CARD_FRONT = ITEMS.register("empty_card_front", () -> new Item(new Item.Properties()));
+	public static final RegistryObject<Item> EMPTY_CARD_BACK = ITEMS.register("empty_card_back", () -> new Item(new Item.Properties()));
+	public static final RegistryObject<Item> EMPTY_CARD_FULL = ITEMS
+			.register("empty_card_full", () -> new Item(new Item.Properties()));
 	public static final RegistryObject<CardItem> CARD = ITEMS.register("card", () -> new CardItem());
 	public static final RegistryObject<DeckItem> DECK = ITEMS.register("deck", () -> new DeckItem());
 	public static final RegistryObject<Item> GAME = ITEMS.register("game",

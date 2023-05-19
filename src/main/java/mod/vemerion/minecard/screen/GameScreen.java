@@ -11,9 +11,9 @@ import java.util.stream.Collectors;
 
 import org.lwjgl.glfw.GLFW;
 
-import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Quaternion;
 
 import mod.vemerion.minecard.Main;
 import mod.vemerion.minecard.game.Card;
@@ -49,6 +49,7 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource.BufferSource;
+import net.minecraft.client.renderer.RenderBuffers;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
@@ -69,10 +70,11 @@ import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 public class GameScreen extends Screen implements GameClient {
 
 	public static final Component TITLE = new TranslatableComponent("gui." + Main.MODID + ".game");
+	private static final Component NEXT_TURN = new TranslatableComponent(Helper.gui("next_turn"));
+	private static final Component GAME_OVER = new TranslatableComponent(Helper.gui("game_over"));
+	private static final Component CHOOSE_TEXT = new TranslatableComponent(Helper.gui("choose"));
 
-	private static Component NEXT_TURN = new TranslatableComponent(Helper.gui("next_turn"));
-	private static Component GAME_OVER = new TranslatableComponent(Helper.gui("game_over"));
-	private static Component CHOOSE_TEXT = new TranslatableComponent(Helper.gui("choose"));
+	private static final RenderBuffers RENDER_BUFFERS = new RenderBuffers();
 
 	public static final int CARD_SCALE = 60;
 	public static final int CARD_LIGHT = LightTexture.FULL_BRIGHT;
@@ -80,7 +82,7 @@ public class GameScreen extends Screen implements GameClient {
 	public static final int CARD_WIDTH = 42;
 	public static final int CARD_HEIGHT = 48;
 	private static final int NEXT_TURN_BUTTON_SIZE = 20;
-	private static final int DECK_HORIZONTAL_OFFSET = 10;
+	private static final int DECK_HORIZONTAL_OFFSET = 5;
 	private static final int DECK_VERTICAL_OFFSET = 55;
 	private static final int CARD_PADDING = 4;
 
@@ -164,7 +166,7 @@ public class GameScreen extends Screen implements GameClient {
 		}
 
 		if (!isSpectator)
-			addRenderableWidget(new NextTurnButton((int) (width * 0.9), height / 2 - NEXT_TURN_BUTTON_SIZE / 2,
+			addRenderableWidget(new NextTurnButton((int) (width * 0.93), height / 2 - NEXT_TURN_BUTTON_SIZE / 2,
 					NEXT_TURN_BUTTON_SIZE, NEXT_TURN_BUTTON_SIZE, TextComponent.EMPTY));
 
 		background = addWidget(new GameBackground(this));
@@ -500,9 +502,8 @@ public class GameScreen extends Screen implements GameClient {
 
 	@Override
 	public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTicks) {
-		Lighting.setupForFlatItems();
-		partialTicks = this.minecraft.getFrameTime(); // s
-		var source = minecraft.renderBuffers().bufferSource();
+		partialTicks = this.minecraft.getFrameTime();
+		var source = RENDER_BUFFERS.bufferSource();
 
 		background.render(poseStack, mouseX, mouseY, source, partialTicks);
 
@@ -519,14 +520,21 @@ public class GameScreen extends Screen implements GameClient {
 					card.render(new PoseStack(), mouseX, mouseY, source, partialTicks);
 
 			// Deck
-			float deckX = enemy ? DECK_HORIZONTAL_OFFSET : width - DECK_HORIZONTAL_OFFSET - CARD_WIDTH;
+			float deckX = enemy ? DECK_HORIZONTAL_OFFSET : width - DECK_HORIZONTAL_OFFSET * 2.3f;
 			float deckY = enemy ? DECK_VERTICAL_OFFSET : height - DECK_VERTICAL_OFFSET - CARD_HEIGHT;
+			float offset = enemy ? 1 : -1;
 			for (int i = 0; i < playerState.deck; i++) {
-				float x = deckX + i * 0.2f;
-				new ClientCard(EMPTY_CARD, new Vec2(x, deckY), this).render(new PoseStack(), mouseX, mouseY, source,
-						partialTicks);
+				poseStack.pushPose();
+				poseStack.translate(deckX + i * offset, deckY, 100);
+				poseStack.mulPose(new Quaternion(0, 80 * offset, 0, true));
+				poseStack.scale(1f, 1f, 0.2f);
+
+				new ClientCard(EMPTY_CARD, Vec2.ZERO, this).render(poseStack, 0, 0, source, partialTicks);
+				poseStack.popPose();
 			}
-			if (mouseX > deckX && mouseX < deckX + CARD_WIDTH && mouseY > deckY && mouseY < deckY + CARD_HEIGHT)
+			if (mouseX > (enemy ? deckX - 3 : deckX - playerState.deck * 1)
+					&& mouseX < (enemy ? deckX + playerState.deck + 7 : deckX + 7) && mouseY > deckY
+					&& mouseY < deckY + CARD_HEIGHT)
 				renderTooltip(poseStack, new TranslatableComponent(Helper.gui("deck_count"), playerState.deck), mouseX,
 						mouseY);
 		}

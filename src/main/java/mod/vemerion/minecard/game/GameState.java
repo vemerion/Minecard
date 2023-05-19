@@ -17,7 +17,7 @@ import net.minecraft.world.entity.EntityType;
 public class GameState {
 
 	public static final int MAX_HAND_SIZE = 10;
-	public static final int MAX_BOARD_SIZE = 7;
+	public static final int MAX_BOARD_SIZE = 8;
 
 	private List<PlayerState> playerStates;
 	private int turn;
