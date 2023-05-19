@@ -16,7 +16,7 @@ apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 apply plugin: 'org.parchmentmc.librarian.forgegradle'
 
-version = '1.18.2-0.5.0'
+version = '1.18.2-0.6.0'
 group = 'mod.vemerion.minecard' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'minecard'
 
