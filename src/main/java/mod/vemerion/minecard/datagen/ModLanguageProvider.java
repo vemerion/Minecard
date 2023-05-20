@@ -37,6 +37,7 @@ public class ModLanguageProvider extends LanguageProvider {
 
 		add(Helper.chat("game_ongoing"), "A game is already ongoing.");
 		add(Helper.chat("not_enough_cards"), "You need a full deck to enter the game.");
+		add(Helper.chat("too_many_duplicates"), "Too many copies of %s in the deck.");
 		add(Helper.chat("game_interactions"),
 				"Use [item] to interact with game:\n* Deck item: Enter the game\n* Redstone dust: Add an AI opponent to the game");
 

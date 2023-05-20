@@ -2,8 +2,10 @@ package mod.vemerion.minecard.blockentity;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
@@ -42,6 +44,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 public class GameBlockEntity extends BlockEntity {
 
 	private static final int START_HAND_SIZE = 5;
+	private static final int MAX_DUPLICATES = 3;
 
 	private GameState state;
 	private Set<UUID> receivers;
@@ -209,18 +212,26 @@ public class GameBlockEntity extends BlockEntity {
 		var id = player.getUUID();
 		DeckData.get(stack).ifPresent(data -> {
 			List<Card> deck = new ArrayList<>();
+			Map<EntityType<?>, Integer> counts = new HashMap<>();
 
 			for (int i = 0; i < data.getSlots(); i++) {
 				var item = data.getStackInSlot(i);
 				if (item.isEmpty()) {
 					player.sendMessage(new TranslatableComponent(Helper.chat("not_enough_cards")), id);
-					break;
+					return;
 				}
-				CardData.getType(item).ifPresent(type -> deck.add(Cards.getInstance(false).get(type).create()));
+				CardData.getType(item).ifPresent(type -> {
+					counts.merge(type, 1, Integer::sum);
+					deck.add(Cards.getInstance(false).get(type).create());
+				});
 			}
 
-			if (deck.size() != DeckData.CAPACITY) {
-				return;
+			for (var entry : counts.entrySet()) {
+				if (entry.getValue() > MAX_DUPLICATES) {
+					player.sendMessage(new TranslatableComponent(Helper.chat("too_many_duplicates"),
+							entry.getKey().getDescription()), id);
+					return;
+				}
 			}
 
 			addPlayer(id, deck);
