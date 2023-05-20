@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
+import mod.vemerion.minecard.Main;
 import mod.vemerion.minecard.capability.CardData;
 import mod.vemerion.minecard.capability.DeckData;
 import mod.vemerion.minecard.game.AIPlayer;
@@ -26,6 +27,8 @@ import mod.vemerion.minecard.network.OpenGameMessage;
 import mod.vemerion.minecard.network.SetReadyMessage;
 import mod.vemerion.minecard.network.SetResourcesMessage;
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EntityType;
@@ -79,6 +82,7 @@ public class GameBlockEntity extends BlockEntity {
 			}
 		}
 
+		setChanged();
 	}
 
 	public void playCard(int card, int leftId) {
@@ -86,6 +90,8 @@ public class GameBlockEntity extends BlockEntity {
 			return;
 
 		state.getCurrentPlayerState().playCard(getReceivers(), card, leftId);
+
+		setChanged();
 	}
 
 	public void attack(int attacker, int target) {
@@ -102,6 +108,8 @@ public class GameBlockEntity extends BlockEntity {
 			state = new GameState();
 			aiPlayer = null;
 		}
+
+		setChanged();
 	}
 
 	public void choice(int choiceId, int selected) {
@@ -140,9 +148,11 @@ public class GameBlockEntity extends BlockEntity {
 		} else if (stack.is(ModItems.DECK.get())
 				&& state.getPlayerStates().stream().noneMatch(s -> s.getId().equals(player.getUUID()))) {
 			addRealPlayer(player, stack);
+			setChanged();
 		} else if (stack.is(Items.REDSTONE)
 				&& state.getPlayerStates().stream().noneMatch(s -> s.getId().equals(AIPlayer.ID))) {
 			addAIPlayer();
+			setChanged();
 		} else {
 			player.sendMessage(new TranslatableComponent(Helper.chat("game_interactions")), id);
 		}
@@ -164,6 +174,7 @@ public class GameBlockEntity extends BlockEntity {
 		playerState.setGame(state);
 		state.getPlayerStates().add(playerState);
 
+		// Notify AI that game has started
 		if (state.getPlayerStates().size() > 1 && aiPlayer != null) {
 			var receiver = new Receiver.AI(aiPlayer);
 			receiver.receiver(createOpenGameMessage(receiver.getId()));
@@ -223,5 +234,39 @@ public class GameBlockEntity extends BlockEntity {
 		return new OpenGameMessage(
 				List.of(state1.toMessage(!state1.getId().equals(id)), state2.toMessage(!state2.getId().equals(id))),
 				getBlockPos());
+	}
+
+	@Override
+	protected void saveAdditional(CompoundTag tag) {
+		super.saveAdditional(tag);
+
+		tag.put("game", GameState.CODEC.encodeStart(NbtOps.INSTANCE, state).getOrThrow(false, s -> {
+			Main.LOGGER.error("Unable to save game state: " + s);
+		}));
+	}
+
+	@Override
+	public void load(CompoundTag tag) {
+		super.load(tag);
+
+		if (tag.contains("game")) {
+			GameState.CODEC.parse(NbtOps.INSTANCE, tag.get("game")).result().ifPresentOrElse(s -> state = s,
+					() -> Main.LOGGER
+							.error("Unable to load game state, will reset game state (maybe the format has changed?)"));
+
+			// Initialize AI player is necessary
+			if (state.getPlayerStates().stream().anyMatch(s -> s.getId().equals(AIPlayer.ID))) {
+				aiPlayer = new AIPlayer(this);
+				receivers.add(AIPlayer.ID);
+
+				// Notify AI that game has started
+				if (state.getPlayerStates().size() > 1) {
+					var receiver = new Receiver.AI(aiPlayer);
+					receiver.receiver(createOpenGameMessage(receiver.getId()));
+					receiver.receiver(new NewTurnMessage(state.getCurrentPlayer()));
+				}
+			}
+		}
+
 	}
 }

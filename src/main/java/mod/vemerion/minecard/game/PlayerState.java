@@ -38,9 +38,9 @@ public class PlayerState {
 
 	public PlayerState(UUID id, List<Card> deck, List<Card> hand, List<Card> board, int resources, int maxResources) {
 		this.id = id;
-		this.deck = deck;
-		this.hand = hand;
-		this.board = board;
+		this.deck = new ArrayList<>(deck);
+		this.hand = new ArrayList<>(hand);
+		this.board = new ArrayList<>(board);
 		this.resources = resources;
 		this.maxResources = maxResources;
 	}

@@ -8,13 +8,23 @@ import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.tuple.Pair;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+
 import mod.vemerion.minecard.network.CombatMessage;
 import mod.vemerion.minecard.network.PlaceCardMessage;
 import mod.vemerion.minecard.network.UpdateCardsMessage;
 import mod.vemerion.minecard.network.UpdateDecksMessage;
+import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.entity.EntityType;
 
 public class GameState {
+
+	public static final Codec<GameState> CODEC = ExtraCodecs
+			.lazyInitializedCodec(() -> RecordCodecBuilder.create(instance -> instance
+					.group(Codec.list(PlayerState.CODEC).fieldOf("playerStates").forGetter(GameState::getPlayerStates),
+							Codec.INT.fieldOf("turn").forGetter(GameState::getTurn))
+					.apply(instance, GameState::new)));
 
 	public static final int MAX_HAND_SIZE = 10;
 	public static final int MAX_BOARD_SIZE = 8;
@@ -23,9 +33,17 @@ public class GameState {
 	private int turn;
 	private Random random;
 
-	public GameState() {
-		playerStates = new ArrayList<>();
+	public GameState(List<PlayerState> playerStates, int turn) {
+		this.playerStates = new ArrayList<>(playerStates);
+		this.turn = turn;
 		random = new Random();
+
+		for (var playerState : playerStates)
+			playerState.setGame(this);
+	}
+
+	public GameState() {
+		this(new ArrayList<>(), 0);
 	}
 
 	public Random getRandom() {
@@ -34,6 +52,10 @@ public class GameState {
 
 	public List<PlayerState> getPlayerStates() {
 		return playerStates;
+	}
+
+	public int getTurn() {
+		return turn;
 	}
 
 	public PlayerState getYourPlayerState(UUID id) {
@@ -162,7 +184,7 @@ public class GameState {
 
 		var playerState = getYourPlayerState(id);
 		var board = playerState.getBoard();
-		
+
 		if (board.size() >= MAX_BOARD_SIZE)
 			return;
 
