@@ -119,7 +119,6 @@ public class ModifyAbility extends CardAbility {
 			selected.setHealth(selected.getHealth() + cardType.getHealth());
 			selected.setDamage(selected.getDamage() + cardType.getDamage());
 			selected.setMaxHealth(selected.getMaxHealth() + cardType.getHealth());
-			selected.setMaxDamage(selected.getMaxDamage() + cardType.getDamage());
 			selected.setCost(selected.getCost() + cardType.getCost());
 
 			// Properties

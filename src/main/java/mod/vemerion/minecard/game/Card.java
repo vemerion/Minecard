@@ -22,10 +22,12 @@ public class Card {
 	public static final Codec<Card> CODEC = ExtraCodecs.lazyInitializedCodec(() -> RecordCodecBuilder.create(
 			instance -> instance.group(ForgeRegistries.ENTITIES.getCodec().fieldOf("entity").forGetter(Card::getType),
 					Codec.INT.fieldOf("cost").forGetter(Card::getCost),
+					Codec.INT.fieldOf("original_cost").forGetter(Card::getOriginalCost),
 					Codec.INT.fieldOf("health").forGetter(Card::getHealth),
-					Codec.INT.fieldOf("damage").forGetter(Card::getDamage),
 					Codec.INT.fieldOf("max_health").forGetter(Card::getMaxHealth),
-					Codec.INT.fieldOf("max_damage").forGetter(Card::getMaxDamage),
+					Codec.INT.fieldOf("original_health").forGetter(Card::getOriginalHealth),
+					Codec.INT.fieldOf("damage").forGetter(Card::getDamage),
+					Codec.INT.fieldOf("original_damage").forGetter(Card::getOriginalDamage),
 					Codec.BOOL.fieldOf("ready").forGetter(Card::isReady),
 					CardProperty.CODEC_MAP.optionalFieldOf("properties", new HashMap<>())
 							.forGetter(Card::getProperties),
@@ -40,25 +42,29 @@ public class Card {
 	private EntityType<?> type;
 	private AdditionalCardData additionalData;
 	private int cost;
+	private int originalCost;
 	private int health;
-	private int damage;
 	private int maxHealth;
-	private int maxDamage;
+	private int originalHealth;
+	private int damage;
+	private int originalDamage;
 	private boolean ready;
 	private Map<CardProperty, Integer> properties;
 	private final CardAbility ability;
 	private Map<EquipmentSlot, Item> equipment;
 	private int id;
 
-	public Card(EntityType<?> type, int cost, int health, int damage, int maxHealth, int maxDamage, boolean ready,
-			Map<CardProperty, Integer> properties, CardAbility ability, Map<EquipmentSlot, Item> equipment,
-			AdditionalCardData additionalData) {
+	public Card(EntityType<?> type, int cost, int originalCost, int health, int maxHealth, int originalHealth,
+			int damage, int originalDamage, boolean ready, Map<CardProperty, Integer> properties, CardAbility ability,
+			Map<EquipmentSlot, Item> equipment, AdditionalCardData additionalData) {
 		this.type = type;
 		this.cost = cost;
+		this.originalCost = originalCost;
 		this.health = health;
-		this.damage = damage;
 		this.maxHealth = maxHealth;
-		this.maxDamage = maxDamage;
+		this.originalHealth = originalHealth;
+		this.damage = damage;
+		this.originalDamage = originalDamage;
 		this.ready = ready;
 		this.properties = properties;
 		this.ability = ability;
@@ -79,6 +85,10 @@ public class Card {
 		this.cost = Math.max(0, cost);
 	}
 
+	public int getOriginalCost() {
+		return originalCost;
+	}
+
 	public int getHealth() {
 		return health;
 	}
@@ -89,6 +99,10 @@ public class Card {
 
 	public int getMaxHealth() {
 		return maxHealth;
+	}
+
+	public int getOriginalHealth() {
+		return originalHealth;
 	}
 
 	public void setMaxHealth(int maxHealth) {
@@ -108,7 +122,7 @@ public class Card {
 	}
 
 	public boolean isSpell() {
-		return maxHealth == 0 && maxDamage == 0;
+		return originalHealth == 0 && originalDamage == 0;
 	}
 
 	public int getDamage() {
@@ -119,12 +133,8 @@ public class Card {
 		this.damage = Math.max(0, damage);
 	}
 
-	public int getMaxDamage() {
-		return maxDamage;
-	}
-
-	public void setMaxDamage(int maxDamage) {
-		this.maxDamage = Math.max(0, maxDamage);
+	public int getOriginalDamage() {
+		return originalDamage;
 	}
 
 	public boolean isReady() {
@@ -196,10 +206,12 @@ public class Card {
 
 	public void copy(Card received) {
 		this.cost = received.cost;
+		this.originalCost = received.originalCost;
 		this.health = received.getHealth();
+		this.maxHealth = received.maxHealth;
+		this.originalHealth = received.originalHealth;
 		this.damage = received.getDamage();
-		this.maxHealth = received.getMaxHealth();
-		this.maxDamage = received.getMaxDamage();
+		this.originalDamage = received.originalDamage;
 		this.ready = received.isReady();
 		this.properties = received.getProperties();
 		this.equipment = received.getEquipment();

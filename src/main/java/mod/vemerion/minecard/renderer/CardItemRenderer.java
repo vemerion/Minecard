@@ -54,6 +54,9 @@ public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 	private static final float TEXT_SIZE = 0.01f;
 	private static final float TITLE_SIZE = 0.006f;
 	private static final float CARD_SIZE = 0.8f;
+	private static final int GOOD_VALUE_COLOR = 0x00ff70;
+	private static final int BAD_VALUE_COLOR = 0xff2020;
+	private static final int NEUTRAL_VALUE_COLOR = 0xffffff;
 
 	public CardItemRenderer(BlockEntityRenderDispatcher dispatcher, EntityModelSet modelSet) {
 		super(dispatcher, modelSet);
@@ -117,7 +120,8 @@ public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 		}
 
 		// Render values
-		renderValue(itemRenderer, mc.font, Items.EMERALD, card.getCost(), 0.62f, -0.18f, light, overlay, pose, buffer);
+		renderValue(itemRenderer, mc.font, Items.EMERALD, card.getCost(), 0.62f, -0.18f, light, overlay, pose, buffer,
+				calcCostColor(card));
 		if (!card.isSpell()) {
 			pose.pushPose();
 			if (card.canAttack()) {
@@ -127,10 +131,10 @@ public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 				pose.translate(-0.2, 0.5, 0);
 			}
 			renderValue(itemRenderer, mc.font, Items.STONE_SWORD, card.getDamage(), 0.21f, -0.42f, light, overlay, pose,
-					buffer);
+					buffer, calcDamageColor(card));
 			pose.popPose();
 			renderValue(itemRenderer, mc.font, Items.GLISTERING_MELON_SLICE, card.getHealth(), 0.6f, -0.42f, light,
-					overlay, pose, buffer);
+					overlay, pose, buffer, calcHealthColor(card));
 		}
 
 		// Properties
@@ -144,7 +148,7 @@ public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 					renderItem(itemRenderer, entry.getKey().getIcon(), light, overlay, pose, buffer);
 				} else {
 					renderValue(itemRenderer, mc.font, entry.getKey().getIcon().getItem(), entry.getValue(), 0, 0,
-							light, overlay, pose, buffer);
+							light, overlay, pose, buffer, 0xffffff);
 				}
 				pose.popPose();
 				propertyY -= 0.15f;
@@ -175,6 +179,30 @@ public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 		pose.popPose();
 	}
 
+	private static int calcCostColor(Card card) {
+		if (card.getCost() > card.getOriginalCost())
+			return BAD_VALUE_COLOR;
+		else if (card.getCost() == card.getOriginalCost())
+			return NEUTRAL_VALUE_COLOR;
+		return GOOD_VALUE_COLOR;
+	}
+
+	private static int calcDamageColor(Card card) {
+		if (card.getDamage() < card.getOriginalDamage())
+			return BAD_VALUE_COLOR;
+		else if (card.getDamage() == card.getOriginalDamage())
+			return NEUTRAL_VALUE_COLOR;
+		return GOOD_VALUE_COLOR;
+	}
+
+	private static int calcHealthColor(Card card) {
+		if (card.getHealth() < card.getMaxHealth())
+			return BAD_VALUE_COLOR;
+		else if (card.getMaxHealth() == card.getOriginalHealth())
+			return NEUTRAL_VALUE_COLOR;
+		return GOOD_VALUE_COLOR;
+	}
+
 	private static void renderItem(ItemRenderer itemRenderer, ItemStack stack, int light, int overlay,
 			PoseStack poseStack, MultiBufferSource buffer) {
 		poseStack.pushPose();
@@ -184,7 +212,7 @@ public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 	}
 
 	private static void renderValue(ItemRenderer itemRenderer, Font font, Item item, int value, float x, float y,
-			int light, int overlay, PoseStack poseStack, MultiBufferSource buffer) {
+			int light, int overlay, PoseStack poseStack, MultiBufferSource buffer, int textColor) {
 		poseStack.pushPose();
 		poseStack.translate(x, y, 0);
 
@@ -205,7 +233,7 @@ public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 
 		// Actual text
 		poseStack.translate(0, 0, 0.01);
-		font.draw(poseStack, String.valueOf(value), 0, 0, 0xFFFFFF);
+		font.draw(poseStack, String.valueOf(value), 0, 0, textColor);
 		poseStack.popPose();
 	}
 
