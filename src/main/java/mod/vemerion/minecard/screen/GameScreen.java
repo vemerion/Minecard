@@ -260,6 +260,7 @@ public class GameScreen extends Screen implements GameClient {
 					card.copy(received);
 
 					animations.add(new HealthAnimation(minecraft, card, healthChange));
+
 					if (card.isDead()) {
 						animations.add(new DeathAnimation(minecraft, card, 20, () -> {
 							playerState.board.removeIf(c -> card.getId() == c.getId());
@@ -552,6 +553,8 @@ public class GameScreen extends Screen implements GameClient {
 
 		for (var r : resources)
 			r.render(new PoseStack(), mouseX, mouseY, partialTicks, source);
+
+		source.endBatch(); // Fixes problems with rendering semi-transparent animations
 
 		for (var animation : animations)
 			animation.render(mouseX, mouseY, source, partialTicks);

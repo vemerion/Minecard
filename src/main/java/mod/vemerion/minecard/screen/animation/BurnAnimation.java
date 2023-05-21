@@ -41,7 +41,7 @@ public class BurnAnimation extends Animation {
 		var pos = new Vec2(card.getPosition().x, card.getPosition().y);
 		float discardProgress = discardTimer == 0 ? 0
 				: Mth.clampedLerp(0, 1, (discardTimer + partialTick) / DISCARD_DURATION);
-		float alpha = 0.3f;
+		float alpha = 0.5f;
 
 		float index = timer % FRAMES;
 
