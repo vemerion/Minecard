@@ -54,9 +54,9 @@ public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 	private static final float TEXT_SIZE = 0.01f;
 	private static final float TITLE_SIZE = 0.006f;
 	private static final float CARD_SIZE = 0.8f;
-	private static final int GOOD_VALUE_COLOR = 0x00ff70;
-	private static final int BAD_VALUE_COLOR = 0xff2020;
-	private static final int NEUTRAL_VALUE_COLOR = 0xffffff;
+	public static final int GOOD_VALUE_COLOR = 0x00ff70;
+	public static final int BAD_VALUE_COLOR = 0xff2020;
+	public static final int NEUTRAL_VALUE_COLOR = 0xffffff;
 
 	public CardItemRenderer(BlockEntityRenderDispatcher dispatcher, EntityModelSet modelSet) {
 		super(dispatcher, modelSet);

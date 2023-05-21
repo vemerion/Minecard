@@ -35,6 +35,7 @@ import mod.vemerion.minecard.screen.animation.AttackAnimation;
 import mod.vemerion.minecard.screen.animation.BurnAnimation;
 import mod.vemerion.minecard.screen.animation.DeathAnimation;
 import mod.vemerion.minecard.screen.animation.FreezeAnimation;
+import mod.vemerion.minecard.screen.animation.HealthAnimation;
 import mod.vemerion.minecard.screen.animation.PoisonAnimation;
 import mod.vemerion.minecard.screen.animation.StealthAnimation;
 import mod.vemerion.minecard.screen.animation.TauntAnimation;
@@ -254,9 +255,11 @@ public class GameScreen extends Screen implements GameClient {
 		for (var playerState : state.values()) {
 			for (var card : playerState.board) {
 				if (card.getId() == received.getId()) {
+					var healthChange = received.getHealth() - card.getHealth();
 					var old = new HashMap<>(card.getProperties());
 					card.copy(received);
 
+					animations.add(new HealthAnimation(minecraft, card, healthChange));
 					if (card.isDead()) {
 						animations.add(new DeathAnimation(minecraft, card, 20, () -> {
 							playerState.board.removeIf(c -> card.getId() == c.getId());

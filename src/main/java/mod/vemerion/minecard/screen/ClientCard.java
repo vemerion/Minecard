@@ -57,7 +57,7 @@ public class ClientCard extends Card {
 				(float) Mth.lerp(value, position.y, target.y));
 	}
 
-	private Vec2 getPosition(float partialTick) {
+	public Vec2 getPosition(float partialTick) {
 		return new Vec2((float) Mth.lerp(partialTick, position0.x, position.x),
 				(float) Mth.lerp(partialTick, position0.y, position.y));
 	}
