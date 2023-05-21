@@ -17,6 +17,8 @@ import net.minecraftforge.common.data.LanguageProvider;
 
 public class ModLanguageProvider extends LanguageProvider {
 
+	private int tutorialCounter;
+
 	public ModLanguageProvider(DataGenerator gen) {
 		super(gen, Main.MODID, "en_us");
 	}
@@ -34,6 +36,8 @@ public class ModLanguageProvider extends LanguageProvider {
 		add(ModEntities.CARD_GAME_ROBOT.get(), "Card Player 9000");
 
 		add("gui." + Main.MODID + ".game", "Minecard Game");
+
+		tutorial();
 
 		add(Helper.chat("game_ongoing"), "A game is already ongoing.");
 		add(Helper.chat("not_enough_cards"), "You need a full deck to enter the game.");
@@ -129,5 +133,17 @@ public class ModLanguageProvider extends LanguageProvider {
 		add(Helper.gui("card_ability_selection"), "%s%s%s%s");
 		add(Helper.gui("where"), " where ");
 		add(Helper.gui("if"), " if ");
+	}
+
+	private void tutorial() {
+		addTutorialStep(
+				"Hello there! My name is Cardy the Creeper and I am here to teach you about the card game. First I will teach you about the cards themselves!");
+		addTutorialStep("This value determines how much it costs to play the card.");
+		addTutorialStep("This value determines how much damage the card does when it attacks.");
+	}
+
+	private void addTutorialStep(String text) {
+		add(Helper.tutorial(tutorialCounter), text);
+		tutorialCounter++;
 	}
 }

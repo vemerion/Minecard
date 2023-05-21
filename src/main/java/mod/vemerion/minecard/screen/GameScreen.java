@@ -101,6 +101,7 @@ public class GameScreen extends Screen implements GameClient {
 	private List<Animation> animations;
 	private List<Resources> resources;
 	private GameBackground background;
+	private GameTutorial tutorial;
 
 	private Card selectedCard;
 	private Card attackingCard;
@@ -170,6 +171,7 @@ public class GameScreen extends Screen implements GameClient {
 			addRenderableWidget(new NextTurnButton((int) (width * 0.93), height / 2 - NEXT_TURN_BUTTON_SIZE / 2,
 					NEXT_TURN_BUTTON_SIZE, NEXT_TURN_BUTTON_SIZE, TextComponent.EMPTY));
 
+		tutorial = addWidget(new GameTutorial(this));
 		background = addWidget(new GameBackground(this));
 
 		animations = new ArrayList<>();
@@ -560,6 +562,8 @@ public class GameScreen extends Screen implements GameClient {
 			animation.render(mouseX, mouseY, source, partialTicks);
 
 		choices.render(poseStack, mouseX, mouseY, source, partialTicks);
+		
+		tutorial.render(poseStack, mouseX, mouseY, source, partialTicks);
 
 		source.endBatch();
 
@@ -608,6 +612,8 @@ public class GameScreen extends Screen implements GameClient {
 		popup.tick();
 
 		choices.tick();
+		
+		tutorial.tick();
 
 		fovModifier = (float) Mth.lerp(0.08, fovModifier, 1);
 	}
