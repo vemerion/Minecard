@@ -1,5 +1,6 @@
 package mod.vemerion.minecard.screen;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Quaternion;
@@ -15,11 +16,13 @@ import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource.BufferSource;
+import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.core.Vec3i;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.FastColor;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EntityType;
@@ -43,7 +46,7 @@ public class GameTutorial implements GuiEventListener, NarratableEntry {
 
 	private GameScreen screen;
 	private Minecraft mc;
-	private Creeper creeper;
+	private TutorialCreeper creeper;
 	private int index;
 	private int timer;
 	private Vec2 position = new Vec2(150, 150);
@@ -52,7 +55,7 @@ public class GameTutorial implements GuiEventListener, NarratableEntry {
 	public GameTutorial(GameScreen screen) {
 		this.screen = screen;
 		this.mc = screen.getMinecraft();
-		this.creeper = new Creeper(EntityType.CREEPER, mc.level);
+		this.creeper = new TutorialCreeper();
 		this.back = new ArrowButton(position.x - 5 - ARROW_SIZE, position.y + 2, false);
 		this.forward = new ArrowButton(position.x + 5, position.y + 2, true);
 	}
@@ -63,6 +66,8 @@ public class GameTutorial implements GuiEventListener, NarratableEntry {
 			return true;
 		} else if (forward.mouseClicked(pMouseX, pMouseY, pButton)) {
 			return true;
+		} else if (creeper.mouseClicked(pMouseX, pMouseY, pButton)) {
+			return true;
 		}
 		return false;
 	}
@@ -71,6 +76,7 @@ public class GameTutorial implements GuiEventListener, NarratableEntry {
 		timer++;
 
 		steps[index].tick();
+		creeper.tick();
 	}
 
 	public void render(PoseStack poseStack, int mouseX, int mouseY, BufferSource source, float partialTick) {
@@ -79,14 +85,7 @@ public class GameTutorial implements GuiEventListener, NarratableEntry {
 		back.render(poseStack, mouseX, mouseY, partialTick);
 		forward.render(poseStack, mouseX, mouseY, partialTick);
 
-		// Creeper
-		poseStack.pushPose();
-		poseStack.translate(position.x, position.y, 300);
-		poseStack.scale(30, -30, 30);
-		poseStack.mulPose(new Quaternion(0, 20, 0, true));
-		mc.getEntityRenderDispatcher().getRenderer(creeper).render(creeper, 0, 0, poseStack, source,
-				LightTexture.FULL_BRIGHT);
-		poseStack.popPose();
+		creeper.render(poseStack, mouseX, mouseY, source, partialTick);
 	}
 
 	@Override
@@ -97,6 +96,49 @@ public class GameTutorial implements GuiEventListener, NarratableEntry {
 	@Override
 	public NarrationPriority narrationPriority() {
 		return NarrationPriority.NONE;
+	}
+
+	private class TutorialCreeper {
+		private static final int WIDTH = 30;
+		private static final int HEIGHT = 52;
+
+		private Creeper creeper;
+		private float swell, swell0;
+
+		private TutorialCreeper() {
+			this.creeper = new Creeper(EntityType.CREEPER, mc.level) {
+				@Override
+				public float getSwelling(float pPartialTicks) {
+					return Mth.lerp(pPartialTicks, swell0, swell);
+				}
+			};
+		}
+
+		private void tick() {
+			swell0 = swell;
+			swell *= 0.9;
+		}
+
+		public boolean mouseClicked(double x, double y, int pButton) {
+			if (pButton == InputConstants.MOUSE_BUTTON_LEFT && x > position.x - WIDTH / 2 && x < position.x + WIDTH / 2
+					&& y > position.y - HEIGHT && y < position.y) {
+				swell += 0.3;
+				mc.getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.CREEPER_HURT, 1f));
+
+				return true;
+			}
+			return false;
+		}
+
+		private void render(PoseStack poseStack, int mouseX, int mouseY, BufferSource source, float partialTick) {
+			poseStack.pushPose();
+			poseStack.translate(position.x, position.y, 300);
+			poseStack.scale(30, -30, 30);
+			poseStack.mulPose(new Quaternion(0, 20, 0, true));
+			mc.getEntityRenderDispatcher().getRenderer(creeper).render(creeper, 0, 0, poseStack, source,
+					LightTexture.FULL_BRIGHT);
+			poseStack.popPose();
+		}
 	}
 
 	private class Step {
