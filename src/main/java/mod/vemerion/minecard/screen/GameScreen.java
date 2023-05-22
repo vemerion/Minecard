@@ -419,6 +419,16 @@ public class GameScreen extends Screen implements GameClient {
 	}
 
 	@Override
+	public boolean mouseReleased(double pMouseX, double pMouseY, int pButton) {
+		return tutorial.mouseReleased(pMouseX, pMouseY, pButton);
+	}
+
+	@Override
+	public void mouseMoved(double pMouseX, double pMouseY) {
+		tutorial.mouseMoved(pMouseX, pMouseY);
+	}
+
+	@Override
 	public boolean mouseClicked(double pMouseX, double pMouseY, int pButton) {
 		if (isCurrentActive() && !isSpectator) {
 			if (pButton == GLFW.GLFW_MOUSE_BUTTON_LEFT) {
@@ -562,7 +572,7 @@ public class GameScreen extends Screen implements GameClient {
 			animation.render(mouseX, mouseY, source, partialTicks);
 
 		choices.render(poseStack, mouseX, mouseY, source, partialTicks);
-		
+
 		tutorial.render(poseStack, mouseX, mouseY, source, partialTicks);
 
 		source.endBatch();
@@ -612,7 +622,7 @@ public class GameScreen extends Screen implements GameClient {
 		popup.tick();
 
 		choices.tick();
-		
+
 		tutorial.tick();
 
 		fovModifier = (float) Mth.lerp(0.08, fovModifier, 1);

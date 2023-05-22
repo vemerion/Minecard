@@ -1,5 +1,7 @@
 package mod.vemerion.minecard.screen;
 
+import java.util.function.Supplier;
+
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -50,14 +52,15 @@ public class GameTutorial implements GuiEventListener, NarratableEntry {
 	private int index;
 	private int timer;
 	private Vec2 position = new Vec2(150, 150);
+	private Vec2 dragPos;
 	private ArrowButton back, forward;
 
 	public GameTutorial(GameScreen screen) {
 		this.screen = screen;
 		this.mc = screen.getMinecraft();
 		this.creeper = new TutorialCreeper();
-		this.back = new ArrowButton(position.x - 5 - ARROW_SIZE, position.y + 2, false);
-		this.forward = new ArrowButton(position.x + 5, position.y + 2, true);
+		this.back = new ArrowButton(() -> (int) position.x - 5 - ARROW_SIZE, () -> (int) position.y + 2, false);
+		this.forward = new ArrowButton(() -> (int) position.x + 5, () -> (int) position.y + 2, true);
 	}
 
 	@Override
@@ -67,8 +70,28 @@ public class GameTutorial implements GuiEventListener, NarratableEntry {
 		} else if (forward.mouseClicked(pMouseX, pMouseY, pButton)) {
 			return true;
 		} else if (creeper.mouseClicked(pMouseX, pMouseY, pButton)) {
+			dragPos = new Vec2((float) pMouseX, (float) pMouseY);
 			return true;
 		}
+		return false;
+	}
+
+	@Override
+	public void mouseMoved(double pMouseX, double pMouseY) {
+		if (dragPos != null) {
+			position = new Vec2(position.x + (float) pMouseX - dragPos.x, position.y + (float) pMouseY - dragPos.y);
+			position = new Vec2(
+					Mth.clamp(position.x, TutorialCreeper.WIDTH / 2, screen.width - TutorialCreeper.WIDTH / 2),
+					Mth.clamp(position.y, TutorialCreeper.HEIGHT, screen.height));
+			dragPos = new Vec2((float) pMouseX, (float) pMouseY);
+			back.updatePosition();
+			forward.updatePosition();
+		}
+	}
+
+	@Override
+	public boolean mouseReleased(double pMouseX, double pMouseY, int pButton) {
+		dragPos = null;
 		return false;
 	}
 
@@ -120,8 +143,7 @@ public class GameTutorial implements GuiEventListener, NarratableEntry {
 		}
 
 		public boolean mouseClicked(double x, double y, int pButton) {
-			if (pButton == InputConstants.MOUSE_BUTTON_LEFT && x > position.x - WIDTH / 2 && x < position.x + WIDTH / 2
-					&& y > position.y - HEIGHT && y < position.y) {
+			if (pButton == InputConstants.MOUSE_BUTTON_LEFT && inside(x, y)) {
 				swell += 0.3;
 				mc.getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.CREEPER_HURT, 1f));
 
@@ -138,6 +160,11 @@ public class GameTutorial implements GuiEventListener, NarratableEntry {
 			mc.getEntityRenderDispatcher().getRenderer(creeper).render(creeper, 0, 0, poseStack, source,
 					LightTexture.FULL_BRIGHT);
 			poseStack.popPose();
+		}
+
+		private boolean inside(double x, double y) {
+			return x > position.x - WIDTH / 2 && x < position.x + WIDTH / 2 && y > position.y - HEIGHT
+					&& y < position.y;
 		}
 	}
 
@@ -193,7 +220,7 @@ public class GameTutorial implements GuiEventListener, NarratableEntry {
 
 			// Text
 			float y = 0;
-			poseStack.translate(0, 0, 100);
+			poseStack.translate(0, 0, 200);
 			for (var line : lines) {
 				mc.font.draw(poseStack, line, pos.getX(), pos.getY() + y, 0);
 				y += 9.5;
@@ -205,10 +232,14 @@ public class GameTutorial implements GuiEventListener, NarratableEntry {
 
 		private static final ResourceLocation TEXTURE = new ResourceLocation(Main.MODID, "textures/gui/arrow.png");
 
+		private final Supplier<Integer> xPos;
+		private final Supplier<Integer> yPos;
 		private final boolean forward;
 
-		public ArrowButton(float pX, float pY, boolean forward) {
-			super((int) pX, (int) pY, ARROW_SIZE, ARROW_SIZE, TextComponent.EMPTY);
+		public ArrowButton(Supplier<Integer> xPos, Supplier<Integer> yPos, boolean forward) {
+			super(xPos.get(), yPos.get(), ARROW_SIZE, ARROW_SIZE, TextComponent.EMPTY);
+			this.xPos = xPos;
+			this.yPos = yPos;
 			this.forward = forward;
 		}
 
@@ -226,14 +257,22 @@ public class GameTutorial implements GuiEventListener, NarratableEntry {
 			}
 		}
 
+		private void updatePosition() {
+			this.x = xPos.get();
+			this.y = yPos.get();
+		}
+
 		@Override
 		public void renderButton(PoseStack pPoseStack, int pMouseX, int pMouseY, float pPartialTick) {
+			pPoseStack.pushPose();
+			pPoseStack.translate(0, 0, 200);
 			RenderSystem.setShader(GameRenderer::getPositionTexShader);
 			RenderSystem.setShaderTexture(0, TEXTURE);
 
 			RenderSystem.enableDepthTest();
 			RenderSystem.setShaderColor(isHovered ? 0.6f : 1, isHovered ? 0.6f : 1, 1, 1);
 			blit(pPoseStack, x, y, forward ? 0 : ARROW_SIZE, 0, width, height, ARROW_SIZE * 2, ARROW_SIZE);
+			pPoseStack.popPose();
 		}
 
 	}
