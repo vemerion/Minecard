@@ -1,7 +1,7 @@
 {
   "equipment": {
-    "head": "minecraft:iron_helmet",
-    "mainhand": "minecraft:iron_shovel"
+    "mainhand": "minecraft:iron_shovel",
+    "head": "minecraft:iron_helmet"
   },
   "entity": "minecraft:item",
   "cost": 0,

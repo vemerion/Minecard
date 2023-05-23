@@ -37,6 +37,7 @@ public class ModLanguageProvider extends LanguageProvider {
 
 		add("gui." + Main.MODID + ".game", "Minecard Game");
 
+		add(Helper.gui("cardy"), "Cardy the Creeper");
 		tutorial();
 
 		add(Helper.chat("game_ongoing"), "A game is already ongoing.");
@@ -138,8 +139,13 @@ public class ModLanguageProvider extends LanguageProvider {
 	private void tutorial() {
 		addTutorialStep(
 				"Hello there! My name is Cardy the Creeper and I am here to teach you about the card game. First I will teach you about the cards themselves!");
+		addTutorialStep(
+				"Also! If I get in the way, you can easily drag me around with the mouse. But be careful, because I am ticklish!");
+		addTutorialStep("Oh look, that's me! Wait, something seems off..");
+		addTutorialStep("There, much better. Now, let the teaching begin!");
 		addTutorialStep("This value determines how much it costs to play the card.");
 		addTutorialStep("This value determines how much damage the card does when it attacks.");
+		addTutorialStep("This value determines how much damage the card can take before it dies.");
 	}
 
 	private void addTutorialStep(String text) {

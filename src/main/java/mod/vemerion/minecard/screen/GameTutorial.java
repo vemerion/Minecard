@@ -1,5 +1,7 @@
 package mod.vemerion.minecard.screen;
 
+import java.util.Map;
+import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
 import com.mojang.blaze3d.platform.InputConstants;
@@ -8,7 +10,13 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Quaternion;
 
 import mod.vemerion.minecard.Main;
+import mod.vemerion.minecard.game.AdditionalCardData;
+import mod.vemerion.minecard.game.Card;
+import mod.vemerion.minecard.game.CardProperty;
+import mod.vemerion.minecard.game.ability.CardAbilityTrigger;
+import mod.vemerion.minecard.game.ability.DrawCardsAbility;
 import mod.vemerion.minecard.helper.Helper;
+import mod.vemerion.minecard.renderer.CardItemRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.gui.components.AbstractButton;
@@ -33,12 +41,6 @@ import net.minecraft.world.phys.Vec2;
 
 public class GameTutorial implements GuiEventListener, NarratableEntry {
 
-	private static record Rect(int x, int y, int width, int height) {
-	}
-
-	private final Step[] steps = { new Step(new Rect(150, 150, 30, 30), new TranslatableComponent(Helper.tutorial(0))),
-			new Step(new Rect(0, 0, 50, 50), new TranslatableComponent(Helper.tutorial(1))) };
-
 	private static final int BUBBLE_BORDER = 2;
 	private static final int BUBBLE_PADDING = 5;
 	private static final int BUBBLE_X_OFFSET = 20;
@@ -51,9 +53,21 @@ public class GameTutorial implements GuiEventListener, NarratableEntry {
 	private TutorialCreeper creeper;
 	private int index;
 	private int timer;
-	private Vec2 position = new Vec2(150, 150);
+	private Vec2 position = new Vec2(50, 150);
 	private Vec2 dragPos;
 	private ArrowButton back, forward;
+	private ClientCard card;
+
+	private final Step[] steps = { new Step(new TranslatableComponent(Helper.tutorial(0))),
+			new Step(new TranslatableComponent(Helper.tutorial(1))),
+			new Step(new TranslatableComponent(Helper.tutorial(2))),
+			new Step(new TranslatableComponent(Helper.tutorial(3)), null, () -> card.setDamage(10)),
+			new Step(new TranslatableComponent(Helper.tutorial(4)),
+					new Rect((w, h) -> w / 2 + 19, (w, h) -> h / 2 - 36, 20, 20)),
+			new Step(new TranslatableComponent(Helper.tutorial(5)),
+					new Rect((w, h) -> w / 2 + 18, (w, h) -> h / 2 - 7, 20, 20)),
+			new Step(new TranslatableComponent(Helper.tutorial(6)),
+					new Rect((w, h) -> w / 2 - 31, (w, h) -> h / 2 - 7, 20, 20)) };
 
 	public GameTutorial(GameScreen screen) {
 		this.screen = screen;
@@ -61,6 +75,13 @@ public class GameTutorial implements GuiEventListener, NarratableEntry {
 		this.creeper = new TutorialCreeper();
 		this.back = new ArrowButton(() -> (int) position.x - 5 - ARROW_SIZE, () -> (int) position.y + 2, false);
 		this.forward = new ArrowButton(() -> (int) position.x + 5, () -> (int) position.y + 2, true);
+		this.card = new ClientCard(
+				new Card(EntityType.CREEPER, 3, 3, 4, 4, 4, 2, 2, false, Map.of(CardProperty.STEALTH, 1),
+						new DrawCardsAbility(CardAbilityTrigger.ATTACK, 2), Map.of(), AdditionalCardData.EMPTY),
+				new Vec2((screen.width - ClientCard.CARD_WIDTH) / 2, (screen.height - ClientCard.CARD_HEIGHT) / 2),
+				screen);
+		this.card.appear(2);
+		CardItemRenderer.getEntity(card, mc.level).setCustomName(new TranslatableComponent(Helper.gui("cardy")));
 	}
 
 	@Override
@@ -98,11 +119,21 @@ public class GameTutorial implements GuiEventListener, NarratableEntry {
 	public void tick() {
 		timer++;
 
+		card.tick();
+
 		steps[index].tick();
 		creeper.tick();
 	}
 
 	public void render(PoseStack poseStack, int mouseX, int mouseY, BufferSource source, float partialTick) {
+		if (index > 1) {
+			poseStack.pushPose();
+			poseStack.translate(0, 0, 10);
+			card.render(poseStack, mouseX, mouseY, source, partialTick);
+			poseStack.popPose();
+			source.endBatch();
+		}
+
 		steps[index].render(partialTick);
 
 		back.render(poseStack, mouseX, mouseY, partialTick);
@@ -160,8 +191,8 @@ public class GameTutorial implements GuiEventListener, NarratableEntry {
 
 			// Head rotation
 			if (step.highlight != null) {
-				Vec2 target = new Vec2(step.highlight.x + step.highlight.width / 2,
-						step.highlight.y + step.highlight.height / 2);
+				Vec2 target = new Vec2(step.highlight.getX() + step.highlight.getWidth() / 2,
+						step.highlight.getY() + step.highlight.getHeight() / 2);
 				double direction = Mth.RAD_TO_DEG * Mth.atan2(position.y - HEAD - target.y, position.x - target.x);
 				float distance = Mth.clamp(Mth.abs(target.x - position.x), 0, 300) / 300f;
 				if (direction > -90 && direction < 90) { // Left
@@ -194,26 +225,43 @@ public class GameTutorial implements GuiEventListener, NarratableEntry {
 
 		private Rect highlight;
 		private Component text;
+		private Runnable action;
 		private int timer;
 
-		private Step(Rect highlight, Component text) {
-			this.highlight = highlight;
+		private Step(Component text, Rect highlight, Runnable action) {
 			this.text = text;
+			this.highlight = highlight;
+			this.action = action;
+		}
+
+		private Step(Component text, Rect highlight) {
+			this(text, highlight, null);
+		}
+
+		private Step(Component text) {
+			this(text, null, null);
 		}
 
 		private void tick() {
 			timer++;
+
+			if (action != null) {
+				action.run();
+				action = null;
+			}
 		}
 
 		private void render(float partialTick) {
 			drawTextBubble();
-			drawHighlight(partialTick);
+			if (highlight != null)
+				drawHighlight(partialTick);
 		}
 
 		private void drawHighlight(float partialTick) {
 			int alpha = (int) Mth.lerp((Mth.sin((timer + partialTick) / 5) + 1) / 2, 0, 170);
-			GuiComponent.fill(new PoseStack(), highlight.x, highlight.y, highlight.x + highlight.width,
-					highlight.y + highlight.height, FastColor.ARGB32.color(alpha, 200, 30, 30));
+			GuiComponent.fill(new PoseStack(), highlight.getX(), highlight.getY(),
+					highlight.getX() + highlight.getWidth(), highlight.getY() + highlight.getHeight(),
+					FastColor.ARGB32.color(alpha, 200, 30, 30));
 		}
 
 		private void drawTextBubble() {
@@ -221,6 +269,7 @@ public class GameTutorial implements GuiEventListener, NarratableEntry {
 			var height = lines.size() * mc.font.lineHeight + BUBBLE_PADDING * 2;
 			var pos = new Vec3i(position.x + BUBBLE_X_OFFSET, position.y + BUBBLE_Y_OFFSET - height, 0);
 			var poseStack = new PoseStack();
+			poseStack.translate(0, 0, 200);
 
 			if (lines.isEmpty())
 				return;
@@ -229,20 +278,21 @@ public class GameTutorial implements GuiEventListener, NarratableEntry {
 			var bubbleWidth = lines.stream().map(s -> mc.font.width(s)).max(Integer::compare).get();
 			var bubble = new Rect(pos.getX() - BUBBLE_PADDING, pos.getY() - BUBBLE_PADDING,
 					bubbleWidth + BUBBLE_PADDING * 2, height);
-			GuiComponent.fill(poseStack, bubble.x - BUBBLE_BORDER, bubble.y - BUBBLE_BORDER,
-					bubble.x + bubble.width + BUBBLE_BORDER, bubble.y + bubble.height + BUBBLE_BORDER, 0xff000000);
-			GuiComponent.fill(poseStack, bubble.x, bubble.y, bubble.x + bubble.width, bubble.y + bubble.height,
-					0xffffffff);
+			GuiComponent.fill(poseStack, bubble.getX() - BUBBLE_BORDER, bubble.getY() - BUBBLE_BORDER,
+					bubble.getX() + bubble.getWidth() + BUBBLE_BORDER,
+					bubble.getY() + bubble.getHeight() + BUBBLE_BORDER, 0xff000000);
+			GuiComponent.fill(poseStack, bubble.getX(), bubble.getY(), bubble.getX() + bubble.getWidth(),
+					bubble.getY() + bubble.getHeight(), 0xffffffff);
 
 			// Point
 			for (int i = 0; i < 10; i++) {
-				GuiComponent.fill(poseStack, bubble.x, bubble.y + bubble.height + BUBBLE_BORDER, bubble.x + 10 - i * 1,
-						bubble.y + bubble.height + i * 1 + BUBBLE_BORDER, 0xff000000);
+				GuiComponent.fill(poseStack, bubble.getX(), bubble.getY() + bubble.getHeight() + BUBBLE_BORDER,
+						bubble.getX() + 10 - i * 1, bubble.getY() + bubble.getHeight() + i * 1 + BUBBLE_BORDER,
+						0xff000000);
 			}
 
 			// Text
 			float y = 0;
-			poseStack.translate(0, 0, 200);
 			for (var line : lines) {
 				mc.font.draw(poseStack, line, pos.getX(), pos.getY() + y, 0);
 				y += 9.5;
@@ -297,5 +347,39 @@ public class GameTutorial implements GuiEventListener, NarratableEntry {
 			pPoseStack.popPose();
 		}
 
+	}
+
+	private class Rect {
+		private BiFunction<Integer, Integer, Integer> x;
+		private BiFunction<Integer, Integer, Integer> y;
+		private int width;
+		private int height;
+
+		Rect(BiFunction<Integer, Integer, Integer> x, BiFunction<Integer, Integer, Integer> y, int width, int height) {
+			this.x = x;
+			this.y = y;
+			this.width = width;
+			this.height = height;
+		}
+
+		Rect(int x, int y, int width, int height) {
+			this((screenWidth, screenHeight) -> x, (screenWidth, screenHeight) -> y, width, height);
+		}
+
+		private int getX() {
+			return x.apply(screen.width, screen.height);
+		}
+
+		private int getY() {
+			return y.apply(screen.width, screen.height);
+		}
+
+		private int getWidth() {
+			return width;
+		}
+
+		private int getHeight() {
+			return height;
+		}
 	}
 }
