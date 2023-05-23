@@ -124,6 +124,7 @@ public class GameTutorial implements GuiEventListener, NarratableEntry {
 	private class TutorialCreeper {
 		private static final int WIDTH = 30;
 		private static final int HEIGHT = 52;
+		private static final int HEAD = 40;
 
 		private Creeper creeper;
 		private float swell, swell0;
@@ -138,6 +139,8 @@ public class GameTutorial implements GuiEventListener, NarratableEntry {
 		}
 
 		private void tick() {
+			creeper.yHeadRotO = creeper.yHeadRot;
+			creeper.xRotO = creeper.getXRot();
 			swell0 = swell;
 			swell *= 0.9;
 		}
@@ -153,6 +156,25 @@ public class GameTutorial implements GuiEventListener, NarratableEntry {
 		}
 
 		private void render(PoseStack poseStack, int mouseX, int mouseY, BufferSource source, float partialTick) {
+			var step = steps[index];
+
+			// Head rotation
+			if (step.highlight != null) {
+				Vec2 target = new Vec2(step.highlight.x + step.highlight.width / 2,
+						step.highlight.y + step.highlight.height / 2);
+				double direction = Mth.RAD_TO_DEG * Mth.atan2(position.y - HEAD - target.y, position.x - target.x);
+				float distance = Mth.clamp(Mth.abs(target.x - position.x), 0, 300) / 300f;
+				if (direction > -90 && direction < 90) { // Left
+					creeper.yHeadRot = Mth.lerp(0.05f, creeper.yHeadRot, 40 + distance * 90);
+					direction = Mth.clamp(direction, -75, 75);
+					creeper.setXRot((float) -Mth.lerp(0.8, creeper.getXRot(), direction));
+				} else { // Right
+					creeper.yHeadRot = Mth.lerp(0.05f, creeper.yHeadRot, -distance * 60);
+					direction = direction > 90 ? Math.max(130, direction) : Math.min(-130, direction);
+					creeper.setXRot((float) Mth.lerp(0.8, creeper.getXRot(), direction + 180));
+				}
+			}
+
 			poseStack.pushPose();
 			poseStack.translate(position.x, position.y, 300);
 			poseStack.scale(30, -30, 30);
