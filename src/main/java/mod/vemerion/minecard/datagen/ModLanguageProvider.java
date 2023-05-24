@@ -44,7 +44,7 @@ public class ModLanguageProvider extends LanguageProvider {
 		add(Helper.chat("not_enough_cards"), "You need a full deck to enter the game.");
 		add(Helper.chat("too_many_duplicates"), "Too many copies of %s in the deck.");
 		add(Helper.chat("game_interactions"),
-				"Use [item] to interact with game:\n* Deck item: Enter the game\n* Redstone dust: Add an AI opponent to the game");
+				"Use [item] to interact with game:\n* Deck item: Enter the game\n* Redstone dust: Add an AI opponent to the game\n* Planks: Start a tutorial game");
 
 		add(Helper.gui("next_turn"), "Next Turn");
 		add(Helper.gui("game_over"), "Game Over");

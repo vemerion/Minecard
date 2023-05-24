@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -100,25 +101,31 @@ public class GameScreen extends Screen implements GameClient {
 	private BlockPos pos;
 	private boolean isSpectator = true;
 	private Choices choices = new Choices();
+	private int tutorialStep;
 
 	// Widgets
 	private PopupText popup;
 	private List<Animation> animations;
 	private List<Resources> resources;
 	private GameBackground background;
-	private GameTutorial tutorial;
+	private Optional<GameTutorial> tutorial = Optional.empty();
 
 	private Card selectedCard;
 	private Card attackingCard;
 
 	private float fovModifier = 1;
 
-	public GameScreen(List<MessagePlayerState> list, BlockPos pos) {
+	public GameScreen(List<MessagePlayerState> list, int tutorialStep, BlockPos pos) {
 		super(TITLE);
+		this.tutorialStep = tutorialStep;
 		this.animations = new ArrayList<>();
 		this.state = initState(list);
 		this.pos = pos;
 		this.popup = new PopupText();
+	}
+
+	public BlockPos getPos() {
+		return pos;
 	}
 
 	@Override
@@ -176,7 +183,9 @@ public class GameScreen extends Screen implements GameClient {
 			addRenderableWidget(new NextTurnButton((int) (width * 0.93), height / 2 - NEXT_TURN_BUTTON_SIZE / 2,
 					NEXT_TURN_BUTTON_SIZE, NEXT_TURN_BUTTON_SIZE, TextComponent.EMPTY));
 
-		tutorial = addWidget(new GameTutorial(this));
+		if (tutorialStep != -1) {
+			tutorial = Optional.of(addWidget(new GameTutorial(this, tutorialStep)));
+		}
 		background = addWidget(new GameBackground(this));
 
 		animations = new ArrayList<>();
@@ -425,12 +434,12 @@ public class GameScreen extends Screen implements GameClient {
 
 	@Override
 	public boolean mouseReleased(double pMouseX, double pMouseY, int pButton) {
-		return tutorial.mouseReleased(pMouseX, pMouseY, pButton);
+		return tutorial.map(t -> t.mouseReleased(pMouseX, pMouseY, pButton)).orElse(false);
 	}
 
 	@Override
 	public void mouseMoved(double pMouseX, double pMouseY) {
-		tutorial.mouseMoved(pMouseX, pMouseY);
+		tutorial.ifPresent(t -> t.mouseMoved(pMouseX, pMouseY));
 	}
 
 	@Override
@@ -522,8 +531,8 @@ public class GameScreen extends Screen implements GameClient {
 	}
 
 	@Override
-	public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTicks) {
-		partialTicks = this.minecraft.getFrameTime();
+	public void render(PoseStack poseStack, int mouseX, int mouseY, float unused) {
+		float partialTicks = this.minecraft.getFrameTime();
 		var source = RENDER_BUFFERS.bufferSource();
 
 		background.render(poseStack, mouseX, mouseY, source, partialTicks);
@@ -580,7 +589,7 @@ public class GameScreen extends Screen implements GameClient {
 
 		popup.render(poseStack, mouseX, mouseY, partialTicks);
 
-		tutorial.render(poseStack, mouseX, mouseY, source, partialTicks);
+		tutorial.ifPresent(t -> t.render(poseStack, mouseX, mouseY, source, partialTicks));
 
 		source.endBatch();
 
@@ -677,7 +686,7 @@ public class GameScreen extends Screen implements GameClient {
 
 		choices.tick();
 
-		tutorial.tick();
+		tutorial.ifPresent(t -> t.tick());
 
 		fovModifier = (float) Mth.lerp(0.08, fovModifier, 1);
 	}

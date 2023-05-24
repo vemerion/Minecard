@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import mod.vemerion.minecard.Main;
 import mod.vemerion.minecard.capability.CardData;
@@ -33,6 +35,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -68,6 +71,17 @@ public class GameBlockEntity extends BlockEntity {
 
 	public boolean isPlayerTurn(ServerPlayer player) {
 		return state.getCurrentPlayer().equals(player.getUUID());
+	}
+
+	public boolean isTutorial() {
+		return state.isTutorial();
+	}
+
+	public void setTutorialStep(ServerPlayer sender, int step) {
+		if (state.getPlayerStates().stream().noneMatch(s -> s.getId().equals(sender.getUUID()))) {
+			return;
+		}
+		state.setTutorialStep(step);
 	}
 
 	public void endTurn() {
@@ -148,6 +162,9 @@ public class GameBlockEntity extends BlockEntity {
 			Network.INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), createOpenGameMessage(id));
 			Network.INSTANCE.send(PacketDistributor.PLAYER.with(() -> player),
 					new NewTurnMessage(state.getCurrentPlayer()));
+		} else if (stack.is(ItemTags.PLANKS)) {
+			startTutorial(player);
+			setChanged();
 		} else if (stack.is(ModItems.DECK.get())
 				&& state.getPlayerStates().stream().noneMatch(s -> s.getId().equals(player.getUUID()))) {
 			addRealPlayer(player, stack);
@@ -161,6 +178,19 @@ public class GameBlockEntity extends BlockEntity {
 		}
 	}
 
+	private void startTutorial(ServerPlayer player) {
+		state = new GameState();
+		aiPlayer = new AIPlayer(this);
+		receivers.add(AIPlayer.ID);
+
+		state.setTutorialStep(0);
+
+		addPlayer(player.getUUID(), IntStream.range(0, 10).mapToObj(i -> Cards.TUTORIAL_CARD_TYPE.create())
+				.collect(Collectors.toCollection(() -> new ArrayList<>())));
+		addPlayer(AIPlayer.ID, IntStream.range(0, 10).mapToObj(i -> Cards.TUTORIAL_CARD_TYPE.create())
+				.collect(Collectors.toCollection(() -> new ArrayList<>())));
+	}
+
 	private void addPlayer(UUID id, List<Card> deck) {
 		Collections.shuffle(deck);
 		List<Card> hand = new ArrayList<>();
@@ -171,6 +201,8 @@ public class GameBlockEntity extends BlockEntity {
 		List<Card> board = new ArrayList<>();
 		var playerCard = Cards.getInstance(false).get(EntityType.PLAYER).create();
 		playerCard.setAdditionalData(new AdditionalCardData.IdData(id));
+		if (state.isTutorial())
+			playerCard.setHealth(1);
 		board.add(playerCard);
 
 		var playerState = new PlayerState(id, deck, hand, board, 1, 1);
@@ -244,7 +276,7 @@ public class GameBlockEntity extends BlockEntity {
 
 		return new OpenGameMessage(
 				List.of(state1.toMessage(!state1.getId().equals(id)), state2.toMessage(!state2.getId().equals(id))),
-				getBlockPos());
+				state.getTutorialStep(), getBlockPos());
 	}
 
 	@Override

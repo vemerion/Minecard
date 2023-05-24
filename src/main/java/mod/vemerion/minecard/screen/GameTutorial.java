@@ -1,6 +1,5 @@
 package mod.vemerion.minecard.screen;
 
-import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
@@ -10,12 +9,10 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Quaternion;
 
 import mod.vemerion.minecard.Main;
-import mod.vemerion.minecard.game.AdditionalCardData;
-import mod.vemerion.minecard.game.Card;
-import mod.vemerion.minecard.game.CardProperty;
-import mod.vemerion.minecard.game.ability.CardAbilityTrigger;
-import mod.vemerion.minecard.game.ability.DrawCardsAbility;
+import mod.vemerion.minecard.game.Cards;
 import mod.vemerion.minecard.helper.Helper;
+import mod.vemerion.minecard.network.Network;
+import mod.vemerion.minecard.network.SetTutorialStepMessage;
 import mod.vemerion.minecard.renderer.CardItemRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiComponent;
@@ -69,19 +66,27 @@ public class GameTutorial implements GuiEventListener, NarratableEntry {
 			new Step(new TranslatableComponent(Helper.tutorial(6)),
 					new Rect((w, h) -> w / 2 - 31, (w, h) -> h / 2 - 7, 20, 20)) };
 
-	public GameTutorial(GameScreen screen) {
+	public GameTutorial(GameScreen screen, int initialStep) {
 		this.screen = screen;
+		this.index = Math.min(initialStep, steps.length - 1);
 		this.mc = screen.getMinecraft();
 		this.creeper = new TutorialCreeper();
 		this.back = new ArrowButton(() -> (int) position.x - 5 - ARROW_SIZE, () -> (int) position.y + 2, false);
 		this.forward = new ArrowButton(() -> (int) position.x + 5, () -> (int) position.y + 2, true);
-		this.card = new ClientCard(
-				new Card(EntityType.CREEPER, 3, 3, 4, 4, 4, 2, 2, false, Map.of(CardProperty.STEALTH, 1),
-						new DrawCardsAbility(CardAbilityTrigger.ATTACK, 2), Map.of(), AdditionalCardData.EMPTY),
+		this.card = new ClientCard(Cards.TUTORIAL_CARD_TYPE.create(),
 				new Vec2((screen.width - ClientCard.CARD_WIDTH) / 2, (screen.height - ClientCard.CARD_HEIGHT) / 2),
 				screen);
 		this.card.appear(2);
 		CardItemRenderer.getEntity(card, mc.level).setCustomName(new TranslatableComponent(Helper.gui("cardy")));
+		initSteps();
+	}
+
+	private void initSteps() {
+		for (int i = 0; i < index; i++) {
+			if (steps[i].action != null) {
+				steps[i].action.run();
+			}
+		}
 	}
 
 	@Override
@@ -174,6 +179,27 @@ public class GameTutorial implements GuiEventListener, NarratableEntry {
 			creeper.xRotO = creeper.getXRot();
 			swell0 = swell;
 			swell *= 0.9;
+
+			// Head rotation
+			var step = steps[index];
+			if (step.highlight != null) {
+				Vec2 target = new Vec2(step.highlight.getX() + step.highlight.getWidth() / 2,
+						step.highlight.getY() + step.highlight.getHeight() / 2);
+				double direction = Mth.RAD_TO_DEG * Mth.atan2(position.y - HEAD - target.y, position.x - target.x);
+				float distance = Mth.clamp(Mth.abs(target.x - position.x), 0, 300) / 300f;
+				if (direction > -90 && direction < 90) { // Left
+					creeper.yHeadRot = Mth.lerp(0.2f, creeper.yHeadRot, 40 + distance * 90);
+					direction = Mth.clamp(direction, -75, 75);
+					creeper.setXRot((float) Mth.rotLerp(0.2f, creeper.getXRot(), (float) -direction));
+				} else { // Right
+					creeper.yHeadRot = Mth.lerp(0.2f, creeper.yHeadRot, -distance * 60);
+					direction = direction > 90 ? Math.max(130, direction) : Math.min(-130, direction);
+					creeper.setXRot((float) Mth.rotLerp(0.2f, creeper.getXRot(), (float) direction + 180));
+				}
+			} else {
+				creeper.yHeadRot = Mth.lerp(0.2f, creeper.yHeadRot, 15);
+				creeper.setXRot((float) Mth.rotLerp(0.2f, creeper.getXRot(), 0));
+			}
 		}
 
 		public boolean mouseClicked(double x, double y, int pButton) {
@@ -187,25 +213,6 @@ public class GameTutorial implements GuiEventListener, NarratableEntry {
 		}
 
 		private void render(PoseStack poseStack, int mouseX, int mouseY, BufferSource source, float partialTick) {
-			var step = steps[index];
-
-			// Head rotation
-			if (step.highlight != null) {
-				Vec2 target = new Vec2(step.highlight.getX() + step.highlight.getWidth() / 2,
-						step.highlight.getY() + step.highlight.getHeight() / 2);
-				double direction = Mth.RAD_TO_DEG * Mth.atan2(position.y - HEAD - target.y, position.x - target.x);
-				float distance = Mth.clamp(Mth.abs(target.x - position.x), 0, 300) / 300f;
-				if (direction > -90 && direction < 90) { // Left
-					creeper.yHeadRot = Mth.lerp(0.05f, creeper.yHeadRot, 40 + distance * 90);
-					direction = Mth.clamp(direction, -75, 75);
-					creeper.setXRot((float) -Mth.lerp(0.8, creeper.getXRot(), direction));
-				} else { // Right
-					creeper.yHeadRot = Mth.lerp(0.05f, creeper.yHeadRot, -distance * 60);
-					direction = direction > 90 ? Math.max(130, direction) : Math.min(-130, direction);
-					creeper.setXRot((float) Mth.lerp(0.8, creeper.getXRot(), direction + 180));
-				}
-			}
-
 			poseStack.pushPose();
 			poseStack.translate(position.x, position.y, 300);
 			poseStack.scale(30, -30, 30);
@@ -322,10 +329,15 @@ public class GameTutorial implements GuiEventListener, NarratableEntry {
 
 		@Override
 		public void onPress() {
+			int prev = index;
 			if (forward) {
 				index = Math.min(steps.length - 1, index + 1);
 			} else {
 				index = Math.max(0, index - 1);
+			}
+
+			if (prev != index) {
+				Network.INSTANCE.sendToServer(new SetTutorialStepMessage(screen.getPos(), index));
 			}
 		}
 

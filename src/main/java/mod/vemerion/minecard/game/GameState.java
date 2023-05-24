@@ -23,7 +23,8 @@ public class GameState {
 	public static final Codec<GameState> CODEC = ExtraCodecs
 			.lazyInitializedCodec(() -> RecordCodecBuilder.create(instance -> instance
 					.group(Codec.list(PlayerState.CODEC).fieldOf("playerStates").forGetter(GameState::getPlayerStates),
-							Codec.INT.fieldOf("turn").forGetter(GameState::getTurn))
+							Codec.INT.fieldOf("turn").forGetter(GameState::getTurn),
+							Codec.INT.fieldOf("tutorialStep").forGetter(GameState::getTutorialStep))
 					.apply(instance, GameState::new)));
 
 	public static final int MAX_HAND_SIZE = 10;
@@ -31,11 +32,13 @@ public class GameState {
 
 	private List<PlayerState> playerStates;
 	private int turn;
+	private int tutorialStep;
 	private Random random;
 
-	public GameState(List<PlayerState> playerStates, int turn) {
+	public GameState(List<PlayerState> playerStates, int turn, int tutorialStep) {
 		this.playerStates = new ArrayList<>(playerStates);
 		this.turn = turn;
+		this.tutorialStep = tutorialStep;
 		random = new Random();
 
 		for (var playerState : playerStates)
@@ -43,7 +46,7 @@ public class GameState {
 	}
 
 	public GameState() {
-		this(new ArrayList<>(), 0);
+		this(new ArrayList<>(), 0, -1);
 	}
 
 	public Random getRandom() {
@@ -56,6 +59,20 @@ public class GameState {
 
 	public int getTurn() {
 		return turn;
+	}
+
+	public int getTutorialStep() {
+		return tutorialStep;
+	}
+
+	public boolean isTutorial() {
+		return tutorialStep != -1;
+	}
+
+	public void setTutorialStep(int step) {
+		if (step == -1)
+			return;
+		tutorialStep = step;
 	}
 
 	public PlayerState getYourPlayerState(UUID id) {

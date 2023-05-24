@@ -18,10 +18,12 @@ import net.minecraftforge.network.NetworkEvent;
 public class OpenGameMessage extends ServerToClientMessage {
 
 	private List<MessagePlayerState> state;
+	private int tutorialStep;
 	private BlockPos pos;
 
-	public OpenGameMessage(List<MessagePlayerState> state, BlockPos pos) {
+	public OpenGameMessage(List<MessagePlayerState> state, int tutorialStep, BlockPos pos) {
 		this.state = state;
+		this.tutorialStep = tutorialStep;
 		this.pos = pos;
 	}
 
@@ -29,6 +31,7 @@ public class OpenGameMessage extends ServerToClientMessage {
 	public void encode(final FriendlyByteBuf buffer) {
 		for (var player : state)
 			writePlayer(buffer, player);
+		buffer.writeInt(tutorialStep);
 		buffer.writeBlockPos(pos);
 	}
 
@@ -63,7 +66,8 @@ public class OpenGameMessage extends ServerToClientMessage {
 	}
 
 	public static OpenGameMessage decode(final FriendlyByteBuf buffer) {
-		return new OpenGameMessage(List.of(readPlayer(buffer), readPlayer(buffer)), buffer.readBlockPos());
+		return new OpenGameMessage(List.of(readPlayer(buffer), readPlayer(buffer)), buffer.readInt(),
+				buffer.readBlockPos());
 	}
 
 	@Override
@@ -94,7 +98,7 @@ public class OpenGameMessage extends ServerToClientMessage {
 					if (mc == null)
 						return;
 
-					mc.setScreen(new GameScreen(message.state, message.pos));
+					mc.setScreen(new GameScreen(message.state, message.tutorialStep, message.pos));
 				}
 			};
 		}

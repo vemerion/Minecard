@@ -39,6 +39,11 @@ public class AIPlayer implements GameClient {
 		if (isGameOver || !isCurrent || timer % 8 != 0)
 			return;
 
+		if (game.isTutorial()) {
+			game.endTurn();
+			return;
+		}
+
 		if (!choices.isEmpty()) {
 			var choice = choices.get(0);
 			game.choice(choice.id(), choice.cards().get(rand.nextInt(choice.cards().size())).getId());

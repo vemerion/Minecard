@@ -10,6 +10,8 @@ import com.google.gson.JsonElement;
 import com.mojang.serialization.JsonOps;
 
 import mod.vemerion.minecard.Main;
+import mod.vemerion.minecard.game.ability.CardAbilityTrigger;
+import mod.vemerion.minecard.game.ability.DrawCardsAbility;
 import mod.vemerion.minecard.game.ability.NoCardAbility;
 import mod.vemerion.minecard.network.Network;
 import mod.vemerion.minecard.network.UpdateCardTypesMessage;
@@ -31,6 +33,9 @@ public class Cards extends SimpleJsonResourceReloadListener {
 
 	public static final CardType EMPTY_CARD_TYPE = new CardType(null, 0, 0, 0, Map.of(), NoCardAbility.NO_CARD_ABILITY,
 			Map.of(), AdditionalCardData.EMPTY);
+	public static final CardType TUTORIAL_CARD_TYPE = new CardType(EntityType.CREEPER, 1, 2, 1,
+			Map.of(CardProperty.STEALTH, 1), new DrawCardsAbility(CardAbilityTrigger.ATTACK, 2), Map.of(),
+			AdditionalCardData.EMPTY);
 
 	private static Cards clientInstance;
 	private static Cards serverInstance;
