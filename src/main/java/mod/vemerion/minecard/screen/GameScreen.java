@@ -43,6 +43,7 @@ import mod.vemerion.minecard.screen.animation.ThornsAnimation;
 import mod.vemerion.minecard.screen.animation.WallAnimation;
 import mod.vemerion.minecard.screen.animation.config.AnimationConfigs;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.gui.components.AbstractButton;
 import net.minecraft.client.gui.components.Widget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
@@ -86,6 +87,10 @@ public class GameScreen extends Screen implements GameClient {
 	private static final int DECK_HORIZONTAL_OFFSET = 5;
 	private static final int DECK_VERTICAL_OFFSET = 55;
 	private static final int CARD_PADDING = 4;
+	private static final int INFO_BUTTON_SIZE = 12;
+	private static final int INFO_BUTTON_OFFSET = 10;
+	private static final ResourceLocation INFO_BUTTON_TEXTURE = new ResourceLocation(Main.MODID,
+			"textures/gui/info.png");
 
 	private static final Card EMPTY_CARD = Cards.EMPTY_CARD_TYPE.create();
 
@@ -573,13 +578,62 @@ public class GameScreen extends Screen implements GameClient {
 
 		choices.render(poseStack, mouseX, mouseY, source, partialTicks);
 
+		popup.render(poseStack, mouseX, mouseY, partialTicks);
+
 		tutorial.render(poseStack, mouseX, mouseY, source, partialTicks);
 
 		source.endBatch();
 
-		popup.render(poseStack, mouseX, mouseY, partialTicks);
+		// Info button
+		boolean isHovered = mouseX > INFO_BUTTON_OFFSET && mouseX < INFO_BUTTON_OFFSET + INFO_BUTTON_SIZE
+				&& mouseY > INFO_BUTTON_OFFSET && mouseY < INFO_BUTTON_OFFSET + INFO_BUTTON_SIZE;
+		if (isHovered) {
+			drawPropertyInfo(poseStack);
+		}
+		RenderSystem.setShader(GameRenderer::getPositionTexShader);
+		RenderSystem.setShaderTexture(0, INFO_BUTTON_TEXTURE);
+		RenderSystem.enableDepthTest();
+		RenderSystem.setShaderColor(isHovered ? 0.6f : 1, isHovered ? 0.6f : 1, 1, 1);
+		blit(poseStack, INFO_BUTTON_OFFSET, INFO_BUTTON_OFFSET, 0, 0, INFO_BUTTON_SIZE, INFO_BUTTON_SIZE,
+				INFO_BUTTON_SIZE, INFO_BUTTON_SIZE);
 
 		super.render(poseStack, mouseX, mouseY, partialTicks);
+	}
+
+	private void drawPropertyInfo(PoseStack poseStack) {
+		poseStack.pushPose();
+		poseStack.translate(0, 0, 500);
+		GuiComponent.fill(poseStack, 0, 0, width, height, 0xcc000000);
+
+		int border = 80;
+		int padding = (width - border * 2) / 2;
+		for (int i = 0; i < CardProperty.values().length; i++) {
+			var property = CardProperty.values()[i];
+
+			int x = padding * (i % 3) + border;
+			int y = i / 3 * 60 + 1;
+
+			itemRenderer.renderGuiItem(property.getIcon(), x, y);
+
+			// Title
+			float size = 1.3f;
+			var title = new TranslatableComponent(property.getTextKey());
+			var width = font.width(title) * size;
+			poseStack.pushPose();
+			poseStack.translate(x + 8 - width / 2, y + 17, 0);
+			poseStack.scale(size, size, size);
+			font.drawShadow(poseStack, title, 0, 0, 0xffffffff);
+			poseStack.popPose();
+
+			// Description
+			var description = new TranslatableComponent(property.getDescriptionKey());
+			var lines = font.split(description, 110);
+			for (int j = 0; j < lines.size(); j++) {
+				font.drawShadow(poseStack, lines.get(j), x + 8 - font.width(lines.get(j)) / 2, y + 30 + j * 9,
+						0xffffffff);
+			}
+		}
+		poseStack.popPose();
 	}
 
 	private void drawBarrier(PoseStack poseStack, BufferSource source, ClientCard card) {

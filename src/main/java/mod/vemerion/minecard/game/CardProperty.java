@@ -44,4 +44,8 @@ public enum CardProperty {
 	public String getTextKey() {
 		return "card_property." + Main.MODID + "." + getName();
 	}
+
+	public String getDescriptionKey() {
+		return "card_property." + Main.MODID + "." + getName() + ".description";
+	}
 }

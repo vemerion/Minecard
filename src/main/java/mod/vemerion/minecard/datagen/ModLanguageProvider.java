@@ -65,6 +65,17 @@ public class ModLanguageProvider extends LanguageProvider {
 		add(CardProperty.THORNS.getTextKey(), "thorns");
 		add(CardProperty.POISON.getTextKey(), "poison");
 
+		add(CardProperty.CHARGE.getDescriptionKey(), "Can attack immediately after being played");
+		add(CardProperty.FREEZE.getDescriptionKey(), "Decreases by 1 every turn, can not attack while frozen");
+		add(CardProperty.SHIELD.getDescriptionKey(), "Blocks first instance of damage");
+		add(CardProperty.STEALTH.getDescriptionKey(), "Can not be attacked until card has attacked");
+		add(CardProperty.TAUNT.getDescriptionKey(), "Must be killed before other cards can be attacked");
+		add(CardProperty.SPECIAL.getDescriptionKey(), "Special property depending on the creature");
+		add(CardProperty.BABY.getDescriptionKey(), "Grows up after X turns");
+		add(CardProperty.BURN.getDescriptionKey(), "Take 1 damage every turn until burn ends");
+		add(CardProperty.THORNS.getDescriptionKey(), "Deals extra damage when attacked");
+		add(CardProperty.POISON.getDescriptionKey(), "Take 1 damage every turn, but cannot kill");
+
 		// Card ability groups
 		add(CardAbilityGroup.ALL.getTextKey(), "anywhere");
 		add(CardAbilityGroup.SELF.getTextKey(), "self");
