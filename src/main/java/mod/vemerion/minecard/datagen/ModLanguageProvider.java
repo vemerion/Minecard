@@ -155,8 +155,37 @@ public class ModLanguageProvider extends LanguageProvider {
 		addTutorialStep("Oh look, that's me! Wait, something seems off..");
 		addTutorialStep("There, much better. Now, let the teaching begin!");
 		addTutorialStep("This value determines how much it costs to play the card.");
-		addTutorialStep("This value determines how much damage the card does when it attacks.");
 		addTutorialStep("This value determines how much damage the card can take before it dies.");
+		addTutorialStep("This value determines how much damage the card does when it attacks.");
+		addTutorialStep(
+				"The column to the right of the card lists all the special properties a card has. For example, this card has thorns, so it will deal extra damage when attacked.");
+		addTutorialStep(
+				"You can hover over this button at any time during the game to see a list of all the different properties.");
+		addTutorialStep(
+				"This area describes any abilities the card has. Abilities have a trigger and an effect. In this case, the trigger is 'attack', which means the effect will happen every time the card attacks.");
+		addTutorialStep("Enough about the cards! Let's move on to the rest of the game.");
+		addTutorialStep("This bottom half is your part of the game space.");
+		addTutorialStep(
+				"This is your deck. At the start of your turn, you automatically draw one card from your deck.");
+		addTutorialStep("This is your hand.");
+		addTutorialStep("This is your part of the board.");
+		addTutorialStep(
+				"Each player always start with one card on the board, the player card. When you kill the opponent player card, you win the game.");
+		addTutorialStep(
+				"Usually the player card has %s health, but I have reduced it to 1 so the tutorial won't drag on for too long!");
+		addTutorialStep(
+				"Here are your resources. These are drained when you play cards. When a new turn starts your resources are restored, and you gain 1 more total.");
+		addTutorialStep(
+				"Let's try playing a card! Click on one of the cards in your hand, and then click somewhere on your board.");
+		addTutorialStep(
+				"Great work! Unfortunately, played cards need one turn to get ready before they can attack, so not much more to do than to end the turn.");
+		addTutorialStep("Click on the end turn button!");
+		addTutorialStep(
+				"Usually this is when the opponent will make their move, but fortunately for you, the AI is programmed to just pass their turn during the tutorial.");
+		addTutorialStep(
+				"Now your card is ready to attack! Click on it, and then click on the enemy card to attack it and end the tutorial!");
+		addTutorialStep(
+				"Good job! You have completed the tutorial! Now get out there and collect some cards and play against new opponents :)");
 	}
 
 	private void addTutorialStep(String text) {

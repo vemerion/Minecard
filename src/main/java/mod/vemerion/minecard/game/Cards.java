@@ -34,7 +34,7 @@ public class Cards extends SimpleJsonResourceReloadListener {
 	public static final CardType EMPTY_CARD_TYPE = new CardType(null, 0, 0, 0, Map.of(), NoCardAbility.NO_CARD_ABILITY,
 			Map.of(), AdditionalCardData.EMPTY);
 	public static final CardType TUTORIAL_CARD_TYPE = new CardType(EntityType.CREEPER, 1, 2, 1,
-			Map.of(CardProperty.STEALTH, 1), new DrawCardsAbility(CardAbilityTrigger.ATTACK, 2), Map.of(),
+			Map.of(CardProperty.THORNS, 1), new DrawCardsAbility(CardAbilityTrigger.ATTACK, 2), Map.of(),
 			AdditionalCardData.EMPTY);
 
 	private static Cards clientInstance;

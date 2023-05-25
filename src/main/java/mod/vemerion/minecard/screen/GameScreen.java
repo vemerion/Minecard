@@ -30,6 +30,7 @@ import mod.vemerion.minecard.network.GameClient;
 import mod.vemerion.minecard.network.Network;
 import mod.vemerion.minecard.network.PlayCardMessage;
 import mod.vemerion.minecard.network.PlayerChoiceResponseMessage;
+import mod.vemerion.minecard.network.SetTutorialStepMessage;
 import mod.vemerion.minecard.renderer.CardItemRenderer;
 import mod.vemerion.minecard.screen.animation.Animation;
 import mod.vemerion.minecard.screen.animation.AttackAnimation;
@@ -124,10 +125,6 @@ public class GameScreen extends Screen implements GameClient {
 		this.popup = new PopupText();
 	}
 
-	public BlockPos getPos() {
-		return pos;
-	}
-
 	@Override
 	public boolean isPauseScreen() {
 		return false;
@@ -180,10 +177,10 @@ public class GameScreen extends Screen implements GameClient {
 		}
 
 		if (!isSpectator)
-			addRenderableWidget(new NextTurnButton((int) (width * 0.93), height / 2 - NEXT_TURN_BUTTON_SIZE / 2,
+			addRenderableWidget(new NextTurnButton(width - 24, height / 2 - NEXT_TURN_BUTTON_SIZE / 2,
 					NEXT_TURN_BUTTON_SIZE, NEXT_TURN_BUTTON_SIZE, TextComponent.EMPTY));
 
-		if (tutorialStep != -1) {
+		if (tutorialStep != -1 && !isSpectator) {
 			tutorial = Optional.of(addWidget(new GameTutorial(this, tutorialStep)));
 		}
 		background = addWidget(new GameBackground(this));
@@ -256,6 +253,8 @@ public class GameScreen extends Screen implements GameClient {
 		}
 		playerState.hand.removeIf(c -> c.getId() == card.getId());
 		resetPositions(playerState);
+
+		tutorial.ifPresent(t -> t.unlock(GameTutorial.UnlockAction.PLAY_CARD));
 	}
 
 	@Override
@@ -337,6 +336,7 @@ public class GameScreen extends Screen implements GameClient {
 	@Override
 	public void gameOver() {
 		popup.popup(GAME_OVER);
+		tutorial.ifPresent(t -> t.unlock(GameTutorial.UnlockAction.GAME_OVER));
 	}
 
 	@Override
@@ -430,6 +430,13 @@ public class GameScreen extends Screen implements GameClient {
 			if (!playerState.id.equals(minecraft.player.getUUID()))
 				return playerState;
 		return null;
+	}
+
+	public void setTutorial(int tutorialStep) {
+		if (tutorialStep <= this.tutorialStep)
+			return;
+		this.tutorialStep = tutorialStep;
+		Network.INSTANCE.sendToServer(new SetTutorialStepMessage(pos, tutorialStep));
 	}
 
 	@Override
@@ -726,6 +733,7 @@ public class GameScreen extends Screen implements GameClient {
 				Network.INSTANCE.sendToServer(new EndTurnMessage(pos));
 				selectedCard = null;
 				attackingCard = null;
+				tutorial.ifPresent(t -> t.unlock(GameTutorial.UnlockAction.END_TURN));
 			}
 		}
 

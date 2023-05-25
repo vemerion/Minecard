@@ -11,8 +11,6 @@ import com.mojang.math.Quaternion;
 import mod.vemerion.minecard.Main;
 import mod.vemerion.minecard.game.Cards;
 import mod.vemerion.minecard.helper.Helper;
-import mod.vemerion.minecard.network.Network;
-import mod.vemerion.minecard.network.SetTutorialStepMessage;
 import mod.vemerion.minecard.renderer.CardItemRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiComponent;
@@ -38,6 +36,10 @@ import net.minecraft.world.phys.Vec2;
 
 public class GameTutorial implements GuiEventListener, NarratableEntry {
 
+	public static enum UnlockAction {
+		NONE, PLAY_CARD, END_TURN, GAME_OVER
+	}
+
 	private static final int BUBBLE_BORDER = 2;
 	private static final int BUBBLE_PADDING = 5;
 	private static final int BUBBLE_X_OFFSET = 20;
@@ -49,8 +51,7 @@ public class GameTutorial implements GuiEventListener, NarratableEntry {
 	private Minecraft mc;
 	private TutorialCreeper creeper;
 	private int index;
-	private int timer;
-	private Vec2 position = new Vec2(50, 150);
+	private Vec2 position = new Vec2(30, 200);
 	private Vec2 dragPos;
 	private ArrowButton back, forward;
 	private ClientCard card;
@@ -58,13 +59,38 @@ public class GameTutorial implements GuiEventListener, NarratableEntry {
 	private final Step[] steps = { new Step(new TranslatableComponent(Helper.tutorial(0))),
 			new Step(new TranslatableComponent(Helper.tutorial(1))),
 			new Step(new TranslatableComponent(Helper.tutorial(2))),
-			new Step(new TranslatableComponent(Helper.tutorial(3)), null, () -> card.setDamage(10)),
+			new Step(new TranslatableComponent(Helper.tutorial(3)), null, () -> card.setDamage(10), UnlockAction.NONE),
 			new Step(new TranslatableComponent(Helper.tutorial(4)),
 					new Rect((w, h) -> w / 2 + 19, (w, h) -> h / 2 - 36, 20, 20)),
 			new Step(new TranslatableComponent(Helper.tutorial(5)),
 					new Rect((w, h) -> w / 2 + 18, (w, h) -> h / 2 - 7, 20, 20)),
 			new Step(new TranslatableComponent(Helper.tutorial(6)),
-					new Rect((w, h) -> w / 2 - 31, (w, h) -> h / 2 - 7, 20, 20)) };
+					new Rect((w, h) -> w / 2 - 31, (w, h) -> h / 2 - 7, 20, 20)),
+			new Step(new TranslatableComponent(Helper.tutorial(7)),
+					new Rect((w, h) -> w / 2 + 35, (w, h) -> h / 2 - 50, 20, 100)),
+			new Step(new TranslatableComponent(Helper.tutorial(8)), new Rect(4, 4, 24, 24)),
+			new Step(new TranslatableComponent(Helper.tutorial(9)),
+					new Rect((w, h) -> w / 2 - 40, (w, h) -> h / 2 + 10, 86, 40)),
+			new Step(new TranslatableComponent(Helper.tutorial(10))),
+			new Step(new TranslatableComponent(Helper.tutorial(11)), new Rect((w, h) -> 0, (w, h) -> h / 2, 500, 500)),
+			new Step(new TranslatableComponent(Helper.tutorial(12)),
+					new Rect((w, h) -> w - 19, (w, h) -> h - 110, 18, 62)),
+			new Step(new TranslatableComponent(Helper.tutorial(13)),
+					new Rect((w, h) -> w / 2 - 130, (w, h) -> h - 54, 260, 50)),
+			new Step(new TranslatableComponent(Helper.tutorial(14)),
+					new Rect((w, h) -> w / 2 - 130, (w, h) -> h - 118, 260, 52)),
+			new Step(new TranslatableComponent(Helper.tutorial(15))),
+			new Step(new TranslatableComponent(Helper.tutorial(16),
+					Cards.getInstance(true).get(EntityType.PLAYER).getHealth())),
+			new Step(new TranslatableComponent(Helper.tutorial(17)),
+					new Rect((w, h) -> w - 210, (w, h) -> h - 66, 80, 12)),
+			new Step(new TranslatableComponent(Helper.tutorial(18))),
+			new Step(new TranslatableComponent(Helper.tutorial(19)), null, null, UnlockAction.PLAY_CARD),
+			new Step(new TranslatableComponent(Helper.tutorial(20)),
+					new Rect((w, h) -> w - 26, (w, h) -> h / 2 - 12, 24, 24)),
+			new Step(new TranslatableComponent(Helper.tutorial(21)), null, null, UnlockAction.END_TURN),
+			new Step(new TranslatableComponent(Helper.tutorial(22))),
+			new Step(new TranslatableComponent(Helper.tutorial(23)), null, null, UnlockAction.GAME_OVER) };
 
 	public GameTutorial(GameScreen screen, int initialStep) {
 		this.screen = screen;
@@ -82,9 +108,23 @@ public class GameTutorial implements GuiEventListener, NarratableEntry {
 	}
 
 	private void initSteps() {
-		for (int i = 0; i < index; i++) {
+		for (int i = 0; i <= index; i++) {
 			if (steps[i].action != null) {
 				steps[i].action.run();
+			}
+			steps[i].locked = false;
+		}
+	}
+
+	public void unlock(UnlockAction action) {
+		for (int i = index + 1; i < steps.length; i++) {
+			if (steps[i].locked) {
+				if (steps[i].unlockAction == action) {
+					steps[i].locked = false;
+					index = i;
+					screen.setTutorial(index);
+				}
+				return;
 			}
 		}
 	}
@@ -122,8 +162,6 @@ public class GameTutorial implements GuiEventListener, NarratableEntry {
 	}
 
 	public void tick() {
-		timer++;
-
 		card.tick();
 
 		steps[index].tick();
@@ -131,7 +169,7 @@ public class GameTutorial implements GuiEventListener, NarratableEntry {
 	}
 
 	public void render(PoseStack poseStack, int mouseX, int mouseY, BufferSource source, float partialTick) {
-		if (index > 1) {
+		if (index > 1 && index < 10) {
 			poseStack.pushPose();
 			poseStack.translate(0, 0, 10);
 			card.render(poseStack, mouseX, mouseY, source, partialTick);
@@ -229,24 +267,28 @@ public class GameTutorial implements GuiEventListener, NarratableEntry {
 	}
 
 	private class Step {
-
 		private Rect highlight;
 		private Component text;
 		private Runnable action;
 		private int timer;
+		private boolean locked;
+		private UnlockAction unlockAction;
 
-		private Step(Component text, Rect highlight, Runnable action) {
+		private Step(Component text, Rect highlight, Runnable action, UnlockAction unlockAction) {
 			this.text = text;
 			this.highlight = highlight;
 			this.action = action;
+			this.unlockAction = unlockAction;
+			if (unlockAction != UnlockAction.NONE)
+				locked = true;
 		}
 
 		private Step(Component text, Rect highlight) {
-			this(text, highlight, null);
+			this(text, highlight, null, UnlockAction.NONE);
 		}
 
 		private Step(Component text) {
-			this(text, null, null);
+			this(text, null);
 		}
 
 		private void tick() {
@@ -331,13 +373,14 @@ public class GameTutorial implements GuiEventListener, NarratableEntry {
 		public void onPress() {
 			int prev = index;
 			if (forward) {
-				index = Math.min(steps.length - 1, index + 1);
+				if (index + 1 < steps.length && !steps[index + 1].locked)
+					index++;
 			} else {
 				index = Math.max(0, index - 1);
 			}
 
-			if (prev != index) {
-				Network.INSTANCE.sendToServer(new SetTutorialStepMessage(screen.getPos(), index));
+			if (index > prev) {
+				screen.setTutorial(index);
 			}
 		}
 
@@ -352,11 +395,20 @@ public class GameTutorial implements GuiEventListener, NarratableEntry {
 			pPoseStack.translate(0, 0, 200);
 			RenderSystem.setShader(GameRenderer::getPositionTexShader);
 			RenderSystem.setShaderTexture(0, TEXTURE);
-
+			setShaderColor();
 			RenderSystem.enableDepthTest();
-			RenderSystem.setShaderColor(isHovered ? 0.6f : 1, isHovered ? 0.6f : 1, 1, 1);
 			blit(pPoseStack, x, y, forward ? 0 : ARROW_SIZE, 0, width, height, ARROW_SIZE * 2, ARROW_SIZE);
 			pPoseStack.popPose();
+		}
+
+		private void setShaderColor() {
+			if ((forward && (index >= steps.length - 1 || steps[index + 1].locked)) || (!forward && index == 0)) {
+				RenderSystem.setShaderColor(0.1f, 0.1f, 0.1f, 1);
+			} else if (isHovered) {
+				RenderSystem.setShaderColor(0.6f, 0.6f, 1, 1);
+			} else {
+				RenderSystem.setShaderColor(1, 1, 1, 1);
+			}
 		}
 
 	}
