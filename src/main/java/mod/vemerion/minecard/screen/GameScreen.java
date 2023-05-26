@@ -537,6 +537,16 @@ public class GameScreen extends Screen implements GameClient {
 		return current.equals(minecraft.player.getUUID());
 	}
 
+	private PoseStack transformCard(ClientCard card, float yOffset, int mouseX, int mouseY, float partialTicks) {
+		var poseStack = new PoseStack();
+		if (card.contains(mouseX, mouseY) && selectedCard == null) {
+			var position = card.getPosition(partialTicks);
+			poseStack.translate(-position.x - CARD_WIDTH / 2, -position.y - CARD_HEIGHT / 2 + yOffset, 50);
+			poseStack.scale(2, 2, 2);
+		}
+		return poseStack;
+	}
+
 	@Override
 	public void render(PoseStack poseStack, int mouseX, int mouseY, float unused) {
 		float partialTicks = this.minecraft.getFrameTime();
@@ -549,12 +559,19 @@ public class GameScreen extends Screen implements GameClient {
 
 			// Cards
 			for (var card : playerState.board) {
-				if (card.getType() == null || !card.isDead())
-					card.render(new PoseStack(), mouseX, mouseY, source, partialTicks);
+				if (card.getType() == null || !card.isDead()) {
+					card.render(transformCard(card, 0, mouseX, mouseY, partialTicks), mouseX, mouseY, source,
+							partialTicks);
+				}
 			}
-			for (var card : playerState.hand)
-				if (card.getType() == null || !card.isDead() || card.isSpell())
-					card.render(new PoseStack(), mouseX, mouseY, source, partialTicks);
+			for (var card : playerState.hand) {
+				if (card.getType() == null || !card.isDead() || card.isSpell()) {
+					card.render(
+							!enemy && !isSpectator ? transformCard(card, -CARD_HEIGHT / 2, mouseX, mouseY, partialTicks)
+									: new PoseStack(),
+							mouseX, mouseY, source, partialTicks);
+				}
+			}
 
 			// Deck
 			float deckX = enemy ? DECK_HORIZONTAL_OFFSET : width - DECK_HORIZONTAL_OFFSET * 2.3f;
