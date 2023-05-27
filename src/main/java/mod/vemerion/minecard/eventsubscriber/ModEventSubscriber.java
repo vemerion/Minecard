@@ -10,6 +10,7 @@ import mod.vemerion.minecard.network.CombatMessage;
 import mod.vemerion.minecard.network.DrawCardsMessage;
 import mod.vemerion.minecard.network.EndTurnMessage;
 import mod.vemerion.minecard.network.GameOverMessage;
+import mod.vemerion.minecard.network.HistoryMessage;
 import mod.vemerion.minecard.network.Network;
 import mod.vemerion.minecard.network.NewTurnMessage;
 import mod.vemerion.minecard.network.OpenGameMessage;
@@ -83,6 +84,8 @@ public class ModEventSubscriber {
 				PlayerChoiceResponseMessage::decode, PlayerChoiceResponseMessage::handle);
 		Network.INSTANCE.registerMessage(id++, SetTutorialStepMessage.class, SetTutorialStepMessage::encode,
 				SetTutorialStepMessage::decode, SetTutorialStepMessage::handle);
+		Network.INSTANCE.registerMessage(id++, HistoryMessage.class, HistoryMessage::encode, HistoryMessage::decode,
+				HistoryMessage::handle);
 
 	}
 }

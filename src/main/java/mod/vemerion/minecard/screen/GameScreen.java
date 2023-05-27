@@ -21,6 +21,7 @@ import mod.vemerion.minecard.game.Card;
 import mod.vemerion.minecard.game.CardProperty;
 import mod.vemerion.minecard.game.Cards;
 import mod.vemerion.minecard.game.GameUtil;
+import mod.vemerion.minecard.game.HistoryEntry;
 import mod.vemerion.minecard.game.MessagePlayerState;
 import mod.vemerion.minecard.helper.Helper;
 import mod.vemerion.minecard.network.AttackMessage;
@@ -66,6 +67,7 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.FastColor;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.Vec2;
@@ -102,7 +104,9 @@ public class GameScreen extends Screen implements GameClient {
 	private BlockPos pos;
 	private boolean isSpectator = true;
 	private Choices choices = new Choices();
+	private History history = new History();
 	private int tutorialStep;
+	private List<HistoryEntry> historyList;
 
 	// Widgets
 	private PopupText popup;
@@ -116,9 +120,10 @@ public class GameScreen extends Screen implements GameClient {
 
 	private float fovModifier = 1;
 
-	public GameScreen(List<MessagePlayerState> list, int tutorialStep, BlockPos pos) {
+	public GameScreen(List<MessagePlayerState> list, int tutorialStep, List<HistoryEntry> historyList, BlockPos pos) {
 		super(TITLE);
 		this.tutorialStep = tutorialStep;
+		this.historyList = historyList;
 		this.animations = new ArrayList<>();
 		this.state = initState(list);
 		this.pos = pos;
@@ -359,6 +364,11 @@ public class GameScreen extends Screen implements GameClient {
 	@Override
 	public void playerChoice(Choice choice) {
 		choices.add(choice);
+	}
+
+	@Override
+	public void history(HistoryEntry entry) {
+		historyList.add(entry);
 	}
 
 	private void updatePropertiesAnimations(Map<CardProperty, Integer> old, ClientCard card) {
@@ -610,6 +620,7 @@ public class GameScreen extends Screen implements GameClient {
 			animation.render(mouseX, mouseY, source, partialTicks);
 
 		choices.render(poseStack, mouseX, mouseY, source, partialTicks);
+		history.render(poseStack, mouseX, mouseY, source, partialTicks);
 
 		popup.render(poseStack, mouseX, mouseY, partialTicks);
 
@@ -987,6 +998,45 @@ public class GameScreen extends Screen implements GameClient {
 				}
 			}
 			return false;
+		}
+	}
+
+	private class History {
+		private static final int ENTRY_SIZE = 10;
+		private static final int PADDING = 5;
+		private static final int BORDER = 1;
+		private static final int X = 10;
+		private static final int TOTAL_SIZE = ENTRY_SIZE + PADDING;
+		private static final int MAX_ENTRIES = 15;
+
+		private void render(PoseStack poseStack, int mouseX, int mouseY, BufferSource source, float partialTick) {
+			int y = (int) (height / 2 + ENTRY_SIZE / 2
+					- (Math.min(MAX_ENTRIES, historyList.size()) - 1) / 2f * TOTAL_SIZE);
+			for (int i = historyList.size() - 1; i >= Math.max(0, historyList.size() - MAX_ENTRIES); i--) {
+				var entry = historyList.get(i);
+				var entity = CardItemRenderer.getEntity(entry.getCard(), minecraft.level);
+				poseStack.pushPose();
+				poseStack.translate(X, y, 500);
+				float scale = getScale(entity.getType().getDimensions());
+				poseStack.scale(scale, -scale, scale);
+				poseStack.mulPose(new Quaternion(0, 20, 0, true));
+				minecraft.getEntityRenderDispatcher().getRenderer(entity).render(entity, 0, 0, poseStack, source,
+						LightTexture.FULL_BRIGHT);
+				poseStack.popPose();
+				poseStack.pushPose();
+				poseStack.translate(0, 0, 600);
+				int color = 0xff00aaaa;
+				fill(poseStack, X - ENTRY_SIZE / 2, y, X + ENTRY_SIZE / 2, y + BORDER, color); // Bottom
+				fill(poseStack, X - ENTRY_SIZE / 2, y - ENTRY_SIZE - BORDER, X + ENTRY_SIZE / 2, y - ENTRY_SIZE, color); // Top
+				fill(poseStack, X - ENTRY_SIZE / 2 - BORDER, y, X - ENTRY_SIZE / 2, y - ENTRY_SIZE, color); // Left
+				fill(poseStack, X + ENTRY_SIZE / 2, y, X + ENTRY_SIZE / 2 + BORDER, y - ENTRY_SIZE, color); // Right
+				poseStack.popPose();
+				y += TOTAL_SIZE;
+			}
+		}
+
+		private float getScale(EntityDimensions dimensions) {
+			return Math.min(ENTRY_SIZE / dimensions.width, ENTRY_SIZE / dimensions.height);
 		}
 	}
 

@@ -12,6 +12,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import mod.vemerion.minecard.network.CombatMessage;
+import mod.vemerion.minecard.network.HistoryMessage;
 import mod.vemerion.minecard.network.PlaceCardMessage;
 import mod.vemerion.minecard.network.UpdateCardsMessage;
 import mod.vemerion.minecard.network.UpdateDecksMessage;
@@ -24,21 +25,25 @@ public class GameState {
 			.lazyInitializedCodec(() -> RecordCodecBuilder.create(instance -> instance
 					.group(Codec.list(PlayerState.CODEC).fieldOf("playerStates").forGetter(GameState::getPlayerStates),
 							Codec.INT.fieldOf("turn").forGetter(GameState::getTurn),
-							Codec.INT.fieldOf("tutorialStep").forGetter(GameState::getTutorialStep))
+							Codec.INT.fieldOf("tutorialStep").forGetter(GameState::getTutorialStep),
+							Codec.list(HistoryEntry.CODEC).fieldOf("history").forGetter(GameState::getHistory))
 					.apply(instance, GameState::new)));
 
 	public static final int MAX_HAND_SIZE = 10;
 	public static final int MAX_BOARD_SIZE = 8;
+	public static final int MAX_HISTORY_SIZE = 20;
 
 	private List<PlayerState> playerStates;
 	private int turn;
 	private int tutorialStep;
+	private List<HistoryEntry> history;
 	private Random random;
 
-	public GameState(List<PlayerState> playerStates, int turn, int tutorialStep) {
+	public GameState(List<PlayerState> playerStates, int turn, int tutorialStep, List<HistoryEntry> history) {
 		this.playerStates = new ArrayList<>(playerStates);
 		this.turn = turn;
 		this.tutorialStep = tutorialStep;
+		this.history = new ArrayList<>(history);
 		random = new Random();
 
 		for (var playerState : playerStates)
@@ -46,7 +51,7 @@ public class GameState {
 	}
 
 	public GameState() {
-		this(new ArrayList<>(), 0, -1);
+		this(new ArrayList<>(), 0, -1, new ArrayList<>());
 	}
 
 	public Random getRandom() {
@@ -63,6 +68,22 @@ public class GameState {
 
 	public int getTutorialStep() {
 		return tutorialStep;
+	}
+
+	public List<HistoryEntry> getHistory() {
+		return history;
+	}
+
+	public void addHistory(List<Receiver> receivers, HistoryEntry entry) {
+		history.add(entry);
+
+		if (history.size() > MAX_HISTORY_SIZE)
+			history.remove(0);
+
+		var msg = new HistoryMessage(entry);
+		for (var receiver : receivers) {
+			receiver.receiver(msg);
+		}
 	}
 
 	public boolean isTutorial() {
@@ -255,6 +276,8 @@ public class GameState {
 			receiver.receiver(
 					new CombatMessage(current.getId(), attackerCard.getId(), enemy.getId(), targetCard.getId()));
 		}
+
+		addHistory(receivers, new HistoryEntry(HistoryEntry.Type.ATTACK, attackerCard, List.of(targetCard)));
 	}
 
 	public void choice(List<Receiver> receivers, int choiceId, int selected) {

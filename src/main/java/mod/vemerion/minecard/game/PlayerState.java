@@ -247,6 +247,8 @@ public class PlayerState {
 		card.getAbility().onSummon(receivers, this, card);
 
 		choices = null;
+
+		game.addHistory(receivers, new HistoryEntry(HistoryEntry.Type.PLAY_CARD, card, List.of()));
 	}
 
 	public MessagePlayerState toMessage(boolean hide) {

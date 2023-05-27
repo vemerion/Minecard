@@ -6,13 +6,14 @@ import java.util.UUID;
 
 import mod.vemerion.minecard.game.Card;
 import mod.vemerion.minecard.game.CardProperty;
+import mod.vemerion.minecard.game.HistoryEntry;
 import mod.vemerion.minecard.game.MessagePlayerState;
 import mod.vemerion.minecard.game.ability.CardAbility;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 
 public interface GameClient {
-	
+
 	public static record Choice(int id, CardAbility ability, List<Card> cards, boolean targeting) {
 	}
 
@@ -42,4 +43,5 @@ public interface GameClient {
 
 	public void playerChoice(Choice choice);
 
+	public void history(HistoryEntry entry);
 }

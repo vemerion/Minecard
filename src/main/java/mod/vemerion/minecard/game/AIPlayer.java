@@ -234,4 +234,9 @@ public class AIPlayer implements GameClient {
 	public void playerChoice(Choice choice) {
 		choices.add(choice);
 	}
+
+	@Override
+	public void history(HistoryEntry entry) {
+		
+	}
 }
