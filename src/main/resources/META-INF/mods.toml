@@ -29,6 +29,8 @@ displayURL="https://github.com/vemerion/Minecard" #optional
 # A file name (in the root of the mod JAR) containing a logo for display
 logoFile="logo.png" #optional
 # A text field displayed in the mod UI
+credits="Thanks to Sxuuz for providing awesome textures for the mod!" #optional
+# A text field displayed in the mod UI
 authors="Vemerion" #optional
 # The description text for the mod (multi line!) (#mandatory)
 description='''

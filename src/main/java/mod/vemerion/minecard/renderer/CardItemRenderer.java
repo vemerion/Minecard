@@ -46,8 +46,9 @@ public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 	private static record DescriptionSize(float scale, int maxWidth, int maxLines) {
 	}
 
-	private static final DescriptionSize[] DESCRIPTION_SIZES = { new DescriptionSize(0.007f, 85, 3),
-			new DescriptionSize(0.006f, 98, 4), new DescriptionSize(0.004f, 148, 6) };
+	private static final DescriptionSize[] DESCRIPTION_SIZES = { new DescriptionSize(0.007f, 80, 3),
+			new DescriptionSize(0.006f, 90, 4), new DescriptionSize(0.005f, 110, 5),
+			new DescriptionSize(0.004f, 135, 6) };
 
 	private static final Map<EntityType<?>, Entity> CACHE = new HashMap<>();
 
@@ -107,7 +108,7 @@ public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 			var lines = mc.font.split(card.getAbility().getDescription(), size.maxWidth);
 			if (lines.size() <= size.maxLines || i == DESCRIPTION_SIZES.length - 1) {
 				pose.pushPose();
-				pose.translate(0.105, -0.53, 0.01);
+				pose.translate(0.131, -0.521, 0.01);
 				pose.scale(size.scale, -size.scale, size.scale);
 				float y = 0;
 				for (FormattedCharSequence line : lines) {
@@ -130,7 +131,7 @@ public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 				pose.scale(scale, scale, 1);
 				pose.translate(-0.2, 0.5, 0);
 			}
-			renderValue(itemRenderer, mc.font, Items.STONE_SWORD, card.getDamage(), 0.21f, -0.42f, light, overlay, pose,
+			renderValue(itemRenderer, mc.font, Items.STONE_SWORD, card.getDamage(), 0.21f, -0.41f, light, overlay, pose,
 					buffer, calcDamageColor(card));
 			pose.popPose();
 			renderValue(itemRenderer, mc.font, Items.GLISTERING_MELON_SLICE, card.getHealth(), 0.6f, -0.42f, light,
