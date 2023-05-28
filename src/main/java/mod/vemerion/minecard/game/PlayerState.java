@@ -248,7 +248,8 @@ public class PlayerState {
 
 		choices = null;
 
-		game.addHistory(receivers, new HistoryEntry(HistoryEntry.Type.PLAY_CARD, id, card, List.of()));
+		if (!card.isSpell())
+			game.addHistory(receivers, new HistoryEntry(HistoryEntry.Type.PLAY_CARD, id, card, List.of()));
 	}
 
 	public MessagePlayerState toMessage(boolean hide) {

@@ -8,6 +8,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import mod.vemerion.minecard.game.Card;
+import mod.vemerion.minecard.game.HistoryEntry;
 import mod.vemerion.minecard.game.LazyCardType;
 import mod.vemerion.minecard.game.PlayerState;
 import mod.vemerion.minecard.game.Receiver;
@@ -66,7 +67,12 @@ public class SummonCardAbility extends CardAbility {
 			}
 		}
 
-		state.getGame().summonCard(receivers, summon.get(false).create(), id, leftId);
+		var summoned = summon.get(false).create();
+
+		state.getGame().addHistory(receivers,
+				new HistoryEntry(HistoryEntry.Type.ABILITY, state.getId(), card, List.of(summoned)));
+
+		state.getGame().summonCard(receivers, summoned, id, leftId);
 	}
 
 	public LazyCardType getSummon() {

@@ -13,6 +13,7 @@ import mod.vemerion.minecard.game.Card;
 import mod.vemerion.minecard.game.CardProperty;
 import mod.vemerion.minecard.game.CardVisibility;
 import mod.vemerion.minecard.game.GameUtil;
+import mod.vemerion.minecard.game.HistoryEntry;
 import mod.vemerion.minecard.game.LazyCardType;
 import mod.vemerion.minecard.game.PlayerState;
 import mod.vemerion.minecard.game.Receiver;
@@ -140,6 +141,9 @@ public class ModifyAbility extends CardAbility {
 				state.getGame().heal(receivers, selected, healthChange);
 			}
 		}
+
+		state.getGame().addHistory(receivers, new HistoryEntry(HistoryEntry.Type.ABILITY, state.getId(), card,
+				selectedCards.stream().filter(c -> state.getGame().isInBoard(c) || c.isDead()).toList()));
 
 		for (var receiver : receivers) {
 			state.getGame().updateCards(receiver, selectedCards);

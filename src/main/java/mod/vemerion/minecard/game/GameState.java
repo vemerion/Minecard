@@ -96,6 +96,14 @@ public class GameState {
 		tutorialStep = step;
 	}
 
+	public boolean isInBoard(Card card) {
+		for (var playerState : playerStates)
+			for (var c : playerState.getBoard())
+				if (c.getId() == card.getId())
+					return true;
+		return false;
+	}
+
 	public PlayerState getYourPlayerState(UUID id) {
 		for (var playerState : playerStates)
 			if (playerState.getId().equals(id))

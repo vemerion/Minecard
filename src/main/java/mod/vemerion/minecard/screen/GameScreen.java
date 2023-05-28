@@ -1066,22 +1066,22 @@ public class GameScreen extends Screen implements GameClient {
 
 		private void renderTargets(HistoryEntry entry, int y, ItemStack stack, PoseStack poseStack, BufferSource source,
 				float partialTick) {
-			if (entry.getTargets().isEmpty())
-				return;
 
 			// Targets
-			var targets = entry.getTargets();
-			float xStart = X + ENTRY_SIZE / 2 + 3 + CARD_WIDTH * ENTRY_CARD_SCALE + CARDS_SPACING;
-			float targetScale = Math.min(ENTRY_CARD_SCALE,
-					(width - xStart - CARDS_SPACING * targets.size()) / (targets.size() * CARD_WIDTH));
-			float yStart = y + (ENTRY_CARD_SCALE - targetScale) * CARD_HEIGHT / 2;
-			for (int i = 0; i < targets.size(); i++) {
-				var target = new ClientCard(targets.get(i), Vec2.ZERO, GameScreen.this);
-				poseStack.pushPose();
-				poseStack.translate(xStart + i * (targetScale * CARD_WIDTH + CARDS_SPACING), yStart, 500);
-				poseStack.scale(targetScale, targetScale, targetScale);
-				target.render(poseStack, 0, 0, source, partialTick);
-				poseStack.popPose();
+			if (!entry.getTargets().isEmpty()) {
+				var targets = entry.getTargets();
+				float xStart = X + ENTRY_SIZE / 2 + 3 + CARD_WIDTH * ENTRY_CARD_SCALE + CARDS_SPACING;
+				float targetScale = Math.min(ENTRY_CARD_SCALE,
+						(width - xStart - CARDS_SPACING * targets.size()) / (targets.size() * CARD_WIDTH));
+				float yStart = y + (ENTRY_CARD_SCALE - targetScale) * CARD_HEIGHT / 2;
+				for (int i = 0; i < targets.size(); i++) {
+					var target = new ClientCard(targets.get(i), Vec2.ZERO, GameScreen.this);
+					poseStack.pushPose();
+					poseStack.translate(xStart + i * (targetScale * CARD_WIDTH + CARDS_SPACING), yStart, 500);
+					poseStack.scale(targetScale, targetScale, targetScale);
+					target.render(poseStack, 0, 0, source, partialTick);
+					poseStack.popPose();
+				}
 			}
 
 			// Item

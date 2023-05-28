@@ -13,6 +13,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import mod.vemerion.minecard.game.Card;
 import mod.vemerion.minecard.game.CardVisibility;
+import mod.vemerion.minecard.game.HistoryEntry;
 import mod.vemerion.minecard.game.PlayerState;
 import mod.vemerion.minecard.game.Receiver;
 import mod.vemerion.minecard.init.ModCardAbilities;
@@ -103,6 +104,9 @@ public class CopyCardsAbility extends CardAbility {
 				}).map(c -> c.getId()).collect(Collectors.toList()), anim));
 			}
 		});
+
+		state.getGame().addHistory(receivers, new HistoryEntry(HistoryEntry.Type.ABILITY, state.getId(), card,
+				selected.stream().filter(c -> state.getGame().isInBoard(c)).toList()));
 
 		if (destroyOriginal)
 			for (var c : selected)

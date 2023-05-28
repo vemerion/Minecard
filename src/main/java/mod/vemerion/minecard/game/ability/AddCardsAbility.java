@@ -8,6 +8,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import mod.vemerion.minecard.game.Card;
+import mod.vemerion.minecard.game.HistoryEntry;
 import mod.vemerion.minecard.game.LazyCardType;
 import mod.vemerion.minecard.game.PlayerState;
 import mod.vemerion.minecard.game.Receiver;
@@ -48,8 +49,11 @@ public class AddCardsAbility extends CardAbility {
 
 	@Override
 	protected void invoke(List<Receiver> receivers, PlayerState state, Card card, @Nullable Card other) {
-		state.addCards(receivers,
-				List.of(toAdd.get(state.getGame().getRandom().nextInt(toAdd.size())).get(false).create()));
+		var created = toAdd.get(state.getGame().getRandom().nextInt(toAdd.size())).get(false).create();
+		state.addCards(receivers, List.of(created));
+
+		state.getGame().addHistory(receivers,
+				new HistoryEntry(HistoryEntry.Type.ABILITY, state.getId(), card, List.of(created)));
 	}
 
 	public List<LazyCardType> getCards() {

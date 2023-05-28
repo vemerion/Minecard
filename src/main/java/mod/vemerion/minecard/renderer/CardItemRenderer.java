@@ -126,7 +126,7 @@ public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 		if (!card.isSpell()) {
 			pose.pushPose();
 			if (card.canAttack()) {
-				float scale = Mth.sin((mc.level.getGameTime() + mc.getFrameTime()) / 10) * 0.2f + 1;
+				float scale = Mth.sin((mc.level.getGameTime() % 100000 + mc.getFrameTime()) / 10) * 0.2f + 1;
 				pose.translate(0.2, -0.5, 0);
 				pose.scale(scale, scale, 1);
 				pose.translate(-0.2, 0.5, 0);
