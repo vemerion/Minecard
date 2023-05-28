@@ -1025,7 +1025,7 @@ public class GameScreen extends Screen implements GameClient {
 				poseStack.popPose();
 				poseStack.pushPose();
 				poseStack.translate(0, 0, 600);
-				int color = 0xff00aaaa;
+				int color = state.get(entry.getPlayerId()).isTop ? 0xffff2020 : 0xff00ff70;
 				fill(poseStack, X - ENTRY_SIZE / 2, y, X + ENTRY_SIZE / 2, y + BORDER, color); // Bottom
 				fill(poseStack, X - ENTRY_SIZE / 2, y - ENTRY_SIZE - BORDER, X + ENTRY_SIZE / 2, y - ENTRY_SIZE, color); // Top
 				fill(poseStack, X - ENTRY_SIZE / 2 - BORDER, y, X - ENTRY_SIZE / 2, y - ENTRY_SIZE, color); // Left

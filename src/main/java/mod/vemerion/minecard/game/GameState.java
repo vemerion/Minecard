@@ -277,7 +277,8 @@ public class GameState {
 					new CombatMessage(current.getId(), attackerCard.getId(), enemy.getId(), targetCard.getId()));
 		}
 
-		addHistory(receivers, new HistoryEntry(HistoryEntry.Type.ATTACK, attackerCard, List.of(targetCard)));
+		addHistory(receivers,
+				new HistoryEntry(HistoryEntry.Type.ATTACK, current.getId(), attackerCard, List.of(targetCard)));
 	}
 
 	public void choice(List<Receiver> receivers, int choiceId, int selected) {
