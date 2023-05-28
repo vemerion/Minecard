@@ -73,6 +73,14 @@ public class Card {
 		this.id = counter++;
 	}
 
+	public Card(Card other) {
+		this(other.getType(), other.getCost(), other.getOriginalCost(), other.getHealth(), other.getMaxHealth(),
+				other.getOriginalHealth(), other.getDamage(), other.getOriginalDamage(), other.isReady(),
+				new HashMap<>(other.getProperties()), other.getAbility(), new HashMap<>(other.getEquipment()),
+				other.getAdditionalData());
+		this.id = other.getId();
+	}
+
 	public EntityType<?> getType() {
 		return type;
 	}

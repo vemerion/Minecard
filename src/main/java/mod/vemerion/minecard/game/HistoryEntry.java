@@ -46,8 +46,8 @@ public class HistoryEntry {
 	public HistoryEntry(Type type, UUID playerId, Card card, List<Card> targets) {
 		this.type = type;
 		this.playerId = playerId;
-		this.card = card;
-		this.targets = targets;
+		this.card = new Card(card);
+		this.targets = targets.stream().map(c -> new Card(c)).toList();
 	}
 
 	public Type getType() {

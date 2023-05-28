@@ -67,8 +67,10 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.FastColor;
 import net.minecraft.util.Mth;
-import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.Vec2;
 import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
@@ -1008,6 +1010,8 @@ public class GameScreen extends Screen implements GameClient {
 		private static final int X = 10;
 		private static final int TOTAL_SIZE = ENTRY_SIZE + PADDING;
 		private static final int MAX_ENTRIES = 15;
+		private static final int ENTRY_CARD_SCALE = 2;
+		private static final int CARDS_SPACING = 10;
 
 		private void render(PoseStack poseStack, int mouseX, int mouseY, BufferSource source, float partialTick) {
 			int y = (int) (height / 2 + ENTRY_SIZE / 2
@@ -1016,8 +1020,8 @@ public class GameScreen extends Screen implements GameClient {
 				var entry = historyList.get(i);
 				var entity = CardItemRenderer.getEntity(entry.getCard(), minecraft.level);
 				poseStack.pushPose();
-				poseStack.translate(X, y, 500);
-				float scale = getScale(entity.getType().getDimensions());
+				poseStack.translate(X, y + (entity.getType() == EntityType.ITEM ? 6 : 0), 500);
+				float scale = getScale(entity);
 				poseStack.scale(scale, -scale, scale);
 				poseStack.mulPose(new Quaternion(0, 20, 0, true));
 				minecraft.getEntityRenderDispatcher().getRenderer(entity).render(entity, 0, 0, poseStack, source,
@@ -1031,11 +1035,71 @@ public class GameScreen extends Screen implements GameClient {
 				fill(poseStack, X - ENTRY_SIZE / 2 - BORDER, y, X - ENTRY_SIZE / 2, y - ENTRY_SIZE, color); // Left
 				fill(poseStack, X + ENTRY_SIZE / 2, y, X + ENTRY_SIZE / 2 + BORDER, y - ENTRY_SIZE, color); // Right
 				poseStack.popPose();
+
+				if (mouseX > X - ENTRY_SIZE / 2 && mouseX < X + ENTRY_SIZE / 2 && mouseY > y - ENTRY_SIZE
+						&& mouseY < y) {
+					renderCards(entry, y, poseStack, source, partialTick);
+				}
+
 				y += TOTAL_SIZE;
 			}
 		}
 
-		private float getScale(EntityDimensions dimensions) {
+		private void renderCards(HistoryEntry entry, int y, PoseStack poseStack, BufferSource source,
+				float partialTick) {
+			y = Mth.clamp(y - CARD_HEIGHT / 2 * ENTRY_CARD_SCALE - ENTRY_SIZE / 2, 0,
+					height - CARD_HEIGHT * ENTRY_CARD_SCALE);
+			var card = new ClientCard(entry.getCard(), Vec2.ZERO, GameScreen.this);
+			poseStack.pushPose();
+			poseStack.translate(X + ENTRY_SIZE / 2 + 3, y, 500);
+			poseStack.scale(ENTRY_CARD_SCALE, ENTRY_CARD_SCALE, ENTRY_CARD_SCALE);
+			card.render(poseStack, 0, 0, source, partialTick);
+			poseStack.popPose();
+
+			if (entry.getType() != HistoryEntry.Type.PLAY_CARD) {
+				renderTargets(entry, y,
+						entry.getType() == HistoryEntry.Type.ATTACK ? Items.NETHERITE_SWORD.getDefaultInstance()
+								: Items.BOOK.getDefaultInstance(),
+						poseStack, source, partialTick);
+			}
+		}
+
+		private void renderTargets(HistoryEntry entry, int y, ItemStack stack, PoseStack poseStack, BufferSource source,
+				float partialTick) {
+			if (entry.getTargets().isEmpty())
+				return;
+
+			// Targets
+			var targets = entry.getTargets();
+			float xStart = X + ENTRY_SIZE / 2 + 3 + CARD_WIDTH * ENTRY_CARD_SCALE + CARDS_SPACING;
+			float targetScale = Math.min(ENTRY_CARD_SCALE,
+					(width - xStart - CARDS_SPACING * targets.size()) / (targets.size() * CARD_WIDTH));
+			float yStart = y + (ENTRY_CARD_SCALE - targetScale) * CARD_HEIGHT / 2;
+			for (int i = 0; i < targets.size(); i++) {
+				var target = new ClientCard(targets.get(i), Vec2.ZERO, GameScreen.this);
+				poseStack.pushPose();
+				poseStack.translate(xStart + i * (targetScale * CARD_WIDTH + CARDS_SPACING), yStart, 500);
+				poseStack.scale(targetScale, targetScale, targetScale);
+				target.render(poseStack, 0, 0, source, partialTick);
+				poseStack.popPose();
+			}
+
+			// Item
+			poseStack.pushPose();
+			poseStack.translate(X + ENTRY_SIZE / 2 + 3 + CARD_WIDTH * ENTRY_CARD_SCALE + CARDS_SPACING / 2,
+					y + CARD_HEIGHT / 2 * ENTRY_CARD_SCALE, 600);
+			poseStack.scale(40, -40, 40);
+			itemRenderer.renderStatic(stack, ItemTransforms.TransformType.GUI, LightTexture.FULL_BRIGHT,
+					OverlayTexture.NO_OVERLAY, poseStack, source, 0);
+			poseStack.popPose();
+		}
+
+		private float getScale(Entity entity) {
+			if (entity.getType() == EntityType.ITEM) {
+				return 25;
+			}
+
+			var dimensions = entity.getType().getDimensions();
 			return Math.min(ENTRY_SIZE / dimensions.width, ENTRY_SIZE / dimensions.height);
 		}
 	}
