@@ -85,12 +85,16 @@ public class GameTutorial implements GuiEventListener, NarratableEntry {
 			new Step(new TranslatableComponent(Helper.tutorial(17)),
 					new Rect((w, h) -> w - 210, (w, h) -> h - 66, 80, 12)),
 			new Step(new TranslatableComponent(Helper.tutorial(18))),
-			new Step(new TranslatableComponent(Helper.tutorial(19)), null, null, UnlockAction.PLAY_CARD),
-			new Step(new TranslatableComponent(Helper.tutorial(20)),
-					new Rect((w, h) -> w - 26, (w, h) -> h / 2 - 12, 24, 24)),
-			new Step(new TranslatableComponent(Helper.tutorial(21)), null, null, UnlockAction.END_TURN),
+			new Step(new TranslatableComponent(Helper.tutorial(19)), new Rect((w, h) -> 2, (w, h) -> 0, 16, 320), null,
+					UnlockAction.PLAY_CARD),
+			new Step(new TranslatableComponent(Helper.tutorial(20)), new Rect((w, h) -> 2, (w, h) -> 0, 16, 320)),
+			new Step(new TranslatableComponent(Helper.tutorial(21)), new Rect((w, h) -> 2, (w, h) -> 0, 16, 320)),
 			new Step(new TranslatableComponent(Helper.tutorial(22))),
-			new Step(new TranslatableComponent(Helper.tutorial(23)), null, null, UnlockAction.GAME_OVER) };
+			new Step(new TranslatableComponent(Helper.tutorial(23)),
+					new Rect((w, h) -> w - 26, (w, h) -> h / 2 - 12, 24, 24)),
+			new Step(new TranslatableComponent(Helper.tutorial(24)), null, null, UnlockAction.END_TURN),
+			new Step(new TranslatableComponent(Helper.tutorial(25))),
+			new Step(new TranslatableComponent(Helper.tutorial(26)), null, null, UnlockAction.GAME_OVER) };
 
 	public GameTutorial(GameScreen screen, int initialStep) {
 		this.screen = screen;

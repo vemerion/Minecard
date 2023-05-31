@@ -178,7 +178,12 @@ public class ModLanguageProvider extends LanguageProvider {
 		addTutorialStep(
 				"Let's try playing a card! Click on one of the cards in your hand, and then click somewhere on your board.");
 		addTutorialStep(
-				"Great work! Unfortunately, played cards need one turn to get ready before they can attack, so not much more to do than to end the turn.");
+				"Great work! As you might have noticed, an activity entry was added here to the left when you played a card.");
+		addTutorialStep(
+				"Every time you or the opponent plays a card, attacks, or a card ability comes into effect, an entry is added, which you can use to see if you missed anything important.");
+		addTutorialStep("If you hover over an entry, you will get the details of what happened.");
+		addTutorialStep(
+				"Now, back to the game at hand! Unfortunately, played cards need one turn to get ready before they can attack, so not much more to do than to end the turn.");
 		addTutorialStep("Click on the end turn button!");
 		addTutorialStep(
 				"Usually this is when the opponent will make their move, but fortunately for you, the AI is programmed to just pass their turn during the tutorial.");
