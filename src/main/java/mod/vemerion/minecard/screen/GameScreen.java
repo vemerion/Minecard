@@ -94,7 +94,8 @@ public class GameScreen extends Screen implements GameClient {
 	private static final int DECK_VERTICAL_OFFSET = 55;
 	private static final int CARD_PADDING = 4;
 	private static final int INFO_BUTTON_SIZE = 12;
-	private static final int INFO_BUTTON_OFFSET = 10;
+	private static final int INFO_BUTTON_X_OFFSET = 8;
+	private static final int INFO_BUTTON_Y_OFFSET = 15;
 	private static final ResourceLocation INFO_BUTTON_TEXTURE = new ResourceLocation(Main.MODID,
 			"textures/gui/info.png");
 
@@ -551,9 +552,14 @@ public class GameScreen extends Screen implements GameClient {
 
 	private PoseStack transformCard(ClientCard card, float yOffset, int mouseX, int mouseY, float partialTicks) {
 		var poseStack = new PoseStack();
-		if (card.contains(mouseX, mouseY) && selectedCard == null) {
+		if (card.contains(mouseX, mouseY) && selectedCard == null && mouseX > History.X + History.ENTRY_SIZE) {
 			var position = card.getPosition(partialTicks);
-			poseStack.translate(-position.x - CARD_WIDTH / 2, -position.y - CARD_HEIGHT / 2 + yOffset, 50);
+			float xOffset = 0;
+			if (position.x - CARD_WIDTH / 2 < 0)
+				xOffset = -(position.x - CARD_WIDTH / 2);
+			else if (position.x + CARD_WIDTH * 3 / 2 > width)
+				xOffset = width - position.x - CARD_WIDTH * 3 / 2;
+			poseStack.translate(-position.x - CARD_WIDTH / 2 + xOffset, -position.y - CARD_HEIGHT / 2 + yOffset, 550);
 			poseStack.scale(2, 2, 2);
 		}
 		return poseStack;
@@ -631,18 +637,21 @@ public class GameScreen extends Screen implements GameClient {
 		source.endBatch();
 
 		// Info button
-		boolean isHovered = mouseX > INFO_BUTTON_OFFSET && mouseX < INFO_BUTTON_OFFSET + INFO_BUTTON_SIZE
-				&& mouseY > INFO_BUTTON_OFFSET && mouseY < INFO_BUTTON_OFFSET + INFO_BUTTON_SIZE;
+		boolean isHovered = mouseX > width - INFO_BUTTON_X_OFFSET - INFO_BUTTON_SIZE
+				&& mouseX < width - INFO_BUTTON_X_OFFSET
+				&& mouseY > height / 2 - INFO_BUTTON_Y_OFFSET - INFO_BUTTON_SIZE
+				&& mouseY < height / 2 - INFO_BUTTON_Y_OFFSET;
 		if (isHovered) {
 			drawPropertyInfo(poseStack);
+		} else {
+			RenderSystem.setShader(GameRenderer::getPositionTexShader);
+			RenderSystem.setShaderTexture(0, INFO_BUTTON_TEXTURE);
+			RenderSystem.enableDepthTest();
+			RenderSystem.setShaderColor(isHovered ? 0.6f : 1, isHovered ? 0.6f : 1, 1, 1);
+			blit(poseStack, width - INFO_BUTTON_X_OFFSET - INFO_BUTTON_SIZE,
+					height / 2 - INFO_BUTTON_Y_OFFSET - INFO_BUTTON_SIZE, 0, 0, INFO_BUTTON_SIZE, INFO_BUTTON_SIZE,
+					INFO_BUTTON_SIZE, INFO_BUTTON_SIZE);
 		}
-		RenderSystem.setShader(GameRenderer::getPositionTexShader);
-		RenderSystem.setShaderTexture(0, INFO_BUTTON_TEXTURE);
-		RenderSystem.enableDepthTest();
-		RenderSystem.setShaderColor(isHovered ? 0.6f : 1, isHovered ? 0.6f : 1, 1, 1);
-		blit(poseStack, INFO_BUTTON_OFFSET, INFO_BUTTON_OFFSET, 0, 0, INFO_BUTTON_SIZE, INFO_BUTTON_SIZE,
-				INFO_BUTTON_SIZE, INFO_BUTTON_SIZE);
-
 		super.render(poseStack, mouseX, mouseY, partialTicks);
 	}
 
@@ -722,6 +731,7 @@ public class GameScreen extends Screen implements GameClient {
 		popup.tick();
 
 		choices.tick();
+		history.tick();
 
 		tutorial.ifPresent(t -> t.tick());
 
@@ -1013,14 +1023,32 @@ public class GameScreen extends Screen implements GameClient {
 		private static final int ENTRY_CARD_SCALE = 2;
 		private static final int CARDS_SPACING = 10;
 
+		private float xPos = X;
+		private float xPos0 = xPos;
+		private float mouseX;
+
+		private void tick() {
+			xPos0 = xPos;
+			if (mouseX < History.X + History.ENTRY_SIZE)
+				xPos = Mth.clampedLerp(xPos, X, 0.4f);
+			else
+				xPos = Mth.clamp(xPos, -X - ENTRY_SIZE, 0.4f);
+		}
+
+		private int getX(float partialTicks) {
+			return (int) Mth.lerp(partialTicks, xPos0, xPos);
+		}
+
 		private void render(PoseStack poseStack, int mouseX, int mouseY, BufferSource source, float partialTick) {
+			this.mouseX = mouseX;
 			int y = (int) (height / 2 + ENTRY_SIZE / 2
 					- (Math.min(MAX_ENTRIES, historyList.size()) - 1) / 2f * TOTAL_SIZE);
+			int x = getX(partialTick);
 			for (int i = historyList.size() - 1; i >= Math.max(0, historyList.size() - MAX_ENTRIES); i--) {
 				var entry = historyList.get(i);
 				var entity = CardItemRenderer.getEntity(entry.getCard(), minecraft.level);
 				poseStack.pushPose();
-				poseStack.translate(X, y + (entity.getType() == EntityType.ITEM ? 6 : 0), 500);
+				poseStack.translate(x, y + (entity.getType() == EntityType.ITEM ? 6 : 0), 500);
 				float scale = getScale(entity);
 				poseStack.scale(scale, -scale, scale);
 				poseStack.mulPose(new Quaternion(0, 20, 0, true));
@@ -1030,47 +1058,46 @@ public class GameScreen extends Screen implements GameClient {
 				poseStack.pushPose();
 				poseStack.translate(0, 0, 600);
 				int color = state.get(entry.getPlayerId()).isTop ? 0xffff2020 : 0xff00ff70;
-				fill(poseStack, X - ENTRY_SIZE / 2, y, X + ENTRY_SIZE / 2, y + BORDER, color); // Bottom
-				fill(poseStack, X - ENTRY_SIZE / 2, y - ENTRY_SIZE - BORDER, X + ENTRY_SIZE / 2, y - ENTRY_SIZE, color); // Top
-				fill(poseStack, X - ENTRY_SIZE / 2 - BORDER, y, X - ENTRY_SIZE / 2, y - ENTRY_SIZE, color); // Left
-				fill(poseStack, X + ENTRY_SIZE / 2, y, X + ENTRY_SIZE / 2 + BORDER, y - ENTRY_SIZE, color); // Right
+				fill(poseStack, x - ENTRY_SIZE / 2, y, x + ENTRY_SIZE / 2, y + BORDER, color); // Bottom
+				fill(poseStack, x - ENTRY_SIZE / 2, y - ENTRY_SIZE - BORDER, x + ENTRY_SIZE / 2, y - ENTRY_SIZE, color); // Top
+				fill(poseStack, x - ENTRY_SIZE / 2 - BORDER, y, x - ENTRY_SIZE / 2, y - ENTRY_SIZE, color); // Left
+				fill(poseStack, x + ENTRY_SIZE / 2, y, x + ENTRY_SIZE / 2 + BORDER, y - ENTRY_SIZE, color); // Right
 				poseStack.popPose();
 
-				if (mouseX > X - ENTRY_SIZE / 2 && mouseX < X + ENTRY_SIZE / 2 && mouseY > y - ENTRY_SIZE
+				if (mouseX > x - ENTRY_SIZE / 2 && mouseX < x + ENTRY_SIZE / 2 && mouseY > y - ENTRY_SIZE
 						&& mouseY < y) {
-					renderCards(entry, y, poseStack, source, partialTick);
+					renderCards(entry, y, x, poseStack, source, partialTick);
 				}
 
 				y += TOTAL_SIZE;
 			}
 		}
 
-		private void renderCards(HistoryEntry entry, int y, PoseStack poseStack, BufferSource source,
+		private void renderCards(HistoryEntry entry, int y, int x, PoseStack poseStack, BufferSource source,
 				float partialTick) {
 			y = Mth.clamp(y - CARD_HEIGHT / 2 * ENTRY_CARD_SCALE - ENTRY_SIZE / 2, 0,
 					height - CARD_HEIGHT * ENTRY_CARD_SCALE);
 			var card = new ClientCard(entry.getCard(), Vec2.ZERO, GameScreen.this);
 			poseStack.pushPose();
-			poseStack.translate(X + ENTRY_SIZE / 2 + 3, y, 500);
+			poseStack.translate(x + ENTRY_SIZE / 2 + 3, y, 500);
 			poseStack.scale(ENTRY_CARD_SCALE, ENTRY_CARD_SCALE, ENTRY_CARD_SCALE);
 			card.render(poseStack, 0, 0, source, partialTick);
 			poseStack.popPose();
 
 			if (entry.getType() != HistoryEntry.Type.PLAY_CARD) {
-				renderTargets(entry, y,
+				renderTargets(entry, y, x,
 						entry.getType() == HistoryEntry.Type.ATTACK ? Items.NETHERITE_SWORD.getDefaultInstance()
 								: Items.BOOK.getDefaultInstance(),
 						poseStack, source, partialTick);
 			}
 		}
 
-		private void renderTargets(HistoryEntry entry, int y, ItemStack stack, PoseStack poseStack, BufferSource source,
-				float partialTick) {
-
+		private void renderTargets(HistoryEntry entry, int y, int x, ItemStack stack, PoseStack poseStack,
+				BufferSource source, float partialTick) {
 			// Targets
 			if (!entry.getTargets().isEmpty()) {
 				var targets = entry.getTargets();
-				float xStart = X + ENTRY_SIZE / 2 + 3 + CARD_WIDTH * ENTRY_CARD_SCALE + CARDS_SPACING;
+				float xStart = x + ENTRY_SIZE / 2 + 3 + CARD_WIDTH * ENTRY_CARD_SCALE + CARDS_SPACING;
 				float targetScale = Math.min(ENTRY_CARD_SCALE,
 						(width - xStart - CARDS_SPACING * targets.size()) / (targets.size() * CARD_WIDTH));
 				float yStart = y + (ENTRY_CARD_SCALE - targetScale) * CARD_HEIGHT / 2;
@@ -1086,7 +1113,7 @@ public class GameScreen extends Screen implements GameClient {
 
 			// Item
 			poseStack.pushPose();
-			poseStack.translate(X + ENTRY_SIZE / 2 + 3 + CARD_WIDTH * ENTRY_CARD_SCALE + CARDS_SPACING / 2,
+			poseStack.translate(x + ENTRY_SIZE / 2 + 3 + CARD_WIDTH * ENTRY_CARD_SCALE + CARDS_SPACING / 2,
 					y + CARD_HEIGHT / 2 * ENTRY_CARD_SCALE, 600);
 			poseStack.scale(40, -40, 40);
 			itemRenderer.renderStatic(stack, ItemTransforms.TransformType.GUI, LightTexture.FULL_BRIGHT,
