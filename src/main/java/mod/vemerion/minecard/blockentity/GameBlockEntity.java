@@ -63,6 +63,17 @@ public class GameBlockEntity extends BlockEntity {
 		if (aiPlayer != null) {
 			aiPlayer.tick();
 		}
+
+		if (state.isGameOver()) {
+			for (var receiver : getReceivers()) {
+				receiver.receiver(new GameOverMessage());
+			}
+
+			state = new GameState();
+			aiPlayer = null;
+			receivers.clear();
+			setChanged();
+		}
 	}
 
 	public boolean canReceiveMessage(ServerPlayer player) {
@@ -116,15 +127,6 @@ public class GameBlockEntity extends BlockEntity {
 			return;
 
 		state.attack(getReceivers(), attacker, target);
-
-		if (state.isGameOver()) {
-			for (var receiver : getReceivers()) {
-				receiver.receiver(new GameOverMessage());
-			}
-
-			state = new GameState();
-			aiPlayer = null;
-		}
 
 		setChanged();
 	}

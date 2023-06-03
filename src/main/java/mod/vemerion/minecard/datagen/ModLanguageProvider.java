@@ -142,6 +142,7 @@ public class ModLanguageProvider extends LanguageProvider {
 		add(ModCardAbilities.MULTI.get().getTranslationKey(), "%s");
 		add(ModCardAbilities.CHANCE.get().getTranslationKey(), "%s%% chance: %s");
 		add(ModCardAbilities.CHOICE.get().getTranslationKey(), "Choice of: %s");
+		add(ModCardAbilities.GAME_OVER.get().getTranslationKey(), "%s lose the game");
 		add(Helper.gui("card_ability_selection"), "%s%s%s%s");
 		add(Helper.gui("where"), " where ");
 		add(Helper.gui("if"), " if ");

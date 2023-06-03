@@ -10,6 +10,7 @@ import mod.vemerion.minecard.game.ability.ChanceAbility;
 import mod.vemerion.minecard.game.ability.ChoiceCardAbility;
 import mod.vemerion.minecard.game.ability.CopyCardsAbility;
 import mod.vemerion.minecard.game.ability.DrawCardsAbility;
+import mod.vemerion.minecard.game.ability.GameOverAbility;
 import mod.vemerion.minecard.game.ability.ModifyAbility;
 import mod.vemerion.minecard.game.ability.MultiAbility;
 import mod.vemerion.minecard.game.ability.NoCardAbility;
@@ -56,5 +57,7 @@ public class ModCardAbilities {
 			.register("chance", () -> new CardAbilityType<ChanceAbility>(ChanceAbility.CODEC));
 	public static final RegistryObject<CardAbilityType<? extends CardAbility>> CHOICE = CARD_ABILITIES
 			.register("choice", () -> new CardAbilityType<ChoiceCardAbility>(ChoiceCardAbility.CODEC));
+	public static final RegistryObject<CardAbilityType<? extends CardAbility>> GAME_OVER = CARD_ABILITIES
+			.register("game_over", () -> new CardAbilityType<GameOverAbility>(GameOverAbility.CODEC));
 
 }

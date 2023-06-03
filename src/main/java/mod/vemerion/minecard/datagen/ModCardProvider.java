@@ -33,6 +33,7 @@ import mod.vemerion.minecard.game.ability.ChanceAbility;
 import mod.vemerion.minecard.game.ability.ChoiceCardAbility;
 import mod.vemerion.minecard.game.ability.CopyCardsAbility;
 import mod.vemerion.minecard.game.ability.DrawCardsAbility;
+import mod.vemerion.minecard.game.ability.GameOverAbility;
 import mod.vemerion.minecard.game.ability.ModifyAbility;
 import mod.vemerion.minecard.game.ability.MultiAbility;
 import mod.vemerion.minecard.game.ability.NoCardAbility;
@@ -82,7 +83,7 @@ public class ModCardProvider implements DataProvider {
 
 	private void addCards() {
 		// Entity card
-		add(new Builder(EntityType.PLAYER, 0, 30, 0));
+		add(new Builder(EntityType.PLAYER, 0, 30, 0).setCardAbility(new GameOverAbility(CardAbilityTrigger.DEATH)));
 		add(new Builder(EntityType.CREEPER, 1, 3, 2)
 				.setCardAbility(new ModifyAbility(CardAbilityTrigger.DEATH, Optional.of(mod("origin_explosion")),
 						new CardAbilitySelection(new CardAbilityGroups(EnumSet.of(CardAbilityGroup.ADJACENT)),

@@ -21,12 +21,12 @@
                 "modifications": {
                   "properties": {
                     "burn": 0,
-                    "freeze": 0,
-                    "stealth": 0,
-                    "taunt": 0,
-                    "poison": 0,
+                    "shield": 0,
                     "thorns": 0,
-                    "shield": 0
+                    "stealth": 0,
+                    "poison": 0,
+                    "freeze": 0,
+                    "taunt": 0
                   },
                   "entity": "minecraft:item",
                   "cost": 0,

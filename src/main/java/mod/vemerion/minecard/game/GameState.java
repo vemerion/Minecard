@@ -17,7 +17,6 @@ import mod.vemerion.minecard.network.PlaceCardMessage;
 import mod.vemerion.minecard.network.UpdateCardsMessage;
 import mod.vemerion.minecard.network.UpdateDecksMessage;
 import net.minecraft.util.ExtraCodecs;
-import net.minecraft.world.entity.EntityType;
 
 public class GameState {
 
@@ -38,6 +37,7 @@ public class GameState {
 	private int tutorialStep;
 	private List<HistoryEntry> history;
 	private Random random;
+	private boolean isGameOver;
 
 	public GameState(List<PlayerState> playerStates, int turn, int tutorialStep, List<HistoryEntry> history) {
 		this.playerStates = new ArrayList<>(playerStates);
@@ -311,15 +311,10 @@ public class GameState {
 	}
 
 	public boolean isGameOver() {
-		int count = 0;
-		for (var playerState : playerStates) {
-			for (var card : playerState.getBoard()) {
-				if (card.getType() == EntityType.PLAYER && !card.isDead()) {
-					count++;
-					break;
-				}
-			}
-		}
-		return count < playerStates.size();
+		return isGameOver;
+	}
+
+	public void setGameOver() {
+		isGameOver = true;
 	}
 }

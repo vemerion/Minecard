@@ -107,6 +107,7 @@
   "minecard.minecard.copy_cards.you": "you",
   "minecard.minecard.draw_cards": "%s draw %s card(s).",
   "minecard.minecard.entity": "card is %s",
+  "minecard.minecard.game_over": "%s lose the game",
   "minecard.minecard.modify": "%s apply%s%s to %s.",
   "minecard.minecard.modify.element": " [%s%s/%s%s%s]",
   "minecard.minecard.modify.element_cost": ", cost %s",

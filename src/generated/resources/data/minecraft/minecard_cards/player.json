@@ -1,4 +1,8 @@
 {
+  "abilities": {
+    "trigger": "death",
+    "type": "minecard:game_over"
+  },
   "entity": "minecraft:player",
   "cost": 0,
   "health": 30,
