@@ -46,11 +46,12 @@ public class OpenGameMessage extends ServerToClientMessage {
 		writeCards(buffer, player.board);
 		buffer.writeInt(player.resources);
 		buffer.writeInt(player.maxResources);
+		buffer.writeBoolean(player.mulligan);
 	}
 
 	private static MessagePlayerState readPlayer(final FriendlyByteBuf buffer) {
 		return new MessagePlayerState(buffer.readUUID(), buffer.readInt(), readCards(buffer), readCards(buffer),
-				buffer.readInt(), buffer.readInt());
+				buffer.readInt(), buffer.readInt(), buffer.readBoolean());
 	}
 
 	private static void writeCards(final FriendlyByteBuf buffer, List<Card> cards) {

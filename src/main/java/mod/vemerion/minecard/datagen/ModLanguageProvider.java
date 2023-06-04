@@ -52,6 +52,8 @@ public class ModLanguageProvider extends LanguageProvider {
 		add(Helper.gui("deck_count"), "%s");
 		add(Helper.gui("choose"), "Choose a card for ability:");
 		add(Helper.gui("buried_treasure"), "Buried Treasure");
+		add(Helper.gui("mulligan"), "Choose cards to mulligan");
+		add(Helper.gui("confirm"), "Confirm");
 
 		// Card properties
 		add(CardProperty.CHARGE.getTextKey(), "charge");

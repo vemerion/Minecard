@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -24,6 +25,8 @@ public class AIPlayer implements GameClient {
 	private int resources;
 	private boolean isGameOver;
 	private boolean isCurrent;
+	private boolean yourMulligan;
+	private boolean enemyMulligan;
 	private int timer;
 	private GameBlockEntity game;
 	private Random rand;
@@ -36,7 +39,11 @@ public class AIPlayer implements GameClient {
 
 	public void tick() {
 		timer++;
-		if (isGameOver || !isCurrent || timer % 8 != 0)
+
+		if (yourMulligan)
+			game.performMulligan(ID, Set.of());
+
+		if (isGameOver || !isCurrent || timer % 8 != 0 || yourMulligan || enemyMulligan)
 			return;
 
 		if (game.isTutorial()) {
@@ -224,8 +231,10 @@ public class AIPlayer implements GameClient {
 			if (playerState.id.equals(ID)) {
 				yourHand = playerState.hand;
 				yourBoard = playerState.board;
+				yourMulligan = playerState.mulligan;
 			} else {
 				enemyBoard = playerState.board;
+				enemyMulligan = playerState.mulligan;
 			}
 		}
 	}
@@ -237,6 +246,15 @@ public class AIPlayer implements GameClient {
 
 	@Override
 	public void history(HistoryEntry entry) {
-		
+
+	}
+
+	@Override
+	public void mulliganDone(UUID id) {
+		if (id.equals(ID)) {
+			yourMulligan = false;
+		} else {
+			enemyMulligan = false;
+		}
 	}
 }

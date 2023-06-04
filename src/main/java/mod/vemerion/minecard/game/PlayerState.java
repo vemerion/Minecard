@@ -2,12 +2,14 @@ package mod.vemerion.minecard.game;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import mod.vemerion.minecard.network.DrawCardsMessage;
+import mod.vemerion.minecard.network.MulliganDoneMessage;
 import mod.vemerion.minecard.network.PlaceCardMessage;
 import mod.vemerion.minecard.network.SetPropertiesMessage;
 import mod.vemerion.minecard.network.SetResourcesMessage;
@@ -24,7 +26,8 @@ public class PlayerState {
 							Codec.list(Card.CODEC).fieldOf("hand").forGetter(PlayerState::getHand),
 							Codec.list(Card.CODEC).fieldOf("board").forGetter(PlayerState::getBoard),
 							Codec.INT.fieldOf("resources").forGetter(PlayerState::getResources),
-							Codec.INT.fieldOf("maxResources").forGetter(PlayerState::getMaxResources))
+							Codec.INT.fieldOf("maxResources").forGetter(PlayerState::getMaxResources),
+							Codec.BOOL.fieldOf("mulligan").forGetter(PlayerState::isMulligan))
 					.apply(instance, PlayerState::new)));
 
 	private UUID id;
@@ -33,16 +36,19 @@ public class PlayerState {
 	private List<Card> board;
 	private int resources;
 	private int maxResources;
+	private boolean mulligan;
 	private PlayerChoices choices;
 	private GameState game;
 
-	public PlayerState(UUID id, List<Card> deck, List<Card> hand, List<Card> board, int resources, int maxResources) {
+	public PlayerState(UUID id, List<Card> deck, List<Card> hand, List<Card> board, int resources, int maxResources,
+			boolean mulligan) {
 		this.id = id;
 		this.deck = new ArrayList<>(deck);
 		this.hand = new ArrayList<>(hand);
 		this.board = new ArrayList<>(board);
 		this.resources = resources;
 		this.maxResources = maxResources;
+		this.mulligan = mulligan;
 	}
 
 	public void setGame(GameState game) {
@@ -75,6 +81,10 @@ public class PlayerState {
 
 	public int getMaxResources() {
 		return maxResources;
+	}
+
+	public boolean isMulligan() {
+		return mulligan;
 	}
 
 	public PlayerChoices getChoices() {
@@ -200,6 +210,33 @@ public class PlayerState {
 			receiver.receiver(msg);
 	}
 
+	public void performMulligan(List<Receiver> receivers, Set<Integer> cards) {
+		if (!isMulligan())
+			return;
+
+		mulligan = false;
+		List<Card> discarded = new ArrayList<>();
+		for (var c : cards) {
+			var card = findFromHand(c);
+			if (card == null)
+				continue;
+			discarded.add(new Card(card));
+			game.removeCard(receivers, card);
+		}
+
+		drawCards(receivers, discarded.size());
+
+		for (var card : discarded)
+			deck.add(game.getRandom().nextInt(deck.size()), card);
+
+		game.updateDecks(receivers);
+
+		var msg = new MulliganDoneMessage(id);
+		for (var receiver : receivers) {
+			receiver.receiver(msg);
+		}
+	}
+
 	public void playCard(List<Receiver> receivers, int cardId, int leftId) {
 		var card = findFromHand(cardId);
 		var left = findFromBoard(leftId);
@@ -260,6 +297,6 @@ public class PlayerState {
 				hand.add(Cards.EMPTY_CARD_TYPE.create().setId(card.getId()));
 			}
 		}
-		return new MessagePlayerState(id, deck.size(), hand, board, resources, maxResources);
+		return new MessagePlayerState(id, deck.size(), hand, board, resources, maxResources, mulligan);
 	}
 }

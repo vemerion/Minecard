@@ -4,9 +4,11 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -29,6 +31,7 @@ import mod.vemerion.minecard.network.CloseGameMessage;
 import mod.vemerion.minecard.network.EndTurnMessage;
 import mod.vemerion.minecard.network.GameClient;
 import mod.vemerion.minecard.network.Network;
+import mod.vemerion.minecard.network.PerformMulliganMessage;
 import mod.vemerion.minecard.network.PlayCardMessage;
 import mod.vemerion.minecard.network.PlayerChoiceResponseMessage;
 import mod.vemerion.minecard.network.SetTutorialStepMessage;
@@ -73,6 +76,7 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.Vec2;
+import net.minecraftforge.client.gui.widget.ExtendedButton;
 import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 
 public class GameScreen extends Screen implements GameClient {
@@ -81,6 +85,8 @@ public class GameScreen extends Screen implements GameClient {
 	private static final Component NEXT_TURN = new TranslatableComponent(Helper.gui("next_turn"));
 	private static final Component GAME_OVER = new TranslatableComponent(Helper.gui("game_over"));
 	private static final Component CHOOSE_TEXT = new TranslatableComponent(Helper.gui("choose"));
+	private static final Component MULLIGAN_TEXT = new TranslatableComponent(Helper.gui("mulligan"));
+	private static final Component CONFIRM = new TranslatableComponent(Helper.gui("confirm"));
 
 	private static final RenderBuffers RENDER_BUFFERS = new RenderBuffers();
 
@@ -110,6 +116,7 @@ public class GameScreen extends Screen implements GameClient {
 	private History history = new History();
 	private int tutorialStep;
 	private List<HistoryEntry> historyList;
+	private Set<Integer> mulliganTargets = new HashSet<>();
 
 	// Widgets
 	private PopupText popup;
@@ -166,7 +173,7 @@ public class GameScreen extends Screen implements GameClient {
 									.collect(Collectors.toList()),
 							messageState.board.stream().map(c -> new ClientCard(c, Vec2.ZERO, this))
 									.collect(Collectors.toList()),
-							messageState.resources, messageState.maxResources,
+							messageState.resources, messageState.maxResources, messageState.mulligan,
 							isSpectator ? isTop : !messageState.id.equals(Minecraft.getInstance().player.getUUID())));
 			isTop = !isTop;
 		}
@@ -187,6 +194,12 @@ public class GameScreen extends Screen implements GameClient {
 		if (!isSpectator)
 			addRenderableWidget(new NextTurnButton(width - 24, height / 2 - NEXT_TURN_BUTTON_SIZE / 2,
 					NEXT_TURN_BUTTON_SIZE, NEXT_TURN_BUTTON_SIZE, TextComponent.EMPTY));
+
+		if (!isSpectator && yourState().mulligan)
+			addRenderableWidget(new ExtendedButton(width / 2 - 40, height - 85, 80, 20, CONFIRM, b -> {
+				b.visible = false;
+				Network.INSTANCE.sendToServer(new PerformMulliganMessage(pos, mulliganTargets));
+			}));
 
 		if (tutorialStep != -1 && !isSpectator) {
 			tutorial = Optional.of(addWidget(new GameTutorial(this, tutorialStep)));
@@ -434,6 +447,11 @@ public class GameScreen extends Screen implements GameClient {
 				.collect(Collectors.toCollection(() -> new ArrayList<>())));
 	}
 
+	@Override
+	public void mulliganDone(UUID id) {
+		state.get(id).mulligan = false;
+	}
+
 	private ClientPlayerState yourState() {
 		return state.get(minecraft.player.getUUID());
 	}
@@ -462,11 +480,28 @@ public class GameScreen extends Screen implements GameClient {
 		tutorial.ifPresent(t -> t.mouseMoved(pMouseX, pMouseY));
 	}
 
+	private boolean isMulligan() {
+		return state.values().stream().anyMatch(s -> s.mulligan);
+	}
+
 	@Override
 	public boolean mouseClicked(double pMouseX, double pMouseY, int pButton) {
+		// Mulligan
+		if (!isSpectator && this.yourState().mulligan && pButton == GLFW.GLFW_MOUSE_BUTTON_LEFT) {
+			for (var card : yourState().hand) {
+				if (card.contains(pMouseX, pMouseY)) {
+					if (mulliganTargets.contains(card.getId())) {
+						mulliganTargets.remove(card.getId());
+					} else {
+						mulliganTargets.add(card.getId());
+					}
+					return true;
+				}
+			}
+		}
+
 		if (isCurrentActive() && !isSpectator) {
 			if (pButton == GLFW.GLFW_MOUSE_BUTTON_LEFT) {
-
 				// Player choice
 				if (choices.mouseClicked(pMouseX, pMouseY)) {
 					return true;
@@ -576,10 +611,12 @@ public class GameScreen extends Screen implements GameClient {
 			boolean enemy = playerState.isTop;
 
 			// Cards
-			for (var card : playerState.board) {
-				if (card.getType() == null || !card.isDead()) {
-					card.render(transformCard(card, 0, mouseX, mouseY, partialTicks), mouseX, mouseY, source,
-							partialTicks);
+			if (!isMulligan()) {
+				for (var card : playerState.board) {
+					if (card.getType() == null || !card.isDead()) {
+						card.render(transformCard(card, 0, mouseX, mouseY, partialTicks), mouseX, mouseY, source,
+								partialTicks);
+					}
 				}
 			}
 			for (var card : playerState.hand) {
@@ -617,6 +654,21 @@ public class GameScreen extends Screen implements GameClient {
 			for (var card : enemyState.board)
 				if (!GameUtil.canBeAttacked(card, enemyState.board))
 					drawBarrier(poseStack, source, card);
+		}
+
+		// Mulligan
+		if (!isSpectator && yourState().mulligan) {
+			var yourState = yourState();
+			for (var card : yourState.hand)
+				if (mulliganTargets.contains(card.getId()))
+					drawBarrier(poseStack, source, card);
+
+			// Text
+			poseStack.pushPose();
+			poseStack.translate((width - font.width(CHOOSE_TEXT) * 1.5f) / 2, height - 100, 20);
+			poseStack.scale(1.5f, 1.5f, 1.5f);
+			font.drawShadow(poseStack, MULLIGAN_TEXT, 0, 0, 0xffffff);
+			poseStack.popPose();
 		}
 
 		for (var r : resources)
@@ -769,7 +821,7 @@ public class GameScreen extends Screen implements GameClient {
 
 		@Override
 		public void onPress() {
-			if (isCurrentActive() && choices.isEmpty()) {
+			if (isCurrentActive() && choices.isEmpty() && !isMulligan()) {
 				Network.INSTANCE.sendToServer(new EndTurnMessage(pos));
 				selectedCard = null;
 				attackingCard = null;

@@ -173,10 +173,16 @@ public class GameState {
 		receiver.receiver(new UpdateCardsMessage(updated));
 
 		if (updateDeckSizes) {
-			receiver.receiver(new UpdateDecksMessage(playerStates.stream()
-					.map(s -> Pair.of(s.getId(), (int) s.getDeck().stream().filter(c -> !c.isDead()).count()))
-					.collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue()))));
+			updateDecks(List.of(receiver));
 		}
+	}
+
+	public void updateDecks(List<Receiver> receivers) {
+		var msg = new UpdateDecksMessage(playerStates.stream()
+				.map(s -> Pair.of(s.getId(), (int) s.getDeck().stream().filter(c -> !c.isDead()).count()))
+				.collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue())));
+		for (var receiver : receivers)
+			receiver.receiver(msg);
 	}
 
 	public void hurt(List<Receiver> receivers, Card card, int amount) {
@@ -316,5 +322,9 @@ public class GameState {
 
 	public void setGameOver() {
 		isGameOver = true;
+	}
+
+	public boolean isMulligan() {
+		return playerStates.stream().anyMatch(s -> s.isMulligan());
 	}
 }

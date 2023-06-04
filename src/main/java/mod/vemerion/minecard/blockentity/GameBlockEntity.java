@@ -96,7 +96,7 @@ public class GameBlockEntity extends BlockEntity {
 	}
 
 	public void endTurn() {
-		if (state.getCurrentPlayerState().getChoices() != null)
+		if (state.getCurrentPlayerState().getChoices() != null || state.isMulligan())
 			return;
 
 		state.endTurn(getReceivers());
@@ -114,7 +114,7 @@ public class GameBlockEntity extends BlockEntity {
 	}
 
 	public void playCard(int card, int leftId) {
-		if (state.getCurrentPlayerState().getChoices() != null)
+		if (state.getCurrentPlayerState().getChoices() != null || state.isMulligan())
 			return;
 
 		state.getCurrentPlayerState().playCard(getReceivers(), card, leftId);
@@ -123,7 +123,7 @@ public class GameBlockEntity extends BlockEntity {
 	}
 
 	public void attack(int attacker, int target) {
-		if (state.getCurrentPlayerState().getChoices() != null)
+		if (state.getCurrentPlayerState().getChoices() != null || state.isMulligan())
 			return;
 
 		state.attack(getReceivers(), attacker, target);
@@ -132,6 +132,9 @@ public class GameBlockEntity extends BlockEntity {
 	}
 
 	public void choice(int choiceId, int selected) {
+		if (state.isMulligan())
+			return;
+
 		state.choice(getReceivers(), choiceId, selected);
 	}
 
@@ -140,6 +143,12 @@ public class GameBlockEntity extends BlockEntity {
 		if (sender.getUUID().equals(state.getCurrentPlayer())) {
 			state.getCurrentPlayerState().resetChoices();
 		}
+	}
+
+	public void performMulligan(UUID sender, Set<Integer> cards) {
+		var playerState = state.getYourPlayerState(sender);
+		if (playerState != null)
+			playerState.performMulligan(getReceivers(), cards);
 	}
 
 	private List<Receiver> getReceivers() {
@@ -207,7 +216,7 @@ public class GameBlockEntity extends BlockEntity {
 			playerCard.setHealth(1);
 		board.add(playerCard);
 
-		var playerState = new PlayerState(id, deck, hand, board, 1, 1);
+		var playerState = new PlayerState(id, deck, hand, board, 1, 1, true);
 		playerState.setGame(state);
 		state.getPlayerStates().add(playerState);
 

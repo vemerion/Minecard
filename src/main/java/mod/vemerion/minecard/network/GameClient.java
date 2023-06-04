@@ -44,4 +44,6 @@ public interface GameClient {
 	public void playerChoice(Choice choice);
 
 	public void history(HistoryEntry entry);
+
+	public void mulliganDone(UUID id);
 }
