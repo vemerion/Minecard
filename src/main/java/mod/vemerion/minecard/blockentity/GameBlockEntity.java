@@ -166,6 +166,13 @@ public class GameBlockEntity extends BlockEntity {
 		return list;
 	}
 
+	public boolean playersPresent() {
+		for (var playerState : state.getPlayerStates())
+			if (!receivers.contains(playerState.getId()))
+				return false;
+		return true;
+	}
+
 	public void open(ServerPlayer player, ItemStack stack) {
 		var id = player.getUUID();
 		if (state.getPlayerStates().size() > 1) {

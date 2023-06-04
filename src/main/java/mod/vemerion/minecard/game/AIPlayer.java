@@ -5,7 +5,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -38,10 +37,16 @@ public class AIPlayer implements GameClient {
 	}
 
 	public void tick() {
+		if (!game.playersPresent())
+			return;
+
 		timer++;
 
-		if (yourMulligan)
-			game.performMulligan(ID, Set.of());
+		if (yourMulligan && timer % 8 == 0) {
+			game.performMulligan(ID,
+					yourHand.stream().filter(c -> c.getCost() > 3).map(c -> c.getId()).collect(Collectors.toSet()));
+			return;
+		}
 
 		if (isGameOver || !isCurrent || timer % 8 != 0 || yourMulligan || enemyMulligan)
 			return;
