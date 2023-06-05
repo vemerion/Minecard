@@ -171,6 +171,11 @@ public class ModLanguageProvider extends LanguageProvider {
 		addTutorialStep(
 				"This is your deck. At the start of your turn, you automatically draw one card from your deck.");
 		addTutorialStep("This is your hand.");
+		addTutorialStep(
+				"The game always starts with a mulligan phase, where you get to select which cards you want to replace from the starting hand.");
+		addTutorialStep(
+				"All the cards in the tutorial deck are identical, so it does not matter if you replace cards or not.");
+		addTutorialStep("Click on the 'Confirm' button to complete the mulligan phase and continue with the tutorial.");
 		addTutorialStep("This is your part of the board.");
 		addTutorialStep(
 				"Each player always start with one card on the board, the player card. When you kill the opponent player card, you win the game.");

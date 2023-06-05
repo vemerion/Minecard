@@ -199,6 +199,7 @@ public class GameScreen extends Screen implements GameClient {
 			addRenderableWidget(new ExtendedButton(width / 2 - 40, height - 85, 80, 20, CONFIRM, b -> {
 				b.visible = false;
 				Network.INSTANCE.sendToServer(new PerformMulliganMessage(pos, mulliganTargets));
+				tutorial.ifPresent(t -> t.unlock(GameTutorial.UnlockAction.MULLIGAN));
 			}));
 
 		if (tutorialStep != -1 && !isSpectator) {
