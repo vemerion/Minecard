@@ -220,10 +220,7 @@
     "type": "minecard:throw_item"
   },
   "ender_dragon": {
-    "red": 0.8,
-    "green": 0.0,
-    "blue": 0.9,
-    "type": "minecard:potion"
+    "type": "minecard:ender_dragon"
   },
   "throw_trident": {
     "item": {

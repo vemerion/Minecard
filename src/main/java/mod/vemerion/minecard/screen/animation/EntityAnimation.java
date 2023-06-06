@@ -1,11 +1,11 @@
 package mod.vemerion.minecard.screen.animation;
 
 import java.util.Optional;
+import java.util.function.Supplier;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Quaternion;
 
-import mod.vemerion.minecard.screen.ClientCard;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource.BufferSource;
@@ -15,13 +15,14 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.minecraft.world.entity.projectile.EvokerFangs;
 import net.minecraft.world.phys.Vec2;
 
 public class EntityAnimation extends Animation {
 
 	private final Vec2 start;
-	private ClientCard card;
+	private Supplier<Vec2> target;
 	private int timer;
 	private Entity entity;
 	private final int duration;
@@ -31,12 +32,12 @@ public class EntityAnimation extends Animation {
 	private Optional<SoundEvent> durationSound;
 	private Optional<SoundEvent> impactSound;
 
-	public EntityAnimation(Minecraft mc, Vec2 start, ClientCard card, EntityType<?> type, int duration, int size,
+	public EntityAnimation(Minecraft mc, Vec2 start, Supplier<Vec2> target, EntityType<?> type, int duration, int size,
 			int soundDelay, Optional<SoundEvent> startSound, Optional<SoundEvent> durationSound,
 			Optional<SoundEvent> impactSound, Runnable onDone) {
 		super(mc, onDone);
 		this.start = start;
-		this.card = card;
+		this.target = target;
 		this.duration = duration;
 		this.size = size;
 		this.soundDelay = soundDelay;
@@ -67,14 +68,13 @@ public class EntityAnimation extends Animation {
 	public void render(int mouseX, int mouseY, BufferSource source, float partialTick) {
 		var poseStack = new PoseStack();
 		float progress = (timer + partialTick) / duration;
-		var target = new Vec2(card.getPosition().x + ClientCard.CARD_WIDTH / 2,
-				card.getPosition().y + ClientCard.CARD_HEIGHT / 2);
-		var pos = start == null ? target
-				: new Vec2(Mth.lerp(progress, start.x, target.x), Mth.lerp(progress, start.y, target.y));
+		var targetPos = target.get();
+		var pos = start == null ? targetPos
+				: new Vec2(Mth.lerp(progress, start.x, targetPos.x), Mth.lerp(progress, start.y, targetPos.y));
 		poseStack.translate(pos.x, pos.y, 0);
-		poseStack.scale(size, -size, size);
+		poseStack.scale(size * (entity instanceof EnderDragon ? -1 : 1), -size, size);
 		poseStack.mulPose(new Quaternion(Mth.HALF_PI,
-				(float) -Mth.atan2(target.y - pos.y, target.x - pos.x) + Mth.HALF_PI, -0.6f, false));
+				(float) -Mth.atan2(targetPos.y - pos.y, targetPos.x - pos.x) + Mth.HALF_PI, -0.6f, false));
 
 		mc.getEntityRenderDispatcher().getRenderer(entity).render(entity, 0, partialTick, poseStack, source,
 				LightTexture.FULL_BRIGHT);
@@ -98,6 +98,10 @@ public class EntityAnimation extends Animation {
 			living.animationSpeedOld = 0.2f;
 			living.animationSpeed = 0.2f;
 			living.animationPosition = timer * 1.5f;
+		}
+		if (entity instanceof EnderDragon dragon) {
+			dragon.oFlapTime = dragon.flapTime;
+			dragon.flapTime += 0.1;
 		}
 	}
 

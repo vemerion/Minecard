@@ -63,7 +63,9 @@ public class EntityAnimationConfig extends AnimationConfig {
 			game.addAnimation(new EntityAnimation(game.getMinecraft(),
 					moving ? origin.getPosition().add(new Vec2(ClientCard.CARD_WIDTH / 2, ClientCard.CARD_HEIGHT / 2))
 							: null,
-					target, entity, duration, size, soundDelay, startSound, durationSound, impactSound, () -> {
+					() -> new Vec2(target.getPosition().x + ClientCard.CARD_WIDTH / 2,
+							target.getPosition().y + ClientCard.CARD_HEIGHT / 2),
+					entity, duration, size, soundDelay, startSound, durationSound, impactSound, () -> {
 					}));
 	}
 

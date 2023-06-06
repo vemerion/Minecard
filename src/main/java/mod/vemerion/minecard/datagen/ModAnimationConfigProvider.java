@@ -13,6 +13,7 @@ import com.mojang.serialization.JsonOps;
 import mod.vemerion.minecard.Main;
 import mod.vemerion.minecard.screen.animation.config.AnimationConfig;
 import mod.vemerion.minecard.screen.animation.config.AnimationConfigs;
+import mod.vemerion.minecard.screen.animation.config.EnderDragonAnimationConfig;
 import mod.vemerion.minecard.screen.animation.config.EntityAnimationConfig;
 import mod.vemerion.minecard.screen.animation.config.ExplosionAnimationConfig;
 import mod.vemerion.minecard.screen.animation.config.GlowAnimationConfig;
@@ -61,7 +62,7 @@ public class ModAnimationConfigProvider implements DataProvider {
 	private void addAnimations() {
 		animations.put("throw_carrot", new ThrowItemAnimationConfig(Items.CARROT, Optional.empty()));
 		animations.put("glow", GlowAnimationConfig.INSTANCE);
-		animations.put("ender_dragon", new PotionAnimationConfig(0.8f, 0, 0.9f));
+		animations.put("ender_dragon", EnderDragonAnimationConfig.INSTANCE);
 		animations.put("target_explosion", new ExplosionAnimationConfig(true, false));
 		animations.put("origin_explosion", new ExplosionAnimationConfig(false, true));
 		animations.put("wither_projectile", new ThrowItemAnimationConfig(Items.WITHER_SKELETON_SKULL,
