@@ -243,7 +243,7 @@ public class PlayerState {
 		if (card == null || (leftId != -1 && left == null))
 			return;
 
-		if (card.getCost() > resources || board.size() >= GameState.MAX_BOARD_SIZE)
+		if (card.getCost() > resources || (board.size() >= GameState.MAX_BOARD_SIZE && !card.isSpell()))
 			return;
 
 		if (choices == null) {
