@@ -47,6 +47,7 @@ import mod.vemerion.minecard.screen.animation.StealthAnimation;
 import mod.vemerion.minecard.screen.animation.TauntAnimation;
 import mod.vemerion.minecard.screen.animation.ThornsAnimation;
 import mod.vemerion.minecard.screen.animation.WallAnimation;
+import mod.vemerion.minecard.screen.animation.WitherAnimation;
 import mod.vemerion.minecard.screen.animation.config.AnimationConfigs;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiComponent;
@@ -271,6 +272,11 @@ public class GameScreen extends Screen implements GameClient {
 					}
 				}
 			}
+
+			if (placed.getType() == EntityType.WITHER) {
+				addAnimation(new WitherAnimation(minecraft));
+			}
+
 			updatePropertiesAnimations(null, placed);
 		}
 		playerState.hand.removeIf(c -> c.getId() == card.getId());
