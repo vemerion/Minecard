@@ -30,7 +30,7 @@ public class GlowAnimationConfig extends AnimationConfig {
 			return;
 
 		var particleConfig = new ParticlesAnimation.ParticleConfig(new ParticlesAnimation.Color(0.6f, 1.0f, 0.8f), 15,
-				25, ParticlesAnimation.ParticleConfig.GLOW_TEXTURES);
+				25, 0, 0, ParticlesAnimation.ParticleConfig.GLOW_TEXTURES);
 		targets.remove(origin);
 		var area = calcArea(targets);
 		int count = (int) ((area.maxX - area.minX) * (area.maxY - area.minY) * 0.0004);

@@ -12,7 +12,7 @@
           "type": "minecard:modify",
           "value": {
             "trigger": "grow",
-            "animation": "minecard:bamboo",
+            "animation": "minecard:throw_bamboo",
             "selection": {
               "groups": [
                 "enemy_board",

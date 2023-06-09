@@ -10,33 +10,33 @@ import mod.vemerion.minecard.screen.ClientCard;
 import mod.vemerion.minecard.screen.GameScreen;
 import mod.vemerion.minecard.screen.animation.ParticlesAnimation;
 
-public class PotionAnimationConfig extends AnimationConfig {
+public class SplashAnimationConfig extends AnimationConfig {
 
-	public static final Codec<PotionAnimationConfig> CODEC = RecordCodecBuilder.create(instance -> instance
-			.group(ParticlesAnimation.Color.CODEC.fieldOf("color").forGetter(PotionAnimationConfig::getColor))
-			.apply(instance, PotionAnimationConfig::new));
+	public static final Codec<SplashAnimationConfig> CODEC = RecordCodecBuilder.create(instance -> instance
+			.group(ParticlesAnimation.Color.CODEC.fieldOf("color").forGetter(SplashAnimationConfig::getColor))
+			.apply(instance, SplashAnimationConfig::new));
 
 	private final ParticlesAnimation.Color color;
 
-	public PotionAnimationConfig(ParticlesAnimation.Color color) {
+	public SplashAnimationConfig(ParticlesAnimation.Color color) {
 		this.color = color;
 	}
 
 	@Override
 	protected AnimationConfigType<?> getType() {
-		return ModAnimationConfigs.POTION.get();
+		return ModAnimationConfigs.SPLASH.get();
 	}
 
 	@Override
 	public void invoke(GameScreen game, ClientCard origin, List<ClientCard> targets) {
 		if (targets.isEmpty())
 			return;
-		var particleConfig = new ParticlesAnimation.ParticleConfig(color, 15, 25, 0, 0,
-				ParticlesAnimation.ParticleConfig.POTION_TEXTURES);
+
+		var particleConfig = new ParticlesAnimation.ParticleConfig(color, 5, 10, 1f, 1.5f,
+				ParticlesAnimation.ParticleConfig.GENERIC_REVERSE_TEXTURES);
 		targets.remove(origin);
 		var area = calcArea(targets);
-		int count = (int) ((area.maxX - area.minX) * (area.maxY - area.minY) * 0.001);
-		game.addAnimation(new ParticlesAnimation(game.getMinecraft(), area, count, 20, particleConfig, () -> {
+		game.addAnimation(new ParticlesAnimation(game.getMinecraft(), area, 15, 1, particleConfig, () -> {
 		}));
 	}
 

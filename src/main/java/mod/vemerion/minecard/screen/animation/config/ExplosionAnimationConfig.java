@@ -52,7 +52,7 @@ public class ExplosionAnimationConfig extends AnimationConfig {
 		for (var card : cards) {
 			var color = random.nextFloat() * 0.6f + 0.4f;
 			var particleConfig = new ParticlesAnimation.ParticleConfig(
-					new ParticlesAnimation.Color(color, color, color), 40, 60,
+					new ParticlesAnimation.Color(color, color, color), 40, 60, 0, 0,
 					ParticlesAnimation.ParticleConfig.EXPLOSION_TEXTURES);
 			game.getMinecraft().getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.GENERIC_EXPLODE, 1f));
 			game.addAnimation(new ParticlesAnimation(game.getMinecraft(), fromCard(card), 7, 1, particleConfig, () -> {

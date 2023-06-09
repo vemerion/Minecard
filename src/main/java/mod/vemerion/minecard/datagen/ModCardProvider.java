@@ -218,7 +218,7 @@ public class ModCardProvider implements DataProvider {
 				new LazyCardType(new Builder(EntityType.ITEM, 0, 5, 0)
 						.setAdditionalData(new AdditionalCardData.ItemData(Items.BAMBOO))
 						.addProperty(CardProperty.BABY, 1)
-						.setCardAbility(new ModifyAbility(CardAbilityTrigger.GROW, Optional.of(mod("bamboo")),
+						.setCardAbility(new ModifyAbility(CardAbilityTrigger.GROW, Optional.of(mod("throw_bamboo")),
 								new CardAbilitySelection(
 										new CardAbilityGroups(
 												EnumSet.of(CardAbilityGroup.YOUR_BOARD, CardAbilityGroup.ENEMY_BOARD)),
