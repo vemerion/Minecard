@@ -17,6 +17,14 @@
     },
     "type": "minecard:splash"
   },
+  "egg_splash": {
+    "color": {
+      "red": 0.88,
+      "green": 0.81,
+      "blue": 0.61
+    },
+    "type": "minecard:splash"
+  },
   "throw_bamboo": {
     "item": {
       "id": "minecraft:bamboo",
@@ -30,6 +38,8 @@
       "id": "minecraft:scute",
       "Count": 1
     },
+    "start_sound": "minecraft:entity.turtle.lay_egg",
+    "impact_sound": "minecraft:entity.turtle.egg_break",
     "end_animation": "minecard:green_splash",
     "type": "minecard:throw_item"
   },
@@ -38,6 +48,9 @@
       "id": "minecraft:egg",
       "Count": 1
     },
+    "start_sound": "minecraft:entity.egg.throw",
+    "impact_sound": "minecraft:entity.chicken.egg",
+    "end_animation": "minecard:egg_splash",
     "type": "minecard:throw_item"
   },
   "throw_poison_potion": {
@@ -48,6 +61,8 @@
         "Potion": "minecraft:poison"
       }
     },
+    "start_sound": "minecraft:entity.splash_potion.throw",
+    "impact_sound": "minecraft:entity.splash_potion.break",
     "end_animation": "minecard:poison_potion",
     "type": "minecard:throw_item"
   },
@@ -56,6 +71,7 @@
       "id": "minecraft:pointed_dripstone",
       "Count": 1
     },
+    "impact_sound": "minecraft:block.dripstone_block.fall",
     "type": "minecard:throw_item"
   },
   "absorption_potion": {
@@ -74,6 +90,8 @@
         "Potion": "minecraft:healing"
       }
     },
+    "start_sound": "minecraft:entity.splash_potion.throw",
+    "impact_sound": "minecraft:entity.splash_potion.break",
     "end_animation": "minecard:healing_potion",
     "type": "minecard:throw_item"
   },
@@ -93,11 +111,20 @@
     },
     "type": "minecard:throw_item"
   },
+  "orange_splash": {
+    "color": {
+      "red": 1.0,
+      "green": 0.4,
+      "blue": 0.0
+    },
+    "type": "minecard:splash"
+  },
   "throw_mushroom_stew": {
     "item": {
       "id": "minecraft:mushroom_stew",
       "Count": 1
     },
+    "impact_sound": "minecraft:entity.player.burp",
     "type": "minecard:throw_item"
   },
   "ravager_charge": {
@@ -123,6 +150,8 @@
         "Potion": "minecraft:turtle_master"
       }
     },
+    "start_sound": "minecraft:entity.splash_potion.throw",
+    "impact_sound": "minecraft:entity.splash_potion.break",
     "end_animation": "minecard:absorption_potion",
     "type": "minecard:throw_item"
   },
@@ -139,6 +168,7 @@
       "id": "minecraft:sweet_berries",
       "Count": 1
     },
+    "impact_sound": "minecraft:entity.player.burp",
     "type": "minecard:throw_item"
   },
   "throw_packed_ice": {
@@ -146,6 +176,7 @@
       "id": "minecraft:packed_ice",
       "Count": 1
     },
+    "impact_sound": "minecraft:entity.player.hurt_freeze",
     "type": "minecard:throw_item"
   },
   "throw_iron_boots": {
@@ -156,6 +187,7 @@
         "Damage": 0
       }
     },
+    "impact_sound": "minecraft:item.armor.equip_iron",
     "type": "minecard:throw_item"
   },
   "throw_web": {
@@ -170,6 +202,9 @@
       "id": "minecraft:fire_charge",
       "Count": 1
     },
+    "start_sound": "minecraft:entity.ghast.shoot",
+    "impact_sound": "minecraft:entity.generic.explode",
+    "end_animation": "minecard:orange_splash",
     "type": "minecard:throw_item"
   },
   "throw_pork": {
@@ -177,6 +212,7 @@
       "id": "minecraft:porkchop",
       "Count": 1
     },
+    "impact_sound": "minecraft:entity.player.burp",
     "type": "minecard:throw_item"
   },
   "wither_projectile": {
@@ -184,6 +220,7 @@
       "id": "minecraft:wither_skeleton_skull",
       "Count": 1
     },
+    "start_sound": "minecraft:entity.wither.shoot",
     "end_animation": "minecard:target_explosion",
     "type": "minecard:throw_item"
   },
@@ -203,6 +240,7 @@
         "Damage": 0
       }
     },
+    "impact_sound": "minecraft:item.armor.equip_iron",
     "type": "minecard:throw_item"
   },
   "throw_shield": {
@@ -213,6 +251,7 @@
         "Damage": 0
       }
     },
+    "impact_sound": "minecraft:item.shield.block",
     "type": "minecard:throw_item"
   },
   "healing_potion": {
@@ -228,6 +267,7 @@
       "id": "minecraft:ender_pearl",
       "Count": 1
     },
+    "start_sound": "minecraft:entity.ender_pearl.throw",
     "type": "minecard:throw_item"
   },
   "ender_dragon": {
@@ -241,6 +281,8 @@
         "Damage": 0
       }
     },
+    "start_sound": "minecraft:item.trident.throw",
+    "impact_sound": "minecraft:item.trident.hit",
     "end_animation": "minecard:lightning_bolt",
     "type": "minecard:throw_item"
   },
@@ -271,11 +313,13 @@
       "id": "minecraft:milk_bucket",
       "Count": 1
     },
+    "impact_sound": "minecraft:entity.generic.drink",
     "end_animation": "minecard:white_splash",
     "type": "minecard:throw_item"
   },
   "llama_spit": {
     "start_sound": "minecraft:entity.llama.spit",
+    "impact_sound": "minecraft:entity.generic.hurt",
     "entity": "minecraft:llama_spit",
     "moving": true,
     "duration": 15,
@@ -290,6 +334,7 @@
         "Damage": 0
       }
     },
+    "impact_sound": "minecraft:item.armor.equip_leather",
     "type": "minecard:throw_item"
   },
   "throw_snowball": {
@@ -297,6 +342,9 @@
       "id": "minecraft:snowball",
       "Count": 1
     },
+    "start_sound": "minecraft:entity.snowball.throw",
+    "impact_sound": "minecraft:entity.generic.hurt",
+    "end_animation": "minecard:white_splash",
     "type": "minecard:throw_item"
   },
   "glow": {
@@ -315,6 +363,7 @@
       "id": "minecraft:rotten_flesh",
       "Count": 1
     },
+    "impact_sound": "minecraft:entity.player.burp",
     "type": "minecard:throw_item"
   }
 }
