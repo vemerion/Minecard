@@ -2,6 +2,7 @@ package mod.vemerion.minecard.game;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -57,8 +58,8 @@ public class CardType {
 	}
 
 	public Card create() {
-		return new Card(type, cost, cost, health, health, health, damage, damage, false, new HashMap<>(properties),
-				ability, new HashMap<>(equipment), additionalData);
+		return new Card(Optional.ofNullable(type), cost, cost, health, health, health, damage, damage, false,
+				new HashMap<>(properties), ability, new HashMap<>(equipment), additionalData);
 	}
 
 	public EntityType<?> getType() {

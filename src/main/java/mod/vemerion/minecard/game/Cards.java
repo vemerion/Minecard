@@ -31,7 +31,7 @@ public class Cards extends SimpleJsonResourceReloadListener {
 	private static final Gson GSON = (new GsonBuilder()).setPrettyPrinting().disableHtmlEscaping().create();
 	public static final String FOLDER_NAME = Main.MODID + "_cards";
 
-	public static final CardType EMPTY_CARD_TYPE = new CardType(null, 0, 0, 0, Map.of(), NoCardAbility.NO_CARD_ABILITY,
+	public static final CardType EMPTY_CARD_TYPE = new CardType(null, 0, 1, 1, Map.of(), NoCardAbility.NO_CARD_ABILITY,
 			Map.of(), AdditionalCardData.EMPTY);
 	public static final CardType TUTORIAL_CARD_TYPE = new CardType(EntityType.CREEPER, 1, 2, 1,
 			Map.of(CardProperty.THORNS, 1), new DrawCardsAbility(CardAbilityTrigger.ATTACK, 2), Map.of(),

@@ -31,7 +31,7 @@ public abstract class CardCondition implements Predicate<Card> {
 	protected abstract CardConditionType<?> getType();
 
 	protected abstract Object[] getDescriptionArgs();
-	
+
 	public boolean isEmpty() {
 		return false;
 	}
@@ -87,7 +87,7 @@ public abstract class CardCondition implements Predicate<Card> {
 		protected Object[] getDescriptionArgs() {
 			return new Object[] {};
 		}
-		
+
 		public boolean isEmpty() {
 			return true;
 		}
@@ -218,7 +218,7 @@ public abstract class CardCondition implements Predicate<Card> {
 
 		@Override
 		public boolean test(Card t) {
-			return t.getType() == entity;
+			return t.getType().orElse(null) == entity;
 		}
 
 		@Override

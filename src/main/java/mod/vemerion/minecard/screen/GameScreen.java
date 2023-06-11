@@ -273,7 +273,7 @@ public class GameScreen extends Screen implements GameClient {
 				}
 			}
 
-			if (placed.getType() == EntityType.WITHER) {
+			if (placed.getType().orElse(null) == EntityType.WITHER) {
 				addAnimation(new WitherAnimation(minecraft));
 			}
 
@@ -620,14 +620,14 @@ public class GameScreen extends Screen implements GameClient {
 			// Cards
 			if (!isMulligan()) {
 				for (var card : playerState.board) {
-					if (card.getType() == null || !card.isDead()) {
+					if (!card.isDead()) {
 						card.render(transformCard(card, 0, mouseX, mouseY, partialTicks), mouseX, mouseY, source,
 								partialTicks);
 					}
 				}
 			}
 			for (var card : playerState.hand) {
-				if (card.getType() == null || !card.isDead() || card.isSpell()) {
+				if (!card.isDead() || card.isSpell()) {
 					card.render(
 							!enemy && !isSpectator ? transformCard(card, -CARD_HEIGHT / 2, mouseX, mouseY, partialTicks)
 									: new PoseStack(),
@@ -806,8 +806,8 @@ public class GameScreen extends Screen implements GameClient {
 						: SoundEvents.ITEM_FRAME_ADD_ITEM;
 				minecraft.getSoundManager().play(SimpleSoundInstance.forUI(sound, 1));
 			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-				Main.LOGGER.error("Unable to play ambient sound for card " + card.getType().getRegistryName().toString()
-						+ ": " + e);
+				Main.LOGGER.error("Unable to play ambient sound for card "
+						+ card.getType().get().getRegistryName().toString() + ": " + e);
 			}
 		}
 	}

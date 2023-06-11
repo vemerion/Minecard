@@ -2,6 +2,7 @@ package mod.vemerion.minecard.game;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -19,27 +20,28 @@ public class Card {
 
 	private static int counter = 0;
 
-	public static final Codec<Card> CODEC = ExtraCodecs.lazyInitializedCodec(() -> RecordCodecBuilder.create(
-			instance -> instance.group(ForgeRegistries.ENTITIES.getCodec().fieldOf("entity").forGetter(Card::getType),
-					Codec.INT.fieldOf("cost").forGetter(Card::getCost),
-					Codec.INT.fieldOf("original_cost").forGetter(Card::getOriginalCost),
-					Codec.INT.fieldOf("health").forGetter(Card::getHealth),
-					Codec.INT.fieldOf("max_health").forGetter(Card::getMaxHealth),
-					Codec.INT.fieldOf("original_health").forGetter(Card::getOriginalHealth),
-					Codec.INT.fieldOf("damage").forGetter(Card::getDamage),
-					Codec.INT.fieldOf("original_damage").forGetter(Card::getOriginalDamage),
-					Codec.BOOL.fieldOf("ready").forGetter(Card::isReady),
-					CardProperty.CODEC_MAP.optionalFieldOf("properties", new HashMap<>())
-							.forGetter(Card::getProperties),
-					CardAbility.CODEC.optionalFieldOf("abilities", NoCardAbility.NO_CARD_ABILITY)
-							.forGetter(Card::getAbility),
-					GameUtil.EQUIPMENT_MAP_CODEC.optionalFieldOf("equipment", new HashMap<>())
-							.forGetter(Card::getEquipment),
-					AdditionalCardData.CODEC.optionalFieldOf("additional_data", AdditionalCardData.EMPTY)
-							.forGetter(Card::getAdditionalData))
+	public static final Codec<Card> CODEC = ExtraCodecs
+			.lazyInitializedCodec(() -> RecordCodecBuilder.create(instance -> instance
+					.group(ForgeRegistries.ENTITIES.getCodec().optionalFieldOf("entity").forGetter(Card::getType),
+							Codec.INT.fieldOf("cost").forGetter(Card::getCost),
+							Codec.INT.fieldOf("original_cost").forGetter(Card::getOriginalCost),
+							Codec.INT.fieldOf("health").forGetter(Card::getHealth),
+							Codec.INT.fieldOf("max_health").forGetter(Card::getMaxHealth),
+							Codec.INT.fieldOf("original_health").forGetter(Card::getOriginalHealth),
+							Codec.INT.fieldOf("damage").forGetter(Card::getDamage),
+							Codec.INT.fieldOf("original_damage").forGetter(Card::getOriginalDamage),
+							Codec.BOOL.fieldOf("ready").forGetter(Card::isReady),
+							CardProperty.CODEC_MAP.optionalFieldOf("properties", new HashMap<>())
+									.forGetter(Card::getProperties),
+							CardAbility.CODEC.optionalFieldOf("abilities", NoCardAbility.NO_CARD_ABILITY)
+									.forGetter(Card::getAbility),
+							GameUtil.EQUIPMENT_MAP_CODEC.optionalFieldOf("equipment", new HashMap<>())
+									.forGetter(Card::getEquipment),
+							AdditionalCardData.CODEC.optionalFieldOf("additional_data", AdditionalCardData.EMPTY)
+									.forGetter(Card::getAdditionalData))
 					.apply(instance, Card::new)));
 
-	private EntityType<?> type;
+	private Optional<EntityType<?>> type;
 	private AdditionalCardData additionalData;
 	private int cost;
 	private int originalCost;
@@ -54,7 +56,7 @@ public class Card {
 	private Map<EquipmentSlot, Item> equipment;
 	private int id;
 
-	public Card(EntityType<?> type, int cost, int originalCost, int health, int maxHealth, int originalHealth,
+	public Card(Optional<EntityType<?>> type, int cost, int originalCost, int health, int maxHealth, int originalHealth,
 			int damage, int originalDamage, boolean ready, Map<CardProperty, Integer> properties, CardAbility ability,
 			Map<EquipmentSlot, Item> equipment, AdditionalCardData additionalData) {
 		this.type = type;
@@ -81,7 +83,7 @@ public class Card {
 		this.id = other.getId();
 	}
 
-	public EntityType<?> getType() {
+	public Optional<EntityType<?>> getType() {
 		return type;
 	}
 
@@ -200,7 +202,7 @@ public class Card {
 
 	public Component getName() {
 		return getAdditionalData() instanceof AdditionalCardData.ItemData itemData ? itemData.getStack().getHoverName()
-				: getType().getDescription();
+				: getType().get().getDescription();
 	}
 
 	public int getId() {

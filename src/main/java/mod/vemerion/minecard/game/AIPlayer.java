@@ -88,7 +88,8 @@ public class AIPlayer implements GameClient {
 
 	private Card findTarget(Card attacker) {
 		var totalDamage = yourBoard.stream().mapToInt(c -> c.canAttack() ? c.getDamage() : 0).sum();
-		var enemyPlayer = enemyBoard.stream().dropWhile(c -> c.getType() != EntityType.PLAYER).findFirst().get();
+		var enemyPlayer = enemyBoard.stream().dropWhile(c -> c.getType().orElse(null) != EntityType.PLAYER).findFirst()
+				.get();
 
 		// Attack player if it leads to win or with small random chance
 		if (GameUtil.canBeAttacked(enemyPlayer, enemyBoard)
@@ -97,7 +98,7 @@ public class AIPlayer implements GameClient {
 		}
 
 		var candidates = enemyBoard.stream()
-				.filter(c -> c.getType() != EntityType.PLAYER && GameUtil.canBeAttacked(c, enemyBoard))
+				.filter(c -> c.getType().orElse(null) != EntityType.PLAYER && GameUtil.canBeAttacked(c, enemyBoard))
 				.collect(Collectors.toCollection(() -> new ArrayList<>()));
 		Collections.shuffle(candidates);
 

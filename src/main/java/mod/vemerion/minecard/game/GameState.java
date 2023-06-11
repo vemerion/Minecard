@@ -158,7 +158,9 @@ public class GameState {
 				break;
 			case ENEMY_HAND:
 				if (card.isDead()) {
-					updated.add(Cards.EMPTY_CARD_TYPE.create().setId(card.getId()));
+					var fake = Cards.EMPTY_CARD_TYPE.create().setId(card.getId());
+					fake.setHealth(0);
+					updated.add(fake);
 				}
 				break;
 			case UNKNOWN:

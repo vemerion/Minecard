@@ -104,7 +104,7 @@ public class ClientCard extends Card {
 				: getPosition(partialTick);
 
 		// Rotate to show back
-		if (getType() == null) {
+		if (getType().isEmpty()) {
 			ps.translate(pos.x + 24, 0, 0);
 			ps.mulPose(new Quaternion(0, 180, 0, true));
 			ps.translate(-pos.x - 24, 0, 0);

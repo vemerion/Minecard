@@ -65,8 +65,8 @@ public class DeathAnimation extends Animation {
 						: SoundEvents.GENERIC_DEATH;
 				mc.getSoundManager().play(SimpleSoundInstance.forUI(sound, 1));
 			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-				Main.LOGGER.error("Unable to play death sound for card " + card.getType().getRegistryName().toString()
-						+ ": " + e);
+				Main.LOGGER.error("Unable to play death sound for card "
+						+ card.getType().get().getRegistryName().toString() + ": " + e);
 			}
 		}
 	}

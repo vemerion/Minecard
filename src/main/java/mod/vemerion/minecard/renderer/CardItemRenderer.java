@@ -85,13 +85,13 @@ public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 				overlay, pose, buffer, 0);
 		pose.translate(-0.001, -0.001, -0.001);
 		itemRenderer.renderStatic(
-				card.getType() == null ? ModItems.EMPTY_CARD_FULL.get().getDefaultInstance()
+				card.getType().isEmpty() ? ModItems.EMPTY_CARD_FULL.get().getDefaultInstance()
 						: ModItems.EMPTY_CARD_BACK.get().getDefaultInstance(),
 				TransformType.NONE, light, overlay, pose, buffer, 0);
 		pose.popPose();
 
 		var type = card.getType();
-		if (type == null)
+		if (type.isEmpty())
 			return;
 		var entity = getEntity(card, mc.level);
 
@@ -243,11 +243,11 @@ public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 	public static Entity getEntity(Card card, ClientLevel level) {
 		var type = card.getType();
 
-		if (type == null)
+		if (type.isEmpty())
 			return null;
 
 		// Find actual player
-		if (type == EntityType.PLAYER) {
+		if (type.get() == EntityType.PLAYER) {
 			if (card.getAdditionalData() instanceof AdditionalCardData.IdData idData) {
 				var id = idData.getId();
 				if (id.equals(AIPlayer.ID)) {
@@ -261,7 +261,7 @@ public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 			return level.players().get(0);
 		}
 
-		var entity = CACHE.computeIfAbsent(type, t -> {
+		var entity = CACHE.computeIfAbsent(type.get(), t -> {
 			// Special case for item to prevent spin
 			if (t == EntityType.ITEM) {
 				return new ItemEntity(EntityType.ITEM, level) {

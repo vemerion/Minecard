@@ -57,7 +57,7 @@ public class ChoiceCardAbility extends CardAbility {
 		}, () -> {
 			var cards = new ArrayList<Card>();
 			for (int i = 0; i < abilities.size(); i++)
-				cards.add(new CardType(card.getType(), 0, 0, 0, Map.of(), abilities.get(i), Map.of(),
+				cards.add(new CardType(card.getType().get(), 0, 0, 0, Map.of(), abilities.get(i), Map.of(),
 						card.getAdditionalData()).create().setId(i));
 			choices.addChoice(receivers, this, cards, false);
 		});
