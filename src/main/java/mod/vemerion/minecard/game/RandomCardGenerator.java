@@ -11,6 +11,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import mod.vemerion.minecard.capability.DeckData;
 import mod.vemerion.minecard.game.ability.AddCardsAbility;
 import mod.vemerion.minecard.game.ability.CardAbility;
 import mod.vemerion.minecard.game.ability.CardAbilityGroup;
@@ -39,6 +40,15 @@ public class RandomCardGenerator {
 	public RandomCardGenerator(Random rand, int maxDepth) {
 		this.rand = rand;
 		this.maxDepth = maxDepth;
+	}
+
+	public static List<Card> generateDeck() {
+		List<Card> deck = new ArrayList<>();
+		var gen = new RandomCardGenerator(new Random(), 4);
+		for (int i = 0; i < DeckData.CAPACITY; i++)
+			deck.add(gen.next().create());
+
+		return deck;
 	}
 
 	public CardType next() {

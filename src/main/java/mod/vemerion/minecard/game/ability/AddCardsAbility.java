@@ -1,5 +1,6 @@
 package mod.vemerion.minecard.game.ability;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Nullable;
@@ -50,10 +51,13 @@ public class AddCardsAbility extends CardAbility {
 	@Override
 	protected void invoke(List<Receiver> receivers, PlayerState state, Card card, @Nullable Card other) {
 		var created = toAdd.get(state.getGame().getRandom().nextInt(toAdd.size())).get(false).create();
-		state.addCards(receivers, List.of(created));
+		List<Card> added = new ArrayList<>();
+		added.add(created);
+		state.addCards(receivers, added);
 
-		state.getGame().addHistory(receivers,
-				new HistoryEntry(HistoryEntry.Type.ABILITY, state.getId(), card, List.of(created)));
+		if (!added.isEmpty())
+			state.getGame().addHistory(receivers,
+					new HistoryEntry(HistoryEntry.Type.ABILITY, state.getId(), card, added));
 	}
 
 	public List<LazyCardType> getCards() {
