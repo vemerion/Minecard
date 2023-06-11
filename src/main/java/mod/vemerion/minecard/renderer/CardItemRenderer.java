@@ -173,6 +173,8 @@ public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 
 		pose.pushPose();
 		pose.translate(0.4, -0.47 + (0.34f - dimensions.height * drawingScale * scaleFactor) / 2f, 0);
+		if (transform == TransformType.NONE)
+			pose.translate(0, 0, -0.2);
 		pose.scale(drawingScale, drawingScale, drawingScale);
 		pose.mulPose(new Quaternion(0, 20, 0, true));
 
