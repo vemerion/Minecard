@@ -132,7 +132,7 @@ public class Card {
 	}
 
 	public boolean isSpell() {
-		return originalHealth == 0 && originalDamage == 0;
+		return originalHealth == 0;
 	}
 
 	public int getDamage() {
