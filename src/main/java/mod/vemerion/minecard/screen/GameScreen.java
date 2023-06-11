@@ -1080,7 +1080,8 @@ public class GameScreen extends Screen implements GameClient {
 		private static final int TOTAL_SIZE = ENTRY_SIZE + PADDING;
 		private static final int MAX_ENTRIES = 15;
 		private static final int ENTRY_CARD_SCALE = 2;
-		private static final int CARDS_SPACING = 10;
+		private static final int TARGETS_SPACING = 5;
+		private static final int CARD_TARGET_SPACING = 10;
 
 		private float xPos = X;
 		private float xPos0 = xPos;
@@ -1156,14 +1157,20 @@ public class GameScreen extends Screen implements GameClient {
 			// Targets
 			if (!entry.getTargets().isEmpty()) {
 				var targets = entry.getTargets();
-				float xStart = x + ENTRY_SIZE / 2 + 3 + CARD_WIDTH * ENTRY_CARD_SCALE + CARDS_SPACING;
-				float targetScale = Math.min(ENTRY_CARD_SCALE,
-						(width - xStart - CARDS_SPACING * targets.size()) / (targets.size() * CARD_WIDTH));
+				float xStart = x + ENTRY_SIZE / 2 + 3 + CARD_WIDTH * ENTRY_CARD_SCALE + CARD_TARGET_SPACING;
+
+				// Extra space to make sure scaled down card is not hidden behind item
+				if (targets.size() > 8)
+					xStart += CARD_TARGET_SPACING;
+
+				// Spacing is also scaled down
+				float targetScale = Mth.clamp((width - xStart) / (targets.size() * (CARD_WIDTH + TARGETS_SPACING)),
+						0.3f, ENTRY_CARD_SCALE);
 				float yStart = y + (ENTRY_CARD_SCALE - targetScale) * CARD_HEIGHT / 2;
 				for (int i = 0; i < targets.size(); i++) {
 					var target = new ClientCard(targets.get(i), Vec2.ZERO, GameScreen.this);
 					poseStack.pushPose();
-					poseStack.translate(xStart + i * (targetScale * CARD_WIDTH + CARDS_SPACING), yStart, 500);
+					poseStack.translate(xStart + i * (targetScale * (CARD_WIDTH + TARGETS_SPACING)), yStart, 500);
 					poseStack.scale(targetScale, targetScale, targetScale);
 					target.render(poseStack, 0, 0, source, partialTick);
 					poseStack.popPose();
@@ -1172,7 +1179,7 @@ public class GameScreen extends Screen implements GameClient {
 
 			// Item
 			poseStack.pushPose();
-			poseStack.translate(x + ENTRY_SIZE / 2 + 3 + CARD_WIDTH * ENTRY_CARD_SCALE + CARDS_SPACING / 2,
+			poseStack.translate(x + ENTRY_SIZE / 2 + 3 + CARD_WIDTH * ENTRY_CARD_SCALE + CARD_TARGET_SPACING / 2,
 					y + CARD_HEIGHT / 2 * ENTRY_CARD_SCALE, 600);
 			poseStack.scale(40, -40, 40);
 			itemRenderer.renderStatic(stack, ItemTransforms.TransformType.GUI, LightTexture.FULL_BRIGHT,

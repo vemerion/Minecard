@@ -209,13 +209,15 @@ public class AIPlayer implements GameClient {
 			yourHand.removeIf(c -> c.getId() == card.getId());
 		}
 
-		if (leftId == -1) {
-			board.add(0, card);
-		}
+		if (!card.isSpell()) {
+			if (leftId == -1) {
+				board.add(0, card);
+			}
 
-		for (int i = 0; i < board.size(); i++) {
-			if (board.get(i).getId() == leftId) {
-				board.add(i + 1, card);
+			for (int i = 0; i < board.size(); i++) {
+				if (board.get(i).getId() == leftId) {
+					board.add(i + 1, card);
+				}
 			}
 		}
 	}

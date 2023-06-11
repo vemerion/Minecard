@@ -187,7 +187,7 @@ public class PlayerState {
 			if (card.hasProperty(CardProperty.BABY)) {
 				card.decrementProperty(CardProperty.BABY);
 				if (!card.hasProperty(CardProperty.BABY)) {
-					card.getAbility().onGrow(receivers, this, card);
+					card.getAbility().onGrow(receivers, this, card); // TODO: If onGrow modifies board we have a problem
 				}
 				updated.add(card);
 			}
