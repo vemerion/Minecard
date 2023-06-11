@@ -18,7 +18,7 @@ import net.minecraft.network.chat.TextComponent;
 
 public class CardAbilityGroups {
 
-	private static final List<Pair<CardAbilityGroup, CardAbilityGroup>> INCOMPATIBLE = List.of(
+	public static final List<Pair<CardAbilityGroup, CardAbilityGroup>> INCOMPATIBLE = List.of(
 			Pair.of(CardAbilityGroup.ADJACENT, CardAbilityGroup.YOUR_BOARD),
 			Pair.of(CardAbilityGroup.SELF, CardAbilityGroup.YOUR_BOARD),
 			Pair.of(CardAbilityGroup.TARGET, CardAbilityGroup.ENEMY_BOARD),

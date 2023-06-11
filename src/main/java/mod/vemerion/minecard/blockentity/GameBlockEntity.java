@@ -20,6 +20,7 @@ import mod.vemerion.minecard.game.Card;
 import mod.vemerion.minecard.game.Cards;
 import mod.vemerion.minecard.game.GameState;
 import mod.vemerion.minecard.game.PlayerState;
+import mod.vemerion.minecard.game.RandomCardGenerator;
 import mod.vemerion.minecard.game.Receiver;
 import mod.vemerion.minecard.helper.Helper;
 import mod.vemerion.minecard.init.ModBlockEntities;
