@@ -149,8 +149,7 @@ public class PlayerState {
 	}
 
 	public void endTurn(List<Receiver> receivers) {
-		for (int i = board.size() - 1; i >= 0; i--) {
-			var card = board.get(i);
+		for (var card : new ArrayList<>(new ArrayList<>(board))) {
 			boolean changed = false;
 			if (card.hasProperty(CardProperty.FREEZE)) {
 				card.decrementProperty(CardProperty.FREEZE);
@@ -180,14 +179,14 @@ public class PlayerState {
 		resources = maxResources;
 
 		List<Card> updated = new ArrayList<>();
-		for (var card : board) {
+		for (var card : new ArrayList<>(board)) {
 			if (!card.hasProperty(CardProperty.FREEZE))
 				card.setReady(true);
 
 			if (card.hasProperty(CardProperty.BABY)) {
 				card.decrementProperty(CardProperty.BABY);
 				if (!card.hasProperty(CardProperty.BABY)) {
-					card.getAbility().onGrow(receivers, this, card); // TODO: If onGrow modifies board we have a problem
+					card.getAbility().onGrow(receivers, this, card);
 				}
 				updated.add(card);
 			}
