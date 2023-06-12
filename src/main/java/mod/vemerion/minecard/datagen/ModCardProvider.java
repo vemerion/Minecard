@@ -1,6 +1,7 @@
 package mod.vemerion.minecard.datagen;
 
 import java.io.IOException;
+import java.util.EnumMap;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -674,9 +675,9 @@ public class ModCardProvider implements DataProvider {
 		private int cost;
 		private int health;
 		private int damage;
-		private Map<CardProperty, Integer> properties = new HashMap<>();
+		private Map<CardProperty, Integer> properties = new EnumMap<>(CardProperty.class);
 		private CardAbility ability = NoCardAbility.NO_CARD_ABILITY;
-		private Map<EquipmentSlot, Item> equipment = new HashMap<>();
+		private Map<EquipmentSlot, Item> equipment = new EnumMap<>(EquipmentSlot.class);
 		private AdditionalCardData additionalData = AdditionalCardData.EMPTY;
 		private ResourceLocation key;
 

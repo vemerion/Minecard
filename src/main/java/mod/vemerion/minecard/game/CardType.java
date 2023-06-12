@@ -18,20 +18,26 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 public class CardType {
 	public static final Codec<CardType> CODEC = ExtraCodecs
-			.lazyInitializedCodec(() -> RecordCodecBuilder.create(instance -> instance
-					.group(ForgeRegistries.ENTITIES.getCodec().fieldOf("entity").forGetter(CardType::getType),
-							Codec.INT.fieldOf("cost").forGetter(CardType::getCost),
-							Codec.INT.fieldOf("health").forGetter(CardType::getHealth),
-							Codec.INT.fieldOf("damage").forGetter(CardType::getDamage),
-							CardProperty.CODEC_MAP.optionalFieldOf("properties", new HashMap<>())
-									.forGetter(CardType::getProperties),
-							CardAbility.CODEC.optionalFieldOf("abilities", NoCardAbility.NO_CARD_ABILITY)
-									.forGetter(CardType::getAbility),
-							GameUtil.EQUIPMENT_MAP_CODEC.optionalFieldOf("equipment", new HashMap<>())
-									.forGetter(CardType::getEquipment),
-							AdditionalCardData.CODEC.optionalFieldOf("additional_data", AdditionalCardData.EMPTY)
-									.forGetter(CardType::getAdditionalData))
-					.apply(instance, CardType::new)));
+			.lazyInitializedCodec(
+					() -> RecordCodecBuilder
+							.create(instance -> instance
+									.group(ForgeRegistries.ENTITIES.getCodec().fieldOf("entity").forGetter(
+											CardType::getType), Codec.INT.fieldOf("cost").forGetter(CardType::getCost),
+											Codec.INT.fieldOf("health").forGetter(CardType::getHealth),
+											Codec.INT.fieldOf("damage").forGetter(CardType::getDamage),
+											CardProperty.CODEC_MAP
+													.optionalFieldOf("properties", new HashMap<>())
+													.forGetter(CardType::getProperties),
+											GameUtil.SafeOptionalCodec
+													.defaulted("abilities", CardAbility.CODEC,
+															NoCardAbility.NO_CARD_ABILITY)
+													.forGetter(CardType::getAbility),
+											GameUtil.EQUIPMENT_MAP_CODEC.optionalFieldOf("equipment", new HashMap<>())
+													.forGetter(CardType::getEquipment),
+											AdditionalCardData.CODEC
+													.optionalFieldOf("additional_data", AdditionalCardData.EMPTY)
+													.forGetter(CardType::getAdditionalData))
+									.apply(instance, CardType::new)));
 
 	private final EntityType<?> type;
 	private final AdditionalCardData additionalData;
