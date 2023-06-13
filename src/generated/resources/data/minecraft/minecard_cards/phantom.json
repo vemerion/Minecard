@@ -1,9 +1,9 @@
 {
+  "health": 2,
+  "damage": 3,
   "properties": {
     "stealth": 1
   },
   "entity": "minecraft:phantom",
-  "cost": 3,
-  "health": 2,
-  "damage": 3
+  "cost": 3
 }

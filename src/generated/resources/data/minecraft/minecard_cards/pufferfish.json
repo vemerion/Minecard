@@ -1,9 +1,9 @@
 {
+  "health": 2,
+  "damage": 1,
   "properties": {
     "thorns": 1
   },
   "entity": "minecraft:pufferfish",
-  "cost": 1,
-  "health": 2,
-  "damage": 1
+  "cost": 1
 }

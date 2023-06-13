@@ -17,27 +17,27 @@ import net.minecraft.world.item.Item;
 import net.minecraftforge.registries.ForgeRegistries;
 
 public class CardType {
+
+	public static final int DEFAULT_DECK_COUNT = 3;
+	public static final float DEFAULT_DROP_CHANCE = 0.1f;
+
 	public static final Codec<CardType> CODEC = ExtraCodecs
-			.lazyInitializedCodec(
-					() -> RecordCodecBuilder
-							.create(instance -> instance
-									.group(ForgeRegistries.ENTITIES.getCodec().fieldOf("entity").forGetter(
-											CardType::getType), Codec.INT.fieldOf("cost").forGetter(CardType::getCost),
-											Codec.INT.fieldOf("health").forGetter(CardType::getHealth),
-											Codec.INT.fieldOf("damage").forGetter(CardType::getDamage),
-											CardProperty.CODEC_MAP
-													.optionalFieldOf("properties", new HashMap<>())
-													.forGetter(CardType::getProperties),
-											GameUtil.SafeOptionalCodec
-													.defaulted("abilities", CardAbility.CODEC,
-															NoCardAbility.NO_CARD_ABILITY)
-													.forGetter(CardType::getAbility),
-											GameUtil.EQUIPMENT_MAP_CODEC.optionalFieldOf("equipment", new HashMap<>())
-													.forGetter(CardType::getEquipment),
-											AdditionalCardData.CODEC
-													.optionalFieldOf("additional_data", AdditionalCardData.EMPTY)
-													.forGetter(CardType::getAdditionalData))
-									.apply(instance, CardType::new)));
+			.lazyInitializedCodec(() -> RecordCodecBuilder.create(instance -> instance.group(
+					ForgeRegistries.ENTITIES.getCodec().fieldOf("entity").forGetter(CardType::getType),
+					Codec.INT.fieldOf("cost").forGetter(CardType::getCost),
+					Codec.INT.fieldOf("health").forGetter(CardType::getHealth),
+					Codec.INT.fieldOf("damage").forGetter(CardType::getDamage),
+					CardProperty.CODEC_MAP.optionalFieldOf("properties", new HashMap<>())
+							.forGetter(CardType::getProperties),
+					GameUtil.SafeOptionalCodec.defaulted("abilities", CardAbility.CODEC, NoCardAbility.NO_CARD_ABILITY)
+							.forGetter(CardType::getAbility),
+					GameUtil.EQUIPMENT_MAP_CODEC.optionalFieldOf("equipment", new HashMap<>())
+							.forGetter(CardType::getEquipment),
+					AdditionalCardData.CODEC.optionalFieldOf("additional_data", AdditionalCardData.EMPTY)
+							.forGetter(CardType::getAdditionalData),
+					Codec.INT.optionalFieldOf("deck_count", DEFAULT_DECK_COUNT).forGetter(CardType::getDeckCount),
+					Codec.FLOAT.optionalFieldOf("drop_chance", DEFAULT_DROP_CHANCE).forGetter(CardType::getDropChance))
+					.apply(instance, CardType::new)));
 
 	private final EntityType<?> type;
 	private final AdditionalCardData additionalData;
@@ -48,9 +48,12 @@ public class CardType {
 	private final Map<CardProperty, Integer> properties;
 	private final CardAbility ability;
 	private final Map<EquipmentSlot, Item> equipment;
+	private final int deckCount;
+	private final float dropChance;
 
 	public CardType(EntityType<?> type, int cost, int health, int damage, Map<CardProperty, Integer> properties,
-			CardAbility ability, Map<EquipmentSlot, Item> equipment, AdditionalCardData additionalData) {
+			CardAbility ability, Map<EquipmentSlot, Item> equipment, AdditionalCardData additionalData, int deckCount,
+			float dropChance) {
 		this.type = type;
 		this.cost = cost;
 		this.health = health;
@@ -59,6 +62,8 @@ public class CardType {
 		this.additionalData = additionalData;
 		this.properties = properties;
 		this.equipment = equipment;
+		this.deckCount = deckCount;
+		this.dropChance = dropChance;
 		this.cardForRendering = create();
 
 	}
@@ -102,6 +107,14 @@ public class CardType {
 
 	public AdditionalCardData getAdditionalData() {
 		return additionalData;
+	}
+
+	public int getDeckCount() {
+		return deckCount;
+	}
+
+	public float getDropChance() {
+		return dropChance;
 	}
 
 	public Component getName() {

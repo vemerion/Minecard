@@ -1,4 +1,10 @@
 {
+  "additional_data": {
+    "item": {
+      "id": "minecraft:rotten_flesh",
+      "Count": 1
+    }
+  },
   "abilities": {
     "type": "minecard:modify",
     "value": {
@@ -15,32 +21,26 @@
         {
           "health_change": -2,
           "modifications": {
-            "entity": "minecraft:item",
-            "cost": 0,
             "health": 0,
-            "damage": 0
+            "damage": 0,
+            "entity": "minecraft:item",
+            "cost": 0
           }
         },
         {
           "health_change": 2,
           "modifications": {
-            "entity": "minecraft:item",
-            "cost": 0,
             "health": 0,
-            "damage": 0
+            "damage": 0,
+            "entity": "minecraft:item",
+            "cost": 0
           }
         }
       ]
     }
   },
-  "additional_data": {
-    "item": {
-      "id": "minecraft:rotten_flesh",
-      "Count": 1
-    }
-  },
-  "entity": "minecraft:item",
-  "cost": 0,
   "health": 0,
-  "damage": 0
+  "damage": 0,
+  "entity": "minecraft:item",
+  "cost": 0
 }

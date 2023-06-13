@@ -1,13 +1,4 @@
 {
-  "abilities": {
-    "trigger": "death",
-    "cards": [
-      "minecard:emerald",
-      "minecard:leather_chestplate",
-      "minecard:iron_sword"
-    ],
-    "type": "minecard:add_cards"
-  },
   "additional_data": {
     "item": {
       "id": "minecraft:chest",
@@ -19,8 +10,17 @@
       }
     }
   },
-  "entity": "minecraft:item",
-  "cost": 0,
+  "abilities": {
+    "trigger": "death",
+    "cards": [
+      "minecard:emerald",
+      "minecard:leather_chestplate",
+      "minecard:iron_sword"
+    ],
+    "type": "minecard:add_cards"
+  },
   "health": 2,
-  "damage": 0
+  "damage": 0,
+  "entity": "minecraft:item",
+  "cost": 0
 }

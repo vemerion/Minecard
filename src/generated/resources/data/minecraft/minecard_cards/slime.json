@@ -25,8 +25,8 @@
       ]
     }
   },
-  "entity": "minecraft:slime",
-  "cost": 7,
   "health": 4,
-  "damage": 4
+  "damage": 4,
+  "entity": "minecraft:slime",
+  "cost": 7
 }

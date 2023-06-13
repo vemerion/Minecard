@@ -8,8 +8,8 @@
     ],
     "type": "minecard:add_cards"
   },
-  "entity": "minecraft:witch",
-  "cost": 6,
   "health": 5,
-  "damage": 4
+  "damage": 4,
+  "entity": "minecraft:witch",
+  "cost": 6
 }

@@ -17,6 +17,7 @@ import mod.vemerion.minecard.capability.DeckData;
 import mod.vemerion.minecard.game.AIPlayer;
 import mod.vemerion.minecard.game.AdditionalCardData;
 import mod.vemerion.minecard.game.Card;
+import mod.vemerion.minecard.game.CardType;
 import mod.vemerion.minecard.game.Cards;
 import mod.vemerion.minecard.game.GameState;
 import mod.vemerion.minecard.game.PlayerState;
@@ -47,7 +48,6 @@ import net.minecraftforge.registries.ForgeRegistries;
 public class GameBlockEntity extends BlockEntity {
 
 	private static final int START_HAND_SIZE = 5;
-	private static final int MAX_DUPLICATES = 3;
 
 	private GameState state;
 	private Set<UUID> receivers;
@@ -262,7 +262,7 @@ public class GameBlockEntity extends BlockEntity {
 		var id = player.getUUID();
 		DeckData.get(stack).ifPresent(data -> {
 			List<Card> deck = new ArrayList<>();
-			Map<EntityType<?>, Integer> counts = new HashMap<>();
+			Map<CardType, Integer> counts = new HashMap<>();
 
 			for (int i = 0; i < data.getSlots(); i++) {
 				var item = data.getStackInSlot(i);
@@ -271,15 +271,17 @@ public class GameBlockEntity extends BlockEntity {
 					return;
 				}
 				CardData.getType(item).ifPresent(type -> {
-					counts.merge(type, 1, Integer::sum);
-					deck.add(Cards.getInstance(false).get(type).create());
+					var cardType = Cards.getInstance(false).get(type);
+					counts.merge(cardType, 1, Integer::sum);
+					deck.add(cardType.create());
 				});
 			}
 
 			for (var entry : counts.entrySet()) {
-				if (entry.getValue() > MAX_DUPLICATES) {
+				var max = entry.getKey().getDeckCount();
+				if (entry.getValue() > max) {
 					player.sendMessage(new TranslatableComponent(Helper.chat("too_many_duplicates"),
-							entry.getKey().getDescription()), id);
+							entry.getKey().getType().getDescription(), max), id);
 					return;
 				}
 			}

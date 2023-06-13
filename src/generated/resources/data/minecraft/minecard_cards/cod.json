@@ -49,53 +49,53 @@
                                                   "trigger": "summon",
                                                   "placement": "right",
                                                   "card": {
-                                                    "entity": "minecraft:cod",
-                                                    "cost": 1,
                                                     "health": 1,
-                                                    "damage": 1
+                                                    "damage": 1,
+                                                    "entity": "minecraft:cod",
+                                                    "cost": 1
                                                   }
                                                 }
                                               }
                                             }
                                           },
-                                          "entity": "minecraft:cod",
-                                          "cost": 1,
                                           "health": 1,
-                                          "damage": 1
+                                          "damage": 1,
+                                          "entity": "minecraft:cod",
+                                          "cost": 1
                                         }
                                       }
                                     }
                                   }
                                 },
-                                "entity": "minecraft:cod",
-                                "cost": 1,
                                 "health": 1,
-                                "damage": 1
+                                "damage": 1,
+                                "entity": "minecraft:cod",
+                                "cost": 1
                               }
                             }
                           }
                         }
                       },
-                      "entity": "minecraft:cod",
-                      "cost": 1,
                       "health": 1,
-                      "damage": 1
+                      "damage": 1,
+                      "entity": "minecraft:cod",
+                      "cost": 1
                     }
                   }
                 }
               }
             },
-            "entity": "minecraft:cod",
-            "cost": 1,
             "health": 1,
-            "damage": 1
+            "damage": 1,
+            "entity": "minecraft:cod",
+            "cost": 1
           }
         }
       }
     }
   },
-  "entity": "minecraft:cod",
-  "cost": 1,
   "health": 1,
-  "damage": 1
+  "damage": 1,
+  "entity": "minecraft:cod",
+  "cost": 1
 }

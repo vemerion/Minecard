@@ -6,8 +6,8 @@
     ],
     "type": "minecard:add_cards"
   },
-  "entity": "minecraft:zoglin",
-  "cost": 9,
   "health": 6,
-  "damage": 12
+  "damage": 12,
+  "entity": "minecraft:zoglin",
+  "cost": 9
 }

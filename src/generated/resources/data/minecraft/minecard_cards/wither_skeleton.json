@@ -20,17 +20,17 @@
         {
           "health_change": 0,
           "modifications": {
-            "entity": "minecraft:item",
-            "cost": -2,
             "health": 0,
-            "damage": 0
+            "damage": 0,
+            "entity": "minecraft:item",
+            "cost": -2
           }
         }
       ]
     }
   },
-  "entity": "minecraft:wither_skeleton",
-  "cost": 5,
   "health": 6,
-  "damage": 4
+  "damage": 4,
+  "entity": "minecraft:wither_skeleton",
+  "cost": 5
 }

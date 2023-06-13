@@ -14,20 +14,20 @@
         {
           "health_change": -2,
           "modifications": {
+            "health": 0,
+            "damage": 0,
             "properties": {
               "burn": 2
             },
             "entity": "minecraft:item",
-            "cost": 0,
-            "health": 0,
-            "damage": 0
+            "cost": 0
           }
         }
       ]
     }
   },
-  "entity": "minecraft:skeleton_horse",
-  "cost": 4,
   "health": 4,
-  "damage": 4
+  "damage": 4,
+  "entity": "minecraft:skeleton_horse",
+  "cost": 4
 }

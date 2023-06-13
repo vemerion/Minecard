@@ -15,17 +15,17 @@
         {
           "health_change": -1,
           "modifications": {
-            "entity": "minecraft:item",
-            "cost": 0,
             "health": 0,
-            "damage": 0
+            "damage": 0,
+            "entity": "minecraft:item",
+            "cost": 0
           }
         }
       ]
     }
   },
-  "entity": "minecraft:llama",
-  "cost": 1,
   "health": 1,
-  "damage": 1
+  "damage": 1,
+  "entity": "minecraft:llama",
+  "cost": 1
 }

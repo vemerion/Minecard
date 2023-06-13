@@ -5,34 +5,34 @@
       "trigger": "summon",
       "placement": "right",
       "card": {
-        "abilities": {
-          "type": "minecard:summon_card",
-          "value": {
-            "trigger": "tick",
-            "placement": "right",
-            "card": {
-              "entity": "minecraft:bee",
-              "cost": 0,
-              "health": 2,
-              "damage": 2
-            }
-          }
-        },
         "additional_data": {
           "item": {
             "id": "minecraft:bee_nest",
             "Count": 1
           }
         },
-        "entity": "minecraft:item",
-        "cost": 0,
+        "abilities": {
+          "type": "minecard:summon_card",
+          "value": {
+            "trigger": "tick",
+            "placement": "right",
+            "card": {
+              "health": 2,
+              "damage": 2,
+              "entity": "minecraft:bee",
+              "cost": 0
+            }
+          }
+        },
         "health": 5,
-        "damage": 0
+        "damage": 0,
+        "entity": "minecraft:item",
+        "cost": 0
       }
     }
   },
-  "entity": "minecraft:bee",
-  "cost": 5,
   "health": 2,
-  "damage": 2
+  "damage": 2,
+  "entity": "minecraft:bee",
+  "cost": 5
 }

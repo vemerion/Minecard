@@ -24,7 +24,8 @@ public class CardLootModifier extends LootModifier {
 	@Override
 	protected List<ItemStack> doApply(List<ItemStack> generatedLoot, LootContext context) {
 		var type = context.getParam(LootContextParams.THIS_ENTITY).getType();
-		if (!Cards.isAllowed(type))
+		if (!Cards.isAllowed(type)
+				|| context.getRandom().nextFloat() >= Cards.getInstance(false).get(type).getDropChance())
 			return generatedLoot;
 
 		var card = ModItems.CARD.get().getDefaultInstance();

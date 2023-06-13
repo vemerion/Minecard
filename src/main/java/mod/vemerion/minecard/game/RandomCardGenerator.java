@@ -119,6 +119,6 @@ public class RandomCardGenerator {
 		}
 
 		return new CardType(type, cost, health, damage, properties, abilities.get(rand.nextInt(abilities.size())),
-				new HashMap<>(), AdditionalCardData.EMPTY);
+				new HashMap<>(), AdditionalCardData.EMPTY, CardType.DEFAULT_DECK_COUNT, CardType.DEFAULT_DROP_CHANCE);
 	}
 }

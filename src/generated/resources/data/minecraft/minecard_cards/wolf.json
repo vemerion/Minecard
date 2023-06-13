@@ -1,9 +1,9 @@
 {
+  "health": 5,
+  "damage": 3,
   "properties": {
     "taunt": 1
   },
   "entity": "minecraft:wolf",
-  "cost": 4,
-  "health": 5,
-  "damage": 3
+  "cost": 4
 }

@@ -1,4 +1,13 @@
 {
+  "additional_data": {
+    "item": {
+      "id": "minecraft:trident",
+      "Count": 1,
+      "tag": {
+        "Damage": 0
+      }
+    }
+  },
   "abilities": {
     "type": "minecard:multi",
     "value": {
@@ -19,13 +28,13 @@
               {
                 "health_change": -4,
                 "modifications": {
+                  "health": 0,
+                  "damage": 0,
                   "properties": {
                     "burn": 4
                   },
                   "entity": "minecraft:item",
-                  "cost": 0,
-                  "health": 0,
-                  "damage": 0
+                  "cost": 0
                 }
               }
             ]
@@ -47,17 +56,8 @@
       ]
     }
   },
-  "additional_data": {
-    "item": {
-      "id": "minecraft:trident",
-      "Count": 1,
-      "tag": {
-        "Damage": 0
-      }
-    }
-  },
-  "entity": "minecraft:item",
-  "cost": 0,
   "health": 0,
-  "damage": 0
+  "damage": 0,
+  "entity": "minecraft:item",
+  "cost": 0
 }

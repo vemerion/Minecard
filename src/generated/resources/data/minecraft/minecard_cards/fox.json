@@ -7,8 +7,8 @@
       "card": "minecard:sweet_berries"
     }
   },
-  "entity": "minecraft:fox",
-  "cost": 4,
   "health": 3,
-  "damage": 2
+  "damage": 2,
+  "entity": "minecraft:fox",
+  "cost": 4
 }

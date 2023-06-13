@@ -1,4 +1,6 @@
 {
+  "deck_count": 1,
+  "drop_chance": 1.0,
   "abilities": {
     "type": "minecard:modify",
     "value": {
@@ -14,17 +16,17 @@
         {
           "health_change": -4,
           "modifications": {
-            "entity": "minecraft:item",
-            "cost": 0,
             "health": 0,
-            "damage": 0
+            "damage": 0,
+            "entity": "minecraft:item",
+            "cost": 0
           }
         }
       ]
     }
   },
-  "entity": "minecraft:wither",
-  "cost": 12,
   "health": 10,
-  "damage": 10
+  "damage": 10,
+  "entity": "minecraft:wither",
+  "cost": 12
 }

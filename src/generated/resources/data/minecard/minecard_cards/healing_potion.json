@@ -1,4 +1,13 @@
 {
+  "additional_data": {
+    "item": {
+      "id": "minecraft:potion",
+      "Count": 1,
+      "tag": {
+        "Potion": "minecraft:healing"
+      }
+    }
+  },
   "abilities": {
     "type": "minecard:modify",
     "value": {
@@ -15,26 +24,17 @@
         {
           "health_change": 5,
           "modifications": {
-            "entity": "minecraft:item",
-            "cost": 0,
             "health": 0,
-            "damage": 0
+            "damage": 0,
+            "entity": "minecraft:item",
+            "cost": 0
           }
         }
       ]
     }
   },
-  "additional_data": {
-    "item": {
-      "id": "minecraft:potion",
-      "Count": 1,
-      "tag": {
-        "Potion": "minecraft:healing"
-      }
-    }
-  },
-  "entity": "minecraft:item",
-  "cost": 0,
   "health": 0,
-  "damage": 0
+  "damage": 0,
+  "entity": "minecraft:item",
+  "cost": 0
 }

@@ -48,7 +48,7 @@
   "chat.minecard.game_interactions": "Use [item] to interact with game:\n* Deck item: Enter the game\n* Redstone dust: Add an AI opponent to the game\n* Planks: Start a tutorial game",
   "chat.minecard.game_ongoing": "A game is already ongoing.",
   "chat.minecard.not_enough_cards": "You need a full deck to enter the game.",
-  "chat.minecard.too_many_duplicates": "Too many copies of %s in the deck.",
+  "chat.minecard.too_many_duplicates": "Too many copies of %s in the deck (max = %s).",
   "entity.minecard.card_game_robot": "Card Player 9000",
   "gui.minecard.buried_treasure": "Buried Treasure",
   "gui.minecard.card_ability_selection": "%s%s%s%s",

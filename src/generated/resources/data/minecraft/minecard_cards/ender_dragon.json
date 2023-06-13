@@ -1,4 +1,6 @@
 {
+  "deck_count": 1,
+  "drop_chance": 1.0,
   "abilities": {
     "type": "minecard:multi",
     "value": {
@@ -34,10 +36,10 @@
               {
                 "health_change": -1,
                 "modifications": {
-                  "entity": "minecraft:item",
-                  "cost": 0,
                   "health": 0,
-                  "damage": 0
+                  "damage": 0,
+                  "entity": "minecraft:item",
+                  "cost": 0
                 }
               }
             ]
@@ -46,8 +48,8 @@
       ]
     }
   },
-  "entity": "minecraft:ender_dragon",
-  "cost": 10,
   "health": 13,
-  "damage": 5
+  "damage": 5,
+  "entity": "minecraft:ender_dragon",
+  "cost": 10
 }

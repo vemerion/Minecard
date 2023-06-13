@@ -124,7 +124,7 @@ public class ModCardProvider implements DataProvider {
 						new CardAbilityGroups(EnumSet.of(CardAbilityGroup.YOUR_HAND, CardAbilityGroup.YOUR_DECK)),
 						CardSelectionMethod.ALL, new CardCondition.Entity(EntityType.WITHER)),
 				List.of(modification(0, new LazyCardType(new Builder(EntityType.ITEM, -2, 0, 0).build()))))));
-		add(new Builder(EntityType.WITHER, 12, 10, 10)
+		add(new Builder(EntityType.WITHER, 12, 10, 10).setDropChance(1).setDeckCount(1)
 				.setCardAbility(new ModifyAbility(CardAbilityTrigger.TICK, Optional.of(mod("wither_projectile")),
 						new CardAbilitySelection(new CardAbilityGroups(EnumSet.of(CardAbilityGroup.ENEMY_BOARD)),
 								CardSelectionMethod.RANDOM, CardCondition.NoCondition.NO_CONDITION),
@@ -147,15 +147,18 @@ public class ModCardProvider implements DataProvider {
 						.setAdditionalData(new AdditionalCardData.ItemData(Items.WHITE_WOOL)).build()))));
 		add(new Builder(EntityType.VILLAGER, 6, 3, 3).setCardAbility(new SummonCardAbility(CardAbilityTrigger.HURT,
 				CardPlacement.RIGHT, new LazyCardType(new Builder(EntityType.IRON_GOLEM, 0, 7, 7).build()))));
-		add(new Builder(EntityType.ENDER_DRAGON, 10, 13, 5).setCardAbility(new MultiAbility(List.of(
-				new SummonCardAbility(CardAbilityTrigger.SUMMON, CardPlacement.LEFT,
-						new LazyCardType(mod("end_crystal"))),
-				new SummonCardAbility(CardAbilityTrigger.SUMMON, CardPlacement.RIGHT,
-						new LazyCardType(mod("end_crystal"))),
-				new ModifyAbility(CardAbilityTrigger.TICK, Optional.of(mod("ender_dragon")),
-						new CardAbilitySelection(new CardAbilityGroups(EnumSet.of(CardAbilityGroup.ENEMY_BOARD)),
-								CardSelectionMethod.ALL, CardCondition.NoCondition.NO_CONDITION),
-						List.of(modification(-1, new LazyCardType(new Builder(EntityType.ITEM, 0, 0, 0).build()))))))));
+		add(new Builder(EntityType.ENDER_DRAGON, 10, 13, 5).setDeckCount(1).setDropChance(1)
+				.setCardAbility(new MultiAbility(List.of(
+						new SummonCardAbility(CardAbilityTrigger.SUMMON, CardPlacement.LEFT,
+								new LazyCardType(mod("end_crystal"))),
+						new SummonCardAbility(CardAbilityTrigger.SUMMON, CardPlacement.RIGHT,
+								new LazyCardType(mod("end_crystal"))),
+						new ModifyAbility(CardAbilityTrigger.TICK, Optional.of(mod("ender_dragon")),
+								new CardAbilitySelection(
+										new CardAbilityGroups(EnumSet.of(CardAbilityGroup.ENEMY_BOARD)),
+										CardSelectionMethod.ALL, CardCondition.NoCondition.NO_CONDITION),
+								List.of(modification(-1,
+										new LazyCardType(new Builder(EntityType.ITEM, 0, 0, 0).build()))))))));
 		add(new Builder(EntityType.RABBIT, 1, 2, 1).setCardAbility(new ChanceAbility(30, new ModifyAbility(
 				CardAbilityTrigger.SUMMON, Optional.empty(),
 				new CardAbilitySelection(new CardAbilityGroups(EnumSet.of(CardAbilityGroup.SELF)),
@@ -679,6 +682,8 @@ public class ModCardProvider implements DataProvider {
 		private CardAbility ability = NoCardAbility.NO_CARD_ABILITY;
 		private Map<EquipmentSlot, Item> equipment = new EnumMap<>(EquipmentSlot.class);
 		private AdditionalCardData additionalData = AdditionalCardData.EMPTY;
+		private int deckCount = CardType.DEFAULT_DECK_COUNT;
+		private float dropChance = CardType.DEFAULT_DROP_CHANCE;
 		private ResourceLocation key;
 
 		private Builder(EntityType<?> type, int cost, int health, int damage) {
@@ -713,8 +718,19 @@ public class ModCardProvider implements DataProvider {
 			return this;
 		}
 
+		private Builder setDeckCount(int deckCount) {
+			this.deckCount = deckCount;
+			return this;
+		}
+
+		private Builder setDropChance(float dropChance) {
+			this.dropChance = dropChance;
+			return this;
+		}
+
 		private CardType build() {
-			return new CardType(type, cost, health, damage, properties, ability, equipment, additionalData);
+			return new CardType(type, cost, health, damage, properties, ability, equipment, additionalData, deckCount,
+					dropChance);
 		}
 
 		private ResourceLocation getKey() {

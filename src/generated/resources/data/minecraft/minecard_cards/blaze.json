@@ -13,20 +13,20 @@
         {
           "health_change": 0,
           "modifications": {
+            "health": 0,
+            "damage": 0,
             "properties": {
               "burn": 3
             },
             "entity": "minecraft:item",
-            "cost": 0,
-            "health": 0,
-            "damage": 0
+            "cost": 0
           }
         }
       ]
     }
   },
-  "entity": "minecraft:blaze",
-  "cost": 6,
   "health": 6,
-  "damage": 5
+  "damage": 5,
+  "entity": "minecraft:blaze",
+  "cost": 6
 }
