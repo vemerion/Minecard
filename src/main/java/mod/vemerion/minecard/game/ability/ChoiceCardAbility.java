@@ -11,10 +11,12 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import mod.vemerion.minecard.game.Card;
 import mod.vemerion.minecard.game.CardType;
+import mod.vemerion.minecard.game.GameUtil;
 import mod.vemerion.minecard.game.PlayerState;
 import mod.vemerion.minecard.game.Receiver;
 import mod.vemerion.minecard.init.ModCardAbilities;
 import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.util.ExtraCodecs;
 
 public class ChoiceCardAbility extends CardAbility {
@@ -42,10 +44,14 @@ public class ChoiceCardAbility extends CardAbility {
 	protected Object[] getDescriptionArgs() {
 		var text = TextComponent.EMPTY.copy();
 		for (var ability : abilities) {
+			text.append("  ");
 			text.append(ability.getDescription());
 			text.append("\n");
 		}
-		return new Object[] { text };
+		return new Object[] {
+				GameUtil.emphasize(
+						new TranslatableComponent(ModCardAbilities.CHOICE.get().getTranslationKey() + ".choice_of")),
+				text };
 	}
 
 	@Override

@@ -127,7 +127,7 @@ public class ModLanguageProvider extends LanguageProvider {
 		add(ModCardAbilities.MODIFY.get().getTranslationKey() + ".element_cost", ", cost %s");
 		add(ModCardAbilities.MODIFY.get().getTranslationKey() + ".element_heal", ", restoring %s health");
 		add(ModCardAbilities.MODIFY.get().getTranslationKey() + ".element_hurt", ", taking %s damage");
-		add(ModCardAbilities.ADD_CARDS.get().getTranslationKey(), "%s Add %s to your hand.");
+		add(ModCardAbilities.ADD_CARDS.get().getTranslationKey(), "%s Receive %s.");
 		add(ModCardAbilities.ADD_CARDS.get().getTranslationKey() + ".one_of", "one of");
 		add(ModCardAbilities.ADD_CARDS.get().getTranslationKey() + ".element", " [%s]");
 
@@ -142,8 +142,10 @@ public class ModLanguageProvider extends LanguageProvider {
 		add(ModCardAbilities.SUMMON_CARD.get().getTranslationKey(), "%s summon a %s %s.");
 		add(ModCardAbilities.SUMMON_CARD.get().getTranslationKey() + "card_text", "%s (%s/%s)");
 		add(ModCardAbilities.MULTI.get().getTranslationKey(), "%s");
-		add(ModCardAbilities.CHANCE.get().getTranslationKey(), "%s%% chance: %s");
-		add(ModCardAbilities.CHOICE.get().getTranslationKey(), "Choice of: %s");
+		add(ModCardAbilities.CHANCE.get().getTranslationKey(), "%s%% %s: %s");
+		add(ModCardAbilities.CHANCE.get().getTranslationKey() + ".chance", "chance");
+		add(ModCardAbilities.CHOICE.get().getTranslationKey(), "%s:\n%s");
+		add(ModCardAbilities.CHOICE.get().getTranslationKey() + ".choice_of", "Choice of");
 		add(ModCardAbilities.GAME_OVER.get().getTranslationKey(), "%s lose the game");
 		add(Helper.gui("card_ability_selection"), "%s%s%s%s");
 		add(Helper.gui("where"), " where ");

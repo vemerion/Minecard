@@ -8,9 +8,11 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import mod.vemerion.minecard.game.Card;
+import mod.vemerion.minecard.game.GameUtil;
 import mod.vemerion.minecard.game.PlayerState;
 import mod.vemerion.minecard.game.Receiver;
 import mod.vemerion.minecard.init.ModCardAbilities;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.util.ExtraCodecs;
 
 public class ChanceAbility extends CardAbility {
@@ -37,7 +39,10 @@ public class ChanceAbility extends CardAbility {
 
 	@Override
 	protected Object[] getDescriptionArgs() {
-		return new Object[] { chance, ability.getDescription() };
+		return new Object[] { chance,
+				GameUtil.emphasize(
+						new TranslatableComponent(ModCardAbilities.CHANCE.get().getTranslationKey() + ".chance")),
+				ability.getDescription() };
 	}
 
 	@Override

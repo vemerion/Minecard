@@ -46,7 +46,7 @@ public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 	private static record DescriptionSize(float scale, int maxWidth, int maxLines) {
 	}
 
-	private static final DescriptionSize[] DESCRIPTION_SIZES = { new DescriptionSize(0.007f, 80, 3),
+	private static final DescriptionSize[] DESCRIPTION_SIZES = { new DescriptionSize(0.007f, 79, 3),
 			new DescriptionSize(0.006f, 90, 4), new DescriptionSize(0.005f, 110, 5),
 			new DescriptionSize(0.004f, 135, 6) };
 
