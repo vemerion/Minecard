@@ -54,6 +54,7 @@ public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 
 	private static final float TEXT_SIZE = 0.01f;
 	private static final float TITLE_SIZE = 0.006f;
+	private static final float TITLE_MAX_WIDTH = 82;
 	private static final float CARD_SIZE = 0.8f;
 	public static final int GOOD_VALUE_COLOR = 0x00ff70;
 	public static final int BAD_VALUE_COLOR = 0xff2020;
@@ -97,9 +98,12 @@ public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 
 		// Render title
 		pose.pushPose();
-		pose.translate(0.13 + (0.56 - mc.font.width(entity.getDisplayName()) * TITLE_SIZE) / 2f, -0.065, 0.01);
-		pose.scale(TITLE_SIZE, -TITLE_SIZE, TITLE_SIZE);
-		mc.font.draw(pose, entity.getDisplayName(), 0, 0, 0);
+		var name = entity.getDisplayName();
+		float titleSize = Math.min(1f, TITLE_MAX_WIDTH / mc.font.width(name)) * TITLE_SIZE;
+		pose.translate(0.124 + (0.555 - mc.font.width(name) * titleSize) / 2f,
+				-0.092 + mc.font.lineHeight * titleSize / 2, 0.01);
+		pose.scale(titleSize, -titleSize, titleSize);
+		mc.font.draw(pose, name, 0, 0, 0);
 		pose.popPose();
 
 		// Render text
@@ -121,7 +125,7 @@ public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 		}
 
 		// Render values
-		renderValue(itemRenderer, mc.font, Items.EMERALD, card.getCost(), 0.62f, -0.18f, light, overlay, pose, buffer,
+		renderValue(itemRenderer, mc.font, Items.EMERALD, card.getCost(), 0.62f, -0.195f, light, overlay, pose, buffer,
 				calcCostColor(card));
 		if (!card.isSpell()) {
 			pose.pushPose();
