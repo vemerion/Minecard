@@ -13,6 +13,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import mod.vemerion.minecard.game.Card;
 import mod.vemerion.minecard.game.CardVisibility;
+import mod.vemerion.minecard.game.GameUtil;
 import mod.vemerion.minecard.game.HistoryEntry;
 import mod.vemerion.minecard.game.PlayerState;
 import mod.vemerion.minecard.game.Receiver;
@@ -59,7 +60,7 @@ public class CopyCardsAbility extends CardAbility {
 
 	@Override
 	protected Object[] getDescriptionArgs() {
-		return new Object[] { trigger.getText(), selection.getText(),
+		return new Object[] { GameUtil.emphasize(trigger.getText()), selection.getText(),
 				new TranslatableComponent(
 						ModCardAbilities.COPY_CARDS.get().getTranslationKey() + (giveToEnemy ? ".enemy" : ".you")),
 				destroyOriginal

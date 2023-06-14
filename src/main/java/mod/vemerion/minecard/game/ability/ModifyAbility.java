@@ -80,7 +80,7 @@ public class ModifyAbility extends CardAbility {
 					GameUtil.propertiesToComponent(card.getProperties()), damageText, healthText, costText,
 					healthChangeText));
 		}
-		return new Object[] { trigger.getText(),
+		return new Object[] { GameUtil.emphasize(trigger.getText()),
 				modifications.size() == 1 ? TextComponent.EMPTY
 						: new TranslatableComponent(ModCardAbilities.MODIFY.get().getTranslationKey() + ".one_of"),
 				elements, selection.getText() };

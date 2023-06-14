@@ -86,4 +86,8 @@ public class GameUtil {
 
 		return result;
 	}
+
+	public static Component emphasize(Component text) {
+		return text.copy().setStyle(text.getStyle().withItalic(true));
+	}
 }

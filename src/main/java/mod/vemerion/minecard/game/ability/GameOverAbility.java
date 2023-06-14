@@ -8,6 +8,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import mod.vemerion.minecard.game.Card;
+import mod.vemerion.minecard.game.GameUtil;
 import mod.vemerion.minecard.game.PlayerState;
 import mod.vemerion.minecard.game.Receiver;
 import mod.vemerion.minecard.init.ModCardAbilities;
@@ -29,7 +30,7 @@ public class GameOverAbility extends CardAbility {
 
 	@Override
 	protected Object[] getDescriptionArgs() {
-		return new Object[] { trigger.getText() };
+		return new Object[] { GameUtil.emphasize(trigger.getText()) };
 	}
 
 	@Override

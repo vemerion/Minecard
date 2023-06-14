@@ -8,6 +8,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import mod.vemerion.minecard.game.Card;
+import mod.vemerion.minecard.game.GameUtil;
 import mod.vemerion.minecard.game.HistoryEntry;
 import mod.vemerion.minecard.game.LazyCardType;
 import mod.vemerion.minecard.game.PlayerState;
@@ -44,7 +45,7 @@ public class SummonCardAbility extends CardAbility {
 		var card = summon.get(true);
 		var cardText = new TranslatableComponent(ModCardAbilities.SUMMON_CARD.get().getTranslationKey() + "card_text",
 				card.getName(), card.getDamage(), card.getHealth());
-		return new Object[] { trigger.getText(), cardText, placement.getText() };
+		return new Object[] { GameUtil.emphasize(trigger.getText()), cardText, placement.getText() };
 	}
 
 	@Override

@@ -8,6 +8,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import mod.vemerion.minecard.game.Card;
+import mod.vemerion.minecard.game.GameUtil;
 import mod.vemerion.minecard.game.HistoryEntry;
 import mod.vemerion.minecard.game.PlayerState;
 import mod.vemerion.minecard.game.Receiver;
@@ -34,7 +35,7 @@ public class DrawCardsAbility extends CardAbility {
 
 	@Override
 	protected Object[] getDescriptionArgs() {
-		return new Object[] { trigger.getText(), count };
+		return new Object[] { GameUtil.emphasize(trigger.getText()), count };
 	}
 
 	@Override

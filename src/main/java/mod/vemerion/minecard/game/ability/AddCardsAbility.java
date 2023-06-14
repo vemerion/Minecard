@@ -9,6 +9,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import mod.vemerion.minecard.game.Card;
+import mod.vemerion.minecard.game.GameUtil;
 import mod.vemerion.minecard.game.HistoryEntry;
 import mod.vemerion.minecard.game.LazyCardType;
 import mod.vemerion.minecard.game.PlayerState;
@@ -45,7 +46,7 @@ public class AddCardsAbility extends CardAbility {
 		for (var card : toAdd)
 			text.append(new TranslatableComponent(ModCardAbilities.ADD_CARDS.get().getTranslationKey() + ".element",
 					card.get(true).getName()));
-		return new Object[] { trigger.getText(), text };
+		return new Object[] { GameUtil.emphasize(trigger.getText()), text };
 	}
 
 	@Override
