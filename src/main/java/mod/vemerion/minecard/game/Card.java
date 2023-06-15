@@ -10,6 +10,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import mod.vemerion.minecard.game.ability.CardAbility;
 import mod.vemerion.minecard.game.ability.NoCardAbility;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -51,14 +52,14 @@ public class Card {
 	private int damage;
 	private int originalDamage;
 	private boolean ready;
-	private Map<CardProperty, Integer> properties;
+	private Map<ResourceLocation, Integer> properties;
 	private final CardAbility ability;
 	private Map<EquipmentSlot, Item> equipment;
 	private int id;
 
 	public Card(Optional<EntityType<?>> type, int cost, int originalCost, int health, int maxHealth, int originalHealth,
-			int damage, int originalDamage, boolean ready, Map<CardProperty, Integer> properties, CardAbility ability,
-			Map<EquipmentSlot, Item> equipment, AdditionalCardData additionalData) {
+			int damage, int originalDamage, boolean ready, Map<ResourceLocation, Integer> properties,
+			CardAbility ability, Map<EquipmentSlot, Item> equipment, AdditionalCardData additionalData) {
 		this.type = type;
 		this.cost = cost;
 		this.originalCost = originalCost;
@@ -159,27 +160,27 @@ public class Card {
 		return isReady() && getDamage() > 0;
 	}
 
-	public Map<CardProperty, Integer> getProperties() {
+	public Map<ResourceLocation, Integer> getProperties() {
 		return properties;
 	}
 
-	public boolean hasProperty(CardProperty property) {
+	public boolean hasProperty(ResourceLocation property) {
 		return getProperty(property) > 0;
 	}
 
-	public int getProperty(CardProperty property) {
+	public int getProperty(ResourceLocation property) {
 		return properties.getOrDefault(property, 0);
 	}
 
-	public void putProperty(CardProperty property, int value) {
+	public void putProperty(ResourceLocation property, int value) {
 		properties.put(property, value);
 	}
 
-	public void removeProperty(CardProperty property) {
+	public void removeProperty(ResourceLocation property) {
 		properties.remove(property);
 	}
 
-	public void decrementProperty(CardProperty property) {
+	public void decrementProperty(ResourceLocation property) {
 		if (hasProperty(property))
 			properties.put(property, properties.get(property) - 1);
 	}

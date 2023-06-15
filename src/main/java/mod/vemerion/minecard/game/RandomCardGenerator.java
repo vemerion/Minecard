@@ -29,6 +29,7 @@ import mod.vemerion.minecard.game.ability.MultiAbility;
 import mod.vemerion.minecard.game.ability.NoCardAbility;
 import mod.vemerion.minecard.game.ability.ResourceAbility;
 import mod.vemerion.minecard.game.ability.SummonCardAbility;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.registries.ForgeRegistries;
 
 // For testing
@@ -86,9 +87,9 @@ public class RandomCardGenerator {
 		var cost = rand.nextInt(11);
 		var health = rand.nextInt(3);
 		var damage = rand.nextInt(3);
-		Map<CardProperty, Integer> properties = new HashMap<>();
+		Map<ResourceLocation, Integer> properties = new HashMap<>();
 		for (int i = 0; i < rand.nextInt(3); i++) {
-			properties.put(randEnum(CardProperty.class), rand.nextInt(1, 3));
+			properties.put(CardProperties.getInstance(false).randomKey(rand), rand.nextInt(1, 3));
 		}
 
 		List<CardAbility> abilities = new ArrayList<>();

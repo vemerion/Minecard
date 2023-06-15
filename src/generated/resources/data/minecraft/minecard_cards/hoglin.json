@@ -12,7 +12,7 @@
               "health": 3,
               "damage": 4,
               "properties": {
-                "baby": 1
+                "minecard:baby": 1
               },
               "entity": "minecraft:hoglin",
               "cost": 0
@@ -36,7 +36,7 @@
                   "health": 1,
                   "damage": 1,
                   "properties": {
-                    "taunt": 1
+                    "minecard:taunt": 1
                   },
                   "entity": "minecraft:item",
                   "cost": 0

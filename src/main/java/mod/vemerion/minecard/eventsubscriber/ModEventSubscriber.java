@@ -24,6 +24,7 @@ import mod.vemerion.minecard.network.SetPropertiesMessage;
 import mod.vemerion.minecard.network.SetReadyMessage;
 import mod.vemerion.minecard.network.SetResourcesMessage;
 import mod.vemerion.minecard.network.SetTutorialStepMessage;
+import mod.vemerion.minecard.network.UpdateCardPropertiesMessage;
 import mod.vemerion.minecard.network.UpdateCardTypesMessage;
 import mod.vemerion.minecard.network.UpdateCardsMessage;
 import mod.vemerion.minecard.network.UpdateDecksMessage;
@@ -92,5 +93,8 @@ public class ModEventSubscriber {
 				PerformMulliganMessage::decode, PerformMulliganMessage::handle);
 		Network.INSTANCE.registerMessage(id++, MulliganDoneMessage.class, MulliganDoneMessage::encode,
 				MulliganDoneMessage::decode, MulliganDoneMessage::handle);
+		Network.INSTANCE.registerMessage(id++, UpdateCardPropertiesMessage.class, UpdateCardPropertiesMessage::encode,
+				UpdateCardPropertiesMessage::decode, UpdateCardPropertiesMessage::handle);
+
 	}
 }

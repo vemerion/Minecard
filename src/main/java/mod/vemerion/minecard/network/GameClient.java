@@ -5,7 +5,6 @@ import java.util.Map;
 import java.util.UUID;
 
 import mod.vemerion.minecard.game.Card;
-import mod.vemerion.minecard.game.CardProperty;
 import mod.vemerion.minecard.game.HistoryEntry;
 import mod.vemerion.minecard.game.MessagePlayerState;
 import mod.vemerion.minecard.game.ability.CardAbility;
@@ -23,7 +22,7 @@ public interface GameClient {
 
 	public void combat(UUID attackerId, int attackerCardId, UUID targetId, int targetCardId);
 
-	public void setProperties(UUID id, int cardId, Map<CardProperty, Integer> properties);
+	public void setProperties(UUID id, int cardId, Map<ResourceLocation, Integer> properties);
 
 	public void gameOver();
 

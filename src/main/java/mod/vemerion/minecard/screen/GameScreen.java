@@ -20,6 +20,7 @@ import com.mojang.math.Quaternion;
 
 import mod.vemerion.minecard.Main;
 import mod.vemerion.minecard.game.Card;
+import mod.vemerion.minecard.game.CardProperties;
 import mod.vemerion.minecard.game.CardProperty;
 import mod.vemerion.minecard.game.Cards;
 import mod.vemerion.minecard.game.GameUtil;
@@ -376,7 +377,7 @@ public class GameScreen extends Screen implements GameClient {
 	}
 
 	@Override
-	public void setProperties(UUID id, int cardId, Map<CardProperty, Integer> properties) {
+	public void setProperties(UUID id, int cardId, Map<ResourceLocation, Integer> properties) {
 		var card = withId(state.get(id).board, cardId);
 		var old = new HashMap<>(card.getProperties());
 		card.getProperties().clear();
@@ -394,45 +395,34 @@ public class GameScreen extends Screen implements GameClient {
 		historyList.add(entry);
 	}
 
-	private void updatePropertiesAnimations(Map<CardProperty, Integer> old, ClientCard card) {
+	private void updatePropertiesAnimations(Map<ResourceLocation, Integer> old, ClientCard card) {
 		for (var entry : card.getProperties().entrySet()) {
 			if ((old == null || old.getOrDefault(entry.getKey(), 0) < 1) && entry.getValue() > 0) {
-				switch (entry.getKey()) {
-				case CHARGE:
+				if (entry.getKey().equals(CardProperty.CHARGE)) {
 					fovModifier = 3;
-					break;
-				case FREEZE:
+				} else if (entry.getKey().equals(CardProperty.FREEZE)) {
 					animations.add(new FreezeAnimation(minecraft, card, () -> {
 					}));
-					break;
-				case SHIELD:
+				} else if (entry.getKey().equals(CardProperty.SHIELD)) {
 					animations.add(new WallAnimation(minecraft, card, () -> {
 					}));
-					break;
-				case STEALTH:
+				} else if (entry.getKey().equals(CardProperty.STEALTH)) {
 					animations.add(new StealthAnimation(minecraft, card, () -> {
 					}));
-					break;
-				case TAUNT:
+				} else if (entry.getKey().equals(CardProperty.TAUNT)) {
 					animations.add(new TauntAnimation(minecraft, card, () -> {
 					}));
-					break;
-				case BURN:
+				} else if (entry.getKey().equals(CardProperty.BURN)) {
 					animations.add(new BurnAnimation(minecraft, card, () -> {
 					}));
-					break;
-				case THORNS:
+				} else if (entry.getKey().equals(CardProperty.THORNS)) {
 					animations.add(new ThornsAnimation(minecraft, card, () -> {
 					}));
-					break;
-				case SPECIAL:
-					break;
-				case BABY:
-					break;
-				case POISON:
+				} else if (entry.getKey().equals(CardProperty.SPECIAL)) {
+				} else if (entry.getKey().equals(CardProperty.BABY)) {
+				} else if (entry.getKey().equals(CardProperty.POISON)) {
 					animations.add(new PoisonAnimation(minecraft, card, () -> {
 					}));
-					break;
 				}
 			}
 		}
@@ -721,17 +711,19 @@ public class GameScreen extends Screen implements GameClient {
 
 		int border = 80;
 		int padding = (width - border * 2) / 2;
-		for (int i = 0; i < CardProperty.values().length; i++) {
-			var property = CardProperty.values()[i];
+		int i = 0;
+		for (var entry : CardProperties.getInstance(true).entries()) {
+			var property = entry.getValue();
+			var rl = entry.getKey();
 
 			int x = padding * (i % 3) + border;
 			int y = i / 3 * 60 + 1;
 
-			itemRenderer.renderGuiItem(property.getIcon(), x, y);
+			itemRenderer.renderGuiItem(property.getItem(), x, y);
 
 			// Title
 			float size = 1.3f;
-			var title = new TranslatableComponent(property.getTextKey());
+			var title = new TranslatableComponent(CardProperty.getTextKey(rl));
 			var width = font.width(title) * size;
 			poseStack.pushPose();
 			poseStack.translate(x + 8 - width / 2, y + 17, 0);
@@ -740,12 +732,13 @@ public class GameScreen extends Screen implements GameClient {
 			poseStack.popPose();
 
 			// Description
-			var description = new TranslatableComponent(property.getDescriptionKey());
+			var description = new TranslatableComponent(CardProperty.getDescriptionKey(rl));
 			var lines = font.split(description, 110);
 			for (int j = 0; j < lines.size(); j++) {
 				font.drawShadow(poseStack, lines.get(j), x + 8 - font.width(lines.get(j)) / 2, y + 30 + j * 9,
 						0xffffffff);
 			}
+			i++;
 		}
 		poseStack.popPose();
 	}

@@ -2,7 +2,7 @@
   "health": 3,
   "damage": 3,
   "properties": {
-    "shield": 1
+    "minecard:shield": 1
   },
   "entity": "minecraft:shulker",
   "cost": 3

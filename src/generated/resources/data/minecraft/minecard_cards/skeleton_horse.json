@@ -17,7 +17,7 @@
             "health": 0,
             "damage": 0,
             "properties": {
-              "burn": 2
+              "minecard:burn": 2
             },
             "entity": "minecraft:item",
             "cost": 0

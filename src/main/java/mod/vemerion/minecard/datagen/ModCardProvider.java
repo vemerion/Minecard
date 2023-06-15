@@ -602,7 +602,7 @@ public class ModCardProvider implements DataProvider {
 
 	private void printStatistics() {
 		Map<Integer, Integer> costCounts = new TreeMap<>();
-		Map<CardProperty, Integer> propertyCounts = new TreeMap<>();
+		Map<ResourceLocation, Integer> propertyCounts = new TreeMap<>();
 		Set<EntityType<?>> types = new HashSet<>();
 		for (var entry : cards.entrySet()) {
 			var card = entry.getValue();
@@ -624,7 +624,7 @@ public class ModCardProvider implements DataProvider {
 		System.out.println("Total cards: " + costCounts.values().stream().reduce(0, (a, b) -> a + b));
 		System.out.println("Card properties:");
 		for (var entry : propertyCounts.entrySet())
-			System.out.println(entry.getKey().getName() + ": " + entry.getValue());
+			System.out.println(entry.getKey() + ": " + entry.getValue());
 
 		for (var entry : ForgeRegistries.ENTITIES.getEntries()) {
 			if (Cards.isAllowed(entry.getValue()) && !types.contains(entry.getValue())) {
@@ -678,7 +678,7 @@ public class ModCardProvider implements DataProvider {
 		private int cost;
 		private int health;
 		private int damage;
-		private Map<CardProperty, Integer> properties = new EnumMap<>(CardProperty.class);
+		private Map<ResourceLocation, Integer> properties = new HashMap<>();
 		private CardAbility ability = NoCardAbility.NO_CARD_ABILITY;
 		private Map<EquipmentSlot, Item> equipment = new EnumMap<>(EquipmentSlot.class);
 		private AdditionalCardData additionalData = AdditionalCardData.EMPTY;
@@ -698,7 +698,7 @@ public class ModCardProvider implements DataProvider {
 			return this;
 		}
 
-		private Builder addProperty(CardProperty property, int value) {
+		private Builder addProperty(ResourceLocation property, int value) {
 			properties.put(property, value);
 			return this;
 		}

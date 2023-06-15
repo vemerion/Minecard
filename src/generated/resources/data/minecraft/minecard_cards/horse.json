@@ -2,7 +2,7 @@
   "health": 2,
   "damage": 4,
   "properties": {
-    "charge": 1
+    "minecard:charge": 1
   },
   "entity": "minecraft:horse",
   "cost": 4

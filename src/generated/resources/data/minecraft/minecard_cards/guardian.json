@@ -2,7 +2,7 @@
   "health": 6,
   "damage": 4,
   "properties": {
-    "thorns": 2
+    "minecard:thorns": 2
   },
   "entity": "minecraft:guardian",
   "cost": 5

@@ -12,6 +12,7 @@ import mod.vemerion.minecard.entity.CardGameRobot;
 import mod.vemerion.minecard.game.AIPlayer;
 import mod.vemerion.minecard.game.AdditionalCardData;
 import mod.vemerion.minecard.game.Card;
+import mod.vemerion.minecard.game.CardProperties;
 import mod.vemerion.minecard.game.CardProperty;
 import mod.vemerion.minecard.game.Cards;
 import mod.vemerion.minecard.init.ModEntities;
@@ -36,7 +37,6 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.animal.Rabbit;
 import net.minecraft.world.entity.animal.TropicalFish;
 import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
@@ -125,8 +125,8 @@ public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 		}
 
 		// Render values
-		renderValue(itemRenderer, mc.font, Items.EMERALD, card.getCost(), 0.62f, -0.195f, light, overlay, pose, buffer,
-				calcCostColor(card));
+		renderValue(itemRenderer, mc.font, Items.EMERALD.getDefaultInstance(), card.getCost(), 0.62f, -0.195f, light,
+				overlay, pose, buffer, calcCostColor(card));
 		if (!card.isSpell()) {
 			pose.pushPose();
 			if (card.canAttack()) {
@@ -135,11 +135,11 @@ public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 				pose.scale(scale, scale, 1);
 				pose.translate(-0.2, 0.5, 0);
 			}
-			renderValue(itemRenderer, mc.font, Items.STONE_SWORD, card.getDamage(), 0.21f, -0.41f, light, overlay, pose,
-					buffer, calcDamageColor(card));
+			renderValue(itemRenderer, mc.font, Items.STONE_SWORD.getDefaultInstance(), card.getDamage(), 0.21f, -0.41f,
+					light, overlay, pose, buffer, calcDamageColor(card));
 			pose.popPose();
-			renderValue(itemRenderer, mc.font, Items.GLISTERING_MELON_SLICE, card.getHealth(), 0.6f, -0.42f, light,
-					overlay, pose, buffer, calcHealthColor(card));
+			renderValue(itemRenderer, mc.font, Items.GLISTERING_MELON_SLICE.getDefaultInstance(), card.getHealth(),
+					0.6f, -0.42f, light, overlay, pose, buffer, calcHealthColor(card));
 		}
 
 		// Properties
@@ -149,14 +149,17 @@ public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 				pose.pushPose();
 				pose.translate(0.74, propertyY, 0);
 				pose.scale(0.7f, 0.7f, 0.7f);
-				if (entry.getValue() == 1) {
-					renderItem(itemRenderer, entry.getKey().getIcon(), light, overlay, pose, buffer);
-				} else {
-					renderValue(itemRenderer, mc.font, entry.getKey().getIcon().getItem(), entry.getValue(), 0, 0,
-							light, overlay, pose, buffer, 0xffffff);
+				var property = CardProperties.getInstance(true).get(entry.getKey());
+				if (property != null) {
+					if (entry.getValue() == 1) {
+						renderItem(itemRenderer, property.getItem(), light, overlay, pose, buffer);
+					} else {
+						renderValue(itemRenderer, mc.font, property.getItem(), entry.getValue(), 0, 0, light, overlay,
+								pose, buffer, 0xffffff);
+					}
+					propertyY -= 0.15f;
 				}
 				pose.popPose();
-				propertyY -= 0.15f;
 			}
 		}
 
@@ -218,13 +221,13 @@ public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 		poseStack.popPose();
 	}
 
-	private static void renderValue(ItemRenderer itemRenderer, Font font, Item item, int value, float x, float y,
+	private static void renderValue(ItemRenderer itemRenderer, Font font, ItemStack stack, int value, float x, float y,
 			int light, int overlay, PoseStack poseStack, MultiBufferSource buffer, int textColor) {
 		poseStack.pushPose();
 		poseStack.translate(x, y, 0);
 
 		// Item
-		renderItem(itemRenderer, new ItemStack(item), light, overlay, poseStack, buffer);
+		renderItem(itemRenderer, stack, light, overlay, poseStack, buffer);
 
 		// Text
 		var text = String.valueOf(value);

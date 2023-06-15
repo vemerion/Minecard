@@ -10,6 +10,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import mod.vemerion.minecard.game.ability.CardAbility;
 import mod.vemerion.minecard.game.ability.NoCardAbility;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -45,13 +46,13 @@ public class CardType {
 	private final int health;
 	private final int damage;
 	private final Card cardForRendering;
-	private final Map<CardProperty, Integer> properties;
+	private final Map<ResourceLocation, Integer> properties;
 	private final CardAbility ability;
 	private final Map<EquipmentSlot, Item> equipment;
 	private final int deckCount;
 	private final float dropChance;
 
-	public CardType(EntityType<?> type, int cost, int health, int damage, Map<CardProperty, Integer> properties,
+	public CardType(EntityType<?> type, int cost, int health, int damage, Map<ResourceLocation, Integer> properties,
 			CardAbility ability, Map<EquipmentSlot, Item> equipment, AdditionalCardData additionalData, int deckCount,
 			float dropChance) {
 		this.type = type;
@@ -89,11 +90,11 @@ public class CardType {
 		return damage;
 	}
 
-	public Map<CardProperty, Integer> getProperties() {
+	public Map<ResourceLocation, Integer> getProperties() {
 		return properties;
 	}
 
-	public boolean hasProperty(CardProperty property) {
+	public boolean hasProperty(ResourceLocation property) {
 		return properties.getOrDefault(property, 0) > 0;
 	}
 

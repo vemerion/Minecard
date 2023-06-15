@@ -1,51 +1,49 @@
 package mod.vemerion.minecard.game;
 
 import java.util.Map;
-import java.util.function.Supplier;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import mod.vemerion.minecard.Main;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import net.minecraftforge.common.util.Lazy;
 
-public enum CardProperty {
-	TAUNT("taunt", Lazy.of(() -> new ItemStack(Items.CARROT_ON_A_STICK))),
-	CHARGE("charge", Lazy.of(() -> new ItemStack(Items.SUGAR))),
-	STEALTH("stealth", Lazy.of(() -> new ItemStack(Items.TALL_GRASS))),
-	FREEZE("freeze", Lazy.of(() -> new ItemStack(Items.ICE))),
-	SHIELD("shield", Lazy.of(() -> new ItemStack(Items.DIAMOND_CHESTPLATE))),
-	BURN("burn", Lazy.of(() -> new ItemStack(Items.LAVA_BUCKET))),
-	SPECIAL("special", Lazy.of(() -> new ItemStack(Items.ENCHANTED_GOLDEN_APPLE))),
-	BABY("baby", Lazy.of(() -> new ItemStack(Items.EGG))),
-	THORNS("thorns", Lazy.of(() -> new ItemStack(Items.POINTED_DRIPSTONE))),
-	POISON("poison", Lazy.of(() -> new ItemStack(Items.SPIDER_EYE)));
+public class CardProperty {
+	public static final ResourceLocation TAUNT = new ResourceLocation(Main.MODID, "taunt");
+	public static final ResourceLocation CHARGE = new ResourceLocation(Main.MODID, "charge");
+	public static final ResourceLocation STEALTH = new ResourceLocation(Main.MODID, "stealth");
+	public static final ResourceLocation FREEZE = new ResourceLocation(Main.MODID, "freeze");
+	public static final ResourceLocation SHIELD = new ResourceLocation(Main.MODID, "shield");
+	public static final ResourceLocation BURN = new ResourceLocation(Main.MODID, "burn");
+	public static final ResourceLocation SPECIAL = new ResourceLocation(Main.MODID, "special");
+	public static final ResourceLocation BABY = new ResourceLocation(Main.MODID, "baby");
+	public static final ResourceLocation THORNS = new ResourceLocation(Main.MODID, "thorns");
+	public static final ResourceLocation POISON = new ResourceLocation(Main.MODID, "poison");
 
-	public static final Codec<Map<CardProperty, Integer>> CODEC_MAP = GameUtil
-			.toMutable(Codec.unboundedMap(GameUtil.enumCodec(CardProperty.class, CardProperty::getName), Codec.INT));
+	public static final Codec<CardProperty> CODEC = ExtraCodecs.lazyInitializedCodec(() -> RecordCodecBuilder
+			.create(instance -> instance.group(ItemStack.CODEC.fieldOf("item").forGetter(CardProperty::getItem))
+					.apply(instance, CardProperty::new)));
 
-	private String name;
-	private Supplier<ItemStack> icon;
+	public static final Codec<Map<ResourceLocation, Integer>> CODEC_MAP = GameUtil
+			.toMutable(Codec.unboundedMap(ResourceLocation.CODEC, Codec.INT));
 
-	private CardProperty(String name, Supplier<ItemStack> icon) {
-		this.name = name;
-		this.icon = icon;
+	private ItemStack item;
+
+	public CardProperty(ItemStack item) {
+		this.item = item;
 	}
 
-	public String getName() {
-		return name;
+	public ItemStack getItem() {
+		return item;
 	}
 
-	public ItemStack getIcon() {
-		return icon.get();
+	public static String getTextKey(ResourceLocation rl) {
+		return "card_property." + rl.getNamespace() + "." + rl.getPath();
 	}
 
-	public String getTextKey() {
-		return "card_property." + Main.MODID + "." + getName();
-	}
-
-	public String getDescriptionKey() {
-		return "card_property." + Main.MODID + "." + getName() + ".description";
+	public static String getDescriptionKey(ResourceLocation rl) {
+		return "card_property." + rl.getNamespace() + "." + rl.getPath() + ".description";
 	}
 }

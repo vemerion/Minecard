@@ -2,7 +2,7 @@
   "health": 5,
   "damage": 6,
   "properties": {
-    "taunt": 1
+    "minecard:taunt": 1
   },
   "entity": "minecraft:piglin_brute",
   "cost": 6

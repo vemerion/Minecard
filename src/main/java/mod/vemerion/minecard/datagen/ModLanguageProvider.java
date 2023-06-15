@@ -56,27 +56,28 @@ public class ModLanguageProvider extends LanguageProvider {
 		add(Helper.gui("confirm"), "Confirm");
 
 		// Card properties
-		add(CardProperty.CHARGE.getTextKey(), "charge");
-		add(CardProperty.FREEZE.getTextKey(), "freeze");
-		add(CardProperty.SHIELD.getTextKey(), "shield");
-		add(CardProperty.STEALTH.getTextKey(), "stealth");
-		add(CardProperty.TAUNT.getTextKey(), "taunt");
-		add(CardProperty.SPECIAL.getTextKey(), "special");
-		add(CardProperty.BABY.getTextKey(), "baby");
-		add(CardProperty.BURN.getTextKey(), "burn");
-		add(CardProperty.THORNS.getTextKey(), "thorns");
-		add(CardProperty.POISON.getTextKey(), "poison");
+		add(CardProperty.getTextKey(CardProperty.CHARGE), "charge");
+		add(CardProperty.getTextKey(CardProperty.FREEZE), "freeze");
+		add(CardProperty.getTextKey(CardProperty.SHIELD), "shield");
+		add(CardProperty.getTextKey(CardProperty.STEALTH), "stealth");
+		add(CardProperty.getTextKey(CardProperty.TAUNT), "taunt");
+		add(CardProperty.getTextKey(CardProperty.SPECIAL), "special");
+		add(CardProperty.getTextKey(CardProperty.BABY), "baby");
+		add(CardProperty.getTextKey(CardProperty.BURN), "burn");
+		add(CardProperty.getTextKey(CardProperty.THORNS), "thorns");
+		add(CardProperty.getTextKey(CardProperty.POISON), "poison");
 
-		add(CardProperty.CHARGE.getDescriptionKey(), "Can attack immediately after being played");
-		add(CardProperty.FREEZE.getDescriptionKey(), "Decreases by 1 every turn, can not attack while frozen");
-		add(CardProperty.SHIELD.getDescriptionKey(), "Blocks first instance of damage");
-		add(CardProperty.STEALTH.getDescriptionKey(), "Can not be attacked until card has attacked");
-		add(CardProperty.TAUNT.getDescriptionKey(), "Must be killed before other cards can be attacked");
-		add(CardProperty.SPECIAL.getDescriptionKey(), "Special property depending on the creature");
-		add(CardProperty.BABY.getDescriptionKey(), "Grows up after X turns");
-		add(CardProperty.BURN.getDescriptionKey(), "Take 1 damage every turn until burn ends");
-		add(CardProperty.THORNS.getDescriptionKey(), "Deals extra damage when attacked");
-		add(CardProperty.POISON.getDescriptionKey(), "Take 1 damage every turn, but cannot kill");
+		add(CardProperty.getDescriptionKey(CardProperty.CHARGE), "Can attack immediately after being played");
+		add(CardProperty.getDescriptionKey(CardProperty.FREEZE),
+				"Decreases by 1 every turn, can not attack while frozen");
+		add(CardProperty.getDescriptionKey(CardProperty.SHIELD), "Blocks first instance of damage");
+		add(CardProperty.getDescriptionKey(CardProperty.STEALTH), "Can not be attacked until card has attacked");
+		add(CardProperty.getDescriptionKey(CardProperty.TAUNT), "Must be killed before other cards can be attacked");
+		add(CardProperty.getDescriptionKey(CardProperty.SPECIAL), "Special property depending on the creature");
+		add(CardProperty.getDescriptionKey(CardProperty.BABY), "Grows up after X turns");
+		add(CardProperty.getDescriptionKey(CardProperty.BURN), "Take 1 damage every turn until burn ends");
+		add(CardProperty.getDescriptionKey(CardProperty.THORNS), "Deals extra damage when attacked");
+		add(CardProperty.getDescriptionKey(CardProperty.POISON), "Take 1 damage every turn, but cannot kill");
 
 		// Card ability groups
 		add(CardAbilityGroup.ALL.getTextKey(), "anywhere");

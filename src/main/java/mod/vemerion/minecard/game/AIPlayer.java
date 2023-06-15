@@ -162,7 +162,7 @@ public class AIPlayer implements GameClient {
 	}
 
 	@Override
-	public void setProperties(UUID id, int cardId, Map<CardProperty, Integer> properties) {
+	public void setProperties(UUID id, int cardId, Map<ResourceLocation, Integer> properties) {
 		var card = find(cardId);
 		if (card != null) {
 			card.getProperties().clear();

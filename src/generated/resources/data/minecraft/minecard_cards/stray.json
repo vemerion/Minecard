@@ -16,7 +16,7 @@
             "health": 0,
             "damage": 0,
             "properties": {
-              "freeze": 2
+              "minecard:freeze": 2
             },
             "entity": "minecraft:item",
             "cost": 0

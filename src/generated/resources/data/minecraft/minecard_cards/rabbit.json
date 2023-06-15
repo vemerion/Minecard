@@ -20,7 +20,7 @@
                 "health": 1,
                 "damage": 1,
                 "properties": {
-                  "special": 1
+                  "minecard:special": 1
                 },
                 "entity": "minecraft:item",
                 "cost": 0

@@ -28,13 +28,13 @@
                   "health": 0,
                   "damage": 0,
                   "properties": {
-                    "taunt": 0,
-                    "stealth": 0,
-                    "freeze": 0,
-                    "shield": 0,
-                    "burn": 0,
-                    "thorns": 0,
-                    "poison": 0
+                    "minecard:stealth": 0,
+                    "minecard:poison": 0,
+                    "minecard:burn": 0,
+                    "minecard:shield": 0,
+                    "minecard:taunt": 0,
+                    "minecard:freeze": 0,
+                    "minecard:thorns": 0
                   },
                   "entity": "minecraft:item",
                   "cost": 0

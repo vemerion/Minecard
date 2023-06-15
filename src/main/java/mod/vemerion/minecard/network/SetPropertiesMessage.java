@@ -5,14 +5,15 @@ import java.util.UUID;
 
 import mod.vemerion.minecard.game.CardProperty;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
 
 public class SetPropertiesMessage extends ServerToClientMessage {
 
 	private UUID id;
 	private int cardId;
-	private Map<CardProperty, Integer> properties;
+	private Map<ResourceLocation, Integer> properties;
 
-	public SetPropertiesMessage(UUID id, int cardId, Map<CardProperty, Integer> properties) {
+	public SetPropertiesMessage(UUID id, int cardId, Map<ResourceLocation, Integer> properties) {
 		this.id = id;
 		this.cardId = cardId;
 		this.properties = properties;

@@ -38,6 +38,7 @@ public class EventSubscriber {
 			generator.addProvider(new ModRecipeProvider(generator));
 			generator.addProvider(new ModBlockTagsProvider(generator, existingFileHelper));
 			generator.addProvider(new ModCardProvider(generator));
+			generator.addProvider(new ModCardPropertyProvider(generator));
 			generator.addProvider(new LootTableProvider(generator) {
 				@Override
 				protected List<Pair<Supplier<Consumer<BiConsumer<ResourceLocation, Builder>>>, LootContextParamSet>> getTables() {

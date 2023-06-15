@@ -2,7 +2,7 @@
   "health": 1,
   "damage": 2,
   "properties": {
-    "charge": 1
+    "minecard:charge": 1
   },
   "entity": "minecraft:vex",
   "cost": 2
