@@ -21,6 +21,7 @@ public class CardProperty {
 	public static final ResourceLocation BABY = new ResourceLocation(Main.MODID, "baby");
 	public static final ResourceLocation THORNS = new ResourceLocation(Main.MODID, "thorns");
 	public static final ResourceLocation POISON = new ResourceLocation(Main.MODID, "poison");
+	public static final ResourceLocation UNDEAD = new ResourceLocation(Main.MODID, "undead");
 
 	public static final Codec<CardProperty> CODEC = ExtraCodecs.lazyInitializedCodec(() -> RecordCodecBuilder
 			.create(instance -> instance.group(ItemStack.CODEC.fieldOf("item").forGetter(CardProperty::getItem))

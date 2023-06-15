@@ -9,10 +9,12 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import mod.vemerion.minecard.game.Card;
+import mod.vemerion.minecard.game.CardProperty;
 import mod.vemerion.minecard.init.ModCardConditions;
 import net.minecraft.Util;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.entity.EntityType;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -233,6 +235,39 @@ public abstract class CardCondition implements Predicate<Card> {
 		@Override
 		protected Object[] getDescriptionArgs() {
 			return new Object[] { entity.getDescription() };
+		}
+	}
+
+	public static class HasProperty extends CardCondition {
+
+		public static final Codec<HasProperty> CODEC = ExtraCodecs
+				.lazyInitializedCodec(() -> RecordCodecBuilder.create(instance -> instance
+						.group(ResourceLocation.CODEC.fieldOf("property").forGetter(HasProperty::getProperty))
+						.apply(instance, HasProperty::new)));
+
+		private final ResourceLocation property;
+
+		public HasProperty(ResourceLocation property) {
+			this.property = property;
+		}
+
+		@Override
+		public boolean test(Card t) {
+			return t.hasProperty(property);
+		}
+
+		@Override
+		protected CardConditionType<?> getType() {
+			return ModCardConditions.HAS_PROPERTY.get();
+		}
+
+		public ResourceLocation getProperty() {
+			return property;
+		}
+
+		@Override
+		protected Object[] getDescriptionArgs() {
+			return new Object[] { new TranslatableComponent(CardProperty.getTextKey(property)) };
 		}
 	}
 }

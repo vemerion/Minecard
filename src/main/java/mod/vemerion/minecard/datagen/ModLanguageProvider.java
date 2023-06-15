@@ -66,6 +66,7 @@ public class ModLanguageProvider extends LanguageProvider {
 		add(CardProperty.getTextKey(CardProperty.BURN), "burn");
 		add(CardProperty.getTextKey(CardProperty.THORNS), "thorns");
 		add(CardProperty.getTextKey(CardProperty.POISON), "poison");
+		add(CardProperty.getTextKey(CardProperty.UNDEAD), "undead");
 
 		add(CardProperty.getDescriptionKey(CardProperty.CHARGE), "Can attack immediately after being played");
 		add(CardProperty.getDescriptionKey(CardProperty.FREEZE),
@@ -78,6 +79,7 @@ public class ModLanguageProvider extends LanguageProvider {
 		add(CardProperty.getDescriptionKey(CardProperty.BURN), "Take 1 damage every turn until burn ends");
 		add(CardProperty.getDescriptionKey(CardProperty.THORNS), "Deals extra damage when attacked");
 		add(CardProperty.getDescriptionKey(CardProperty.POISON), "Take 1 damage every turn, but cannot kill");
+		add(CardProperty.getDescriptionKey(CardProperty.UNDEAD), "The card belongs to the undead category");
 
 		// Card ability groups
 		add(CardAbilityGroup.ALL.getTextKey(), "anywhere");
@@ -103,6 +105,7 @@ public class ModLanguageProvider extends LanguageProvider {
 		add(ModCardConditions.OR.get().getTranslationKey(), "(%s or %s)");
 		add(ModCardConditions.NOT.get().getTranslationKey(), "not (%s)");
 		add(ModCardConditions.ENTITY.get().getTranslationKey(), "card is %s");
+		add(ModCardConditions.HAS_PROPERTY.get().getTranslationKey(), "card has property %s");
 
 		// Card abilities triggers
 		add(CardAbilityTrigger.ALWAYS.getTextKey(), "Always:");

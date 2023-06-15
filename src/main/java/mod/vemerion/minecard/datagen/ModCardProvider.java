@@ -92,14 +92,14 @@ public class ModCardProvider implements DataProvider {
 						List.of(modification(-3, new LazyCardType(new Builder(EntityType.ITEM, 0, 0, 0).build()))))));
 		add(new Builder(EntityType.SHULKER, 3, 3, 3).addProperty(CardProperty.SHIELD, 1));
 		add(new Builder(EntityType.DONKEY, 3, 2, 2).setCardAbility(new DrawCardsAbility(CardAbilityTrigger.SUMMON, 1)));
-		add(new Builder(EntityType.ZOMBIE, 4, 4, 4)
+		add(new Builder(EntityType.ZOMBIE, 4, 4, 4).addProperty(CardProperty.UNDEAD, 1)
 				.setCardAbility(new ModifyAbility(CardAbilityTrigger.SUMMON, Optional.empty(),
 						new CardAbilitySelection(new CardAbilityGroups(EnumSet.of(CardAbilityGroup.SELF)),
 								CardSelectionMethod.ALL, CardCondition.NoCondition.NO_CONDITION),
 						List.of(modification(0, new LazyCardType(mod("shield"))),
 								modification(0, new LazyCardType(mod("iron_equipment"))),
 								modification(0, new LazyCardType(mod("diamond_sword")))))));
-		add(new Builder(EntityType.STRAY, 2, 2, 2)
+		add(new Builder(EntityType.STRAY, 2, 2, 2).addProperty(CardProperty.UNDEAD, 1)
 				.setCardAbility(new ModifyAbility(CardAbilityTrigger.ATTACK, Optional.empty(),
 						new CardAbilitySelection(new CardAbilityGroups(EnumSet.of(CardAbilityGroup.TARGET)),
 								CardSelectionMethod.ALL, CardCondition.NoCondition.NO_CONDITION),
@@ -118,13 +118,14 @@ public class ModCardProvider implements DataProvider {
 						CardSelectionMethod.ALL, CardCondition.NoCondition.NO_CONDITION),
 				List.of(modification(0, new LazyCardType(
 						new Builder(EntityType.ITEM, 0, 0, 0).addProperty(CardProperty.STEALTH, 0).build()))))));
-		add(new Builder(EntityType.WITHER_SKELETON, 5, 6, 4).setCardAbility(new ModifyAbility(CardAbilityTrigger.SUMMON,
-				Optional.empty(),
-				new CardAbilitySelection(
-						new CardAbilityGroups(EnumSet.of(CardAbilityGroup.YOUR_HAND, CardAbilityGroup.YOUR_DECK)),
-						CardSelectionMethod.ALL, new CardCondition.Entity(EntityType.WITHER)),
-				List.of(modification(0, new LazyCardType(new Builder(EntityType.ITEM, -2, 0, 0).build()))))));
-		add(new Builder(EntityType.WITHER, 12, 10, 10).setDropChance(1).setDeckCount(1)
+		add(new Builder(EntityType.WITHER_SKELETON, 5, 6, 4).addProperty(CardProperty.UNDEAD, 1)
+				.setCardAbility(new ModifyAbility(CardAbilityTrigger.SUMMON, Optional.empty(),
+						new CardAbilitySelection(new CardAbilityGroups(
+								EnumSet.of(CardAbilityGroup.YOUR_HAND, CardAbilityGroup.YOUR_DECK)),
+								CardSelectionMethod.ALL, new CardCondition.Entity(EntityType.WITHER)),
+						List.of(modification(0, new LazyCardType(new Builder(EntityType.ITEM, -2, 0, 0).build()))))));
+		add(new Builder(EntityType.WITHER, 12, 10, 10).addProperty(CardProperty.UNDEAD, 1).setDropChance(1)
+				.setDeckCount(1)
 				.setCardAbility(new ModifyAbility(CardAbilityTrigger.TICK, Optional.of(mod("wither_projectile")),
 						new CardAbilitySelection(new CardAbilityGroups(EnumSet.of(CardAbilityGroup.ENEMY_BOARD)),
 								CardSelectionMethod.RANDOM, CardCondition.NoCondition.NO_CONDITION),
@@ -231,12 +232,12 @@ public class ModCardProvider implements DataProvider {
 										new LazyCardType(new Builder(EntityType.ITEM, 0, 2, 2).build())))))
 						.build()))));
 		add(new Builder(EntityType.WOLF, 4, 5, 3).addProperty(CardProperty.TAUNT, 1));
-		add(new Builder(EntityType.ZOMBIFIED_PIGLIN, 7, 9, 4)
+		add(new Builder(EntityType.ZOMBIFIED_PIGLIN, 7, 9, 4).addProperty(CardProperty.UNDEAD, 1)
 				.setCardAbility(new ModifyAbility(CardAbilityTrigger.HURT, Optional.empty(),
 						new CardAbilitySelection(new CardAbilityGroups(EnumSet.of(CardAbilityGroup.SELF)),
 								CardSelectionMethod.ALL, CardCondition.NoCondition.NO_CONDITION),
 						List.of(modification(0, new LazyCardType(new Builder(EntityType.ITEM, 0, 0, 3).build()))))));
-		add(new Builder(EntityType.HUSK, 3, 4, 2)
+		add(new Builder(EntityType.HUSK, 3, 4, 2).addProperty(CardProperty.UNDEAD, 1)
 				.setCardAbility(new ModifyAbility(CardAbilityTrigger.ATTACK, Optional.empty(),
 						new CardAbilitySelection(new CardAbilityGroups(EnumSet.of(CardAbilityGroup.TARGET)),
 								CardSelectionMethod.ALL, CardCondition.NoCondition.NO_CONDITION),
@@ -248,7 +249,8 @@ public class ModCardProvider implements DataProvider {
 								CardSelectionMethod.ALL, CardCondition.NoCondition.NO_CONDITION),
 						List.of(modification(0, new LazyCardType(
 								new Builder(EntityType.ITEM, 0, 0, 0).addProperty(CardProperty.BURN, 2).build())))));
-		add(new Builder(EntityType.PHANTOM, 3, 2, 3).addProperty(CardProperty.STEALTH, 1));
+		add(new Builder(EntityType.PHANTOM, 3, 2, 3).addProperty(CardProperty.UNDEAD, 1)
+				.addProperty(CardProperty.STEALTH, 1));
 		add(new Builder(EntityType.VEX, 2, 1, 2).addProperty(CardProperty.CHARGE, 1));
 		add(new Builder(EntityType.PUFFERFISH, 1, 2, 1).addProperty(CardProperty.THORNS, 1));
 		add(new Builder(EntityType.GUARDIAN, 5, 6, 4).addProperty(CardProperty.THORNS, 2));
@@ -278,7 +280,7 @@ public class ModCardProvider implements DataProvider {
 						new CardAbilitySelection(new CardAbilityGroups(EnumSet.of(CardAbilityGroup.TARGET_ADJACENT)),
 								CardSelectionMethod.ALL, CardCondition.NoCondition.NO_CONDITION),
 						List.of(modification(-4, new LazyCardType(new Builder(EntityType.ITEM, 0, 0, 0).build()))))));
-		add(new Builder(EntityType.SKELETON, 4, 4, 1)
+		add(new Builder(EntityType.SKELETON, 4, 4, 1).addProperty(CardProperty.UNDEAD, 1)
 				.setCardAbility(new ModifyAbility(CardAbilityTrigger.TICK, Optional.of(mod("shoot_arrow")),
 						new CardAbilitySelection(new CardAbilityGroups(EnumSet.of(CardAbilityGroup.ENEMY_BOARD)),
 								CardSelectionMethod.RANDOM, CardCondition.NoCondition.NO_CONDITION),
@@ -289,7 +291,7 @@ public class ModCardProvider implements DataProvider {
 								CardSelectionMethod.RANDOM, CardCondition.NoCondition.NO_CONDITION),
 						List.of(modification(0, new LazyCardType(new Builder(EntityType.ITEM, 1, 0, 0).build()))))));
 		add(new Builder(EntityType.TROPICAL_FISH, 0, 1, 1));
-		add(new Builder(EntityType.SKELETON_HORSE, 4, 4, 4)
+		add(new Builder(EntityType.SKELETON_HORSE, 4, 4, 4).addProperty(CardProperty.UNDEAD, 1)
 				.setCardAbility(new ModifyAbility(CardAbilityTrigger.SUMMON, Optional.of(mod("lightning_bolt")),
 						new CardAbilitySelection(new CardAbilityGroups(EnumSet.of(CardAbilityGroup.ENEMY_BOARD)),
 								CardSelectionMethod.RANDOM, CardCondition.NoCondition.NO_CONDITION),
@@ -347,7 +349,7 @@ public class ModCardProvider implements DataProvider {
 														new LazyCardType(new Builder(EntityType.ITEM, 0, 5, 0)
 																.addProperty(CardProperty.TAUNT, 1).build())))))
 								.build())))));
-		add(new Builder(EntityType.DROWNED, 7, 5, 9).setCardAbility(
+		add(new Builder(EntityType.DROWNED, 7, 5, 9).addProperty(CardProperty.UNDEAD, 1).setCardAbility(
 				new AddCardsAbility(CardAbilityTrigger.DEATH, List.of(new LazyCardType(mod("trident"))))));
 		add(new Builder(EntityType.COW, 2, 2, 2).setCardAbility(new AddCardsAbility(CardAbilityTrigger.SUMMON,
 				List.of(new LazyCardType(new Builder(EntityType.ITEM, 0, 0, 0)
@@ -414,9 +416,11 @@ public class ModCardProvider implements DataProvider {
 								new DrawCardsAbility(CardAbilityTrigger.SUMMON, 1)))));
 		add(new Builder(EntityType.DOLPHIN, 3, 2, 3).setCardAbility(new SummonCardAbility(CardAbilityTrigger.SUMMON,
 				CardPlacement.RIGHT, new LazyCardType(mod("buried_treasure")))));
-		add(new Builder(EntityType.ZOMBIE_VILLAGER, 6, 3, 3)
-				.setCardAbility(new SummonCardAbility(CardAbilityTrigger.DEATH, CardPlacement.RIGHT,
-						new LazyCardType(EntityType.VILLAGER.getRegistryName()))));
+		add(new Builder(EntityType.ZOMBIE_VILLAGER, 6, 4, 4).addProperty(CardProperty.UNDEAD, 1)
+				.setCardAbility(new ModifyAbility(CardAbilityTrigger.SUMMON, Optional.empty(),
+						new CardAbilitySelection(new CardAbilityGroups(EnumSet.of(CardAbilityGroup.YOUR_BOARD)),
+								CardSelectionMethod.ALL, new CardCondition.HasProperty(CardProperty.UNDEAD)),
+						List.of(modification(0, new LazyCardType(new Builder(EntityType.ITEM, 0, 2, 2).build()))))));
 		add(new Builder(EntityType.HOGLIN, 8, 5, 7)
 				.setCardAbility(new ChoiceCardAbility(List.of(
 						new SummonCardAbility(CardAbilityTrigger.SUMMON, CardPlacement.RIGHT,
@@ -427,7 +431,7 @@ public class ModCardProvider implements DataProvider {
 										CardSelectionMethod.ALL, CardCondition.NoCondition.NO_CONDITION),
 								List.of(modification(0, new LazyCardType(new Builder(EntityType.ITEM, 0, 1, 1)
 										.addProperty(CardProperty.TAUNT, 1).build()))))))));
-		add(new Builder(EntityType.ZOGLIN, 9, 6, 12).setCardAbility(
+		add(new Builder(EntityType.ZOGLIN, 9, 6, 12).addProperty(CardProperty.UNDEAD, 1).setCardAbility(
 				new AddCardsAbility(CardAbilityTrigger.DEATH, List.of(new LazyCardType(mod("rotten_flesh"))))));
 		add(new Builder(EntityType.PIGLIN, 5, 4, 4).setCardAbility(
 				new AddCardsAbility(CardAbilityTrigger.SUMMON, List.of(new LazyCardType(mod("iron_boots")),

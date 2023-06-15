@@ -27,6 +27,9 @@
   },
   "health": 10,
   "damage": 10,
+  "properties": {
+    "minecard:undead": 1
+  },
   "entity": "minecraft:wither",
   "cost": 12
 }

@@ -57,6 +57,7 @@ public class ModCardPropertyProvider implements DataProvider {
 		properties.put(CardProperty.BABY, new CardProperty(new ItemStack(Items.EGG)));
 		properties.put(CardProperty.THORNS, new CardProperty(new ItemStack(Items.POINTED_DRIPSTONE)));
 		properties.put(CardProperty.POISON, new CardProperty(new ItemStack(Items.SPIDER_EYE)));
+		properties.put(CardProperty.UNDEAD, new CardProperty(new ItemStack(Items.ZOMBIE_HEAD)));
 	}
 
 	@Override
