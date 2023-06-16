@@ -22,15 +22,17 @@
         }
       },
       "modifications": [
-        {
-          "health_change": 4,
-          "modifications": {
-            "health": 0,
-            "damage": 0,
-            "entity": "minecraft:item",
-            "cost": 0
+        [
+          {
+            "output": {
+              "type": "minecard:health"
+            },
+            "operator": {
+              "type": "minecard:constant",
+              "value": 4
+            }
           }
-        }
+        ]
       ]
     }
   },

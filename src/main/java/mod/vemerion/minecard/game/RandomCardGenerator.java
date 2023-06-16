@@ -24,7 +24,6 @@ import mod.vemerion.minecard.game.ability.CardSelectionMethod;
 import mod.vemerion.minecard.game.ability.ChoiceCardAbility;
 import mod.vemerion.minecard.game.ability.CopyCardsAbility;
 import mod.vemerion.minecard.game.ability.DrawCardsAbility;
-import mod.vemerion.minecard.game.ability.ModifyAbility;
 import mod.vemerion.minecard.game.ability.MultiAbility;
 import mod.vemerion.minecard.game.ability.NoCardAbility;
 import mod.vemerion.minecard.game.ability.ResourceAbility;
@@ -108,12 +107,12 @@ public class RandomCardGenerator {
 			abilities.add(new CopyCardsAbility(randEnum(CardAbilityTrigger.class), rand.nextBoolean(),
 					rand.nextBoolean(), rand.nextBoolean(), Optional.empty(), new CardAbilitySelection(randGroups(),
 							randEnum(CardSelectionMethod.class), CardCondition.NoCondition.NO_CONDITION)));
-			abilities.add(new ModifyAbility(randEnum(CardAbilityTrigger.class), Optional.empty(),
-					new CardAbilitySelection(randGroups(), randEnum(CardSelectionMethod.class),
-							CardCondition.NoCondition.NO_CONDITION),
-					IntStream.range(0, rand.nextInt(1, 4)).mapToObj(
-							i -> new ModifyAbility.Modification(rand.nextInt(-5, 6), new LazyCardType(next(depth + 1))))
-							.collect(Collectors.toCollection(() -> new ArrayList<>()))));
+//			abilities.add(new ModifyAbility(randEnum(CardAbilityTrigger.class), Optional.empty(),
+//					new CardAbilitySelection(randGroups(), randEnum(CardSelectionMethod.class),
+//							CardCondition.NoCondition.NO_CONDITION),
+//					IntStream.range(0, rand.nextInt(1, 4)).mapToObj(
+//							i -> new ModifyAbility.Modification(rand.nextInt(-5, 6), new LazyCardType(next(depth + 1))))
+//							.collect(Collectors.toCollection(() -> new ArrayList<>()))));
 			abilities.add(
 					new MultiAbility(IntStream.range(0, rand.nextInt(1, 5)).mapToObj(i -> next(depth + 1).getAbility())
 							.collect(Collectors.toCollection(() -> new ArrayList<>()))));

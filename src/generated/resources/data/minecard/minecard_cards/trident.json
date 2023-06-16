@@ -25,18 +25,27 @@
               "method": "choice"
             },
             "modifications": [
-              {
-                "health_change": -4,
-                "modifications": {
-                  "health": 0,
-                  "damage": 0,
-                  "properties": {
-                    "minecard:burn": 4
+              [
+                {
+                  "output": {
+                    "type": "minecard:health"
                   },
-                  "entity": "minecraft:item",
-                  "cost": 0
+                  "operator": {
+                    "type": "minecard:constant",
+                    "value": -4
+                  }
+                },
+                {
+                  "output": {
+                    "type": "minecard:property",
+                    "value": "minecard:burn"
+                  },
+                  "operator": {
+                    "type": "minecard:constant",
+                    "value": 4
+                  }
                 }
-              }
+              ]
             ]
           }
         },

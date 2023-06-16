@@ -14,18 +14,58 @@
             "method": "all"
           },
           "modifications": [
-            {
-              "health_change": 0,
-              "modifications": {
-                "health": 1,
-                "damage": 1,
-                "properties": {
-                  "minecard:special": 1
+            [
+              {
+                "output": {
+                  "type": "minecard:max_health"
                 },
-                "entity": "minecraft:item",
-                "cost": 0
+                "operator": {
+                  "type": "minecard:add",
+                  "value": {
+                    "left": {
+                      "type": "minecard:variable",
+                      "value": {
+                        "type": "minecard:max_health"
+                      }
+                    },
+                    "right": {
+                      "type": "minecard:constant",
+                      "value": 1
+                    }
+                  }
+                }
+              },
+              {
+                "output": {
+                  "type": "minecard:damage"
+                },
+                "operator": {
+                  "type": "minecard:add",
+                  "value": {
+                    "left": {
+                      "type": "minecard:variable",
+                      "value": {
+                        "type": "minecard:damage"
+                      }
+                    },
+                    "right": {
+                      "type": "minecard:constant",
+                      "value": 1
+                    }
+                  }
+                }
+              },
+              {
+                "output": {
+                  "type": "minecard:property",
+                  "value": "minecard:special"
+                },
+                "operator": {
+                  "type": "minecard:constant",
+                  "value": 1
+                }
               }
-            }
+            ]
           ]
         }
       }

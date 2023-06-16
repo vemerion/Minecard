@@ -208,7 +208,7 @@ public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 	private static int calcHealthColor(Card card) {
 		if (card.getHealth() < card.getMaxHealth())
 			return BAD_VALUE_COLOR;
-		else if (card.getMaxHealth() == card.getOriginalHealth())
+		else if (card.getMaxHealth() <= card.getOriginalHealth())
 			return NEUTRAL_VALUE_COLOR;
 		return GOOD_VALUE_COLOR;
 	}

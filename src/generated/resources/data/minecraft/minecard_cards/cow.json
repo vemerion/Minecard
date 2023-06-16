@@ -22,24 +22,78 @@
               "method": "choice"
             },
             "modifications": [
-              {
-                "health_change": 0,
-                "modifications": {
-                  "health": 0,
-                  "damage": 0,
-                  "properties": {
-                    "minecard:stealth": 0,
-                    "minecard:poison": 0,
-                    "minecard:burn": 0,
-                    "minecard:shield": 0,
-                    "minecard:taunt": 0,
-                    "minecard:freeze": 0,
-                    "minecard:thorns": 0
+              [
+                {
+                  "output": {
+                    "type": "minecard:property",
+                    "value": "minecard:burn"
                   },
-                  "entity": "minecraft:item",
-                  "cost": 0
+                  "operator": {
+                    "type": "minecard:constant",
+                    "value": 0
+                  }
+                },
+                {
+                  "output": {
+                    "type": "minecard:property",
+                    "value": "minecard:freeze"
+                  },
+                  "operator": {
+                    "type": "minecard:constant",
+                    "value": 0
+                  }
+                },
+                {
+                  "output": {
+                    "type": "minecard:property",
+                    "value": "minecard:shield"
+                  },
+                  "operator": {
+                    "type": "minecard:constant",
+                    "value": 0
+                  }
+                },
+                {
+                  "output": {
+                    "type": "minecard:property",
+                    "value": "minecard:stealth"
+                  },
+                  "operator": {
+                    "type": "minecard:constant",
+                    "value": 0
+                  }
+                },
+                {
+                  "output": {
+                    "type": "minecard:property",
+                    "value": "minecard:taunt"
+                  },
+                  "operator": {
+                    "type": "minecard:constant",
+                    "value": 0
+                  }
+                },
+                {
+                  "output": {
+                    "type": "minecard:property",
+                    "value": "minecard:thorns"
+                  },
+                  "operator": {
+                    "type": "minecard:constant",
+                    "value": 0
+                  }
+                },
+                {
+                  "output": {
+                    "type": "minecard:property",
+                    "value": "minecard:poison"
+                  },
+                  "operator": {
+                    "type": "minecard:constant",
+                    "value": 0
+                  }
                 }
-              }
+              ]
             ]
           }
         },

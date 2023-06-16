@@ -9,6 +9,8 @@ import mod.vemerion.minecard.init.ModBlockEntities;
 import mod.vemerion.minecard.init.ModBlocks;
 import mod.vemerion.minecard.init.ModCardAbilities;
 import mod.vemerion.minecard.init.ModCardConditions;
+import mod.vemerion.minecard.init.ModCardOperators;
+import mod.vemerion.minecard.init.ModCardVariables;
 import mod.vemerion.minecard.init.ModEntities;
 import mod.vemerion.minecard.init.ModItems;
 import mod.vemerion.minecard.init.ModLootModifiers;
@@ -36,6 +38,8 @@ public class Main {
 		ModCardAbilities.CARD_ABILITIES.register(bus);
 		ModCardConditions.CARD_CONDITIONS.register(bus);
 		ModEntities.ENTITIES.register(bus);
+		ModCardVariables.CARD_VARIABLES.register(bus);
+		ModCardOperators.CARD_OPERATORS.register(bus);
 		DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> Client.register(bus));
 	}
 

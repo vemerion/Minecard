@@ -21,18 +21,18 @@
         "method": "choice"
       },
       "modifications": [
-        {
-          "health_change": 0,
-          "modifications": {
-            "health": 0,
-            "damage": 0,
-            "properties": {
-              "minecard:shield": 1
+        [
+          {
+            "output": {
+              "type": "minecard:property",
+              "value": "minecard:shield"
             },
-            "entity": "minecraft:item",
-            "cost": 0
+            "operator": {
+              "type": "minecard:constant",
+              "value": 1
+            }
           }
-        }
+        ]
       ]
     }
   },

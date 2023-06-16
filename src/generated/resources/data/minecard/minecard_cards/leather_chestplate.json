@@ -21,18 +21,28 @@
         "method": "choice"
       },
       "modifications": [
-        {
-          "health_change": 0,
-          "modifications": {
-            "equipment": {
-              "mainhand": "minecraft:leather_chestplate"
+        [
+          {
+            "output": {
+              "type": "minecard:max_health"
             },
-            "health": 2,
-            "damage": 0,
-            "entity": "minecraft:item",
-            "cost": 0
+            "operator": {
+              "type": "minecard:add",
+              "value": {
+                "left": {
+                  "type": "minecard:variable",
+                  "value": {
+                    "type": "minecard:max_health"
+                  }
+                },
+                "right": {
+                  "type": "minecard:constant",
+                  "value": 2
+                }
+              }
+            }
           }
-        }
+        ]
       ]
     }
   },

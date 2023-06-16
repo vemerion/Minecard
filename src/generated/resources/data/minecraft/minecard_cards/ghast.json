@@ -17,18 +17,18 @@
         }
       },
       "modifications": [
-        {
-          "health_change": 0,
-          "modifications": {
-            "health": 0,
-            "damage": 0,
-            "properties": {
-              "minecard:burn": 4
+        [
+          {
+            "output": {
+              "type": "minecard:property",
+              "value": "minecard:burn"
             },
-            "entity": "minecraft:item",
-            "cost": 0
+            "operator": {
+              "type": "minecard:constant",
+              "value": 4
+            }
           }
-        }
+        ]
       ]
     }
   },

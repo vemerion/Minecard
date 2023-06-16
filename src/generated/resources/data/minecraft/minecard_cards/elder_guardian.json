@@ -11,15 +11,28 @@
         "method": "all"
       },
       "modifications": [
-        {
-          "health_change": 0,
-          "modifications": {
-            "health": 0,
-            "damage": -1,
-            "entity": "minecraft:item",
-            "cost": 0
+        [
+          {
+            "output": {
+              "type": "minecard:damage"
+            },
+            "operator": {
+              "type": "minecard:add",
+              "value": {
+                "left": {
+                  "type": "minecard:variable",
+                  "value": {
+                    "type": "minecard:damage"
+                  }
+                },
+                "right": {
+                  "type": "minecard:constant",
+                  "value": -1
+                }
+              }
+            }
           }
-        }
+        ]
       ]
     }
   },
