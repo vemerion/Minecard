@@ -50,8 +50,8 @@
       ]
     }
   },
-  "health": 13,
-  "damage": 5,
   "entity": "minecraft:ender_dragon",
-  "cost": 10
+  "cost": 10,
+  "health": 13,
+  "damage": 5
 }

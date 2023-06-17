@@ -35,8 +35,8 @@
       ]
     }
   },
-  "health": 4,
-  "damage": 4,
   "entity": "minecraft:snow_golem",
-  "cost": 4
+  "cost": 4,
+  "health": 4,
+  "damage": 4
 }

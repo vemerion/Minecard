@@ -66,8 +66,8 @@
       ]
     }
   },
-  "health": 2,
-  "damage": 2,
   "entity": "minecraft:pillager",
-  "cost": 4
+  "cost": 4,
+  "health": 2,
+  "damage": 2
 }

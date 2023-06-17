@@ -13,8 +13,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.item.Item;
 import net.minecraftforge.registries.ForgeRegistries;
 
 public class CardType {
@@ -32,8 +30,6 @@ public class CardType {
 							.forGetter(CardType::getProperties),
 					GameUtil.SafeOptionalCodec.defaulted("abilities", CardAbility.CODEC, NoCardAbility.NO_CARD_ABILITY)
 							.forGetter(CardType::getAbility),
-					GameUtil.EQUIPMENT_MAP_CODEC.optionalFieldOf("equipment", new HashMap<>())
-							.forGetter(CardType::getEquipment),
 					AdditionalCardData.CODEC.optionalFieldOf("additional_data", AdditionalCardData.EMPTY)
 							.forGetter(CardType::getAdditionalData),
 					Codec.INT.optionalFieldOf("deck_count", DEFAULT_DECK_COUNT).forGetter(CardType::getDeckCount),
@@ -48,13 +44,11 @@ public class CardType {
 	private final Card cardForRendering;
 	private final Map<ResourceLocation, Integer> properties;
 	private final CardAbility ability;
-	private final Map<EquipmentSlot, Item> equipment;
 	private final int deckCount;
 	private final float dropChance;
 
 	public CardType(EntityType<?> type, int cost, int health, int damage, Map<ResourceLocation, Integer> properties,
-			CardAbility ability, Map<EquipmentSlot, Item> equipment, AdditionalCardData additionalData, int deckCount,
-			float dropChance) {
+			CardAbility ability, AdditionalCardData additionalData, int deckCount, float dropChance) {
 		this.type = type;
 		this.cost = cost;
 		this.health = health;
@@ -62,7 +56,6 @@ public class CardType {
 		this.ability = ability;
 		this.additionalData = additionalData;
 		this.properties = properties;
-		this.equipment = equipment;
 		this.deckCount = deckCount;
 		this.dropChance = dropChance;
 		this.cardForRendering = create();
@@ -71,7 +64,7 @@ public class CardType {
 
 	public Card create() {
 		return new Card(Optional.ofNullable(type), cost, cost, health, health, health, damage, damage, false,
-				new HashMap<>(properties), ability, new HashMap<>(equipment), additionalData);
+				new HashMap<>(properties), ability, additionalData);
 	}
 
 	public EntityType<?> getType() {
@@ -100,10 +93,6 @@ public class CardType {
 
 	public CardAbility getAbility() {
 		return ability;
-	}
-
-	public Map<EquipmentSlot, Item> getEquipment() {
-		return equipment;
 	}
 
 	public AdditionalCardData getAdditionalData() {

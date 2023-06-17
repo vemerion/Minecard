@@ -25,8 +25,8 @@
       ]
     }
   },
-  "health": 10,
-  "damage": 4,
   "entity": "minecraft:ravager",
-  "cost": 9
+  "cost": 9,
+  "health": 10,
+  "damage": 4
 }

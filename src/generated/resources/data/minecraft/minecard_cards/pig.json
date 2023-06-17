@@ -31,8 +31,8 @@
       ]
     }
   },
-  "health": 2,
-  "damage": 3,
   "entity": "minecraft:pig",
-  "cost": 2
+  "cost": 2,
+  "health": 2,
+  "damage": 3
 }

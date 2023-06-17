@@ -14,8 +14,8 @@
       "restore_health": false
     }
   },
-  "health": 4,
-  "damage": 5,
   "entity": "minecraft:enderman",
-  "cost": 6
+  "cost": 6,
+  "health": 4,
+  "damage": 5
 }

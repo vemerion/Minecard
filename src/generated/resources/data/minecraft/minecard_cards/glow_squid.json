@@ -27,8 +27,8 @@
       ]
     }
   },
-  "health": 2,
-  "damage": 2,
   "entity": "minecraft:glow_squid",
-  "cost": 3
+  "cost": 3,
+  "health": 2,
+  "damage": 2
 }

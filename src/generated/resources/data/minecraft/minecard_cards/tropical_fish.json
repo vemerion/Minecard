@@ -1,6 +1,6 @@
 {
-  "health": 1,
-  "damage": 1,
   "entity": "minecraft:tropical_fish",
-  "cost": 0
+  "cost": 0,
+  "health": 1,
+  "damage": 1
 }

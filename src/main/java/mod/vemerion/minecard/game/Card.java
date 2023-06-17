@@ -13,8 +13,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.item.Item;
 import net.minecraftforge.registries.ForgeRegistries;
 
 public class Card {
@@ -36,8 +34,6 @@ public class Card {
 									.forGetter(Card::getProperties),
 							CardAbility.CODEC.optionalFieldOf("abilities", NoCardAbility.NO_CARD_ABILITY)
 									.forGetter(Card::getAbility),
-							GameUtil.EQUIPMENT_MAP_CODEC.optionalFieldOf("equipment", new HashMap<>())
-									.forGetter(Card::getEquipment),
 							AdditionalCardData.CODEC.optionalFieldOf("additional_data", AdditionalCardData.EMPTY)
 									.forGetter(Card::getAdditionalData))
 					.apply(instance, Card::new)));
@@ -54,12 +50,11 @@ public class Card {
 	private boolean ready;
 	private Map<ResourceLocation, Integer> properties;
 	private final CardAbility ability;
-	private Map<EquipmentSlot, Item> equipment;
 	private int id;
 
 	public Card(Optional<EntityType<?>> type, int cost, int originalCost, int health, int maxHealth, int originalHealth,
 			int damage, int originalDamage, boolean ready, Map<ResourceLocation, Integer> properties,
-			CardAbility ability, Map<EquipmentSlot, Item> equipment, AdditionalCardData additionalData) {
+			CardAbility ability, AdditionalCardData additionalData) {
 		this.type = type;
 		this.cost = cost;
 		this.originalCost = originalCost;
@@ -71,7 +66,6 @@ public class Card {
 		this.ready = ready;
 		this.properties = properties;
 		this.ability = ability;
-		this.equipment = equipment;
 		this.additionalData = additionalData;
 		this.id = counter++;
 	}
@@ -79,8 +73,7 @@ public class Card {
 	public Card(Card other) {
 		this(other.getType(), other.getCost(), other.getOriginalCost(), other.getHealth(), other.getMaxHealth(),
 				other.getOriginalHealth(), other.getDamage(), other.getOriginalDamage(), other.isReady(),
-				new HashMap<>(other.getProperties()), other.getAbility(), new HashMap<>(other.getEquipment()),
-				other.getAdditionalData());
+				new HashMap<>(other.getProperties()), other.getAbility(), other.getAdditionalData());
 		this.id = other.getId();
 	}
 
@@ -189,10 +182,6 @@ public class Card {
 		return ability;
 	}
 
-	public Map<EquipmentSlot, Item> getEquipment() {
-		return equipment;
-	}
-
 	public AdditionalCardData getAdditionalData() {
 		return additionalData;
 	}
@@ -225,7 +214,6 @@ public class Card {
 		this.originalDamage = received.originalDamage;
 		this.ready = received.isReady();
 		this.properties = received.getProperties();
-		this.equipment = received.getEquipment();
 		this.additionalData = received.getAdditionalData();
 	}
 }

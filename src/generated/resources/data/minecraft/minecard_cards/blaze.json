@@ -25,8 +25,8 @@
       ]
     }
   },
-  "health": 6,
-  "damage": 5,
   "entity": "minecraft:blaze",
-  "cost": 6
+  "cost": 6,
+  "health": 6,
+  "damage": 5
 }

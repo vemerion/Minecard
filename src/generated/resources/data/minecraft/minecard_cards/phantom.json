@@ -1,10 +1,10 @@
 {
-  "health": 2,
-  "damage": 3,
   "properties": {
     "minecard:undead": 1,
     "minecard:stealth": 1
   },
   "entity": "minecraft:phantom",
-  "cost": 3
+  "cost": 3,
+  "health": 2,
+  "damage": 3
 }

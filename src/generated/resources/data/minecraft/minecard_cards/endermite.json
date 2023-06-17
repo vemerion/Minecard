@@ -20,8 +20,8 @@
       "restore_health": false
     }
   },
-  "health": 1,
-  "damage": 2,
   "entity": "minecraft:endermite",
-  "cost": 3
+  "cost": 3,
+  "health": 1,
+  "damage": 2
 }

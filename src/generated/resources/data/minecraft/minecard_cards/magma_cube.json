@@ -48,8 +48,8 @@
       ]
     }
   },
-  "health": 4,
-  "damage": 4,
   "entity": "minecraft:magma_cube",
-  "cost": 9
+  "cost": 9,
+  "health": 4,
+  "damage": 4
 }

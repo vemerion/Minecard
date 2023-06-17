@@ -27,8 +27,8 @@
       ]
     }
   },
-  "health": 7,
-  "damage": 4,
   "entity": "minecraft:wandering_trader",
-  "cost": 7
+  "cost": 7,
+  "health": 7,
+  "damage": 4
 }

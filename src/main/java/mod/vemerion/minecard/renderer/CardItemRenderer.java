@@ -31,8 +31,6 @@ import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.animal.Rabbit;
 import net.minecraft.world.entity.animal.TropicalFish;
@@ -288,14 +286,7 @@ public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 			return t.create(level);
 		});
 
-		if (entity instanceof LivingEntity living) { // Change equipment
-			for (var slot : EquipmentSlot.values()) {
-				living.setItemSlot(slot, ItemStack.EMPTY);
-			}
-			for (var equipment : card.getEquipment().entrySet()) {
-				living.setItemSlot(equipment.getKey(), equipment.getValue().getDefaultInstance());
-			}
-		} else if (entity instanceof ItemEntity itemEntity
+		if (entity instanceof ItemEntity itemEntity
 				&& card.getAdditionalData() instanceof AdditionalCardData.ItemData itemData) { // Update item
 			itemEntity.setExtendedLifetime();
 

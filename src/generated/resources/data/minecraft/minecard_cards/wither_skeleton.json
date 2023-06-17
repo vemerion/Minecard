@@ -1,4 +1,7 @@
 {
+  "properties": {
+    "minecard:undead": 1
+  },
   "abilities": {
     "type": "minecard:modify",
     "value": {
@@ -42,11 +45,8 @@
       ]
     }
   },
-  "health": 6,
-  "damage": 4,
-  "properties": {
-    "minecard:undead": 1
-  },
   "entity": "minecraft:wither_skeleton",
-  "cost": 5
+  "cost": 5,
+  "health": 6,
+  "damage": 4
 }

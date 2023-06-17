@@ -31,8 +31,8 @@
       "restore_health": false
     }
   },
-  "health": 3,
-  "damage": 3,
   "entity": "minecraft:ocelot",
-  "cost": 3
+  "cost": 3,
+  "health": 3,
+  "damage": 3
 }

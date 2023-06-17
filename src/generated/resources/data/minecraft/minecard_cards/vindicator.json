@@ -6,8 +6,8 @@
     ],
     "type": "minecard:add_cards"
   },
-  "health": 4,
-  "damage": 8,
   "entity": "minecraft:vindicator",
-  "cost": 6
+  "cost": 6,
+  "health": 4,
+  "damage": 8
 }

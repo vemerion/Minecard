@@ -32,8 +32,8 @@
       ]
     }
   },
-  "health": 3,
-  "damage": 7,
   "entity": "minecraft:ghast",
-  "cost": 7
+  "cost": 7,
+  "health": 3,
+  "damage": 7
 }

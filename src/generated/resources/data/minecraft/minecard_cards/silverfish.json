@@ -20,8 +20,8 @@
       "restore_health": false
     }
   },
-  "health": 1,
-  "damage": 1,
   "entity": "minecraft:silverfish",
-  "cost": 1
+  "cost": 1,
+  "health": 1,
+  "damage": 1
 }

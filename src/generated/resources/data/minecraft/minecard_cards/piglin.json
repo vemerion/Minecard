@@ -8,8 +8,8 @@
     ],
     "type": "minecard:add_cards"
   },
-  "health": 4,
-  "damage": 4,
   "entity": "minecraft:piglin",
-  "cost": 5
+  "cost": 5,
+  "health": 4,
+  "damage": 4
 }

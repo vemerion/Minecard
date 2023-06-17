@@ -25,8 +25,8 @@
       ]
     }
   },
-  "health": 5,
-  "damage": 4,
   "entity": "minecraft:strider",
-  "cost": 4
+  "cost": 4,
+  "health": 5,
+  "damage": 4
 }

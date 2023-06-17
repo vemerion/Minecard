@@ -1,9 +1,9 @@
 {
-  "health": 5,
-  "damage": 6,
   "properties": {
     "minecard:taunt": 1
   },
   "entity": "minecraft:piglin_brute",
-  "cost": 6
+  "cost": 6,
+  "health": 5,
+  "damage": 6
 }

@@ -38,8 +38,8 @@
       ]
     }
   },
-  "health": 4,
-  "damage": 4,
   "entity": "minecraft:trader_llama",
-  "cost": 5
+  "cost": 5,
+  "health": 4,
+  "damage": 4
 }

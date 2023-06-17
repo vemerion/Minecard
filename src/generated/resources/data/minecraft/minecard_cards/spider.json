@@ -36,8 +36,8 @@
       ]
     }
   },
-  "health": 2,
-  "damage": 2,
   "entity": "minecraft:spider",
-  "cost": 2
+  "cost": 2,
+  "health": 2,
+  "damage": 2
 }

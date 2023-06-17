@@ -26,8 +26,8 @@
       "restore_health": false
     }
   },
-  "health": 4,
-  "damage": 4,
   "entity": "minecraft:goat",
-  "cost": 5
+  "cost": 5,
+  "health": 4,
+  "damage": 4
 }

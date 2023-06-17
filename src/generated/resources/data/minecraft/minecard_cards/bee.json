@@ -17,22 +17,22 @@
             "trigger": "tick",
             "placement": "right",
             "card": {
-              "health": 2,
-              "damage": 2,
               "entity": "minecraft:bee",
-              "cost": 0
+              "cost": 0,
+              "health": 2,
+              "damage": 2
             }
           }
         },
-        "health": 5,
-        "damage": 0,
         "entity": "minecraft:item",
-        "cost": 0
+        "cost": 0,
+        "health": 5,
+        "damage": 0
       }
     }
   },
-  "health": 2,
-  "damage": 2,
   "entity": "minecraft:bee",
-  "cost": 5
+  "cost": 5,
+  "health": 2,
+  "damage": 2
 }

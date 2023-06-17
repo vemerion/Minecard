@@ -1,4 +1,7 @@
 {
+  "properties": {
+    "minecard:thorns": 3
+  },
   "abilities": {
     "type": "minecard:modify",
     "value": {
@@ -36,11 +39,8 @@
       ]
     }
   },
-  "health": 9,
-  "damage": 3,
-  "properties": {
-    "minecard:thorns": 3
-  },
   "entity": "minecraft:elder_guardian",
-  "cost": 8
+  "cost": 8,
+  "health": 9,
+  "damage": 3
 }

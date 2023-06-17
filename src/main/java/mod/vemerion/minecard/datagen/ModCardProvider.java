@@ -2,7 +2,6 @@ package mod.vemerion.minecard.datagen;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.EnumMap;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -51,8 +50,6 @@ import net.minecraft.data.HashCache;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.item.alchemy.Potions;
@@ -687,7 +684,6 @@ public class ModCardProvider implements DataProvider {
 		private int damage;
 		private Map<ResourceLocation, Integer> properties = new HashMap<>();
 		private CardAbility ability = NoCardAbility.NO_CARD_ABILITY;
-		private Map<EquipmentSlot, Item> equipment = new EnumMap<>(EquipmentSlot.class);
 		private AdditionalCardData additionalData = AdditionalCardData.EMPTY;
 		private int deckCount = CardType.DEFAULT_DECK_COUNT;
 		private float dropChance = CardType.DEFAULT_DROP_CHANCE;
@@ -707,11 +703,6 @@ public class ModCardProvider implements DataProvider {
 
 		private Builder addProperty(ResourceLocation property, int value) {
 			properties.put(property, value);
-			return this;
-		}
-
-		private Builder addEquipment(EquipmentSlot slot, Item item) {
-			equipment.put(slot, item);
 			return this;
 		}
 
@@ -736,8 +727,7 @@ public class ModCardProvider implements DataProvider {
 		}
 
 		private CardType build() {
-			return new CardType(type, cost, health, damage, properties, ability, equipment, additionalData, deckCount,
-					dropChance);
+			return new CardType(type, cost, health, damage, properties, ability, additionalData, deckCount, dropChance);
 		}
 
 		private ResourceLocation getKey() {

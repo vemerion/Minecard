@@ -25,8 +25,8 @@
       ]
     }
   },
-  "health": 4,
-  "damage": 1,
   "entity": "minecraft:axolotl",
-  "cost": 2
+  "cost": 2,
+  "health": 4,
+  "damage": 1
 }

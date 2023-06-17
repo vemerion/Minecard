@@ -26,8 +26,8 @@
       ]
     }
   },
-  "health": 1,
-  "damage": 1,
   "entity": "minecraft:llama",
-  "cost": 1
+  "cost": 1,
+  "health": 1,
+  "damage": 1
 }

@@ -1,4 +1,7 @@
 {
+  "properties": {
+    "minecard:undead": 1
+  },
   "abilities": {
     "type": "minecard:modify",
     "value": {
@@ -61,11 +64,8 @@
       ]
     }
   },
-  "health": 4,
-  "damage": 4,
-  "properties": {
-    "minecard:undead": 1
-  },
   "entity": "minecraft:zombie_villager",
-  "cost": 6
+  "cost": 6,
+  "health": 4,
+  "damage": 4
 }
