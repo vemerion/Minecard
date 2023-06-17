@@ -9,7 +9,11 @@ import mod.vemerion.minecard.game.Card;
 import mod.vemerion.minecard.game.CardProperty;
 import mod.vemerion.minecard.game.PlayerState;
 import mod.vemerion.minecard.game.Receiver;
+import mod.vemerion.minecard.init.ModCardConditions;
 import mod.vemerion.minecard.init.ModCardVariables;
+import net.minecraft.Util;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraftforge.registries.ForgeRegistryEntry;
@@ -41,10 +45,21 @@ public abstract class CardVariable {
 	public static final Codec<CardVariable> CODEC = ExtraCodecs.lazyInitializedCodec(() -> ModCardVariables
 			.getRegistry().getCodec().dispatch("type", CardVariable::getType, CardVariableType::codec));
 
+	private Component description;
+
 	private CardVariable() {
 	}
 
+	protected abstract Object[] getDescriptionArgs();
+
 	protected abstract CardVariableType<?> getType();
+
+	public Component getDescription() {
+		if (description == null) {
+			description = new TranslatableComponent(getType().getTranslationKey(), getDescriptionArgs());
+		}
+		return description;
+	}
 
 	public abstract int get(PlayerState state, Card card);
 
@@ -59,6 +74,11 @@ public abstract class CardVariable {
 
 		Codec<T> codec() {
 			return codec;
+		}
+
+		public String getTranslationKey() {
+			return Util.makeDescriptionId(ModCardConditions.CARD_CONDITIONS.getRegistryName().getNamespace(),
+					getRegistryName());
 		}
 	}
 
@@ -87,6 +107,11 @@ public abstract class CardVariable {
 		@Override
 		public void set(PlayerState state, Card card, List<Receiver> receivers, int value) {
 			setter.set(state, card, receivers, value);
+		}
+
+		@Override
+		protected Object[] getDescriptionArgs() {
+			return new Object[0];
 		}
 
 		public static interface Getter {
@@ -132,6 +157,11 @@ public abstract class CardVariable {
 
 			if (property.equals(CardProperty.CHARGE))
 				card.setReady(true);
+		}
+
+		@Override
+		protected Object[] getDescriptionArgs() {
+			return new Object[] { new TranslatableComponent(CardProperty.getTextKey(property)) };
 		}
 	}
 }

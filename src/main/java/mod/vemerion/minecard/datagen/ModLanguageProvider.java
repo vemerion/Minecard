@@ -10,6 +10,8 @@ import mod.vemerion.minecard.helper.Helper;
 import mod.vemerion.minecard.init.ModBlocks;
 import mod.vemerion.minecard.init.ModCardAbilities;
 import mod.vemerion.minecard.init.ModCardConditions;
+import mod.vemerion.minecard.init.ModCardOperators;
+import mod.vemerion.minecard.init.ModCardVariables;
 import mod.vemerion.minecard.init.ModEntities;
 import mod.vemerion.minecard.init.ModItems;
 import net.minecraft.data.DataGenerator;
@@ -107,6 +109,21 @@ public class ModLanguageProvider extends LanguageProvider {
 		add(ModCardConditions.ENTITY.get().getTranslationKey(), "card is %s");
 		add(ModCardConditions.HAS_PROPERTY.get().getTranslationKey(), "card has property %s");
 
+		// Card variables
+		add(ModCardVariables.COST.get().getTranslationKey(), "cost");
+		add(ModCardVariables.DAMAGE.get().getTranslationKey(), "damage");
+		add(ModCardVariables.HEALTH.get().getTranslationKey(), "health");
+		add(ModCardVariables.MAX_HEALTH.get().getTranslationKey(), "max health");
+		add(ModCardVariables.PROPERTY.get().getTranslationKey(), "%s");
+
+		// Card Operators
+		add(ModCardOperators.ADD.get().getTranslationKey(), "(%s + %s)");
+		add(ModCardOperators.CONSTANT.get().getTranslationKey(), "%s");
+		add(ModCardOperators.MUL.get().getTranslationKey(), "(%s * %s)");
+		add(ModCardOperators.RANDOM.get().getTranslationKey(), "(value between %s and %s)");
+		add(ModCardOperators.SUB.get().getTranslationKey(), "(%s - %s)");
+		add(ModCardOperators.VARIABLE.get().getTranslationKey(), "%s");
+
 		// Card abilities triggers
 		add(CardAbilityTrigger.ALWAYS.getTextKey(), "Always:");
 		add(CardAbilityTrigger.NEVER.getTextKey(), "Never:");
@@ -127,10 +144,7 @@ public class ModLanguageProvider extends LanguageProvider {
 		add(ModCardAbilities.DRAW_CARDS.get().getTranslationKey(), "%s draw %s card(s).");
 		add(ModCardAbilities.MODIFY.get().getTranslationKey(), "%s apply%s%s to %s.");
 		add(ModCardAbilities.MODIFY.get().getTranslationKey() + ".one_of", " one of");
-		add(ModCardAbilities.MODIFY.get().getTranslationKey() + ".element", " [%s%s/%s%s%s]");
-		add(ModCardAbilities.MODIFY.get().getTranslationKey() + ".element_cost", ", cost %s");
-		add(ModCardAbilities.MODIFY.get().getTranslationKey() + ".element_heal", ", restoring %s health");
-		add(ModCardAbilities.MODIFY.get().getTranslationKey() + ".element_hurt", ", taking %s damage");
+		add(ModCardAbilities.MODIFY.get().getTranslationKey() + ".element", " [%s]");
 		add(ModCardAbilities.ADD_CARDS.get().getTranslationKey(), "%s Receive %s.");
 		add(ModCardAbilities.ADD_CARDS.get().getTranslationKey() + ".one_of", "one of");
 		add(ModCardAbilities.ADD_CARDS.get().getTranslationKey() + ".element", " [%s]");
@@ -154,6 +168,9 @@ public class ModLanguageProvider extends LanguageProvider {
 		add(Helper.gui("card_ability_selection"), "%s%s%s%s");
 		add(Helper.gui("where"), " where ");
 		add(Helper.gui("if"), " if ");
+		add(Helper.gui("card_modification"), "%s %s %s");
+		add(Helper.gui("equal"), "=");
+		add(Helper.gui("plus_equal"), "+=");
 	}
 
 	private void tutorial() {

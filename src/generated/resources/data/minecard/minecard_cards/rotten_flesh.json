@@ -32,7 +32,7 @@
                 },
                 "max": {
                   "type": "minecard:constant",
-                  "value": 3
+                  "value": 2
                 }
               }
             }

@@ -18,6 +18,7 @@ import mod.vemerion.minecard.game.Receiver;
 import mod.vemerion.minecard.init.ModCardAbilities;
 import mod.vemerion.minecard.network.AnimationMessage;
 import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.ExtraCodecs;
 
@@ -58,39 +59,21 @@ public class ModifyAbility extends CardAbility {
 		return ModCardAbilities.MODIFY.get();
 	}
 
-//	@Override
-//	protected Object[] getDescriptionArgs() {
-//		var elements = TextComponent.EMPTY.copy();
-//		for (var m : modifications) {
-//			var card = m.modifications.get(true);
-//			var healthChangeText = m.healthChange == 0 ? TextComponent.EMPTY
-//					: new TranslatableComponent(
-//							ModCardAbilities.MODIFY.get().getTranslationKey()
-//									+ (m.healthChange > 0 ? ".element_heal" : ".element_hurt"),
-//							Math.abs(m.healthChange));
-//			var damageText = modifierText(card.getDamage());
-//			var healthText = modifierText(card.getHealth());
-//			var costText = card.getCost() == 0 ? TextComponent.EMPTY
-//					: new TranslatableComponent(ModCardAbilities.MODIFY.get().getTranslationKey() + ".element_cost",
-//							modifierText(card.getCost()));
-//			elements.append(new TranslatableComponent(ModCardAbilities.MODIFY.get().getTranslationKey() + ".element",
-//					GameUtil.propertiesToComponent(card.getProperties()), damageText, healthText, costText,
-//					healthChangeText));
-//		}
-//		return new Object[] { GameUtil.emphasize(trigger.getText()),
-//				modifications.size() == 1 ? TextComponent.EMPTY
-//						: new TranslatableComponent(ModCardAbilities.MODIFY.get().getTranslationKey() + ".one_of"),
-//				elements, selection.getText() };
-//	}
-
 	@Override
 	protected Object[] getDescriptionArgs() {
-		return new Object[] { GameUtil.emphasize(trigger.getText()), TextComponent.EMPTY, TextComponent.EMPTY,
-				selection.getText() };
-	}
-
-	private TextComponent modifierText(int value) {
-		return new TextComponent((value > 0 ? "+" : "") + String.valueOf(value));
+		var elements = TextComponent.EMPTY.copy();
+		for (var modification : modifications) {
+			var modificationText = TextComponent.EMPTY.copy();
+			for (int i = 0; i < modification.size(); i++) {
+				modificationText.append(modification.get(i).getText()).append(i < modification.size() - 1 ? ", " : "");
+			}
+			elements.append(new TranslatableComponent(ModCardAbilities.MODIFY.get().getTranslationKey() + ".element",
+					modificationText));
+		}
+		return new Object[] { GameUtil.emphasize(trigger.getText()),
+				modifications.size() == 1 ? TextComponent.EMPTY
+						: new TranslatableComponent(ModCardAbilities.MODIFY.get().getTranslationKey() + ".one_of"),
+				elements, selection.getText() };
 	}
 
 	@Override

@@ -3,6 +3,9 @@ package mod.vemerion.minecard.game.ability;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
+import mod.vemerion.minecard.helper.Helper;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.util.ExtraCodecs;
 
 public class CardModification {
@@ -30,5 +33,11 @@ public class CardModification {
 
 	public CardOperator getOperator() {
 		return operator;
+	}
+
+	public Component getText() {
+		return new TranslatableComponent(Helper.gui("card_modification"), output.getDescription(),
+				new TranslatableComponent(Helper.gui(output == CardVariable.HEALTH ? "plus_equal" : "equal")),
+				operator.getDescription());
 	}
 }

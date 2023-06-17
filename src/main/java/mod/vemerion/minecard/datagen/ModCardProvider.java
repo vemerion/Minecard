@@ -462,7 +462,7 @@ public class ModCardProvider implements DataProvider {
 								new CardAbilityGroups(
 										EnumSet.of(CardAbilityGroup.ENEMY_BOARD, CardAbilityGroup.YOUR_BOARD)),
 								CardSelectionMethod.CHOICE, CardCondition.NoCondition.NO_CONDITION),
-						List.of(new ModificationBuilder().random(CardVariable.HEALTH, -2, 3).build()))));
+						List.of(new ModificationBuilder().random(CardVariable.HEALTH, -2, 2).build()))));
 		add(new Builder(EntityType.ITEM, 0, 0, 0).setKey(mod("rabbit_foot"))
 				.setAdditionalData(new AdditionalCardData.ItemData(Items.RABBIT_FOOT))
 				.setCardAbility(new ModifyAbility(CardAbilityTrigger.SUMMON, Optional.of(mod("throw_rabbit_foot")),

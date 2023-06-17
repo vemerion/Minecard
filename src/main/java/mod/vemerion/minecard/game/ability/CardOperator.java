@@ -5,7 +5,11 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import mod.vemerion.minecard.game.Card;
 import mod.vemerion.minecard.game.PlayerState;
+import mod.vemerion.minecard.init.ModCardConditions;
 import mod.vemerion.minecard.init.ModCardOperators;
+import net.minecraft.Util;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 
@@ -14,12 +18,23 @@ public abstract class CardOperator {
 	public static final Codec<CardOperator> CODEC = ExtraCodecs.lazyInitializedCodec(() -> ModCardOperators
 			.getRegistry().getCodec().dispatch("type", CardOperator::getType, CardOperatorType::codec));
 
+	private Component description;
+
 	private CardOperator() {
 	}
+
+	protected abstract Object[] getDescriptionArgs();
 
 	protected abstract CardOperatorType<?> getType();
 
 	public abstract int evaluate(PlayerState state, Card card);
+
+	public Component getDescription() {
+		if (description == null) {
+			description = new TranslatableComponent(getType().getTranslationKey(), getDescriptionArgs());
+		}
+		return description;
+	}
 
 	public static class CardOperatorType<T extends CardOperator> extends ForgeRegistryEntry<CardOperatorType<?>> {
 		private final Codec<T> codec;
@@ -30,6 +45,11 @@ public abstract class CardOperator {
 
 		Codec<T> codec() {
 			return codec;
+		}
+
+		public String getTranslationKey() {
+			return Util.makeDescriptionId(ModCardConditions.CARD_CONDITIONS.getRegistryName().getNamespace(),
+					getRegistryName());
 		}
 	}
 
@@ -57,6 +77,11 @@ public abstract class CardOperator {
 			return variable.get(state, card);
 		}
 
+		@Override
+		protected Object[] getDescriptionArgs() {
+			return new Object[] { variable.getDescription() };
+		}
+
 	}
 
 	public static class Constant extends CardOperator {
@@ -81,6 +106,11 @@ public abstract class CardOperator {
 		@Override
 		public int evaluate(PlayerState state, Card card) {
 			return value;
+		}
+
+		@Override
+		protected Object[] getDescriptionArgs() {
+			return new Object[] { value };
 		}
 
 	}
@@ -116,7 +146,12 @@ public abstract class CardOperator {
 
 		@Override
 		public int evaluate(PlayerState state, Card card) {
-			return state.getGame().getRandom().nextInt(min.evaluate(state, card), max.evaluate(state, card));
+			return state.getGame().getRandom().nextInt(min.evaluate(state, card), max.evaluate(state, card) + 1);
+		}
+
+		@Override
+		protected Object[] getDescriptionArgs() {
+			return new Object[] { min.getDescription(), max.getDescription() };
 		}
 
 	}
@@ -155,6 +190,11 @@ public abstract class CardOperator {
 			return left.evaluate(state, card) + right.evaluate(state, card);
 		}
 
+		@Override
+		protected Object[] getDescriptionArgs() {
+			return new Object[] { left.getDescription(), right.getDescription() };
+		}
+
 	}
 
 	public static class Sub extends CardOperator {
@@ -191,6 +231,11 @@ public abstract class CardOperator {
 			return left.evaluate(state, card) - right.evaluate(state, card);
 		}
 
+		@Override
+		protected Object[] getDescriptionArgs() {
+			return new Object[] { left.getDescription(), right.getDescription() };
+		}
+
 	}
 
 	public static class Mul extends CardOperator {
@@ -225,6 +270,11 @@ public abstract class CardOperator {
 		@Override
 		public int evaluate(PlayerState state, Card card) {
 			return left.evaluate(state, card) * right.evaluate(state, card);
+		}
+
+		@Override
+		protected Object[] getDescriptionArgs() {
+			return new Object[] { left.getDescription(), right.getDescription() };
 		}
 
 	}
