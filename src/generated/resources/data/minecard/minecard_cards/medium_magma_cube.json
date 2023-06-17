@@ -21,8 +21,20 @@
                     "value": "minecard:burn"
                   },
                   "operator": {
-                    "type": "minecard:constant",
-                    "value": 2
+                    "type": "minecard:add",
+                    "value": {
+                      "left": {
+                        "type": "minecard:variable",
+                        "value": {
+                          "type": "minecard:property",
+                          "value": "minecard:burn"
+                        }
+                      },
+                      "right": {
+                        "type": "minecard:constant",
+                        "value": 2
+                      }
+                    }
                   }
                 }
               ]

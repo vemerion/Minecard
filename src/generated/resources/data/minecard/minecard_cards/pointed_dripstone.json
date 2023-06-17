@@ -25,8 +25,20 @@
               "value": "minecard:thorns"
             },
             "operator": {
-              "type": "minecard:constant",
-              "value": 3
+              "type": "minecard:add",
+              "value": {
+                "left": {
+                  "type": "minecard:variable",
+                  "value": {
+                    "type": "minecard:property",
+                    "value": "minecard:thorns"
+                  }
+                },
+                "right": {
+                  "type": "minecard:constant",
+                  "value": 3
+                }
+              }
             }
           }
         ]

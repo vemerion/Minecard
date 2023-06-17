@@ -24,19 +24,17 @@
               "type": "minecard:health"
             },
             "operator": {
-              "type": "minecard:constant",
-              "value": -2
-            }
-          }
-        ],
-        [
-          {
-            "output": {
-              "type": "minecard:health"
-            },
-            "operator": {
-              "type": "minecard:constant",
-              "value": 2
+              "type": "minecard:random",
+              "value": {
+                "min": {
+                  "type": "minecard:constant",
+                  "value": -2
+                },
+                "max": {
+                  "type": "minecard:constant",
+                  "value": 3
+                }
+              }
             }
           }
         ]

@@ -25,8 +25,20 @@
               "value": "minecard:freeze"
             },
             "operator": {
-              "type": "minecard:constant",
-              "value": 2
+              "type": "minecard:add",
+              "value": {
+                "left": {
+                  "type": "minecard:variable",
+                  "value": {
+                    "type": "minecard:property",
+                    "value": "minecard:freeze"
+                  }
+                },
+                "right": {
+                  "type": "minecard:constant",
+                  "value": 2
+                }
+              }
             }
           }
         ]
