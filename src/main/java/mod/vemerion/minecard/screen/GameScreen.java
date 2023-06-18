@@ -102,10 +102,9 @@ public class GameScreen extends Screen implements GameClient {
 	private static final int DECK_VERTICAL_OFFSET = 55;
 	private static final int CARD_PADDING = 4;
 	private static final int INFO_BUTTON_SIZE = 12;
-	private static final int INFO_BUTTON_X_OFFSET = 8;
-	private static final int INFO_BUTTON_Y_OFFSET = 15;
-	private static final ResourceLocation INFO_BUTTON_TEXTURE = new ResourceLocation(Main.MODID,
-			"textures/gui/info.png");
+	private static final int INFO_BUTTON_X_OFFSET = 8 + INFO_BUTTON_SIZE;
+	private static final int INFO_BUTTON_Y_OFFSET = 15 + INFO_BUTTON_SIZE;
+	private static final int INFO_SCREEN_PROPERTY_COUNT = 3 * 4;
 
 	private static final Card EMPTY_CARD = Cards.EMPTY_CARD_TYPE.create();
 
@@ -192,6 +191,8 @@ public class GameScreen extends Screen implements GameClient {
 
 			resources.add(new Resources(playerState.id, playerState.isTop));
 		}
+
+		addRenderableWidget(new InfoButton());
 
 		if (!isSpectator)
 			addRenderableWidget(new NextTurnButton(width - 24, height / 2 - NEXT_TURN_BUTTON_SIZE / 2,
@@ -685,62 +686,7 @@ public class GameScreen extends Screen implements GameClient {
 
 		source.endBatch();
 
-		// Info button
-		boolean isHovered = mouseX > width - INFO_BUTTON_X_OFFSET - INFO_BUTTON_SIZE
-				&& mouseX < width - INFO_BUTTON_X_OFFSET
-				&& mouseY > height / 2 - INFO_BUTTON_Y_OFFSET - INFO_BUTTON_SIZE
-				&& mouseY < height / 2 - INFO_BUTTON_Y_OFFSET;
-		if (isHovered) {
-			drawPropertyInfo(poseStack);
-		} else {
-			RenderSystem.setShader(GameRenderer::getPositionTexShader);
-			RenderSystem.setShaderTexture(0, INFO_BUTTON_TEXTURE);
-			RenderSystem.enableDepthTest();
-			RenderSystem.setShaderColor(isHovered ? 0.6f : 1, isHovered ? 0.6f : 1, 1, 1);
-			blit(poseStack, width - INFO_BUTTON_X_OFFSET - INFO_BUTTON_SIZE,
-					height / 2 - INFO_BUTTON_Y_OFFSET - INFO_BUTTON_SIZE, 0, 0, INFO_BUTTON_SIZE, INFO_BUTTON_SIZE,
-					INFO_BUTTON_SIZE, INFO_BUTTON_SIZE);
-		}
 		super.render(poseStack, mouseX, mouseY, partialTicks);
-	}
-
-	private void drawPropertyInfo(PoseStack poseStack) {
-		poseStack.pushPose();
-		poseStack.translate(0, 0, 500);
-		GuiComponent.fill(poseStack, 0, 0, width, height, 0xcc000000);
-
-		int border = 80;
-		int padding = (width - border * 2) / 2;
-		int i = 0;
-		for (var entry : CardProperties.getInstance(true).entries()) {
-			var property = entry.getValue();
-			var rl = entry.getKey();
-
-			int x = padding * (i % 3) + border;
-			int y = i / 3 * 60 + 1;
-
-			itemRenderer.renderGuiItem(property.getItem(), x, y);
-
-			// Title
-			float size = 1.3f;
-			var title = new TranslatableComponent(CardProperty.getTextKey(rl));
-			var width = font.width(title) * size;
-			poseStack.pushPose();
-			poseStack.translate(x + 8 - width / 2, y + 17, 0);
-			poseStack.scale(size, size, size);
-			font.drawShadow(poseStack, title, 0, 0, 0xffffffff);
-			poseStack.popPose();
-
-			// Description
-			var description = new TranslatableComponent(CardProperty.getDescriptionKey(rl));
-			var lines = font.split(description, 110);
-			for (int j = 0; j < lines.size(); j++) {
-				font.drawShadow(poseStack, lines.get(j), x + 8 - font.width(lines.get(j)) / 2, y + 30 + j * 9,
-						0xffffffff);
-			}
-			i++;
-		}
-		poseStack.popPose();
 	}
 
 	private void drawBarrier(PoseStack poseStack, BufferSource source, ClientCard card) {
@@ -841,6 +787,114 @@ public class GameScreen extends Screen implements GameClient {
 			if (isHovered && isCurrentActive()) {
 				GameScreen.this.renderTooltip(pPoseStack, NEXT_TURN, pMouseX, pMouseY);
 			}
+		}
+
+	}
+
+	private class InfoButton extends AbstractButton {
+
+		private static final ResourceLocation TEXTURE = new ResourceLocation(Main.MODID, "textures/gui/info.png");
+		private static final TranslatableComponent INFO_BUTTON_HOVER = new TranslatableComponent(
+				Helper.gui("info_button_hover"));
+
+		private int page = 0;
+		private boolean isHovered0;
+		private long hoverTimestamp;
+
+		public InfoButton() {
+			super(GameScreen.this.width - INFO_BUTTON_X_OFFSET, GameScreen.this.height / 2 - INFO_BUTTON_Y_OFFSET,
+					INFO_BUTTON_SIZE, INFO_BUTTON_SIZE, TextComponent.EMPTY);
+		}
+
+		@Override
+		public void updateNarration(NarrationElementOutput pNarrationElementOutput) {
+
+		}
+
+		@Override
+		public void onPress() {
+			page = (page + 1) % infoPages();
+		}
+
+		@Override
+		public void renderButton(PoseStack pPoseStack, int pMouseX, int pMouseY, float pPartialTick) {
+			if (isHovered && !isHovered0) {
+				hoverTimestamp = minecraft.level.getGameTime();
+			}
+			isHovered0 = isHovered;
+
+			if (isHovered) {
+				pPoseStack.pushPose();
+				pPoseStack.translate(0, 0, 500);
+				GuiComponent.fill(pPoseStack, 0, 0, GameScreen.this.width, GameScreen.this.height, 0xcc000000);
+				if (infoPages() > 1 && (minecraft.level.getGameTime() - hoverTimestamp < 60))
+					GameScreen.this.renderTooltip(pPoseStack, INFO_BUTTON_HOVER, pMouseX, pMouseY);
+				pPoseStack.popPose();
+			}
+
+			RenderSystem.setShader(GameRenderer::getPositionTexShader);
+			RenderSystem.setShaderTexture(0, TEXTURE);
+
+			RenderSystem.enableDepthTest();
+			RenderSystem.setShaderColor(isHovered ? 0.6f : 1, isHovered ? 0.6f : 1, 1, 1);
+			blit(pPoseStack, x, y, 0, 0, width, height, INFO_BUTTON_SIZE, INFO_BUTTON_SIZE);
+			if (isHovered) {
+				drawPropertyInfo(pPoseStack);
+			}
+		}
+
+		private int infoPages() {
+			return 1 + Math.max(0, CardProperties.getInstance(true).size() - 1) / INFO_SCREEN_PROPERTY_COUNT;
+		}
+
+		private void drawPropertyInfo(PoseStack poseStack) {
+			poseStack.pushPose();
+			poseStack.translate(0, 0, 500);
+
+			int border = 80;
+			int padding = (GameScreen.this.width - border * 2) / 2;
+			int i = 0;
+			int skip = page * INFO_SCREEN_PROPERTY_COUNT;
+			for (var entry : CardProperties.getInstance(true).entries()) {
+				skip--;
+				if (skip > 0)
+					continue;
+				if (i == INFO_SCREEN_PROPERTY_COUNT)
+					break;
+
+				var property = entry.getValue();
+				var rl = entry.getKey();
+
+				int x = padding * (i % 3) + border - 16 / 2;
+				int y = i / 3 * 60 + 1;
+
+				itemRenderer.renderGuiItem(property.getItem(), x, y);
+
+				// Title
+				float size = 1.3f;
+				var title = new TranslatableComponent(CardProperty.getTextKey(rl));
+				var width = font.width(title) * size;
+				poseStack.pushPose();
+				poseStack.translate(x + 8 - width / 2, y + 17, 0);
+				poseStack.scale(size, size, size);
+				font.drawShadow(poseStack, title, 0, 0, 0xffffffff);
+				poseStack.popPose();
+
+				// Description
+				var description = new TranslatableComponent(CardProperty.getDescriptionKey(rl));
+				var lines = font.split(description, 110);
+				for (int j = 0; j < lines.size(); j++) {
+					font.drawShadow(poseStack, lines.get(j), x + 8 - font.width(lines.get(j)) / 2, y + 30 + j * 9,
+							0xffffffff);
+				}
+				i++;
+			}
+
+			// Page count
+			var pageText = new TextComponent((page + 1) + "/" + infoPages());
+			font.drawShadow(poseStack, pageText, 4, GameScreen.this.height - 12, 0xffaaaaaa);
+
+			poseStack.popPose();
 		}
 
 	}

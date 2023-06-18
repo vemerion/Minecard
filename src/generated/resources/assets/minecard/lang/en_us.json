@@ -63,6 +63,7 @@
   "gui.minecard.game": "Minecard Game",
   "gui.minecard.game_over": "Game Over",
   "gui.minecard.if": " if ",
+  "gui.minecard.info_button_hover": "Click to cycle between pages",
   "gui.minecard.mulligan": "Choose cards to mulligan",
   "gui.minecard.next_turn": "Next Turn",
   "gui.minecard.plus_equal": "+=",
