@@ -11,6 +11,7 @@ import com.google.gson.JsonElement;
 import com.mojang.serialization.JsonOps;
 
 import mod.vemerion.minecard.Main;
+import mod.vemerion.minecard.game.ability.NoCardAbility;
 import mod.vemerion.minecard.network.Network;
 import mod.vemerion.minecard.network.UpdateCardPropertiesMessage;
 import net.minecraft.resources.ResourceLocation;
@@ -19,6 +20,7 @@ import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.util.profiling.ProfilerFiller;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.server.ServerLifecycleHooks;
@@ -26,6 +28,9 @@ import net.minecraftforge.server.ServerLifecycleHooks;
 public class CardProperties extends SimpleJsonResourceReloadListener {
 	private static final Gson GSON = (new GsonBuilder()).setPrettyPrinting().disableHtmlEscaping().create();
 	public static final String FOLDER_NAME = Main.MODID + "_cards_properties";
+
+	private static final CardProperty NO_CARD_PROPERTY = new CardProperty(ItemStack.EMPTY,
+			NoCardAbility.NO_CARD_ABILITY);
 
 	private static CardProperties clientInstance;
 	private static CardProperties serverInstance;
@@ -38,11 +43,7 @@ public class CardProperties extends SimpleJsonResourceReloadListener {
 	}
 
 	public CardProperty get(ResourceLocation rl) {
-		return PROPERTIES.get(rl);
-	}
-
-	public CardProperty get(String s) {
-		return PROPERTIES.get(new ResourceLocation(Main.MODID, s));
+		return PROPERTIES.getOrDefault(rl, NO_CARD_PROPERTY);
 	}
 
 	public Set<Map.Entry<ResourceLocation, CardProperty>> entries() {

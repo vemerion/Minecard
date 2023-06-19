@@ -3,6 +3,7 @@ package mod.vemerion.minecard.game;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -180,6 +181,15 @@ public class Card {
 
 	public CardAbility getAbility() {
 		return ability;
+	}
+
+	public void ability(Consumer<CardAbility> func) {
+		func.accept(getAbility());
+		for (var property : properties.entrySet()) {
+			if (property.getValue() > 0) {
+				func.accept(CardProperties.getInstance(false).get(property.getKey()).getAbility());
+			}
+		}
 	}
 
 	public AdditionalCardData getAdditionalData() {

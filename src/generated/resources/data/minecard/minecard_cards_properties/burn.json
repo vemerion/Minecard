@@ -2,5 +2,52 @@
   "item": {
     "id": "minecraft:lava_bucket",
     "Count": 1
+  },
+  "ability": {
+    "type": "minecard:modify",
+    "value": {
+      "trigger": "tick",
+      "selection": {
+        "groups": [
+          "self"
+        ],
+        "method": "all"
+      },
+      "modifications": [
+        [
+          {
+            "output": {
+              "type": "minecard:health"
+            },
+            "operator": {
+              "type": "minecard:constant",
+              "value": -1
+            }
+          },
+          {
+            "output": {
+              "type": "minecard:property",
+              "value": "minecard:burn"
+            },
+            "operator": {
+              "type": "minecard:add",
+              "value": {
+                "left": {
+                  "type": "minecard:variable",
+                  "value": {
+                    "type": "minecard:property",
+                    "value": "minecard:burn"
+                  }
+                },
+                "right": {
+                  "type": "minecard:constant",
+                  "value": -1
+                }
+              }
+            }
+          }
+        ]
+      ]
+    }
   }
 }

@@ -155,11 +155,6 @@ public class PlayerState {
 				card.decrementProperty(CardProperty.FREEZE);
 				changed = true;
 			}
-			if (card.hasProperty(CardProperty.BURN)) {
-				game.hurt(receivers, card, 1);
-				card.decrementProperty(CardProperty.BURN);
-				changed = true;
-			}
 			if (card.hasProperty(CardProperty.POISON) && card.getHealth() > 1) {
 				game.hurt(receivers, card, 1);
 				changed = true;
@@ -170,7 +165,7 @@ public class PlayerState {
 					receiver.receiver(msg);
 			}
 
-			card.getAbility().onTick(receivers, this, card);
+			card.ability(a -> a.onTick(receivers, this, card));
 		}
 	}
 
@@ -186,7 +181,7 @@ public class PlayerState {
 			if (card.hasProperty(CardProperty.BABY)) {
 				card.decrementProperty(CardProperty.BABY);
 				if (!card.hasProperty(CardProperty.BABY)) {
-					card.getAbility().onGrow(receivers, this, card);
+					card.ability(a -> a.onGrow(receivers, this, card));
 				}
 				updated.add(card);
 			}
@@ -280,7 +275,7 @@ public class PlayerState {
 			receiver.receiver(new PlaceCardMessage(id, card, leftId));
 		}
 
-		card.getAbility().onSummon(receivers, this, card);
+		card.ability(a -> a.onSummon(receivers, this, card));
 
 		choices = null;
 

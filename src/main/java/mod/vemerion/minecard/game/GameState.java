@@ -209,14 +209,15 @@ public class GameState {
 		if (owner == null || container == null)
 			return;
 
-		card.getAbility().onHurt(receivers, owner, card);
+		final var playerState = owner;
+		card.ability(a -> a.onHurt(receivers, playerState, card));
 
 		for (var receiver : receivers) {
 			updateCards(receiver, List.of(card));
 		}
 
 		if (card.isDead()) {
-			card.getAbility().onDeath(receivers, owner, card);
+			card.ability(a -> a.onDeath(receivers, playerState, card));
 			container.remove(card);
 		}
 	}
@@ -257,7 +258,7 @@ public class GameState {
 			receiver.receiver(new PlaceCardMessage(id, card, leftId));
 		}
 
-		card.getAbility().onSummon(receivers, playerState, card);
+		card.ability(a -> a.onSummon(receivers, playerState, card));
 	}
 
 	public void endTurn(List<Receiver> receivers) {
@@ -281,7 +282,7 @@ public class GameState {
 			return;
 		}
 
-		attackerCard.getAbility().onAttack(receivers, current, attackerCard, targetCard);
+		attackerCard.ability(a -> a.onAttack(receivers, current, attackerCard, targetCard));
 
 		attackerCard.setReady(false);
 		attackerCard.removeProperty(CardProperty.STEALTH);
