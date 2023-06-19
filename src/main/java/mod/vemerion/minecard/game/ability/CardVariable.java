@@ -20,12 +20,12 @@ import net.minecraftforge.registries.ForgeRegistryEntry;
 
 public abstract class CardVariable {
 
-	public static final SimpleVariable COST = new CardVariable.SimpleVariable(ModCardVariables.COST,
-			(s, c) -> c.getCost(), (s, c, r, v) -> c.setCost(v));
+	public static final SimpleVariable COST = new CardVariable.SimpleVariable(ModCardVariables.COST, c -> c.getCost(),
+			(s, c, r, v) -> c.setCost(v));
 	public static final SimpleVariable DAMAGE = new CardVariable.SimpleVariable(ModCardVariables.DAMAGE,
-			(s, c) -> c.getDamage(), (s, c, r, v) -> c.setDamage(v));
+			c -> c.getDamage(), (s, c, r, v) -> c.setDamage(v));
 	public static final SimpleVariable MAX_HEALTH = new CardVariable.SimpleVariable(ModCardVariables.MAX_HEALTH,
-			(s, c) -> c.getMaxHealth(), (s, c, r, v) -> {
+			c -> c.getMaxHealth(), (s, c, r, v) -> {
 				var diff = v - c.getMaxHealth();
 				c.setMaxHealth(v);
 				if (c.getHealth() > c.getMaxHealth())
@@ -35,7 +35,7 @@ public abstract class CardVariable {
 
 			});
 	public static final SimpleVariable HEALTH = new CardVariable.SimpleVariable(ModCardVariables.HEALTH,
-			(s, c) -> c.getHealth(), (s, c, r, v) -> {
+			c -> c.getHealth(), (s, c, r, v) -> {
 				if (v < 0)
 					s.getGame().hurt(r, c, -v);
 				else
@@ -61,7 +61,7 @@ public abstract class CardVariable {
 		return description;
 	}
 
-	public abstract int get(PlayerState state, Card card);
+	public abstract int get(Card card);
 
 	public abstract void set(PlayerState state, Card card, List<Receiver> receivers, int value);
 
@@ -100,8 +100,8 @@ public abstract class CardVariable {
 		}
 
 		@Override
-		public int get(PlayerState state, Card card) {
-			return getter.get(state, card);
+		public int get(Card card) {
+			return getter.get(card);
 		}
 
 		@Override
@@ -115,7 +115,7 @@ public abstract class CardVariable {
 		}
 
 		public static interface Getter {
-			public int get(PlayerState state, Card card);
+			public int get(Card card);
 		}
 
 		public static interface Setter {
@@ -144,7 +144,7 @@ public abstract class CardVariable {
 		}
 
 		@Override
-		public int get(PlayerState state, Card card) {
+		public int get(Card card) {
 			return card.getProperty(property);
 		}
 

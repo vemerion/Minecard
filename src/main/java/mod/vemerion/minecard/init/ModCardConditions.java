@@ -37,8 +37,8 @@ public class ModCardConditions {
 			() -> new CardConditionType<CardCondition.Not>(CardCondition.Not.CODEC));
 	public static final RegistryObject<CardConditionType<? extends CardCondition>> ENTITY = CARD_CONDITIONS
 			.register("entity", () -> new CardConditionType<CardCondition.Entity>(CardCondition.Entity.CODEC));
-	public static final RegistryObject<CardConditionType<? extends CardCondition>> HAS_PROPERTY = CARD_CONDITIONS
-			.register("has_property",
-					() -> new CardConditionType<CardCondition.HasProperty>(CardCondition.HasProperty.CODEC));
+	public static final RegistryObject<CardConditionType<? extends CardCondition>> OPERATOR = CARD_CONDITIONS.register(
+			"operator",
+			() -> new CardConditionType<CardCondition.OperatorCondition>(CardCondition.OperatorCondition.CODEC));
 
 }

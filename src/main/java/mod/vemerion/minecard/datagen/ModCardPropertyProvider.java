@@ -84,8 +84,13 @@ public class ModCardPropertyProvider implements DataProvider {
 		properties.put(CardProperty.BABY, new CardProperty(new ItemStack(Items.EGG), NoCardAbility.NO_CARD_ABILITY));
 		properties.put(CardProperty.THORNS,
 				new CardProperty(new ItemStack(Items.POINTED_DRIPSTONE), NoCardAbility.NO_CARD_ABILITY));
-		properties.put(CardProperty.POISON,
-				new CardProperty(new ItemStack(Items.SPIDER_EYE), NoCardAbility.NO_CARD_ABILITY));
+		properties.put(CardProperty.POISON, new CardProperty(new ItemStack(Items.SPIDER_EYE),
+				new ModifyAbility(CardAbilityTrigger.TICK, Optional.empty(),
+						new CardAbilitySelection(new CardAbilityGroups(EnumSet.of(CardAbilityGroup.SELF)),
+								CardSelectionMethod.ALL,
+								new CardCondition.OperatorCondition(new CardOperator.GreaterThan(
+										new CardOperator.Variable(CardVariable.HEALTH), new CardOperator.Constant(1)))),
+						List.of(List.of(new CardModification(CardVariable.HEALTH, new CardOperator.Constant(-1)))))));
 		properties.put(CardProperty.UNDEAD,
 				new CardProperty(new ItemStack(Items.ZOMBIE_HEAD), NoCardAbility.NO_CARD_ABILITY));
 	}

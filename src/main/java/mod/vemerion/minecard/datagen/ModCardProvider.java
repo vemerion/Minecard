@@ -401,9 +401,11 @@ public class ModCardProvider implements DataProvider {
 		add(new Builder(EntityType.DOLPHIN, 3, 2, 3).setCardAbility(new SummonCardAbility(CardAbilityTrigger.SUMMON,
 				CardPlacement.RIGHT, new LazyCardType(mod("buried_treasure")))));
 		add(new Builder(EntityType.ZOMBIE_VILLAGER, 6, 4, 4).addProperty(CardProperty.UNDEAD, 1)
-				.setCardAbility(new ModifyAbility(CardAbilityTrigger.SUMMON, Optional.empty(),
-						new CardAbilitySelection(new CardAbilityGroups(EnumSet.of(CardAbilityGroup.YOUR_BOARD)),
-								CardSelectionMethod.ALL, new CardCondition.HasProperty(CardProperty.UNDEAD)),
+				.setCardAbility(new ModifyAbility(CardAbilityTrigger.SUMMON, Optional.empty(), new CardAbilitySelection(
+						new CardAbilityGroups(EnumSet.of(CardAbilityGroup.YOUR_BOARD)), CardSelectionMethod.ALL,
+						new CardCondition.OperatorCondition(new CardOperator.GreaterThan(
+								new CardOperator.Variable(new CardVariable.PropertyVariable(CardProperty.UNDEAD)),
+								new CardOperator.Constant(0)))),
 						List.of(new ModificationBuilder().addMaxHealth(2).addDamage(2).build()))));
 		add(new Builder(EntityType.HOGLIN, 8, 5, 7)
 				.setCardAbility(new ChoiceCardAbility(List.of(

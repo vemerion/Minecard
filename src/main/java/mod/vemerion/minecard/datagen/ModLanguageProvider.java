@@ -108,7 +108,7 @@ public class ModLanguageProvider extends LanguageProvider {
 		add(ModCardConditions.OR.get().getTranslationKey(), "(%s or %s)");
 		add(ModCardConditions.NOT.get().getTranslationKey(), "not (%s)");
 		add(ModCardConditions.ENTITY.get().getTranslationKey(), "card is %s");
-		add(ModCardConditions.HAS_PROPERTY.get().getTranslationKey(), "card has property %s");
+		add(ModCardConditions.OPERATOR.get().getTranslationKey(), "%s");
 
 		// Card variables
 		add(ModCardVariables.COST.get().getTranslationKey(), "cost");
@@ -124,6 +124,7 @@ public class ModLanguageProvider extends LanguageProvider {
 		add(ModCardOperators.RANDOM.get().getTranslationKey(), "(value between %s and %s)");
 		add(ModCardOperators.SUB.get().getTranslationKey(), "(%s - %s)");
 		add(ModCardOperators.VARIABLE.get().getTranslationKey(), "%s");
+		add(ModCardOperators.GREATER_THAN.get().getTranslationKey(), "(%s > %s)");
 
 		// Card abilities triggers
 		add(CardAbilityTrigger.ALWAYS.getTextKey(), "Always:");

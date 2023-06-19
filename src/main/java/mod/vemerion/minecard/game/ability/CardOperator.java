@@ -1,10 +1,11 @@
 package mod.vemerion.minecard.game.ability;
 
+import java.util.Random;
+
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import mod.vemerion.minecard.game.Card;
-import mod.vemerion.minecard.game.PlayerState;
 import mod.vemerion.minecard.init.ModCardConditions;
 import mod.vemerion.minecard.init.ModCardOperators;
 import net.minecraft.Util;
@@ -27,7 +28,7 @@ public abstract class CardOperator {
 
 	protected abstract CardOperatorType<?> getType();
 
-	public abstract int evaluate(PlayerState state, Card card);
+	public abstract int evaluate(Random rand, Card card);
 
 	public Component getDescription() {
 		if (description == null) {
@@ -73,8 +74,8 @@ public abstract class CardOperator {
 		}
 
 		@Override
-		public int evaluate(PlayerState state, Card card) {
-			return variable.get(state, card);
+		public int evaluate(Random rand, Card card) {
+			return variable.get(card);
 		}
 
 		@Override
@@ -104,7 +105,7 @@ public abstract class CardOperator {
 		}
 
 		@Override
-		public int evaluate(PlayerState state, Card card) {
+		public int evaluate(Random rand, Card card) {
 			return value;
 		}
 
@@ -145,8 +146,8 @@ public abstract class CardOperator {
 		}
 
 		@Override
-		public int evaluate(PlayerState state, Card card) {
-			return state.getGame().getRandom().nextInt(min.evaluate(state, card), max.evaluate(state, card) + 1);
+		public int evaluate(Random rand, Card card) {
+			return rand.nextInt(min.evaluate(rand, card), max.evaluate(rand, card) + 1);
 		}
 
 		@Override
@@ -186,8 +187,8 @@ public abstract class CardOperator {
 		}
 
 		@Override
-		public int evaluate(PlayerState state, Card card) {
-			return left.evaluate(state, card) + right.evaluate(state, card);
+		public int evaluate(Random rand, Card card) {
+			return left.evaluate(rand, card) + right.evaluate(rand, card);
 		}
 
 		@Override
@@ -227,8 +228,8 @@ public abstract class CardOperator {
 		}
 
 		@Override
-		public int evaluate(PlayerState state, Card card) {
-			return left.evaluate(state, card) - right.evaluate(state, card);
+		public int evaluate(Random rand, Card card) {
+			return left.evaluate(rand, card) - right.evaluate(rand, card);
 		}
 
 		@Override
@@ -268,8 +269,49 @@ public abstract class CardOperator {
 		}
 
 		@Override
-		public int evaluate(PlayerState state, Card card) {
-			return left.evaluate(state, card) * right.evaluate(state, card);
+		public int evaluate(Random rand, Card card) {
+			return left.evaluate(rand, card) * right.evaluate(rand, card);
+		}
+
+		@Override
+		protected Object[] getDescriptionArgs() {
+			return new Object[] { left.getDescription(), right.getDescription() };
+		}
+
+	}
+
+	public static class GreaterThan extends CardOperator {
+
+		public static final Codec<GreaterThan> CODEC = ExtraCodecs
+				.lazyInitializedCodec(() -> RecordCodecBuilder.create(instance -> instance
+						.group(CardOperator.CODEC.fieldOf("left").forGetter(GreaterThan::getLeft),
+								CardOperator.CODEC.fieldOf("right").forGetter(GreaterThan::getRight))
+						.apply(instance, GreaterThan::new)));
+
+		private CardOperator left;
+		private CardOperator right;
+
+		public GreaterThan(CardOperator left, CardOperator right) {
+			this.left = left;
+			this.right = right;
+		}
+
+		@Override
+		protected CardOperatorType<?> getType() {
+			return ModCardOperators.GREATER_THAN.get();
+		}
+
+		public CardOperator getLeft() {
+			return left;
+		}
+
+		public CardOperator getRight() {
+			return right;
+		}
+
+		@Override
+		public int evaluate(Random rand, Card card) {
+			return left.evaluate(rand, card) > right.evaluate(rand, card) ? 1 : 0;
 		}
 
 		@Override

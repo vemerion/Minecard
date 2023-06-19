@@ -12,9 +12,24 @@
         ],
         "method": "all",
         "condition": {
-          "type": "minecard:has_property",
+          "type": "minecard:operator",
           "value": {
-            "property": "minecard:undead"
+            "operator": {
+              "type": "minecard:greater_than",
+              "value": {
+                "left": {
+                  "type": "minecard:variable",
+                  "value": {
+                    "type": "minecard:property",
+                    "value": "minecard:undead"
+                  }
+                },
+                "right": {
+                  "type": "minecard:constant",
+                  "value": 0
+                }
+              }
+            }
           }
         }
       },

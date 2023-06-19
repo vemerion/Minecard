@@ -2,6 +2,7 @@ package mod.vemerion.minecard.game.ability;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -9,12 +10,10 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import mod.vemerion.minecard.game.Card;
-import mod.vemerion.minecard.game.CardProperty;
 import mod.vemerion.minecard.init.ModCardConditions;
 import net.minecraft.Util;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.entity.EntityType;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -238,36 +237,36 @@ public abstract class CardCondition implements Predicate<Card> {
 		}
 	}
 
-	public static class HasProperty extends CardCondition {
+	public static class OperatorCondition extends CardCondition {
 
-		public static final Codec<HasProperty> CODEC = ExtraCodecs
+		public static final Codec<OperatorCondition> CODEC = ExtraCodecs
 				.lazyInitializedCodec(() -> RecordCodecBuilder.create(instance -> instance
-						.group(ResourceLocation.CODEC.fieldOf("property").forGetter(HasProperty::getProperty))
-						.apply(instance, HasProperty::new)));
+						.group(CardOperator.CODEC.fieldOf("operator").forGetter(OperatorCondition::getOperator))
+						.apply(instance, OperatorCondition::new)));
 
-		private final ResourceLocation property;
+		private final CardOperator operator;
 
-		public HasProperty(ResourceLocation property) {
-			this.property = property;
+		public OperatorCondition(CardOperator operator) {
+			this.operator = operator;
 		}
 
 		@Override
 		public boolean test(Card t) {
-			return t.hasProperty(property);
+			return operator.evaluate(new Random(0), t) > 0;
 		}
 
 		@Override
 		protected CardConditionType<?> getType() {
-			return ModCardConditions.HAS_PROPERTY.get();
+			return ModCardConditions.OPERATOR.get();
 		}
 
-		public ResourceLocation getProperty() {
-			return property;
+		public CardOperator getOperator() {
+			return operator;
 		}
 
 		@Override
 		protected Object[] getDescriptionArgs() {
-			return new Object[] { new TranslatableComponent(CardProperty.getTextKey(property)) };
+			return new Object[] { operator.getDescription() };
 		}
 	}
 }
