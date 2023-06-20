@@ -99,7 +99,7 @@ public class Card {
 	}
 
 	public void setHealth(int health) {
-		this.health = Math.max(0, health);
+		this.health = health;
 	}
 
 	public int getMaxHealth() {
@@ -123,7 +123,7 @@ public class Card {
 	}
 
 	public boolean isDead() {
-		return health <= 0;
+		return (health <= 0 && !isSpell()) || health < 0;
 	}
 
 	public boolean isSpell() {

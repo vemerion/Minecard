@@ -618,7 +618,7 @@ public class GameScreen extends Screen implements GameClient {
 				}
 			}
 			for (var card : playerState.hand) {
-				if (!card.isDead() || card.isSpell()) {
+				if (!card.isDead()) {
 					card.render(
 							!enemy && !isSpectator ? transformCard(card, -CARD_HEIGHT / 2, mouseX, mouseY, partialTicks)
 									: new PoseStack(),

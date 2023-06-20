@@ -309,7 +309,7 @@ public class GameState {
 
 	// Completely remove the card without running onDeath
 	public void removeCard(List<Receiver> receivers, Card card) {
-		card.setHealth(0);
+		card.setHealth(-1);
 		for (var receiver : receivers)
 			updateCards(receiver, List.of(card));
 		for (var playerState : playerStates) {
