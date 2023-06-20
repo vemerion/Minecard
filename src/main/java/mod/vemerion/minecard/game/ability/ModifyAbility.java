@@ -2,6 +2,7 @@ package mod.vemerion.minecard.game.ability;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
@@ -28,8 +29,8 @@ public class ModifyAbility extends CardAbility {
 			.lazyInitializedCodec(
 					() -> RecordCodecBuilder
 							.create(instance -> instance
-									.group(CardAbilityTrigger.CODEC.fieldOf("trigger")
-											.forGetter(CardAbility::getTrigger),
+									.group(GameUtil.TRIGGERS_CODEC.fieldOf("triggers")
+											.forGetter(CardAbility::getTriggers),
 											ResourceLocation.CODEC
 													.optionalFieldOf("animation")
 													.forGetter(ModifyAbility::getAnimation),
@@ -46,9 +47,9 @@ public class ModifyAbility extends CardAbility {
 	private final CardAbilitySelection selection;
 	private final List<List<CardModification>> modifications;
 
-	public ModifyAbility(CardAbilityTrigger trigger, Optional<ResourceLocation> animation,
+	public ModifyAbility(Set<CardAbilityTrigger> triggers, Optional<ResourceLocation> animation,
 			CardAbilitySelection selection, List<List<CardModification>> modifications) {
-		super(trigger);
+		super(triggers);
 		this.animation = animation;
 		this.selection = selection;
 		this.modifications = modifications;
@@ -70,7 +71,7 @@ public class ModifyAbility extends CardAbility {
 			elements.append(new TranslatableComponent(ModCardAbilities.MODIFY.get().getTranslationKey() + ".element",
 					modificationText));
 		}
-		return new Object[] { GameUtil.emphasize(trigger.getText()),
+		return new Object[] { GameUtil.emphasize(GameUtil.triggersToText(triggers)),
 				modifications.size() == 1 ? TextComponent.EMPTY
 						: new TranslatableComponent(ModCardAbilities.MODIFY.get().getTranslationKey() + ".one_of"),
 				elements, selection.getText() };

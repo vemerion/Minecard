@@ -8,7 +8,9 @@
   "abilities": {
     "type": "minecard:modify",
     "value": {
-      "trigger": "summon",
+      "triggers": [
+        "summon"
+      ],
       "animation": "minecard:throw_rotten_flesh",
       "selection": {
         "groups": [

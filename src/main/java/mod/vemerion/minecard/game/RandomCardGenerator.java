@@ -1,6 +1,7 @@
 package mod.vemerion.minecard.game;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -76,7 +77,8 @@ public class RandomCardGenerator {
 					break;
 				}
 			}
-			if (!invalid && !groups.contains(CardAbilityGroup.ALL)) {
+			if (!invalid && !groups.contains(CardAbilityGroup.ALL)
+					&& (val != CardAbilityGroup.ALL || groups.isEmpty())) {
 				groups.add(val);
 			}
 		}
@@ -113,6 +115,14 @@ public class RandomCardGenerator {
 		return result;
 	}
 
+	private Set<CardAbilityTrigger> randTriggers() {
+		Set<CardAbilityTrigger> result = EnumSet.noneOf(CardAbilityTrigger.class);
+		for (int i = 0; i < rand.nextInt(1, 4); i++) {
+			result.add(randEnum(CardAbilityTrigger.class));
+		}
+		return result;
+	}
+
 	private CardType next(int depth) {
 		var entities = ForgeRegistries.ENTITIES.getValues();
 		var type = entities.stream().skip(rand.nextInt(entities.size())).findFirst().get();
@@ -127,21 +137,20 @@ public class RandomCardGenerator {
 		List<CardAbility> abilities = new ArrayList<>();
 		abilities.add(NoCardAbility.NO_CARD_ABILITY);
 		if (depth < maxDepth) {
-			abilities.add(new AddCardsAbility(randEnum(CardAbilityTrigger.class),
-					List.of(new LazyCardType(next(depth + 1)))));
+			abilities.add(new AddCardsAbility(randTriggers(), List.of(new LazyCardType(next(depth + 1)))));
 			abilities.add(new ChoiceCardAbility(
 					IntStream.range(0, rand.nextInt(1, 5)).mapToObj(i -> next(depth + 1).getAbility())
 							.collect(Collectors.toCollection(() -> new ArrayList<>()))));
-			abilities.add(new DrawCardsAbility(randEnum(CardAbilityTrigger.class), rand.nextInt(1, 3)));
-			abilities.add(new ResourceAbility(randEnum(CardAbilityTrigger.class), rand.nextInt(3), rand.nextInt(3)));
-			abilities.add(new SummonCardAbility(randEnum(CardAbilityTrigger.class),
+			abilities.add(new DrawCardsAbility(randTriggers(), rand.nextInt(1, 3)));
+			abilities.add(new ResourceAbility(randTriggers(), rand.nextInt(3), rand.nextInt(3)));
+			abilities.add(new SummonCardAbility(randTriggers(),
 					CardPlacement.values()[rand.nextInt(CardPlacement.values().length)],
 					new LazyCardType(next(depth + 1))));
-			abilities.add(new CopyCardsAbility(randEnum(CardAbilityTrigger.class), rand.nextBoolean(),
-					rand.nextBoolean(), rand.nextBoolean(), Optional.empty(), new CardAbilitySelection(randGroups(),
+			abilities.add(new CopyCardsAbility(randTriggers(), rand.nextBoolean(), rand.nextBoolean(),
+					rand.nextBoolean(), Optional.empty(), new CardAbilitySelection(randGroups(),
 							randEnum(CardSelectionMethod.class), CardCondition.NoCondition.NO_CONDITION)));
 			abilities.add(new ModifyAbility(
-					randEnum(CardAbilityTrigger.class), Optional.empty(), new CardAbilitySelection(randGroups(),
+					randTriggers(), Optional.empty(), new CardAbilitySelection(randGroups(),
 							randEnum(CardSelectionMethod.class), CardCondition.NoCondition.NO_CONDITION),
 					List.of(randModifications())));
 			abilities.add(

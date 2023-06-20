@@ -2,7 +2,9 @@
   "abilities": {
     "type": "minecard:summon_card",
     "value": {
-      "trigger": "hurt",
+      "triggers": [
+        "hurt"
+      ],
       "placement": "right",
       "card": {
         "entity": "minecraft:iron_golem",

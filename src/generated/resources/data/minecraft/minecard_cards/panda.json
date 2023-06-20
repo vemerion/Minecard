@@ -2,7 +2,9 @@
   "abilities": {
     "type": "minecard:summon_card",
     "value": {
-      "trigger": "summon",
+      "triggers": [
+        "summon"
+      ],
       "placement": "right",
       "card": {
         "additional_data": {
@@ -17,7 +19,9 @@
         "abilities": {
           "type": "minecard:modify",
           "value": {
-            "trigger": "grow",
+            "triggers": [
+              "grow"
+            ],
             "animation": "minecard:throw_bamboo",
             "selection": {
               "groups": [

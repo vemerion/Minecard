@@ -1,6 +1,7 @@
 package mod.vemerion.minecard.game.ability;
 
 import java.util.List;
+import java.util.Set;
 
 import javax.annotation.Nullable;
 
@@ -21,11 +22,11 @@ public abstract class CardAbility {
 
 	private static final Object[] NO_ARGS = {};
 
-	protected final CardAbilityTrigger trigger;
+	protected final Set<CardAbilityTrigger> triggers;
 	private Component description;
 
-	public CardAbility(CardAbilityTrigger trigger) {
-		this.trigger = trigger;
+	public CardAbility(Set<CardAbilityTrigger> triggers) {
+		this.triggers = triggers;
 	}
 
 	protected abstract CardAbilityType<?> getType();
@@ -43,8 +44,8 @@ public abstract class CardAbility {
 		return description;
 	}
 
-	public CardAbilityTrigger getTrigger() {
-		return trigger;
+	public Set<CardAbilityTrigger> getTriggers() {
+		return triggers;
 	}
 
 	public void createChoices(List<Receiver> receivers, PlayerState state, Card card) {
@@ -52,37 +53,37 @@ public abstract class CardAbility {
 	}
 
 	public void onSummon(List<Receiver> receivers, PlayerState state, Card card) {
-		if (trigger == CardAbilityTrigger.ALWAYS || trigger == CardAbilityTrigger.SUMMON) {
+		if (triggers.contains(CardAbilityTrigger.SUMMON)) {
 			invoke(receivers, state, card, null);
 		}
 	}
 
 	public void onAttack(List<Receiver> receivers, PlayerState state, Card card, Card target) {
-		if (trigger == CardAbilityTrigger.ALWAYS || trigger == CardAbilityTrigger.ATTACK) {
+		if (triggers.contains(CardAbilityTrigger.ATTACK)) {
 			invoke(receivers, state, card, target);
 		}
 	}
 
 	public void onDeath(List<Receiver> receivers, PlayerState state, Card card) {
-		if (trigger == CardAbilityTrigger.ALWAYS || trigger == CardAbilityTrigger.DEATH) {
+		if (triggers.contains(CardAbilityTrigger.DEATH)) {
 			invoke(receivers, state, card, null);
 		}
 	}
 
 	public void onHurt(List<Receiver> receivers, PlayerState state, Card card) {
-		if (trigger == CardAbilityTrigger.ALWAYS || trigger == CardAbilityTrigger.HURT) {
+		if (triggers.contains(CardAbilityTrigger.HURT)) {
 			invoke(receivers, state, card, null);
 		}
 	}
 
 	public void onTick(List<Receiver> receivers, PlayerState state, Card card) {
-		if (trigger == CardAbilityTrigger.ALWAYS || trigger == CardAbilityTrigger.TICK) {
+		if (triggers.contains(CardAbilityTrigger.TICK)) {
 			invoke(receivers, state, card, null);
 		}
 	}
 
 	public void onGrow(List<Receiver> receivers, PlayerState state, Card card) {
-		if (trigger == CardAbilityTrigger.ALWAYS || trigger == CardAbilityTrigger.GROW) {
+		if (triggers.contains(CardAbilityTrigger.GROW)) {
 			invoke(receivers, state, card, null);
 		}
 	}

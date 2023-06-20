@@ -1,5 +1,6 @@
 package mod.vemerion.minecard.game.ability;
 
+import java.util.EnumSet;
 import java.util.List;
 
 import javax.annotation.Nullable;
@@ -27,7 +28,7 @@ public class MultiAbility extends CardAbility {
 	private final List<CardAbility> abilities;
 
 	public MultiAbility(List<CardAbility> abilities) {
-		super(CardAbilityTrigger.ALWAYS);
+		super(EnumSet.allOf(CardAbilityTrigger.class));
 		this.abilities = abilities;
 	}
 
@@ -58,50 +59,38 @@ public class MultiAbility extends CardAbility {
 
 	@Override
 	public void onSummon(List<Receiver> receivers, PlayerState state, Card card) {
-		if (trigger == CardAbilityTrigger.ALWAYS || trigger == CardAbilityTrigger.SUMMON) {
-			for (var ability : abilities)
-				ability.onSummon(receivers, state, card);
-		}
+		for (var ability : abilities)
+			ability.onSummon(receivers, state, card);
 	}
 
 	@Override
 	public void onAttack(List<Receiver> receivers, PlayerState state, Card card, Card target) {
-		if (trigger == CardAbilityTrigger.ALWAYS || trigger == CardAbilityTrigger.ATTACK) {
-			for (var ability : abilities)
-				ability.onAttack(receivers, state, card, target);
-		}
+		for (var ability : abilities)
+			ability.onAttack(receivers, state, card, target);
 	}
 
 	@Override
 	public void onDeath(List<Receiver> receivers, PlayerState state, Card card) {
-		if (trigger == CardAbilityTrigger.ALWAYS || trigger == CardAbilityTrigger.DEATH) {
-			for (var ability : abilities)
-				ability.onDeath(receivers, state, card);
-		}
+		for (var ability : abilities)
+			ability.onDeath(receivers, state, card);
 	}
 
 	@Override
 	public void onHurt(List<Receiver> receivers, PlayerState state, Card card) {
-		if (trigger == CardAbilityTrigger.ALWAYS || trigger == CardAbilityTrigger.HURT) {
-			for (var ability : abilities)
-				ability.onHurt(receivers, state, card);
-		}
+		for (var ability : abilities)
+			ability.onHurt(receivers, state, card);
 	}
 
 	@Override
 	public void onTick(List<Receiver> receivers, PlayerState state, Card card) {
-		if (trigger == CardAbilityTrigger.ALWAYS || trigger == CardAbilityTrigger.TICK) {
-			for (var ability : abilities)
-				ability.onTick(receivers, state, card);
-		}
+		for (var ability : abilities)
+			ability.onTick(receivers, state, card);
 	}
 
 	@Override
 	public void onGrow(List<Receiver> receivers, PlayerState state, Card card) {
-		if (trigger == CardAbilityTrigger.ALWAYS || trigger == CardAbilityTrigger.GROW) {
-			for (var ability : abilities)
-				ability.onGrow(receivers, state, card);
-		}
+		for (var ability : abilities)
+			ability.onGrow(receivers, state, card);
 	}
 
 	public List<CardAbility> getAbilities() {

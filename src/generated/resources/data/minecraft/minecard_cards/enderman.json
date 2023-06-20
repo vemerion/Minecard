@@ -9,7 +9,9 @@
         ],
         "method": "random"
       },
-      "trigger": "summon",
+      "triggers": [
+        "summon"
+      ],
       "destroy_original": false,
       "restore_health": false
     }

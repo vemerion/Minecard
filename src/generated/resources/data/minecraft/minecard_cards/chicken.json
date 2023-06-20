@@ -4,7 +4,9 @@
     "value": {
       "chance": 50,
       "ability": {
-        "trigger": "summon",
+        "triggers": [
+          "summon"
+        ],
         "cards": [
           {
             "additional_data": {
@@ -20,7 +22,9 @@
                   {
                     "type": "minecard:modify",
                     "value": {
-                      "trigger": "summon",
+                      "triggers": [
+                        "summon"
+                      ],
                       "animation": "minecard:throw_egg",
                       "selection": {
                         "groups": [
@@ -46,7 +50,9 @@
                   {
                     "type": "minecard:summon_card",
                     "value": {
-                      "trigger": "summon",
+                      "triggers": [
+                        "summon"
+                      ],
                       "placement": "right",
                       "card": "minecraft:chicken"
                     }

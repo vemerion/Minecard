@@ -6,7 +6,9 @@
         {
           "type": "minecard:summon_card",
           "value": {
-            "trigger": "summon",
+            "triggers": [
+              "summon"
+            ],
             "placement": "right",
             "card": {
               "properties": {
@@ -22,7 +24,9 @@
         {
           "type": "minecard:modify",
           "value": {
-            "trigger": "summon",
+            "triggers": [
+              "summon"
+            ],
             "selection": {
               "groups": [
                 "self"

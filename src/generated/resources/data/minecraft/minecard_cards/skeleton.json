@@ -5,7 +5,9 @@
   "abilities": {
     "type": "minecard:modify",
     "value": {
-      "trigger": "tick",
+      "triggers": [
+        "tick"
+      ],
       "animation": "minecard:shoot_arrow",
       "selection": {
         "groups": [

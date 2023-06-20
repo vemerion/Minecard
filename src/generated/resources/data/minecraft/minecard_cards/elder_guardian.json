@@ -5,7 +5,9 @@
   "abilities": {
     "type": "minecard:modify",
     "value": {
-      "trigger": "summon",
+      "triggers": [
+        "summon"
+      ],
       "animation": "minecard:elder_guardian",
       "selection": {
         "groups": [

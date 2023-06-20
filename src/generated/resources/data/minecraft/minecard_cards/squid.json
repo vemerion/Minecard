@@ -9,7 +9,9 @@
         ],
         "method": "all"
       },
-      "trigger": "hurt",
+      "triggers": [
+        "hurt"
+      ],
       "destroy_original": true,
       "restore_health": true
     }

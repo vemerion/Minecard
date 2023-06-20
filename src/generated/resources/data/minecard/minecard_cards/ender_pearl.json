@@ -27,7 +27,9 @@
           }
         }
       },
-      "trigger": "summon",
+      "triggers": [
+        "summon"
+      ],
       "destroy_original": true,
       "restore_health": true
     }

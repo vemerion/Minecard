@@ -4,21 +4,27 @@
     "value": {
       "abilities": [
         {
-          "trigger": "summon",
+          "triggers": [
+            "summon"
+          ],
           "cards": [
             "minecard:pufferfish_bucket"
           ],
           "type": "minecard:add_cards"
         },
         {
-          "trigger": "summon",
+          "triggers": [
+            "summon"
+          ],
           "cards": [
             "minecard:packed_ice"
           ],
           "type": "minecard:add_cards"
         },
         {
-          "trigger": "summon",
+          "triggers": [
+            "summon"
+          ],
           "cards": [
             "minecard:pointed_dripstone"
           ],

@@ -3,6 +3,7 @@ package mod.vemerion.minecard.game.ability;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Nullable;
 
@@ -31,7 +32,7 @@ public class ChoiceCardAbility extends CardAbility {
 	private final List<CardAbility> abilities;
 
 	public ChoiceCardAbility(List<CardAbility> abilities) {
-		super(CardAbilityTrigger.SUMMON);
+		super(Set.of(CardAbilityTrigger.SUMMON));
 		this.abilities = abilities;
 	}
 

@@ -3,7 +3,9 @@
     "minecard:baby": 1
   },
   "abilities": {
-    "trigger": "grow",
+    "triggers": [
+      "grow"
+    ],
     "cards": [
       {
         "additional_data": {
@@ -15,7 +17,9 @@
         "abilities": {
           "type": "minecard:modify",
           "value": {
-            "trigger": "summon",
+            "triggers": [
+              "summon"
+            ],
             "animation": "minecard:throw_scute",
             "selection": {
               "groups": [

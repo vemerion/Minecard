@@ -15,7 +15,9 @@
         {
           "type": "minecard:modify",
           "value": {
-            "trigger": "summon",
+            "triggers": [
+              "summon"
+            ],
             "animation": "minecard:throw_trident",
             "selection": {
               "groups": [
@@ -66,7 +68,9 @@
           "value": {
             "chance": 30,
             "ability": {
-              "trigger": "summon",
+              "triggers": [
+                "summon"
+              ],
               "cards": [
                 "minecard:trident"
               ],

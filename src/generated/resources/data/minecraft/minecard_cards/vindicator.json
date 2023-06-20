@@ -1,6 +1,8 @@
 {
   "abilities": {
-    "trigger": "death",
+    "triggers": [
+      "death"
+    ],
     "cards": [
       "minecard:emerald"
     ],

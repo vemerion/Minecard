@@ -5,7 +5,9 @@
   "abilities": {
     "type": "minecard:modify",
     "value": {
-      "trigger": "hurt",
+      "triggers": [
+        "hurt"
+      ],
       "selection": {
         "groups": [
           "self"

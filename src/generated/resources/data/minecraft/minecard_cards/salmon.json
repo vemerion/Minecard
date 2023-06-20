@@ -4,7 +4,9 @@
     "value": {
       "chance": 50,
       "ability": {
-        "trigger": "death",
+        "triggers": [
+          "death"
+        ],
         "cards": [
           {
             "additional_data": {
@@ -16,7 +18,9 @@
             "abilities": {
               "type": "minecard:summon_card",
               "value": {
-                "trigger": "summon",
+                "triggers": [
+                  "summon"
+                ],
                 "placement": "right",
                 "card": "minecraft:salmon"
               }

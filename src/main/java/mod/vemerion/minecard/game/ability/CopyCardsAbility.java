@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
@@ -28,7 +29,7 @@ public class CopyCardsAbility extends CardAbility {
 
 	public static final Codec<CopyCardsAbility> CODEC = ExtraCodecs
 			.lazyInitializedCodec(() -> RecordCodecBuilder.create(instance -> instance
-					.group(CardAbilityTrigger.CODEC.fieldOf("trigger").forGetter(CardAbility::getTrigger),
+					.group(GameUtil.TRIGGERS_CODEC.fieldOf("triggers").forGetter(CardAbility::getTriggers),
 							Codec.BOOL.fieldOf("destroy_original").forGetter(CopyCardsAbility::destroyOriginal),
 							Codec.BOOL.fieldOf("restore_health").forGetter(CopyCardsAbility::restoreHealth),
 							Codec.BOOL.fieldOf("give_to_enemy").forGetter(CopyCardsAbility::giveToEnemy),
@@ -43,9 +44,9 @@ public class CopyCardsAbility extends CardAbility {
 	private final Optional<ResourceLocation> animation;
 	private final CardAbilitySelection selection;
 
-	public CopyCardsAbility(CardAbilityTrigger trigger, boolean destroyOriginal, boolean restoreHealth,
+	public CopyCardsAbility(Set<CardAbilityTrigger> triggers, boolean destroyOriginal, boolean restoreHealth,
 			boolean giveToEnemy, Optional<ResourceLocation> animation, CardAbilitySelection selection) {
-		super(trigger);
+		super(triggers);
 		this.destroyOriginal = destroyOriginal;
 		this.restoreHealth = restoreHealth;
 		this.giveToEnemy = giveToEnemy;
@@ -60,7 +61,7 @@ public class CopyCardsAbility extends CardAbility {
 
 	@Override
 	protected Object[] getDescriptionArgs() {
-		return new Object[] { GameUtil.emphasize(trigger.getText()), selection.getText(),
+		return new Object[] { GameUtil.emphasize(GameUtil.triggersToText(getTriggers())), selection.getText(),
 				new TranslatableComponent(
 						ModCardAbilities.COPY_CARDS.get().getTranslationKey() + (giveToEnemy ? ".enemy" : ".you")),
 				destroyOriginal

@@ -8,7 +8,9 @@
   "abilities": {
     "type": "minecard:summon_card",
     "value": {
-      "trigger": "summon",
+      "triggers": [
+        "summon"
+      ],
       "placement": "right",
       "card": "minecraft:pufferfish"
     }

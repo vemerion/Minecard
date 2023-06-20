@@ -3,7 +3,9 @@
     "minecard:undead": 1
   },
   "abilities": {
-    "trigger": "death",
+    "triggers": [
+      "death"
+    ],
     "cards": [
       "minecard:rotten_flesh"
     ],

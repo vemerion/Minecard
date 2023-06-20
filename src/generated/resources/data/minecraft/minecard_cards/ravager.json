@@ -2,7 +2,9 @@
   "abilities": {
     "type": "minecard:modify",
     "value": {
-      "trigger": "attack",
+      "triggers": [
+        "attack"
+      ],
       "animation": "minecard:ravager_charge",
       "selection": {
         "groups": [

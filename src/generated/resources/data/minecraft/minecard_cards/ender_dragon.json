@@ -8,7 +8,9 @@
         {
           "type": "minecard:summon_card",
           "value": {
-            "trigger": "summon",
+            "triggers": [
+              "summon"
+            ],
             "placement": "left",
             "card": "minecard:end_crystal"
           }
@@ -16,7 +18,9 @@
         {
           "type": "minecard:summon_card",
           "value": {
-            "trigger": "summon",
+            "triggers": [
+              "summon"
+            ],
             "placement": "right",
             "card": "minecard:end_crystal"
           }
@@ -24,7 +28,9 @@
         {
           "type": "minecard:modify",
           "value": {
-            "trigger": "tick",
+            "triggers": [
+              "tick"
+            ],
             "animation": "minecard:ender_dragon",
             "selection": {
               "groups": [

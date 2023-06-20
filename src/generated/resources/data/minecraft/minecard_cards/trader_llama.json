@@ -6,7 +6,9 @@
         {
           "type": "minecard:modify",
           "value": {
-            "trigger": "summon",
+            "triggers": [
+              "summon"
+            ],
             "animation": "minecard:llama_spit",
             "selection": {
               "groups": [
@@ -31,7 +33,9 @@
           }
         },
         {
-          "trigger": "summon",
+          "triggers": [
+            "summon"
+          ],
           "count": 1,
           "type": "minecard:draw_cards"
         }

@@ -6,7 +6,9 @@
         {
           "type": "minecard:modify",
           "value": {
-            "trigger": "attack",
+            "triggers": [
+              "attack"
+            ],
             "selection": {
               "groups": [
                 "target"
@@ -44,7 +46,9 @@
         {
           "type": "minecard:summon_card",
           "value": {
-            "trigger": "death",
+            "triggers": [
+              "death"
+            ],
             "placement": "left",
             "card": "minecard:small_magma_cube"
           }
@@ -52,7 +56,9 @@
         {
           "type": "minecard:summon_card",
           "value": {
-            "trigger": "death",
+            "triggers": [
+              "death"
+            ],
             "placement": "right",
             "card": "minecard:small_magma_cube"
           }

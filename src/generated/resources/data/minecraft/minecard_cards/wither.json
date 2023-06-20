@@ -7,7 +7,9 @@
   "abilities": {
     "type": "minecard:modify",
     "value": {
-      "trigger": "tick",
+      "triggers": [
+        "tick"
+      ],
       "animation": "minecard:wither_projectile",
       "selection": {
         "groups": [

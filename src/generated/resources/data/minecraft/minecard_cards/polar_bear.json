@@ -5,7 +5,9 @@
   "abilities": {
     "type": "minecard:modify",
     "value": {
-      "trigger": "grow",
+      "triggers": [
+        "grow"
+      ],
       "selection": {
         "groups": [
           "self"

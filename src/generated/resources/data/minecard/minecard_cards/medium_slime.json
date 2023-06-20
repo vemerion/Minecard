@@ -9,7 +9,9 @@
         {
           "type": "minecard:summon_card",
           "value": {
-            "trigger": "death",
+            "triggers": [
+              "death"
+            ],
             "placement": "left",
             "card": "minecard:small_slime"
           }
@@ -17,7 +19,9 @@
         {
           "type": "minecard:summon_card",
           "value": {
-            "trigger": "death",
+            "triggers": [
+              "death"
+            ],
             "placement": "right",
             "card": "minecard:small_slime"
           }

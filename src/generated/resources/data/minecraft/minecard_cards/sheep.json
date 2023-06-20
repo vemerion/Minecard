@@ -2,7 +2,9 @@
   "abilities": {
     "type": "minecard:summon_card",
     "value": {
-      "trigger": "death",
+      "triggers": [
+        "death"
+      ],
       "placement": "enemy",
       "card": {
         "additional_data": {

@@ -11,7 +11,9 @@
   "abilities": {
     "type": "minecard:modify",
     "value": {
-      "trigger": "summon",
+      "triggers": [
+        "summon"
+      ],
       "animation": "minecard:throw_poison_potion",
       "selection": {
         "groups": [

@@ -6,7 +6,9 @@
       "ability": {
         "type": "minecard:summon_card",
         "value": {
-          "trigger": "summon",
+          "triggers": [
+            "summon"
+          ],
           "placement": "right",
           "card": {
             "abilities": {
@@ -16,7 +18,9 @@
                 "ability": {
                   "type": "minecard:summon_card",
                   "value": {
-                    "trigger": "summon",
+                    "triggers": [
+                      "summon"
+                    ],
                     "placement": "right",
                     "card": {
                       "abilities": {
@@ -26,7 +30,9 @@
                           "ability": {
                             "type": "minecard:summon_card",
                             "value": {
-                              "trigger": "summon",
+                              "triggers": [
+                                "summon"
+                              ],
                               "placement": "right",
                               "card": {
                                 "abilities": {
@@ -36,7 +42,9 @@
                                     "ability": {
                                       "type": "minecard:summon_card",
                                       "value": {
-                                        "trigger": "summon",
+                                        "triggers": [
+                                          "summon"
+                                        ],
                                         "placement": "right",
                                         "card": {
                                           "abilities": {
@@ -46,7 +54,9 @@
                                               "ability": {
                                                 "type": "minecard:summon_card",
                                                 "value": {
-                                                  "trigger": "summon",
+                                                  "triggers": [
+                                                    "summon"
+                                                  ],
                                                   "placement": "right",
                                                   "card": {
                                                     "entity": "minecraft:cod",

@@ -2,7 +2,9 @@
   "abilities": {
     "type": "minecard:modify",
     "value": {
-      "trigger": "summon",
+      "triggers": [
+        "summon"
+      ],
       "animation": "minecard:llama_spit",
       "selection": {
         "groups": [

@@ -1,10 +1,12 @@
 package mod.vemerion.minecard.game;
 
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.Function;
 
 import com.mojang.serialization.Codec;
@@ -15,10 +17,9 @@ import com.mojang.serialization.MapLike;
 import com.mojang.serialization.codecs.OptionalFieldCodec;
 import com.mojang.serialization.codecs.UnboundedMapCodec;
 
+import mod.vemerion.minecard.game.ability.CardAbilityTrigger;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.item.Item;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraft.network.chat.TextComponent;
 
 public class GameUtil {
 
@@ -49,8 +50,27 @@ public class GameUtil {
 
 	}
 
-	public static final Codec<Map<EquipmentSlot, Item>> EQUIPMENT_MAP_CODEC = GameUtil.toMutable(Codec.unboundedMap(
-			GameUtil.enumCodec(EquipmentSlot.class, EquipmentSlot::getName), ForgeRegistries.ITEMS.getCodec()));
+	public static final Codec<Set<CardAbilityTrigger>> TRIGGERS_CODEC = Codec.list(CardAbilityTrigger.CODEC)
+			.comapFlatMap(list -> {
+				Set<CardAbilityTrigger> set = EnumSet.copyOf(list);
+				if (list.size() != set.size()) {
+					return DataResult.error("Trigger list has duplicate entries");
+				}
+				return DataResult.success(set);
+			}, set -> List.copyOf(set));
+
+	public static Component triggersToText(Set<CardAbilityTrigger> triggers) {
+		var text = TextComponent.EMPTY.copy();
+		boolean first = true;
+		for (var trigger : triggers) {
+			if (!first) {
+				text.append("/");
+			}
+			text.append(trigger.getText());
+			first = false;
+		}
+		return text;
+	}
 
 	public static boolean canBeAttacked(Card card, List<? extends Card> board) {
 		if (card.hasProperty(CardProperty.STEALTH) || card.isDead())

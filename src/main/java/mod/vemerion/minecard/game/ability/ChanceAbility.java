@@ -27,7 +27,7 @@ public class ChanceAbility extends CardAbility {
 	private final CardAbility ability;
 
 	public ChanceAbility(int chance, CardAbility ability) {
-		super(ability.getTrigger());
+		super(ability.getTriggers());
 		this.chance = chance;
 		this.ability = ability;
 	}

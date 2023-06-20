@@ -1,6 +1,7 @@
 package mod.vemerion.minecard.game.ability;
 
 import java.util.List;
+import java.util.Set;
 
 import javax.annotation.Nullable;
 
@@ -17,7 +18,7 @@ import mod.vemerion.minecard.init.ModCardAbilities;
 public class ResourceAbility extends CardAbility {
 
 	public static final Codec<ResourceAbility> CODEC = RecordCodecBuilder.create(instance -> instance
-			.group(CardAbilityTrigger.CODEC.fieldOf("trigger").forGetter(CardAbility::getTrigger),
+			.group(GameUtil.TRIGGERS_CODEC.fieldOf("triggers").forGetter(CardAbility::getTriggers),
 					Codec.INT.fieldOf("temporary_resources").forGetter(ResourceAbility::getTemporaryResources),
 					Codec.INT.fieldOf("permanent_resources").forGetter(ResourceAbility::getPermanentResources))
 			.apply(instance, ResourceAbility::new));
@@ -25,8 +26,8 @@ public class ResourceAbility extends CardAbility {
 	private final int temporaryResources;
 	private final int permanentResources;
 
-	public ResourceAbility(CardAbilityTrigger trigger, int temporaryResources, int permanentResources) {
-		super(trigger);
+	public ResourceAbility(Set<CardAbilityTrigger> triggers, int temporaryResources, int permanentResources) {
+		super(triggers);
 		this.temporaryResources = temporaryResources;
 		this.permanentResources = permanentResources;
 	}
@@ -38,7 +39,8 @@ public class ResourceAbility extends CardAbility {
 
 	@Override
 	protected Object[] getDescriptionArgs() {
-		return new Object[] { GameUtil.emphasize(trigger.getText()), temporaryResources, permanentResources };
+		return new Object[] { GameUtil.emphasize(GameUtil.triggersToText(triggers)), temporaryResources,
+				permanentResources };
 	}
 
 	@Override

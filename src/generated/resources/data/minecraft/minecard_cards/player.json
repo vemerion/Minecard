@@ -1,6 +1,8 @@
 {
   "abilities": {
-    "trigger": "death",
+    "triggers": [
+      "death"
+    ],
     "type": "minecard:game_over"
   },
   "entity": "minecraft:player",

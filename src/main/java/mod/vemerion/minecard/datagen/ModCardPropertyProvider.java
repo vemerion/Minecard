@@ -71,7 +71,7 @@ public class ModCardPropertyProvider implements DataProvider {
 		properties.put(CardProperty.SHIELD,
 				new CardProperty(new ItemStack(Items.DIAMOND_CHESTPLATE), NoCardAbility.NO_CARD_ABILITY));
 		properties.put(CardProperty.BURN, new CardProperty(new ItemStack(Items.LAVA_BUCKET), new ModifyAbility(
-				CardAbilityTrigger.TICK, Optional.empty(),
+				EnumSet.of(CardAbilityTrigger.TICK), Optional.empty(),
 				new CardAbilitySelection(new CardAbilityGroups(EnumSet.of(CardAbilityGroup.SELF)),
 						CardSelectionMethod.ALL, CardCondition.NoCondition.NO_CONDITION),
 				List.of(List.of(new CardModification(CardVariable.HEALTH, new CardOperator.Constant(-1)),
@@ -85,7 +85,7 @@ public class ModCardPropertyProvider implements DataProvider {
 		properties.put(CardProperty.THORNS,
 				new CardProperty(new ItemStack(Items.POINTED_DRIPSTONE), NoCardAbility.NO_CARD_ABILITY));
 		properties.put(CardProperty.POISON, new CardProperty(new ItemStack(Items.SPIDER_EYE),
-				new ModifyAbility(CardAbilityTrigger.TICK, Optional.empty(),
+				new ModifyAbility(EnumSet.of(CardAbilityTrigger.TICK), Optional.empty(),
 						new CardAbilitySelection(new CardAbilityGroups(EnumSet.of(CardAbilityGroup.SELF)),
 								CardSelectionMethod.ALL,
 								new CardCondition.OperatorCondition(new CardOperator.GreaterThan(

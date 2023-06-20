@@ -2,6 +2,7 @@ package mod.vemerion.minecard.game.ability;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import javax.annotation.Nullable;
 
@@ -22,14 +23,14 @@ import net.minecraft.util.ExtraCodecs;
 public class AddCardsAbility extends CardAbility {
 
 	public static final Codec<AddCardsAbility> CODEC = RecordCodecBuilder.create(instance -> instance
-			.group(CardAbilityTrigger.CODEC.fieldOf("trigger").forGetter(CardAbility::getTrigger), ExtraCodecs
+			.group(GameUtil.TRIGGERS_CODEC.fieldOf("triggers").forGetter(CardAbility::getTriggers), ExtraCodecs
 					.nonEmptyList(Codec.list(LazyCardType.CODEC)).fieldOf("cards").forGetter(AddCardsAbility::getCards))
 			.apply(instance, AddCardsAbility::new));
 
 	private final List<LazyCardType> toAdd;
 
-	public AddCardsAbility(CardAbilityTrigger trigger, List<LazyCardType> toAdd) {
-		super(trigger);
+	public AddCardsAbility(Set<CardAbilityTrigger> triggers, List<LazyCardType> toAdd) {
+		super(triggers);
 		this.toAdd = toAdd;
 	}
 
@@ -46,7 +47,7 @@ public class AddCardsAbility extends CardAbility {
 		for (var card : toAdd)
 			text.append(new TranslatableComponent(ModCardAbilities.ADD_CARDS.get().getTranslationKey() + ".element",
 					card.get(true).getName()));
-		return new Object[] { GameUtil.emphasize(trigger.getText()), text };
+		return new Object[] { GameUtil.emphasize(GameUtil.triggersToText(triggers)), text };
 	}
 
 	@Override

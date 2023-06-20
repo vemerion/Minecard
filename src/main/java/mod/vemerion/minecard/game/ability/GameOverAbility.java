@@ -1,6 +1,7 @@
 package mod.vemerion.minecard.game.ability;
 
 import java.util.List;
+import java.util.Set;
 
 import javax.annotation.Nullable;
 
@@ -16,11 +17,11 @@ import mod.vemerion.minecard.init.ModCardAbilities;
 public class GameOverAbility extends CardAbility {
 
 	public static final Codec<GameOverAbility> CODEC = RecordCodecBuilder.create(
-			instance -> instance.group(CardAbilityTrigger.CODEC.fieldOf("trigger").forGetter(CardAbility::getTrigger))
+			instance -> instance.group(GameUtil.TRIGGERS_CODEC.fieldOf("triggers").forGetter(CardAbility::getTriggers))
 					.apply(instance, GameOverAbility::new));
 
-	public GameOverAbility(CardAbilityTrigger trigger) {
-		super(trigger);
+	public GameOverAbility(Set<CardAbilityTrigger> triggers) {
+		super(triggers);
 	}
 
 	@Override
@@ -30,7 +31,7 @@ public class GameOverAbility extends CardAbility {
 
 	@Override
 	protected Object[] getDescriptionArgs() {
-		return new Object[] { GameUtil.emphasize(trigger.getText()) };
+		return new Object[] { GameUtil.emphasize(GameUtil.triggersToText(triggers)) };
 	}
 
 	@Override

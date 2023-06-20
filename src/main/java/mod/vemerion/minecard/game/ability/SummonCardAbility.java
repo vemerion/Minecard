@@ -1,6 +1,7 @@
 package mod.vemerion.minecard.game.ability;
 
 import java.util.List;
+import java.util.Set;
 
 import javax.annotation.Nullable;
 
@@ -21,7 +22,7 @@ public class SummonCardAbility extends CardAbility {
 
 	public static final Codec<SummonCardAbility> CODEC = ExtraCodecs
 			.lazyInitializedCodec(() -> RecordCodecBuilder.create(instance -> instance
-					.group(CardAbilityTrigger.CODEC.fieldOf("trigger").forGetter(CardAbility::getTrigger),
+					.group(GameUtil.TRIGGERS_CODEC.fieldOf("triggers").forGetter(CardAbility::getTriggers),
 							CardPlacement.CODEC.fieldOf("placement").forGetter(SummonCardAbility::getPlacement),
 							LazyCardType.CODEC.fieldOf("card").forGetter(SummonCardAbility::getSummon))
 					.apply(instance, SummonCardAbility::new)));
@@ -29,8 +30,8 @@ public class SummonCardAbility extends CardAbility {
 	private final CardPlacement placement;
 	private final LazyCardType summon;
 
-	public SummonCardAbility(CardAbilityTrigger trigger, CardPlacement placement, LazyCardType summon) {
-		super(trigger);
+	public SummonCardAbility(Set<CardAbilityTrigger> triggers, CardPlacement placement, LazyCardType summon) {
+		super(triggers);
 		this.placement = placement;
 		this.summon = summon;
 	}
@@ -45,7 +46,7 @@ public class SummonCardAbility extends CardAbility {
 		var card = summon.get(true);
 		var cardText = new TranslatableComponent(ModCardAbilities.SUMMON_CARD.get().getTranslationKey() + "card_text",
 				card.getName(), card.getDamage(), card.getHealth());
-		return new Object[] { GameUtil.emphasize(trigger.getText()), cardText, placement.getText() };
+		return new Object[] { GameUtil.emphasize(GameUtil.triggersToText(triggers)), cardText, placement.getText() };
 	}
 
 	@Override

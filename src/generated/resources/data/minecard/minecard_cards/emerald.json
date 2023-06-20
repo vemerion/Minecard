@@ -6,7 +6,9 @@
     }
   },
   "abilities": {
-    "trigger": "summon",
+    "triggers": [
+      "summon"
+    ],
     "temporary_resources": 1,
     "permanent_resources": 0,
     "type": "minecard:resource"

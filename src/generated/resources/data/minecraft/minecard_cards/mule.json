@@ -3,7 +3,9 @@
     "minecard:baby": 1
   },
   "abilities": {
-    "trigger": "grow",
+    "triggers": [
+      "grow"
+    ],
     "count": 2,
     "type": "minecard:draw_cards"
   },

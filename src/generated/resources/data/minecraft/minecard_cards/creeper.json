@@ -2,7 +2,9 @@
   "abilities": {
     "type": "minecard:modify",
     "value": {
-      "trigger": "death",
+      "triggers": [
+        "death"
+      ],
       "animation": "minecard:origin_explosion",
       "selection": {
         "groups": [

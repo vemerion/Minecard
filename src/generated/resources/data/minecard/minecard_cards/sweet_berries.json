@@ -9,7 +9,9 @@
     "minecard:thorns": 2
   },
   "abilities": {
-    "trigger": "death",
+    "triggers": [
+      "death"
+    ],
     "cards": [
       {
         "additional_data": {
@@ -21,7 +23,9 @@
         "abilities": {
           "type": "minecard:modify",
           "value": {
-            "trigger": "summon",
+            "triggers": [
+              "summon"
+            ],
             "animation": "minecard:throw_sweet_berries",
             "selection": {
               "groups": [

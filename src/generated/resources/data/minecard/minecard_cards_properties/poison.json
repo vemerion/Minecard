@@ -6,7 +6,9 @@
   "ability": {
     "type": "minecard:modify",
     "value": {
-      "trigger": "tick",
+      "triggers": [
+        "tick"
+      ],
       "selection": {
         "groups": [
           "self"

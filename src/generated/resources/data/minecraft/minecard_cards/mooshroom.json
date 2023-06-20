@@ -1,6 +1,8 @@
 {
   "abilities": {
-    "trigger": "summon",
+    "triggers": [
+      "summon"
+    ],
     "cards": [
       {
         "additional_data": {
@@ -12,7 +14,9 @@
         "abilities": {
           "type": "minecard:modify",
           "value": {
-            "trigger": "summon",
+            "triggers": [
+              "summon"
+            ],
             "animation": "minecard:throw_mushroom_stew",
             "selection": {
               "groups": [

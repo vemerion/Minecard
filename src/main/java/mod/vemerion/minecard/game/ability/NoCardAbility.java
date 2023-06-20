@@ -1,6 +1,7 @@
 package mod.vemerion.minecard.game.ability;
 
 import java.util.List;
+import java.util.Set;
 
 import javax.annotation.Nullable;
 
@@ -18,7 +19,7 @@ public class NoCardAbility extends CardAbility {
 	public static final Codec<NoCardAbility> CODEC = Codec.unit(NO_CARD_ABILITY);
 
 	public NoCardAbility() {
-		super(CardAbilityTrigger.NEVER);
+		super(Set.of());
 	}
 
 	@Override

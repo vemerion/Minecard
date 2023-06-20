@@ -1,6 +1,8 @@
 {
   "abilities": {
-    "trigger": "summon",
+    "triggers": [
+      "summon"
+    ],
     "count": 1,
     "type": "minecard:draw_cards"
   },

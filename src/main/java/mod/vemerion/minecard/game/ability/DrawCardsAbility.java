@@ -1,6 +1,7 @@
 package mod.vemerion.minecard.game.ability;
 
 import java.util.List;
+import java.util.Set;
 
 import javax.annotation.Nullable;
 
@@ -17,14 +18,14 @@ import mod.vemerion.minecard.init.ModCardAbilities;
 public class DrawCardsAbility extends CardAbility {
 
 	public static final Codec<DrawCardsAbility> CODEC = RecordCodecBuilder.create(instance -> instance
-			.group(CardAbilityTrigger.CODEC.fieldOf("trigger").forGetter(CardAbility::getTrigger),
+			.group(GameUtil.TRIGGERS_CODEC.fieldOf("triggers").forGetter(CardAbility::getTriggers),
 					Codec.INT.fieldOf("count").forGetter(DrawCardsAbility::getCount))
 			.apply(instance, DrawCardsAbility::new));
 
 	private final int count;
 
-	public DrawCardsAbility(CardAbilityTrigger trigger, int count) {
-		super(trigger);
+	public DrawCardsAbility(Set<CardAbilityTrigger> triggers, int count) {
+		super(triggers);
 		this.count = count;
 	}
 
@@ -35,7 +36,7 @@ public class DrawCardsAbility extends CardAbility {
 
 	@Override
 	protected Object[] getDescriptionArgs() {
-		return new Object[] { GameUtil.emphasize(trigger.getText()), count };
+		return new Object[] { GameUtil.emphasize(GameUtil.triggersToText(triggers)), count };
 	}
 
 	@Override

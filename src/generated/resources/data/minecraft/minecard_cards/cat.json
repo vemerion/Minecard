@@ -4,7 +4,9 @@
     "value": {
       "chance": 50,
       "ability": {
-        "trigger": "tick",
+        "triggers": [
+          "tick"
+        ],
         "cards": [
           "minecard:rotten_flesh",
           "minecard:rabbit_foot"

@@ -2,7 +2,9 @@
   "abilities": {
     "type": "minecard:summon_card",
     "value": {
-      "trigger": "summon",
+      "triggers": [
+        "summon"
+      ],
       "placement": "right",
       "card": {
         "additional_data": {
@@ -14,7 +16,9 @@
         "abilities": {
           "type": "minecard:summon_card",
           "value": {
-            "trigger": "tick",
+            "triggers": [
+              "tick"
+            ],
             "placement": "right",
             "card": {
               "entity": "minecraft:bee",
