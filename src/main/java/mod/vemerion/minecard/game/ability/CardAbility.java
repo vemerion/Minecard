@@ -14,6 +14,7 @@ import mod.vemerion.minecard.init.ModCardAbilities;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.util.ExtraCodecs;
+import net.minecraft.world.item.ItemStack;
 
 public abstract class CardAbility {
 
@@ -35,7 +36,8 @@ public abstract class CardAbility {
 		return NO_ARGS;
 	}
 
-	protected abstract void invoke(List<Receiver> receivers, PlayerState state, Card card, @Nullable Card other);
+	protected abstract void invoke(List<Receiver> receivers, PlayerState state, Card card, @Nullable Card other,
+			ItemStack icon);
 
 	public Component getDescription() {
 		if (description == null) {
@@ -52,40 +54,10 @@ public abstract class CardAbility {
 
 	}
 
-	public void onSummon(List<Receiver> receivers, PlayerState state, Card card) {
-		if (triggers.contains(CardAbilityTrigger.SUMMON)) {
-			invoke(receivers, state, card, null);
+	public void trigger(CardAbilityTrigger trigger, List<Receiver> receivers, PlayerState state, Card card, Card target,
+			ItemStack icon) {
+		if (triggers.contains(trigger)) {
+			invoke(receivers, state, card, target, icon);
 		}
 	}
-
-	public void onAttack(List<Receiver> receivers, PlayerState state, Card card, Card target) {
-		if (triggers.contains(CardAbilityTrigger.ATTACK)) {
-			invoke(receivers, state, card, target);
-		}
-	}
-
-	public void onDeath(List<Receiver> receivers, PlayerState state, Card card) {
-		if (triggers.contains(CardAbilityTrigger.DEATH)) {
-			invoke(receivers, state, card, null);
-		}
-	}
-
-	public void onHurt(List<Receiver> receivers, PlayerState state, Card card) {
-		if (triggers.contains(CardAbilityTrigger.HURT)) {
-			invoke(receivers, state, card, null);
-		}
-	}
-
-	public void onTick(List<Receiver> receivers, PlayerState state, Card card) {
-		if (triggers.contains(CardAbilityTrigger.TICK)) {
-			invoke(receivers, state, card, null);
-		}
-	}
-
-	public void onGrow(List<Receiver> receivers, PlayerState state, Card card) {
-		if (triggers.contains(CardAbilityTrigger.GROW)) {
-			invoke(receivers, state, card, null);
-		}
-	}
-
 }

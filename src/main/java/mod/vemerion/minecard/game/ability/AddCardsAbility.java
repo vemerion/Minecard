@@ -19,6 +19,7 @@ import mod.vemerion.minecard.init.ModCardAbilities;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.util.ExtraCodecs;
+import net.minecraft.world.item.ItemStack;
 
 public class AddCardsAbility extends CardAbility {
 
@@ -51,15 +52,15 @@ public class AddCardsAbility extends CardAbility {
 	}
 
 	@Override
-	protected void invoke(List<Receiver> receivers, PlayerState state, Card card, @Nullable Card other) {
+	protected void invoke(List<Receiver> receivers, PlayerState state, Card card, @Nullable Card other,
+			ItemStack icon) {
 		var created = toAdd.get(state.getGame().getRandom().nextInt(toAdd.size())).get(false).create();
 		List<Card> added = new ArrayList<>();
 		added.add(created);
 		state.addCards(receivers, added);
 
 		if (!added.isEmpty())
-			state.getGame().addHistory(receivers,
-					new HistoryEntry(HistoryEntry.Type.ABILITY, state.getId(), card, added));
+			state.getGame().addHistory(receivers, new HistoryEntry(icon, state.getId(), card, added));
 	}
 
 	public List<LazyCardType> getCards() {

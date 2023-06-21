@@ -22,6 +22,7 @@ import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.ExtraCodecs;
+import net.minecraft.world.item.ItemStack;
 
 public class ModifyAbility extends CardAbility {
 
@@ -83,7 +84,8 @@ public class ModifyAbility extends CardAbility {
 	}
 
 	@Override
-	protected void invoke(List<Receiver> receivers, PlayerState state, Card card, @Nullable Card other) {
+	protected void invoke(List<Receiver> receivers, PlayerState state, Card card, @Nullable Card other,
+			ItemStack icon) {
 		var modification = modifications.get(state.getGame().getRandom().nextInt(modifications.size()));
 
 		var selectedCards = selection.select(state.getGame(), this, state.getId(), card, other);
@@ -103,7 +105,7 @@ public class ModifyAbility extends CardAbility {
 						m.getOperator().evaluate(state.getGame().getRandom(), selected));
 		}
 
-		state.getGame().addHistory(receivers, new HistoryEntry(HistoryEntry.Type.ABILITY, state.getId(), card,
+		state.getGame().addHistory(receivers, new HistoryEntry(icon, state.getId(), card,
 				selectedCards.stream().filter(c -> state.getGame().isInBoard(c) || c.isDead()).toList()));
 
 		for (var receiver : receivers) {

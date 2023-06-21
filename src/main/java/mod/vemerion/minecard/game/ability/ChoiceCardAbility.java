@@ -19,6 +19,7 @@ import mod.vemerion.minecard.init.ModCardAbilities;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.util.ExtraCodecs;
+import net.minecraft.world.item.ItemStack;
 
 public class ChoiceCardAbility extends CardAbility {
 
@@ -72,9 +73,10 @@ public class ChoiceCardAbility extends CardAbility {
 	}
 
 	@Override
-	protected void invoke(List<Receiver> receivers, PlayerState state, Card card, @Nullable Card other) {
+	protected void invoke(List<Receiver> receivers, PlayerState state, Card card, @Nullable Card other,
+			ItemStack icon) {
 		state.getChoices().getSelected(this)
-				.ifPresent(c -> abilities.get(c.getId()).invoke(receivers, state, card, other));
+				.ifPresent(c -> abilities.get(c.getId()).invoke(receivers, state, card, other, icon));
 	}
 
 	public List<CardAbility> getAbilities() {

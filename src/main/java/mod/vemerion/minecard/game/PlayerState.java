@@ -8,6 +8,7 @@ import java.util.UUID;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
+import mod.vemerion.minecard.game.ability.CardAbilityTrigger;
 import mod.vemerion.minecard.network.DrawCardsMessage;
 import mod.vemerion.minecard.network.MulliganDoneMessage;
 import mod.vemerion.minecard.network.PlaceCardMessage;
@@ -16,6 +17,7 @@ import mod.vemerion.minecard.network.SetResourcesMessage;
 import net.minecraft.core.SerializableUUID;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.util.Mth;
+import net.minecraft.world.item.ItemStack;
 
 public class PlayerState {
 
@@ -161,7 +163,7 @@ public class PlayerState {
 					receiver.receiver(msg);
 			}
 
-			card.ability(a -> a.onTick(receivers, this, card));
+			card.ability((a, i) -> a.trigger(CardAbilityTrigger.TICK, receivers, this, card, null, i));
 		}
 	}
 
@@ -177,7 +179,7 @@ public class PlayerState {
 			if (card.hasProperty(CardProperty.BABY)) {
 				card.decrementProperty(CardProperty.BABY);
 				if (!card.hasProperty(CardProperty.BABY)) {
-					card.ability(a -> a.onGrow(receivers, this, card));
+					card.ability((a, i) -> a.trigger(CardAbilityTrigger.GROW, receivers, this, card, null, i));
 				}
 				updated.add(card);
 			}
@@ -271,12 +273,12 @@ public class PlayerState {
 			receiver.receiver(new PlaceCardMessage(id, card, leftId));
 		}
 
-		card.ability(a -> a.onSummon(receivers, this, card));
+		card.ability((a, i) -> a.trigger(CardAbilityTrigger.SUMMON, receivers, this, card, null, i));
 
 		choices = null;
 
 		if (!card.isSpell())
-			game.addHistory(receivers, new HistoryEntry(HistoryEntry.Type.PLAY_CARD, id, card, List.of()));
+			game.addHistory(receivers, new HistoryEntry(ItemStack.EMPTY, id, card, List.of()));
 	}
 
 	public MessagePlayerState toMessage(boolean hide) {

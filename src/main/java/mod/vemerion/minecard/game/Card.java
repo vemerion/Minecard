@@ -3,7 +3,7 @@ package mod.vemerion.minecard.game;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
-import java.util.function.Consumer;
+import java.util.function.BiConsumer;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -14,6 +14,8 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraftforge.registries.ForgeRegistries;
 
 public class Card {
@@ -183,11 +185,12 @@ public class Card {
 		return ability;
 	}
 
-	public void ability(Consumer<CardAbility> func) {
-		func.accept(getAbility());
+	public void ability(BiConsumer<CardAbility, ItemStack> func) {
+		func.accept(getAbility(), new ItemStack(Items.BOOK));
 		for (var property : properties.entrySet()) {
 			if (property.getValue() > 0) {
-				func.accept(CardProperties.getInstance(false).get(property.getKey()).getAbility());
+				var p = CardProperties.getInstance(false).get(property.getKey());
+				func.accept(p.getAbility(), p.getItem());
 			}
 		}
 	}

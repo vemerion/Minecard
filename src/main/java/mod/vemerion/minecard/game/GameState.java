@@ -11,12 +11,15 @@ import org.apache.commons.lang3.tuple.Pair;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
+import mod.vemerion.minecard.game.ability.CardAbilityTrigger;
 import mod.vemerion.minecard.network.CombatMessage;
 import mod.vemerion.minecard.network.HistoryMessage;
 import mod.vemerion.minecard.network.PlaceCardMessage;
 import mod.vemerion.minecard.network.UpdateCardsMessage;
 import mod.vemerion.minecard.network.UpdateDecksMessage;
 import net.minecraft.util.ExtraCodecs;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 
 public class GameState {
 
@@ -210,14 +213,14 @@ public class GameState {
 			return;
 
 		final var playerState = owner;
-		card.ability(a -> a.onHurt(receivers, playerState, card));
+		card.ability((a, i) -> a.trigger(CardAbilityTrigger.HURT, receivers, playerState, card, null, i));
 
 		for (var receiver : receivers) {
 			updateCards(receiver, List.of(card));
 		}
 
 		if (card.isDead()) {
-			card.ability(a -> a.onDeath(receivers, playerState, card));
+			card.ability((a, i) -> a.trigger(CardAbilityTrigger.DEATH, receivers, playerState, card, null, i));
 			container.remove(card);
 		}
 	}
@@ -258,7 +261,7 @@ public class GameState {
 			receiver.receiver(new PlaceCardMessage(id, card, leftId));
 		}
 
-		card.ability(a -> a.onSummon(receivers, playerState, card));
+		card.ability((a, i) -> a.trigger(CardAbilityTrigger.SUMMON, receivers, playerState, card, null, i));
 	}
 
 	public void endTurn(List<Receiver> receivers) {
@@ -282,7 +285,8 @@ public class GameState {
 			return;
 		}
 
-		attackerCard.ability(a -> a.onAttack(receivers, current, attackerCard, targetCard));
+		attackerCard.ability(
+				(a, i) -> a.trigger(CardAbilityTrigger.ATTACK, receivers, current, attackerCard, targetCard, i));
 
 		attackerCard.setReady(false);
 		attackerCard.removeProperty(CardProperty.STEALTH);
@@ -294,8 +298,8 @@ public class GameState {
 					new CombatMessage(current.getId(), attackerCard.getId(), enemy.getId(), targetCard.getId()));
 		}
 
-		addHistory(receivers,
-				new HistoryEntry(HistoryEntry.Type.ATTACK, current.getId(), attackerCard, List.of(targetCard)));
+		addHistory(receivers, new HistoryEntry(new ItemStack(Items.NETHERITE_SWORD), current.getId(), attackerCard,
+				List.of(targetCard)));
 	}
 
 	public void choice(List<Receiver> receivers, int choiceId, int selected) {

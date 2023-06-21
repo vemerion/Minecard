@@ -17,6 +17,7 @@ import mod.vemerion.minecard.game.Receiver;
 import mod.vemerion.minecard.init.ModCardAbilities;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.util.ExtraCodecs;
+import net.minecraft.world.item.ItemStack;
 
 public class SummonCardAbility extends CardAbility {
 
@@ -50,7 +51,8 @@ public class SummonCardAbility extends CardAbility {
 	}
 
 	@Override
-	protected void invoke(List<Receiver> receivers, PlayerState state, Card card, @Nullable Card other) {
+	protected void invoke(List<Receiver> receivers, PlayerState state, Card card, @Nullable Card other,
+			ItemStack icon) {
 
 		var id = placement == CardPlacement.ENEMY ? state.getGame().getEnemyPlayerState(state.getId()).getId()
 				: state.getId();
@@ -71,8 +73,7 @@ public class SummonCardAbility extends CardAbility {
 
 		var summoned = summon.get(false).create();
 
-		state.getGame().addHistory(receivers,
-				new HistoryEntry(HistoryEntry.Type.ABILITY, state.getId(), card, List.of(summoned)));
+		state.getGame().addHistory(receivers, new HistoryEntry(icon, state.getId(), card, List.of(summoned)));
 
 		state.getGame().summonCard(receivers, summoned, id, leftId);
 	}

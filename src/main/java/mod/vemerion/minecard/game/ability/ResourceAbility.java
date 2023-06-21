@@ -14,6 +14,7 @@ import mod.vemerion.minecard.game.HistoryEntry;
 import mod.vemerion.minecard.game.PlayerState;
 import mod.vemerion.minecard.game.Receiver;
 import mod.vemerion.minecard.init.ModCardAbilities;
+import net.minecraft.world.item.ItemStack;
 
 public class ResourceAbility extends CardAbility {
 
@@ -44,10 +45,10 @@ public class ResourceAbility extends CardAbility {
 	}
 
 	@Override
-	protected void invoke(List<Receiver> receivers, PlayerState state, Card card, @Nullable Card other) {
+	protected void invoke(List<Receiver> receivers, PlayerState state, Card card, @Nullable Card other,
+			ItemStack icon) {
 		state.addResources(receivers, temporaryResources, permanentResources);
-		state.getGame().addHistory(receivers,
-				new HistoryEntry(HistoryEntry.Type.ABILITY, state.getId(), card, List.of()));
+		state.getGame().addHistory(receivers, new HistoryEntry(icon, state.getId(), card, List.of()));
 	}
 
 	public int getTemporaryResources() {

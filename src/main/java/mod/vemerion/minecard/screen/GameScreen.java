@@ -1191,12 +1191,7 @@ public class GameScreen extends Screen implements GameClient {
 			card.render(poseStack, 0, 0, source, partialTick);
 			poseStack.popPose();
 
-			if (entry.getType() != HistoryEntry.Type.PLAY_CARD) {
-				renderTargets(entry, y, x,
-						entry.getType() == HistoryEntry.Type.ATTACK ? Items.NETHERITE_SWORD.getDefaultInstance()
-								: Items.BOOK.getDefaultInstance(),
-						poseStack, source, partialTick);
-			}
+			renderTargets(entry, y, x, entry.getIcon(), poseStack, source, partialTick);
 		}
 
 		private void renderTargets(HistoryEntry entry, int y, int x, ItemStack stack, PoseStack poseStack,

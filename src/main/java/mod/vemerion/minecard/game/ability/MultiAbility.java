@@ -14,6 +14,7 @@ import mod.vemerion.minecard.game.Receiver;
 import mod.vemerion.minecard.init.ModCardAbilities;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.util.ExtraCodecs;
+import net.minecraft.world.item.ItemStack;
 
 public class MultiAbility extends CardAbility {
 
@@ -54,43 +55,15 @@ public class MultiAbility extends CardAbility {
 	}
 
 	@Override
-	protected void invoke(List<Receiver> receivers, PlayerState state, Card card, @Nullable Card other) {
+	protected void invoke(List<Receiver> receivers, PlayerState state, Card card, @Nullable Card other,
+			ItemStack icon) {
 	}
 
 	@Override
-	public void onSummon(List<Receiver> receivers, PlayerState state, Card card) {
+	public void trigger(CardAbilityTrigger trigger, List<Receiver> receivers, PlayerState state, Card card, Card target,
+			ItemStack icon) {
 		for (var ability : abilities)
-			ability.onSummon(receivers, state, card);
-	}
-
-	@Override
-	public void onAttack(List<Receiver> receivers, PlayerState state, Card card, Card target) {
-		for (var ability : abilities)
-			ability.onAttack(receivers, state, card, target);
-	}
-
-	@Override
-	public void onDeath(List<Receiver> receivers, PlayerState state, Card card) {
-		for (var ability : abilities)
-			ability.onDeath(receivers, state, card);
-	}
-
-	@Override
-	public void onHurt(List<Receiver> receivers, PlayerState state, Card card) {
-		for (var ability : abilities)
-			ability.onHurt(receivers, state, card);
-	}
-
-	@Override
-	public void onTick(List<Receiver> receivers, PlayerState state, Card card) {
-		for (var ability : abilities)
-			ability.onTick(receivers, state, card);
-	}
-
-	@Override
-	public void onGrow(List<Receiver> receivers, PlayerState state, Card card) {
-		for (var ability : abilities)
-			ability.onGrow(receivers, state, card);
+			ability.trigger(trigger, receivers, state, card, target, icon);
 	}
 
 	public List<CardAbility> getAbilities() {

@@ -151,7 +151,7 @@ public abstract class CardVariable {
 		@Override
 		public void set(PlayerState state, Card card, List<Receiver> receivers, int value) {
 			if (property.equals(CardProperty.BABY) && value == 0 && card.hasProperty(CardProperty.BABY)) {
-				card.ability(a -> a.onGrow(receivers, state, card));
+				card.ability((a, i) -> a.trigger(CardAbilityTrigger.GROW, receivers, state, card, null, i));
 			}
 			card.putProperty(property, value);
 

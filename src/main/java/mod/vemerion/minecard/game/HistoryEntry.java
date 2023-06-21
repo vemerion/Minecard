@@ -8,29 +8,14 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import net.minecraft.core.SerializableUUID;
 import net.minecraft.util.ExtraCodecs;
+import net.minecraft.world.item.ItemStack;
 
 public class HistoryEntry {
-	public static enum Type {
-		PLAY_CARD("play_card"), ATTACK("attack"), ABILITY("ability");
-
-		public static final Codec<Type> CODEC = GameUtil.enumCodec(Type.class, Type::getName);
-
-		private String name;
-
-		private Type(String name) {
-			this.name = name;
-		}
-
-		public String getName() {
-			return name;
-		}
-	}
-
 	public static final Codec<HistoryEntry> CODEC = ExtraCodecs
 			.lazyInitializedCodec(
 					() -> RecordCodecBuilder
 							.create(instance -> instance
-									.group(Type.CODEC.fieldOf("type").forGetter(HistoryEntry::getType),
+									.group(ItemStack.CODEC.fieldOf("icon").forGetter(HistoryEntry::getIcon),
 											SerializableUUID.CODEC.fieldOf("playerId")
 													.forGetter(HistoryEntry::getPlayerId),
 											Card.CODEC.fieldOf("card").forGetter(HistoryEntry::getCard),
@@ -38,20 +23,20 @@ public class HistoryEntry {
 													.forGetter(HistoryEntry::getTargets))
 									.apply(instance, HistoryEntry::new)));
 
-	private Type type;
+	private ItemStack icon;
 	private UUID playerId;
 	private Card card;
 	private List<Card> targets;
 
-	public HistoryEntry(Type type, UUID playerId, Card card, List<Card> targets) {
-		this.type = type;
+	public HistoryEntry(ItemStack icon, UUID playerId, Card card, List<Card> targets) {
+		this.icon = icon;
 		this.playerId = playerId;
 		this.card = new Card(card);
 		this.targets = targets.stream().map(c -> new Card(c)).toList();
 	}
 
-	public Type getType() {
-		return type;
+	public ItemStack getIcon() {
+		return icon;
 	}
 
 	public UUID getPlayerId() {

@@ -24,6 +24,7 @@ import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.ExtraCodecs;
+import net.minecraft.world.item.ItemStack;
 
 public class CopyCardsAbility extends CardAbility {
 
@@ -80,7 +81,8 @@ public class CopyCardsAbility extends CardAbility {
 	}
 
 	@Override
-	protected void invoke(List<Receiver> receivers, PlayerState state, Card card, @Nullable Card other) {
+	protected void invoke(List<Receiver> receivers, PlayerState state, Card card, @Nullable Card other,
+			ItemStack icon) {
 		var selected = selection.select(state.getGame(), this, state.getId(), card, other);
 
 		var copies = selected.stream()
@@ -106,7 +108,7 @@ public class CopyCardsAbility extends CardAbility {
 			}
 		});
 
-		state.getGame().addHistory(receivers, new HistoryEntry(HistoryEntry.Type.ABILITY, state.getId(), card,
+		state.getGame().addHistory(receivers, new HistoryEntry(icon, state.getId(), card,
 				selected.stream().filter(c -> state.getGame().isInBoard(c)).toList()));
 
 		if (destroyOriginal)
