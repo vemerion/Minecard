@@ -272,13 +272,13 @@ public class PlayerState {
 			receiver.receiver(new SetResourcesMessage(id, resources, maxResources));
 			receiver.receiver(new PlaceCardMessage(id, card, leftId));
 		}
+		
+		if (!card.isSpell())
+			game.addHistory(receivers, new HistoryEntry(ItemStack.EMPTY, id, card, List.of()));
 
 		card.ability((a, i) -> a.trigger(CardAbilityTrigger.SUMMON, receivers, this, card, null, i));
 
 		choices = null;
-
-		if (!card.isSpell())
-			game.addHistory(receivers, new HistoryEntry(ItemStack.EMPTY, id, card, List.of()));
 	}
 
 	public MessagePlayerState toMessage(boolean hide) {
