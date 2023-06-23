@@ -63,7 +63,7 @@ public class CardType {
 	}
 
 	public Card create() {
-		return new Card(Optional.ofNullable(type), cost, cost, health, health, health, damage, damage, false,
+		return new Card(Optional.ofNullable(type), cost, cost, health, health, health, damage, damage,
 				new HashMap<>(properties), ability, additionalData);
 	}
 

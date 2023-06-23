@@ -154,9 +154,6 @@ public abstract class CardVariable {
 				card.ability((a, i) -> a.trigger(CardAbilityTrigger.GROW, receivers, state, card, null, i));
 			}
 			card.putProperty(property, value);
-
-			if (property.equals(CardProperty.CHARGE))
-				card.setReady(true);
 		}
 
 		@Override

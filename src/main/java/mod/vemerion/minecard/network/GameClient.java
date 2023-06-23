@@ -30,8 +30,6 @@ public interface GameClient {
 
 	public void updateCard(Card received);
 
-	public void setReady(UUID id, List<Integer> cards);
-
 	public void placeCard(UUID id, Card card, int leftId);
 
 	public void setResources(UUID id, int resources, int maxResources);

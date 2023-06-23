@@ -148,7 +148,7 @@ public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 				pose.translate(0.74, propertyY, 0);
 				pose.scale(0.7f, 0.7f, 0.7f);
 				var property = CardProperties.getInstance(true).get(entry.getKey());
-				if (property != null) {
+				if (property != null && !property.getItem().isEmpty()) {
 					if (entry.getValue() == 1) {
 						renderItem(itemRenderer, property.getItem(), light, overlay, pose, buffer);
 					} else {

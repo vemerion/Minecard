@@ -150,7 +150,7 @@ public class GameState {
 		return CardVisibility.UNKNOWN;
 	}
 
-	public void updateCards(Receiver receiver, List<Card> cards) {
+	public void updateCards(Receiver receiver, Iterable<Card> cards) {
 		boolean updateDeckSizes = false;
 		List<Card> updated = new ArrayList<>();
 		for (var card : cards) {
@@ -237,9 +237,6 @@ public class GameState {
 	}
 
 	public void summonCard(List<Receiver> receivers, Card card, UUID id, int leftId) {
-		if (card.hasProperty(CardProperty.CHARGE))
-			card.setReady(true);
-
 		var playerState = getYourPlayerState(id);
 		var board = playerState.getBoard();
 
@@ -288,7 +285,6 @@ public class GameState {
 		attackerCard.ability(
 				(a, i) -> a.trigger(CardAbilityTrigger.ATTACK, receivers, current, attackerCard, targetCard, i));
 
-		attackerCard.setReady(false);
 		attackerCard.removeProperty(CardProperty.STEALTH);
 		hurt(receivers, attackerCard, targetCard.getDamage() + targetCard.getProperty(CardProperty.THORNS));
 		hurt(receivers, targetCard, attackerCard.getDamage());

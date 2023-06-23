@@ -24,6 +24,7 @@ import mod.vemerion.minecard.game.ability.CardOperator;
 import mod.vemerion.minecard.game.ability.CardSelectionMethod;
 import mod.vemerion.minecard.game.ability.CardVariable;
 import mod.vemerion.minecard.game.ability.ModifyAbility;
+import mod.vemerion.minecard.game.ability.MultiAbility;
 import mod.vemerion.minecard.game.ability.NoCardAbility;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
@@ -63,8 +64,14 @@ public class ModCardPropertyProvider implements DataProvider {
 	private void addProperties() {
 		properties.put(CardProperty.TAUNT,
 				new CardProperty(new ItemStack(Items.CARROT_ON_A_STICK), NoCardAbility.NO_CARD_ABILITY));
-		properties.put(CardProperty.CHARGE,
-				new CardProperty(new ItemStack(Items.SUGAR), NoCardAbility.NO_CARD_ABILITY));
+		properties.put(CardProperty.CHARGE, new CardProperty(new ItemStack(Items.SUGAR), new ModifyAbility(
+				EnumSet.of(CardAbilityTrigger.SUMMON), Optional.empty(),
+				new CardAbilitySelection(new CardAbilityGroups(EnumSet.of(CardAbilityGroup.SELF)),
+						CardSelectionMethod.ALL, CardCondition.NoCondition.NO_CONDITION),
+				List.of(List.of(new CardModification(new CardVariable.PropertyVariable(CardProperty.READY),
+						new CardOperator.Add(
+								new CardOperator.Variable(new CardVariable.PropertyVariable(CardProperty.READY)),
+								new CardOperator.Constant(1))))))));
 		properties.put(CardProperty.STEALTH,
 				new CardProperty(new ItemStack(Items.TALL_GRASS), NoCardAbility.NO_CARD_ABILITY));
 		properties.put(CardProperty.FREEZE, new CardProperty(new ItemStack(Items.ICE), NoCardAbility.NO_CARD_ABILITY));
@@ -93,6 +100,22 @@ public class ModCardPropertyProvider implements DataProvider {
 						List.of(List.of(new CardModification(CardVariable.HEALTH, new CardOperator.Constant(-1)))))));
 		properties.put(CardProperty.UNDEAD,
 				new CardProperty(new ItemStack(Items.ZOMBIE_HEAD), NoCardAbility.NO_CARD_ABILITY));
+		properties.put(CardProperty.READY, new CardProperty(ItemStack.EMPTY, new MultiAbility(List.of(
+				new ModifyAbility(EnumSet.of(CardAbilityTrigger.ATTACK), Optional.empty(),
+						new CardAbilitySelection(
+								new CardAbilityGroups(EnumSet.of(CardAbilityGroup.SELF)), CardSelectionMethod.ALL,
+								CardCondition.NoCondition.NO_CONDITION),
+						List.of(List.of(new CardModification(new CardVariable.PropertyVariable(CardProperty.READY),
+								new CardOperator.Add(
+										new CardOperator.Variable(
+												new CardVariable.PropertyVariable(CardProperty.READY)),
+										new CardOperator.Constant(-1)))))),
+				new ModifyAbility(EnumSet.of(CardAbilityTrigger.TICK), Optional.empty(),
+						new CardAbilitySelection(new CardAbilityGroups(EnumSet.of(CardAbilityGroup.SELF)),
+								CardSelectionMethod.ALL, CardCondition.NoCondition.NO_CONDITION),
+						List.of(List.of(new CardModification(new CardVariable.PropertyVariable(CardProperty.READY),
+								new CardOperator.Constant(0)))))))));
+
 	}
 
 	@Override

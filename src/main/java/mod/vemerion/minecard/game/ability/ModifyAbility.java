@@ -106,8 +106,9 @@ public class ModifyAbility extends CardAbility {
 						m.getOperator().evaluate(state.getGame().getRandom(), selected));
 		}
 
-		state.getGame().addHistory(receivers, new HistoryEntry(icon, state.getId(), copy,
-				selectedCards.stream().filter(c -> state.getGame().isInBoard(c) || c.isDead()).toList()));
+		if (!icon.isEmpty())
+			state.getGame().addHistory(receivers, new HistoryEntry(icon, state.getId(), copy,
+					selectedCards.stream().filter(c -> state.getGame().isInBoard(c) || c.isDead()).toList()));
 
 		for (var receiver : receivers) {
 			state.getGame().updateCards(receiver, selectedCards);

@@ -21,7 +21,6 @@ import mod.vemerion.minecard.network.PlayCardMessage;
 import mod.vemerion.minecard.network.PlayerChoiceMessage;
 import mod.vemerion.minecard.network.PlayerChoiceResponseMessage;
 import mod.vemerion.minecard.network.SetPropertiesMessage;
-import mod.vemerion.minecard.network.SetReadyMessage;
 import mod.vemerion.minecard.network.SetResourcesMessage;
 import mod.vemerion.minecard.network.SetTutorialStepMessage;
 import mod.vemerion.minecard.network.UpdateCardPropertiesMessage;
@@ -59,8 +58,6 @@ public class ModEventSubscriber {
 				PlayCardMessage::handle);
 		Network.INSTANCE.registerMessage(id++, PlaceCardMessage.class, PlaceCardMessage::encode,
 				PlaceCardMessage::decode, PlaceCardMessage::handle);
-		Network.INSTANCE.registerMessage(id++, SetReadyMessage.class, SetReadyMessage::encode, SetReadyMessage::decode,
-				SetReadyMessage::handle);
 		Network.INSTANCE.registerMessage(id++, AttackMessage.class, AttackMessage::encode, AttackMessage::decode,
 				AttackMessage::handle);
 		Network.INSTANCE.registerMessage(id++, DrawCardsMessage.class, DrawCardsMessage::encode,

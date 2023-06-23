@@ -32,7 +32,6 @@ public class Card {
 							Codec.INT.fieldOf("original_health").forGetter(Card::getOriginalHealth),
 							Codec.INT.fieldOf("damage").forGetter(Card::getDamage),
 							Codec.INT.fieldOf("original_damage").forGetter(Card::getOriginalDamage),
-							Codec.BOOL.fieldOf("ready").forGetter(Card::isReady),
 							CardProperty.CODEC_MAP.optionalFieldOf("properties", new HashMap<>())
 									.forGetter(Card::getProperties),
 							CardAbility.CODEC.optionalFieldOf("abilities", NoCardAbility.NO_CARD_ABILITY)
@@ -50,14 +49,13 @@ public class Card {
 	private int originalHealth;
 	private int damage;
 	private int originalDamage;
-	private boolean ready;
 	private Map<ResourceLocation, Integer> properties;
 	private final CardAbility ability;
 	private int id;
 
 	public Card(Optional<EntityType<?>> type, int cost, int originalCost, int health, int maxHealth, int originalHealth,
-			int damage, int originalDamage, boolean ready, Map<ResourceLocation, Integer> properties,
-			CardAbility ability, AdditionalCardData additionalData) {
+			int damage, int originalDamage, Map<ResourceLocation, Integer> properties, CardAbility ability,
+			AdditionalCardData additionalData) {
 		this.type = type;
 		this.cost = cost;
 		this.originalCost = originalCost;
@@ -66,7 +64,6 @@ public class Card {
 		this.originalHealth = originalHealth;
 		this.damage = damage;
 		this.originalDamage = originalDamage;
-		this.ready = ready;
 		this.properties = properties;
 		this.ability = ability;
 		this.additionalData = additionalData;
@@ -75,7 +72,7 @@ public class Card {
 
 	public Card(Card other) {
 		this(other.getType(), other.getCost(), other.getOriginalCost(), other.getHealth(), other.getMaxHealth(),
-				other.getOriginalHealth(), other.getDamage(), other.getOriginalDamage(), other.isReady(),
+				other.getOriginalHealth(), other.getDamage(), other.getOriginalDamage(),
 				new HashMap<>(other.getProperties()), other.getAbility(), other.getAdditionalData());
 		this.id = other.getId();
 	}
@@ -144,16 +141,8 @@ public class Card {
 		return originalDamage;
 	}
 
-	public boolean isReady() {
-		return ready;
-	}
-
-	public void setReady(boolean b) {
-		this.ready = b;
-	}
-
 	public boolean canAttack() {
-		return isReady() && getDamage() > 0;
+		return hasProperty(CardProperty.READY) && getDamage() > 0;
 	}
 
 	public Map<ResourceLocation, Integer> getProperties() {
@@ -225,7 +214,6 @@ public class Card {
 		this.originalHealth = received.originalHealth;
 		this.damage = received.getDamage();
 		this.originalDamage = received.originalDamage;
-		this.ready = received.isReady();
 		this.properties = received.getProperties();
 		this.additionalData = received.getAdditionalData();
 	}

@@ -1,6 +1,7 @@
 package mod.vemerion.minecard.game;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -12,7 +13,6 @@ import mod.vemerion.minecard.game.ability.CardAbilityTrigger;
 import mod.vemerion.minecard.network.DrawCardsMessage;
 import mod.vemerion.minecard.network.MulliganDoneMessage;
 import mod.vemerion.minecard.network.PlaceCardMessage;
-import mod.vemerion.minecard.network.SetPropertiesMessage;
 import mod.vemerion.minecard.network.SetResourcesMessage;
 import net.minecraft.core.SerializableUUID;
 import net.minecraft.util.ExtraCodecs;
@@ -109,15 +109,6 @@ public class PlayerState {
 		return withId(hand, id);
 	}
 
-	public List<Integer> getReady() {
-		var list = new ArrayList<Integer>();
-		for (var card : board) {
-			if (card.isReady())
-				list.add(card.getId());
-		}
-		return list;
-	}
-
 	public void drawCards(List<Receiver> receivers, int count) {
 		List<Card> cards = new ArrayList<>();
 		List<Card> fakes = new ArrayList<>();
@@ -152,17 +143,6 @@ public class PlayerState {
 
 	public void endTurn(List<Receiver> receivers) {
 		for (var card : new ArrayList<>(new ArrayList<>(board))) {
-			boolean changed = false;
-			if (card.hasProperty(CardProperty.FREEZE)) {
-				card.decrementProperty(CardProperty.FREEZE);
-				changed = true;
-			}
-			if (changed && !card.isDead()) {
-				var msg = new SetPropertiesMessage(id, card.getId(), card.getProperties());
-				for (var receiver : receivers)
-					receiver.receiver(msg);
-			}
-
 			card.ability((a, i) -> a.trigger(CardAbilityTrigger.TICK, receivers, this, card, null, i));
 		}
 	}
@@ -171,16 +151,20 @@ public class PlayerState {
 		maxResources = Math.min(10, maxResources + 1);
 		resources = maxResources;
 
-		List<Card> updated = new ArrayList<>();
+		Set<Card> updated = new HashSet<>();
 		for (var card : new ArrayList<>(board)) {
-			if (!card.hasProperty(CardProperty.FREEZE))
-				card.setReady(true);
-
 			if (card.hasProperty(CardProperty.BABY)) {
 				card.decrementProperty(CardProperty.BABY);
 				if (!card.hasProperty(CardProperty.BABY)) {
 					card.ability((a, i) -> a.trigger(CardAbilityTrigger.GROW, receivers, this, card, null, i));
 				}
+				updated.add(card);
+			}
+			if (card.hasProperty(CardProperty.FREEZE)) {
+				card.decrementProperty(CardProperty.FREEZE);
+				updated.add(card);
+			} else {
+				card.putProperty(CardProperty.READY, card.getProperty(CardProperty.READY) + 1);
 				updated.add(card);
 			}
 		}
@@ -248,9 +232,6 @@ public class PlayerState {
 			return;
 		}
 
-		if (card.hasProperty(CardProperty.CHARGE))
-			card.setReady(true);
-
 		resources -= card.getCost();
 
 		if (!card.isSpell()) {
@@ -272,7 +253,7 @@ public class PlayerState {
 			receiver.receiver(new SetResourcesMessage(id, resources, maxResources));
 			receiver.receiver(new PlaceCardMessage(id, card, leftId));
 		}
-		
+
 		if (!card.isSpell())
 			game.addHistory(receivers, new HistoryEntry(ItemStack.EMPTY, id, card, List.of()));
 

@@ -50,10 +50,6 @@ public class CardProperties extends SimpleJsonResourceReloadListener {
 		return PROPERTIES.entrySet();
 	}
 
-	public int size() {
-		return PROPERTIES.size();
-	}
-
 	public ResourceLocation randomKey(Random rand) {
 		var keys = PROPERTIES.keySet();
 		int i = rand.nextInt(keys.size());

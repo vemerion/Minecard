@@ -24,6 +24,7 @@ public class CardProperty {
 	public static final ResourceLocation THORNS = new ResourceLocation(Main.MODID, "thorns");
 	public static final ResourceLocation POISON = new ResourceLocation(Main.MODID, "poison");
 	public static final ResourceLocation UNDEAD = new ResourceLocation(Main.MODID, "undead");
+	public static final ResourceLocation READY = new ResourceLocation(Main.MODID, "ready");
 
 	public static final Codec<CardProperty> CODEC = ExtraCodecs
 			.lazyInitializedCodec(

@@ -29,7 +29,6 @@ import mod.vemerion.minecard.network.GameOverMessage;
 import mod.vemerion.minecard.network.Network;
 import mod.vemerion.minecard.network.NewTurnMessage;
 import mod.vemerion.minecard.network.OpenGameMessage;
-import mod.vemerion.minecard.network.SetReadyMessage;
 import mod.vemerion.minecard.network.SetResourcesMessage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -105,9 +104,6 @@ public class GameBlockEntity extends BlockEntity {
 			receiver.receiver(new NewTurnMessage(state.getCurrentPlayer()));
 			receiver.receiver(new SetResourcesMessage(state.getCurrentPlayer(), current.getResources(),
 					current.getMaxResources()));
-			if (!current.getBoard().isEmpty()) {
-				receiver.receiver(new SetReadyMessage(current.getId(), current.getReady()));
-			}
 		}
 
 		setChanged();

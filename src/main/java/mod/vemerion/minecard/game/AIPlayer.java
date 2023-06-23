@@ -194,15 +194,6 @@ public class AIPlayer implements GameClient {
 	}
 
 	@Override
-	public void setReady(UUID id, List<Integer> cards) {
-		for (var cardId : cards) {
-			var card = find(cardId);
-			if (card != null)
-				card.setReady(true);
-		}
-	}
-
-	@Override
 	public void placeCard(UUID id, Card card, int leftId) {
 		var board = id.equals(ID) ? yourBoard : enemyBoard;
 		if (id.equals(ID)) {

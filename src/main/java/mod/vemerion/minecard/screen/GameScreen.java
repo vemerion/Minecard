@@ -288,14 +288,6 @@ public class GameScreen extends Screen implements GameClient {
 	}
 
 	@Override
-	public void setReady(UUID id, List<Integer> cards) {
-		var playerState = state.get(id);
-		for (var card : playerState.board)
-			if (cards.contains(card.getId()))
-				card.setReady(true);
-	}
-
-	@Override
 	public void updateCard(Card received) {
 		for (var playerState : state.values()) {
 			for (var card : playerState.board) {
@@ -797,7 +789,7 @@ public class GameScreen extends Screen implements GameClient {
 		private static final TranslatableComponent INFO_BUTTON_HOVER = new TranslatableComponent(
 				Helper.gui("info_button_hover"));
 
-		private int page = 0;
+		private long page = 0;
 		private boolean isHovered0;
 		private long hoverTimestamp;
 
@@ -843,8 +835,9 @@ public class GameScreen extends Screen implements GameClient {
 			}
 		}
 
-		private int infoPages() {
-			return 1 + Math.max(0, CardProperties.getInstance(true).size() - 1) / INFO_SCREEN_PROPERTY_COUNT;
+		private long infoPages() {
+			return 1 + Math.max(0, CardProperties.getInstance(true).entries().stream()
+					.filter(e -> !e.getValue().getItem().isEmpty()).count() - 1) / INFO_SCREEN_PROPERTY_COUNT;
 		}
 
 		private void drawPropertyInfo(PoseStack poseStack) {
@@ -854,8 +847,10 @@ public class GameScreen extends Screen implements GameClient {
 			int border = 80;
 			int padding = (GameScreen.this.width - border * 2) / 2;
 			int i = 0;
-			int skip = page * INFO_SCREEN_PROPERTY_COUNT;
+			long skip = page * INFO_SCREEN_PROPERTY_COUNT;
 			for (var entry : CardProperties.getInstance(true).entries()) {
+				if (entry.getValue().getItem().isEmpty())
+					continue;
 				skip--;
 				if (skip > 0)
 					continue;

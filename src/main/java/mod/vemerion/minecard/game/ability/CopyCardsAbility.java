@@ -87,8 +87,8 @@ public class CopyCardsAbility extends CardAbility {
 
 		var copies = selected.stream()
 				.map(c -> new Card(c.getType(), c.getCost(), c.getOriginalCost(), c.getHealth(), c.getMaxHealth(),
-						c.getOriginalHealth(), c.getDamage(), c.getOriginalDamage(), false,
-						new HashMap<>(c.getProperties()), c.getAbility(), c.getAdditionalData()))
+						c.getOriginalHealth(), c.getDamage(), c.getOriginalDamage(), new HashMap<>(c.getProperties()),
+						c.getAbility(), c.getAdditionalData()))
 				.collect(Collectors.toCollection(() -> new ArrayList<>()));
 
 		for (var copy : copies)
