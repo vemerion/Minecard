@@ -176,7 +176,7 @@ public class Card {
 
 	public void ability(BiConsumer<CardAbility, ItemStack> func) {
 		func.accept(getAbility(), new ItemStack(Items.BOOK));
-		for (var property : properties.entrySet()) {
+		for (var property : new HashMap<>(properties).entrySet()) {
 			if (property.getValue() > 0) {
 				var p = CardProperties.getInstance(false).get(property.getKey());
 				func.accept(p.getAbility(), p.getItem());
