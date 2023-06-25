@@ -40,6 +40,7 @@ import mod.vemerion.minecard.renderer.CardItemRenderer;
 import mod.vemerion.minecard.screen.animation.Animation;
 import mod.vemerion.minecard.screen.animation.AttackAnimation;
 import mod.vemerion.minecard.screen.animation.BurnAnimation;
+import mod.vemerion.minecard.screen.animation.ChargeAnimation;
 import mod.vemerion.minecard.screen.animation.DeathAnimation;
 import mod.vemerion.minecard.screen.animation.FreezeAnimation;
 import mod.vemerion.minecard.screen.animation.HealthAnimation;
@@ -128,8 +129,6 @@ public class GameScreen extends Screen implements GameClient {
 
 	private Card selectedCard;
 	private Card attackingCard;
-
-	private float fovModifier = 1;
 
 	public GameScreen(List<MessagePlayerState> list, int tutorialStep, List<HistoryEntry> historyList, BlockPos pos) {
 		super(TITLE);
@@ -392,7 +391,8 @@ public class GameScreen extends Screen implements GameClient {
 		for (var entry : card.getProperties().entrySet()) {
 			if ((old == null || old.getOrDefault(entry.getKey(), 0) < 1) && entry.getValue() > 0) {
 				if (entry.getKey().equals(CardProperty.CHARGE)) {
-					fovModifier = 3;
+					animations.add(new ChargeAnimation(minecraft, card, () -> {
+					}));
 				} else if (entry.getKey().equals(CardProperty.FREEZE)) {
 					animations.add(new FreezeAnimation(minecraft, card, () -> {
 					}));
@@ -724,8 +724,6 @@ public class GameScreen extends Screen implements GameClient {
 		history.tick();
 
 		tutorial.ifPresent(t -> t.tick());
-
-		fovModifier = (float) Mth.lerp(0.08, fovModifier, 1);
 	}
 
 	private static final Method GET_AMBIENT_SOUND = ObfuscationReflectionHelper.findMethod(Mob.class, "m_7515_");
@@ -1232,9 +1230,5 @@ public class GameScreen extends Screen implements GameClient {
 			var dimensions = entity.getType().getDimensions();
 			return Math.min(ENTRY_SIZE / dimensions.width, ENTRY_SIZE / dimensions.height);
 		}
-	}
-
-	public float getFovModifier() {
-		return fovModifier;
 	}
 }
