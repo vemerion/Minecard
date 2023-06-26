@@ -475,6 +475,25 @@ public class GameScreen extends Screen implements GameClient {
 	}
 
 	@Override
+	public boolean mouseScrolled(double pMouseX, double pMouseY, double pDelta) {
+		if (super.mouseScrolled(pMouseX, pMouseY, pDelta)) {
+			return true;
+		}
+
+		for (var playerState : state.values()) {
+			for (var list : List.of(playerState.board, playerState.hand)) {
+				for (var card : list) {
+					if (card.contains(pMouseX, pMouseY)) {
+						card.setTextScroll(card.getTextScroll() - (int) Mth.clamp(pDelta, -1, 1));
+					}
+				}
+			}
+		}
+
+		return true;
+	}
+
+	@Override
 	public boolean mouseClicked(double pMouseX, double pMouseY, int pButton) {
 		// Mulligan
 		if (!isSpectator && this.yourState().mulligan && pButton == GLFW.GLFW_MOUSE_BUTTON_LEFT) {

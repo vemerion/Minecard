@@ -27,7 +27,6 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.block.model.ItemTransforms.TransformType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.ItemRenderer;
-import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -109,12 +108,23 @@ public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 			var size = DESCRIPTION_SIZES[i];
 			var lines = mc.font.split(card.getAbility().getDescription(), size.maxWidth);
 			if (lines.size() <= size.maxLines || i == DESCRIPTION_SIZES.length - 1) {
+				int start = 0;
+				var tooLong = i == DESCRIPTION_SIZES.length - 1 && lines.size() > size.maxLines;
+				if (tooLong) {
+					start = Mth.clamp(card.getTextScroll(), 0, lines.size() - size.maxLines);
+					card.setTextScroll(start);
+				}
 				pose.pushPose();
 				pose.translate(0.131, -0.521, 0.01);
 				pose.scale(size.scale, -size.scale, size.scale);
 				float y = 0;
-				for (FormattedCharSequence line : lines) {
-					mc.font.draw(pose, line, 0, y, 0);
+				int end = Math.min(start + size.maxLines, lines.size());
+				for (int j = start; j < end; j++) {
+					if (j == end - 1 && j != lines.size() - 1) {
+						mc.font.draw(pose, "[ ... ]", 0, y, 0);
+					} else {
+						mc.font.draw(pose, lines.get(j), 0, y, 0);
+					}
 					y += 9.5;
 				}
 				pose.popPose();

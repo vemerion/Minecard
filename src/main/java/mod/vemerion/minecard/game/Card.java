@@ -52,6 +52,7 @@ public class Card {
 	private Map<ResourceLocation, Integer> properties;
 	private final CardAbility ability;
 	private int id;
+	private int textScroll; // Client only
 
 	public Card(Optional<EntityType<?>> type, int cost, int originalCost, int health, int maxHealth, int originalHealth,
 			int damage, int originalDamage, Map<ResourceLocation, Integer> properties, CardAbility ability,
@@ -216,5 +217,13 @@ public class Card {
 		this.originalDamage = received.originalDamage;
 		this.properties = received.getProperties();
 		this.additionalData = received.getAdditionalData();
+	}
+
+	public int getTextScroll() {
+		return textScroll;
+	}
+	
+	public void setTextScroll(int value) {
+		textScroll = value;
 	}
 }

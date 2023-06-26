@@ -41,9 +41,12 @@ public class MultiAbility extends CardAbility {
 	@Override
 	protected Object[] getDescriptionArgs() {
 		var text = TextComponent.EMPTY.copy();
+		int i = 0;
 		for (var ability : abilities) {
 			text.append(ability.getDescription());
-			text.append("\n");
+			if (i < abilities.size() - 1)
+				text.append("\n");
+			i++;
 		}
 		return new Object[] { text };
 	}
