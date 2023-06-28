@@ -14,7 +14,6 @@ import net.minecraftforge.common.capabilities.CapabilityToken;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.registries.ForgeRegistries;
 
 public class CardData implements INBTSerializable<CompoundTag> {
 
@@ -24,39 +23,43 @@ public class CardData implements INBTSerializable<CompoundTag> {
 	private static final String NBT_KEY = Main.MODID + "_carddata";
 
 	private ItemStack owner;
-	private EntityType<?> type = EntityType.PIG;
+	private ResourceLocation type;
 
 	public CardData(ItemStack owner) {
 		this.owner = owner;
 
-		CompoundTag nbt = owner.getOrCreateTag();
+		var nbt = owner.getOrCreateTag();
 		if (nbt.contains(NBT_KEY))
 			deserializeNBT(nbt.getCompound(NBT_KEY));
 	}
 
-	public void setType(EntityType<?> type) {
+	public void setType(ResourceLocation type) {
 		this.type = type;
 		owner.getOrCreateTag().put(NBT_KEY, serializeNBT());
+	}
+
+	public void setType(EntityType<?> type) {
+		setType(type.getRegistryName());
 	}
 
 	public static LazyOptional<CardData> get(ItemStack stack) {
 		return stack.getCapability(CAPABILITY);
 	}
 
-	public static Optional<EntityType<?>> getType(ItemStack stack) {
+	public static Optional<ResourceLocation> getType(ItemStack stack) {
 		return get(stack).map(data -> data.type);
 	}
 
 	@Override
 	public CompoundTag serializeNBT() {
 		var tag = new CompoundTag();
-		tag.putString("type", type.getRegistryName().toString());
+		tag.putString("type", type.toString());
 		return tag;
 	}
 
 	@Override
 	public void deserializeNBT(CompoundTag nbt) {
-		setType(ForgeRegistries.ENTITIES.getValue(new ResourceLocation(nbt.getString("type"))));
+		setType(new ResourceLocation(nbt.getString("type")));
 	}
 
 	public static class Provider implements ICapabilitySerializable<CompoundTag> {

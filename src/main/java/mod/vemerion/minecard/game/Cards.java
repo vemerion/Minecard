@@ -26,6 +26,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.network.PacketDistributor;
+import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.server.ServerLifecycleHooks;
 
 public class Cards extends SimpleJsonResourceReloadListener {
@@ -49,11 +50,11 @@ public class Cards extends SimpleJsonResourceReloadListener {
 	}
 
 	public CardType get(ResourceLocation rl) {
-		return CARDS.get(rl);
+		return CARDS.computeIfAbsent(rl, r -> generateCardType(ForgeRegistries.ENTITIES.getValue(r)));
 	}
 
 	public CardType get(EntityType<?> type) {
-		return CARDS.computeIfAbsent(type.getRegistryName(), rl -> generateCardType(type));
+		return get(type.getRegistryName());
 	}
 
 	public static Cards getInstance(boolean isClient) {
@@ -74,7 +75,10 @@ public class Cards extends SimpleJsonResourceReloadListener {
 	}
 
 	private CardType generateCardType(EntityType<?> type) {
-		Random rand = new Random(type.getRegistryName().toString().hashCode());
+		if (type == null)
+			return null;
+
+		var rand = new Random(type.getRegistryName().toString().hashCode());
 
 		int cost = rand.nextInt(1, 11);
 		int totalStats = cost * 2 + 1;

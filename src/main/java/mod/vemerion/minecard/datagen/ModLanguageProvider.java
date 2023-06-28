@@ -29,9 +29,9 @@ public class ModLanguageProvider extends LanguageProvider {
 	protected void addTranslations() {
 		add("itemGroup." + Main.MODID, "Minecard");
 		add(ModItems.CARD.get(), "%s Card");
-		add("item." + Main.MODID + "." + ModItems.CARD.getId().getPath() + ".tooltip", "(%s/%s/%s)");
-		add("item." + Main.MODID + "." + ModItems.CARD.getId().getPath() + ".tooltip_more",
-				"Press shift to see description");
+		add(ModItems.CARD.get().getDescriptionId() + ".tooltip_stats", "(%s/%s/%s)");
+		add(ModItems.CARD.get().getDescriptionId() + ".tooltip_spell", "spell");
+		add(ModItems.CARD.get().getDescriptionId() + ".tooltip_more", "Press shift to see description");
 		add(ModItems.EMPTY_CARD_FRONT.get(), "Empty Card");
 		add(ModItems.EMPTY_CARD_BACK.get(), "Empty Card");
 		add(ModItems.EMPTY_CARD_FULL.get(), "Empty Card");

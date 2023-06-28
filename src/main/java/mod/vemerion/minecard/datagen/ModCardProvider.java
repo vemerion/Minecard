@@ -438,6 +438,14 @@ public class ModCardProvider implements DataProvider {
 				new AddCardsAbility(EnumSet.of(CardAbilityTrigger.SUMMON), List.of(new LazyCardType(mod("iron_boots")),
 						new LazyCardType(mod("ender_pearl")), new LazyCardType(mod("fire_charge"))))));
 
+		// Spells
+		add(new Builder(EntityType.ITEM, 4, 0, 0).setKey(mod("fishing_rod"))
+				.setAdditionalData(new AdditionalCardData.ItemData(Items.FISHING_ROD))
+				.setCardAbility(new CopyCardsAbility(EnumSet.of(CardAbilityTrigger.SUMMON), true, false, false,
+						Optional.empty(),
+						new CardAbilitySelection(new CardAbilityGroups(EnumSet.of(CardAbilityGroup.ENEMY_HAND)),
+								CardSelectionMethod.CHOICE, CardCondition.NoCondition.NO_CONDITION))));
+
 		// Auxiliary cards
 		add(new Builder(EntityType.ITEM, 0, 5, 0).setKey(mod("end_crystal"))
 				.setAdditionalData(new AdditionalCardData.ItemData(Items.END_CRYSTAL))

@@ -79,6 +79,10 @@ public class CardType {
 		return health;
 	}
 
+	public boolean isSpell() {
+		return health == 0;
+	}
+
 	public int getDamage() {
 		return damage;
 	}

@@ -21,14 +21,16 @@ public class ClientForgeEventSubscriber {
 		CardData.getType(event.getItemStack()).ifPresent(t -> {
 			var tooltip = event.getToolTip();
 			var card = Cards.getInstance(true).get(t);
-			tooltip.add(
-					new TranslatableComponent("item." + Main.MODID + "." + ModItems.CARD.getId().getPath() + ".tooltip",
+			var descr = card.isSpell()
+					? new TranslatableComponent(ModItems.CARD.get().getDescriptionId() + ".tooltip_spell")
+							.withStyle(ChatFormatting.ITALIC)
+					: new TranslatableComponent(ModItems.CARD.get().getDescriptionId() + ".tooltip_stats",
 							new TextComponent(String.valueOf(card.getCost())).withStyle(ChatFormatting.BLUE),
 							new TextComponent(String.valueOf(card.getDamage())).withStyle(ChatFormatting.YELLOW),
-							new TextComponent(String.valueOf(card.getHealth())).withStyle(ChatFormatting.RED)));
+							new TextComponent(String.valueOf(card.getHealth())).withStyle(ChatFormatting.RED));
+			tooltip.add(descr);
 			tooltip.add(Screen.hasShiftDown() ? card.getAbility().getDescription()
-					: new TranslatableComponent(
-							"item." + Main.MODID + "." + ModItems.CARD.getId().getPath() + ".tooltip_more")
+					: new TranslatableComponent(ModItems.CARD.get().getDescriptionId() + ".tooltip_more")
 							.withStyle(ChatFormatting.ITALIC));
 		});
 	}

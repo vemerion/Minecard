@@ -1,0 +1,32 @@
+{
+  "additional_data": {
+    "item": {
+      "id": "minecraft:fishing_rod",
+      "Count": 1,
+      "tag": {
+        "Damage": 0
+      }
+    }
+  },
+  "abilities": {
+    "type": "minecard:copy_cards",
+    "value": {
+      "give_to_enemy": false,
+      "selection": {
+        "groups": [
+          "enemy_hand"
+        ],
+        "method": "choice"
+      },
+      "triggers": [
+        "summon"
+      ],
+      "destroy_original": true,
+      "restore_health": false
+    }
+  },
+  "entity": "minecraft:item",
+  "cost": 4,
+  "health": 0,
+  "damage": 0
+}

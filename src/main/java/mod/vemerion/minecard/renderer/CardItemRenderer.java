@@ -8,6 +8,7 @@ import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Quaternion;
 
+import mod.vemerion.minecard.capability.CardData;
 import mod.vemerion.minecard.entity.CardGameRobot;
 import mod.vemerion.minecard.game.AIPlayer;
 import mod.vemerion.minecard.game.AdditionalCardData;
@@ -17,7 +18,6 @@ import mod.vemerion.minecard.game.CardProperty;
 import mod.vemerion.minecard.game.Cards;
 import mod.vemerion.minecard.init.ModEntities;
 import mod.vemerion.minecard.init.ModItems;
-import mod.vemerion.minecard.item.CardItem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.model.geom.EntityModelSet;
@@ -324,10 +324,10 @@ public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 	public void renderByItem(ItemStack stack, TransformType transform, PoseStack pose, MultiBufferSource buffer,
 			int light, int overlay) {
 
-		if (!(stack.getItem() instanceof CardItem card))
-			return;
-
-		renderCard(Cards.getInstance(true).get(card.getType(stack)).getCardForRendering(), transform, pose, buffer,
-				light, overlay);
+		CardData.getType(stack).ifPresent(rl -> {
+			var card = Cards.getInstance(true).get(rl);
+			if (card != null)
+				renderCard(card.getCardForRendering(), transform, pose, buffer, light, overlay);
+		});
 	}
 }
