@@ -445,6 +445,9 @@ public class ModCardProvider implements DataProvider {
 						Optional.empty(),
 						new CardAbilitySelection(new CardAbilityGroups(EnumSet.of(CardAbilityGroup.ENEMY_HAND)),
 								CardSelectionMethod.CHOICE, CardCondition.NoCondition.NO_CONDITION))));
+		add(new Builder(EntityType.ITEM, 3, 0, 0).setKey(mod("book"))
+				.setAdditionalData(new AdditionalCardData.ItemData(Items.BOOK))
+				.setCardAbility(new DrawCardsAbility(EnumSet.of(CardAbilityTrigger.SUMMON), 2)));
 
 		// Auxiliary cards
 		add(new Builder(EntityType.ITEM, 0, 5, 0).setKey(mod("end_crystal"))

@@ -1,0 +1,19 @@
+{
+  "additional_data": {
+    "item": {
+      "id": "minecraft:book",
+      "Count": 1
+    }
+  },
+  "abilities": {
+    "triggers": [
+      "summon"
+    ],
+    "count": 2,
+    "type": "minecard:draw_cards"
+  },
+  "entity": "minecraft:item",
+  "cost": 3,
+  "health": 0,
+  "damage": 0
+}
