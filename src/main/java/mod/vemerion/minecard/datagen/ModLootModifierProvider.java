@@ -34,7 +34,8 @@ public class ModLootModifierProvider extends GlobalLootModifierProvider {
 										BuiltInLootTables.NETHER_BRIDGE, BuiltInLootTables.SIMPLE_DUNGEON,
 										BuiltInLootTables.STRONGHOLD_CORRIDOR, BuiltInLootTables.WOODLAND_MANSION) },
 						SimpleWeightedRandomList.<ResourceLocation>builder().add(rl("fishing_rod"), 1)
-								.add(rl("book"), 1).build()));
+								.add(rl("book"), 1).add(rl("splash_potion_of_harming"), 1)
+								.add(rl("enchanted_golden_apple"), 1).build()));
 
 	}
 

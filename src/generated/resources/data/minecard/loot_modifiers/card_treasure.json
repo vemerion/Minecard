@@ -58,6 +58,14 @@
     {
       "data": "minecard:book",
       "weight": 1
+    },
+    {
+      "data": "minecard:splash_potion_of_harming",
+      "weight": 1
+    },
+    {
+      "data": "minecard:enchanted_golden_apple",
+      "weight": 1
     }
   ],
   "type": "minecard:card_treasure"

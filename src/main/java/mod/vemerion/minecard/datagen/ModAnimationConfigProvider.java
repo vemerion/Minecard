@@ -149,6 +149,15 @@ public class ModAnimationConfigProvider implements DataProvider {
 				Optional.of(SoundEvents.ARMOR_EQUIP_IRON), Optional.empty()));
 		animations.put("throw_ender_pearl", new ThrowItemAnimationConfig(Items.ENDER_PEARL,
 				Optional.of(SoundEvents.ENDER_PEARL_THROW), Optional.empty(), Optional.empty()));
+		animations.put("throw_splash_potion_of_harming",
+				new ThrowItemAnimationConfig(
+						PotionUtils.setPotion(Items.SPLASH_POTION.getDefaultInstance(), Potions.HARMING),
+						Optional.of(SoundEvents.SPLASH_POTION_THROW), Optional.of(SoundEvents.SPLASH_POTION_BREAK),
+						Optional.of(new ResourceLocation(Main.MODID, "splash_potion_of_harming"))));
+		animations.put("splash_potion_of_harming",
+				new PotionAnimationConfig(new ParticlesAnimation.Color(0.26f, 0.04f, 0.04f)));
+		animations.put("throw_enchanted_golden_apple", new ThrowItemAnimationConfig(Items.ENCHANTED_GOLDEN_APPLE,
+				Optional.empty(), Optional.of(SoundEvents.PLAYER_BURP), Optional.empty()));
 
 	}
 

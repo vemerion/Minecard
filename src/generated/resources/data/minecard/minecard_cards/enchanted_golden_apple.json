@@ -1,0 +1,72 @@
+{
+  "additional_data": {
+    "item": {
+      "id": "minecraft:enchanted_golden_apple",
+      "Count": 1
+    }
+  },
+  "abilities": {
+    "type": "minecard:modify",
+    "value": {
+      "triggers": [
+        "summon"
+      ],
+      "animation": "minecard:throw_enchanted_golden_apple",
+      "selection": {
+        "groups": [
+          "enemy_board",
+          "your_board"
+        ],
+        "method": "choice"
+      },
+      "modifications": [
+        [
+          {
+            "output": {
+              "type": "minecard:max_health"
+            },
+            "operator": {
+              "type": "minecard:add",
+              "value": {
+                "left": {
+                  "type": "minecard:variable",
+                  "value": {
+                    "type": "minecard:max_health"
+                  }
+                },
+                "right": {
+                  "type": "minecard:constant",
+                  "value": 6
+                }
+              }
+            }
+          },
+          {
+            "output": {
+              "type": "minecard:property",
+              "value": "minecard:burn"
+            },
+            "operator": {
+              "type": "minecard:constant",
+              "value": 0
+            }
+          },
+          {
+            "output": {
+              "type": "minecard:property",
+              "value": "minecard:shield"
+            },
+            "operator": {
+              "type": "minecard:constant",
+              "value": 1
+            }
+          }
+        ]
+      ]
+    }
+  },
+  "entity": "minecraft:item",
+  "cost": 4,
+  "health": 0,
+  "damage": 0
+}

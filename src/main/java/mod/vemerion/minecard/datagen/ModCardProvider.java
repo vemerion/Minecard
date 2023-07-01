@@ -83,6 +83,9 @@ public class ModCardProvider implements DataProvider {
 		}
 	}
 
+	// Give player card:
+	// /give <player> minecard:card{minecard_carddata:{type:'<resource location>'}}
+
 	private void addCards() {
 		// Entity card
 		add(new Builder(EntityType.PLAYER, 0, 30, 0)
@@ -448,6 +451,30 @@ public class ModCardProvider implements DataProvider {
 		add(new Builder(EntityType.ITEM, 3, 0, 0).setKey(mod("book"))
 				.setAdditionalData(new AdditionalCardData.ItemData(Items.BOOK))
 				.setCardAbility(new DrawCardsAbility(EnumSet.of(CardAbilityTrigger.SUMMON), 2)));
+		add(new Builder(EntityType.ITEM, 3, 0, 0).setKey(mod("splash_potion_of_harming"))
+				.setAdditionalData(new AdditionalCardData.ItemData(
+						PotionUtils.setPotion(Items.SPLASH_POTION.getDefaultInstance(), Potions.HARMING)))
+				.setCardAbility(new MultiAbility(List.of(new ModifyAbility(EnumSet.of(CardAbilityTrigger.SUMMON),
+						Optional.of(mod("throw_splash_potion_of_harming")),
+						new CardAbilitySelection(new CardAbilityGroups(EnumSet.of(CardAbilityGroup.ENEMY_BOARD)),
+								CardSelectionMethod.RANDOM, CardCondition.NoCondition.NO_CONDITION),
+						List.of(new ModificationBuilder().heal(-3).build())),
+						new ModifyAbility(EnumSet.of(CardAbilityTrigger.SUMMON),
+								Optional.of(mod("throw_splash_potion_of_harming")),
+								new CardAbilitySelection(
+										new CardAbilityGroups(EnumSet.of(CardAbilityGroup.ENEMY_BOARD)),
+										CardSelectionMethod.RANDOM, CardCondition.NoCondition.NO_CONDITION),
+								List.of(new ModificationBuilder().heal(-3).build()))))));
+		add(new Builder(EntityType.ITEM, 4, 0, 0).setKey(mod("enchanted_golden_apple"))
+				.setAdditionalData(new AdditionalCardData.ItemData(Items.ENCHANTED_GOLDEN_APPLE))
+				.setCardAbility(new ModifyAbility(EnumSet.of(CardAbilityTrigger.SUMMON),
+						Optional.of(mod("throw_enchanted_golden_apple")),
+						new CardAbilitySelection(
+								new CardAbilityGroups(
+										EnumSet.of(CardAbilityGroup.ENEMY_BOARD, CardAbilityGroup.YOUR_BOARD)),
+								CardSelectionMethod.CHOICE, CardCondition.NoCondition.NO_CONDITION),
+						List.of(new ModificationBuilder().addMaxHealth(6).setProperty(CardProperty.BURN, 0)
+								.setProperty(CardProperty.SHIELD, 1).build()))));
 
 		// Auxiliary cards
 		add(new Builder(EntityType.ITEM, 0, 5, 0).setKey(mod("end_crystal"))

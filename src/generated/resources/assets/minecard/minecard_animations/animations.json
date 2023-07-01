@@ -95,6 +95,19 @@
     "end_animation": "minecard:healing_potion",
     "type": "minecard:throw_item"
   },
+  "throw_splash_potion_of_harming": {
+    "item": {
+      "id": "minecraft:splash_potion",
+      "Count": 1,
+      "tag": {
+        "Potion": "minecraft:harming"
+      }
+    },
+    "start_sound": "minecraft:entity.splash_potion.throw",
+    "impact_sound": "minecraft:entity.splash_potion.break",
+    "end_animation": "minecard:splash_potion_of_harming",
+    "type": "minecard:throw_item"
+  },
   "evoker_fangs": {
     "sound_delay": 10,
     "start_sound": "minecraft:entity.evoker_fangs.attack",
@@ -214,6 +227,14 @@
     },
     "impact_sound": "minecraft:entity.player.burp",
     "type": "minecard:throw_item"
+  },
+  "splash_potion_of_harming": {
+    "color": {
+      "red": 0.26,
+      "green": 0.04,
+      "blue": 0.04
+    },
+    "type": "minecard:potion"
   },
   "wither_projectile": {
     "item": {
@@ -345,6 +366,14 @@
     "start_sound": "minecraft:entity.snowball.throw",
     "impact_sound": "minecraft:entity.generic.hurt",
     "end_animation": "minecard:white_splash",
+    "type": "minecard:throw_item"
+  },
+  "throw_enchanted_golden_apple": {
+    "item": {
+      "id": "minecraft:enchanted_golden_apple",
+      "Count": 1
+    },
+    "impact_sound": "minecraft:entity.player.burp",
     "type": "minecard:throw_item"
   },
   "glow": {
