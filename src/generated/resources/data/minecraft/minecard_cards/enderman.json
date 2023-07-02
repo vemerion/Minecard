@@ -1,19 +1,31 @@
 {
   "abilities": {
-    "type": "minecard:copy_cards",
+    "type": "minecard:chain",
     "value": {
-      "give_to_enemy": false,
-      "selection": {
-        "groups": [
-          "enemy_hand"
-        ],
-        "method": "random"
-      },
       "triggers": [
         "summon"
       ],
-      "destroy_original": false,
-      "restore_health": false
+      "abilities": [
+        {
+          "type": "minecard:select_cards",
+          "value": {
+            "selection": {
+              "groups": [
+                "enemy_hand"
+              ],
+              "method": "random"
+            }
+          }
+        },
+        {
+          "type": "minecard:copy_cards",
+          "value": {
+            "destroy_original": false,
+            "restore_health": false,
+            "give_to_enemy": false
+          }
+        }
+      ]
     }
   },
   "entity": "minecraft:enderman",

@@ -3,52 +3,64 @@
     "minecard:undead": 1
   },
   "abilities": {
-    "type": "minecard:modify",
+    "type": "minecard:chain",
     "value": {
       "triggers": [
         "summon"
       ],
-      "animation": "minecard:lightning_bolt",
-      "selection": {
-        "groups": [
-          "enemy_board"
-        ],
-        "method": "random"
-      },
-      "modifications": [
-        [
-          {
-            "output": {
-              "type": "minecard:health"
-            },
-            "operator": {
-              "type": "minecard:constant",
-              "value": -2
-            }
-          },
-          {
-            "output": {
-              "type": "minecard:property",
-              "value": "minecard:burn"
-            },
-            "operator": {
-              "type": "minecard:add",
-              "value": {
-                "left": {
-                  "type": "minecard:variable",
-                  "value": {
-                    "type": "minecard:property",
-                    "value": "minecard:burn"
-                  }
-                },
-                "right": {
-                  "type": "minecard:constant",
-                  "value": 2
-                }
-              }
+      "abilities": [
+        {
+          "type": "minecard:select_cards",
+          "value": {
+            "selection": {
+              "groups": [
+                "enemy_board"
+              ],
+              "method": "random"
             }
           }
-        ]
+        },
+        {
+          "type": "minecard:modify",
+          "value": {
+            "animation": "minecard:lightning_bolt",
+            "modifications": [
+              [
+                {
+                  "output": {
+                    "type": "minecard:health"
+                  },
+                  "operator": {
+                    "type": "minecard:constant",
+                    "value": -2
+                  }
+                },
+                {
+                  "output": {
+                    "type": "minecard:property",
+                    "value": "minecard:burn"
+                  },
+                  "operator": {
+                    "type": "minecard:add",
+                    "value": {
+                      "left": {
+                        "type": "minecard:variable",
+                        "value": {
+                          "type": "minecard:property",
+                          "value": "minecard:burn"
+                        }
+                      },
+                      "right": {
+                        "type": "minecard:constant",
+                        "value": 2
+                      }
+                    }
+                  }
+                }
+              ]
+            ]
+          }
+        }
       ]
     }
   },

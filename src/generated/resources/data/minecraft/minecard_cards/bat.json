@@ -1,34 +1,46 @@
 {
   "abilities": {
-    "type": "minecard:modify",
+    "type": "minecard:chain",
     "value": {
       "triggers": [
         "attack"
       ],
-      "selection": {
-        "groups": [
-          "your_board"
-        ],
-        "method": "all",
-        "condition": {
-          "type": "minecard:entity",
+      "abilities": [
+        {
+          "type": "minecard:select_cards",
           "value": {
-            "inner": "minecraft:player"
-          }
-        }
-      },
-      "modifications": [
-        [
-          {
-            "output": {
-              "type": "minecard:health"
-            },
-            "operator": {
-              "type": "minecard:constant",
-              "value": 1
+            "selection": {
+              "groups": [
+                "your_board"
+              ],
+              "method": "all",
+              "condition": {
+                "type": "minecard:entity",
+                "value": {
+                  "inner": "minecraft:player"
+                }
+              }
             }
           }
-        ]
+        },
+        {
+          "type": "minecard:modify",
+          "value": {
+            "modifications": [
+              [
+                {
+                  "output": {
+                    "type": "minecard:health"
+                  },
+                  "operator": {
+                    "type": "minecard:constant",
+                    "value": 1
+                  }
+                }
+              ]
+            ]
+          }
+        }
       ]
     }
   },

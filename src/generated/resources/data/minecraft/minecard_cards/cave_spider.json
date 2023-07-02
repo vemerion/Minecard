@@ -4,30 +4,42 @@
     "value": {
       "chance": 50,
       "ability": {
-        "type": "minecard:modify",
+        "type": "minecard:chain",
         "value": {
           "triggers": [
             "attack"
           ],
-          "selection": {
-            "groups": [
-              "target"
-            ],
-            "method": "all"
-          },
-          "modifications": [
-            [
-              {
-                "output": {
-                  "type": "minecard:property",
-                  "value": "minecard:poison"
-                },
-                "operator": {
-                  "type": "minecard:constant",
-                  "value": 1
+          "abilities": [
+            {
+              "type": "minecard:select_cards",
+              "value": {
+                "selection": {
+                  "groups": [
+                    "target"
+                  ],
+                  "method": "all"
                 }
               }
-            ]
+            },
+            {
+              "type": "minecard:modify",
+              "value": {
+                "modifications": [
+                  [
+                    {
+                      "output": {
+                        "type": "minecard:property",
+                        "value": "minecard:poison"
+                      },
+                      "operator": {
+                        "type": "minecard:constant",
+                        "value": 1
+                      }
+                    }
+                  ]
+                ]
+              }
+            }
           ]
         }
       }

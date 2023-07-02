@@ -9,32 +9,44 @@
     }
   },
   "abilities": {
-    "type": "minecard:modify",
+    "type": "minecard:chain",
     "value": {
       "triggers": [
         "summon"
       ],
-      "animation": "minecard:throw_poison_potion",
-      "selection": {
-        "groups": [
-          "enemy_board",
-          "your_board"
-        ],
-        "method": "choice"
-      },
-      "modifications": [
-        [
-          {
-            "output": {
-              "type": "minecard:property",
-              "value": "minecard:poison"
-            },
-            "operator": {
-              "type": "minecard:constant",
-              "value": 1
+      "abilities": [
+        {
+          "type": "minecard:select_cards",
+          "value": {
+            "selection": {
+              "groups": [
+                "enemy_board",
+                "your_board"
+              ],
+              "method": "choice"
             }
           }
-        ]
+        },
+        {
+          "type": "minecard:modify",
+          "value": {
+            "animation": "minecard:throw_poison_potion",
+            "modifications": [
+              [
+                {
+                  "output": {
+                    "type": "minecard:property",
+                    "value": "minecard:poison"
+                  },
+                  "operator": {
+                    "type": "minecard:constant",
+                    "value": 1
+                  }
+                }
+              ]
+            ]
+          }
+        }
       ]
     }
   },

@@ -1,5 +1,6 @@
 package mod.vemerion.minecard.game.ability;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -37,7 +38,7 @@ public abstract class CardAbility {
 	}
 
 	protected abstract void invoke(List<Receiver> receivers, PlayerState state, Card card, @Nullable Card other,
-			ItemStack icon);
+			List<Card> collected, ItemStack icon);
 
 	public Component getDescription() {
 		if (description == null) {
@@ -57,7 +58,7 @@ public abstract class CardAbility {
 	public void trigger(CardAbilityTrigger trigger, List<Receiver> receivers, PlayerState state, Card card, Card target,
 			ItemStack icon) {
 		if (triggers.contains(trigger)) {
-			invoke(receivers, state, card, target, icon);
+			invoke(receivers, state, card, target, new ArrayList<>(), icon);
 		}
 	}
 }

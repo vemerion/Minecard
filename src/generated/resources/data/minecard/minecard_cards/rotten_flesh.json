@@ -6,40 +6,52 @@
     }
   },
   "abilities": {
-    "type": "minecard:modify",
+    "type": "minecard:chain",
     "value": {
       "triggers": [
         "summon"
       ],
-      "animation": "minecard:throw_rotten_flesh",
-      "selection": {
-        "groups": [
-          "enemy_board",
-          "your_board"
-        ],
-        "method": "choice"
-      },
-      "modifications": [
-        [
-          {
-            "output": {
-              "type": "minecard:health"
-            },
-            "operator": {
-              "type": "minecard:random",
-              "value": {
-                "min": {
-                  "type": "minecard:constant",
-                  "value": -2
-                },
-                "max": {
-                  "type": "minecard:constant",
-                  "value": 2
-                }
-              }
+      "abilities": [
+        {
+          "type": "minecard:select_cards",
+          "value": {
+            "selection": {
+              "groups": [
+                "enemy_board",
+                "your_board"
+              ],
+              "method": "choice"
             }
           }
-        ]
+        },
+        {
+          "type": "minecard:modify",
+          "value": {
+            "animation": "minecard:throw_rotten_flesh",
+            "modifications": [
+              [
+                {
+                  "output": {
+                    "type": "minecard:health"
+                  },
+                  "operator": {
+                    "type": "minecard:random",
+                    "value": {
+                      "min": {
+                        "type": "minecard:constant",
+                        "value": -2
+                      },
+                      "max": {
+                        "type": "minecard:constant",
+                        "value": 2
+                      }
+                    }
+                  }
+                }
+              ]
+            ]
+          }
+        }
       ]
     }
   },

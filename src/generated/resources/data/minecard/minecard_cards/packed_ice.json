@@ -6,44 +6,56 @@
     }
   },
   "abilities": {
-    "type": "minecard:modify",
+    "type": "minecard:chain",
     "value": {
       "triggers": [
         "summon"
       ],
-      "animation": "minecard:throw_packed_ice",
-      "selection": {
-        "groups": [
-          "enemy_board",
-          "your_board"
-        ],
-        "method": "choice"
-      },
-      "modifications": [
-        [
-          {
-            "output": {
-              "type": "minecard:property",
-              "value": "minecard:freeze"
-            },
-            "operator": {
-              "type": "minecard:add",
-              "value": {
-                "left": {
-                  "type": "minecard:variable",
-                  "value": {
-                    "type": "minecard:property",
-                    "value": "minecard:freeze"
-                  }
-                },
-                "right": {
-                  "type": "minecard:constant",
-                  "value": 2
-                }
-              }
+      "abilities": [
+        {
+          "type": "minecard:select_cards",
+          "value": {
+            "selection": {
+              "groups": [
+                "enemy_board",
+                "your_board"
+              ],
+              "method": "choice"
             }
           }
-        ]
+        },
+        {
+          "type": "minecard:modify",
+          "value": {
+            "animation": "minecard:throw_packed_ice",
+            "modifications": [
+              [
+                {
+                  "output": {
+                    "type": "minecard:property",
+                    "value": "minecard:freeze"
+                  },
+                  "operator": {
+                    "type": "minecard:add",
+                    "value": {
+                      "left": {
+                        "type": "minecard:variable",
+                        "value": {
+                          "type": "minecard:property",
+                          "value": "minecard:freeze"
+                        }
+                      },
+                      "right": {
+                        "type": "minecard:constant",
+                        "value": 2
+                      }
+                    }
+                  }
+                }
+              ]
+            ]
+          }
+        }
       ]
     }
   },

@@ -1,29 +1,41 @@
 {
   "abilities": {
-    "type": "minecard:modify",
+    "type": "minecard:chain",
     "value": {
       "triggers": [
         "hurt"
       ],
-      "selection": {
-        "groups": [
-          "self"
-        ],
-        "method": "all"
-      },
-      "modifications": [
-        [
-          {
-            "output": {
-              "type": "minecard:property",
-              "value": "minecard:stealth"
-            },
-            "operator": {
-              "type": "minecard:constant",
-              "value": 1
+      "abilities": [
+        {
+          "type": "minecard:select_cards",
+          "value": {
+            "selection": {
+              "groups": [
+                "self"
+              ],
+              "method": "all"
             }
           }
-        ]
+        },
+        {
+          "type": "minecard:modify",
+          "value": {
+            "modifications": [
+              [
+                {
+                  "output": {
+                    "type": "minecard:property",
+                    "value": "minecard:stealth"
+                  },
+                  "operator": {
+                    "type": "minecard:constant",
+                    "value": 1
+                  }
+                }
+              ]
+            ]
+          }
+        }
       ]
     }
   },

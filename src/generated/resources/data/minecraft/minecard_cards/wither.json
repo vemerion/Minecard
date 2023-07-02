@@ -5,30 +5,42 @@
     "minecard:undead": 1
   },
   "abilities": {
-    "type": "minecard:modify",
+    "type": "minecard:chain",
     "value": {
       "triggers": [
         "tick"
       ],
-      "animation": "minecard:wither_projectile",
-      "selection": {
-        "groups": [
-          "enemy_board"
-        ],
-        "method": "random"
-      },
-      "modifications": [
-        [
-          {
-            "output": {
-              "type": "minecard:health"
-            },
-            "operator": {
-              "type": "minecard:constant",
-              "value": -4
+      "abilities": [
+        {
+          "type": "minecard:select_cards",
+          "value": {
+            "selection": {
+              "groups": [
+                "enemy_board"
+              ],
+              "method": "random"
             }
           }
-        ]
+        },
+        {
+          "type": "minecard:modify",
+          "value": {
+            "animation": "minecard:wither_projectile",
+            "modifications": [
+              [
+                {
+                  "output": {
+                    "type": "minecard:health"
+                  },
+                  "operator": {
+                    "type": "minecard:constant",
+                    "value": -4
+                  }
+                }
+              ]
+            ]
+          }
+        }
       ]
     }
   },

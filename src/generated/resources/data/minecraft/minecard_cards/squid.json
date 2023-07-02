@@ -1,19 +1,31 @@
 {
   "abilities": {
-    "type": "minecard:copy_cards",
+    "type": "minecard:chain",
     "value": {
-      "give_to_enemy": false,
-      "selection": {
-        "groups": [
-          "self"
-        ],
-        "method": "all"
-      },
       "triggers": [
         "hurt"
       ],
-      "destroy_original": true,
-      "restore_health": true
+      "abilities": [
+        {
+          "type": "minecard:select_cards",
+          "value": {
+            "selection": {
+              "groups": [
+                "self"
+              ],
+              "method": "all"
+            }
+          }
+        },
+        {
+          "type": "minecard:copy_cards",
+          "value": {
+            "destroy_original": true,
+            "restore_health": true,
+            "give_to_enemy": false
+          }
+        }
+      ]
     }
   },
   "entity": "minecraft:squid",

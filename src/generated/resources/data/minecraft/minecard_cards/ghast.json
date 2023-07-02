@@ -1,48 +1,60 @@
 {
   "abilities": {
-    "type": "minecard:modify",
+    "type": "minecard:chain",
     "value": {
       "triggers": [
         "summon"
       ],
-      "animation": "minecard:fireball",
-      "selection": {
-        "groups": [
-          "enemy_board"
-        ],
-        "method": "all",
-        "condition": {
-          "type": "minecard:entity",
+      "abilities": [
+        {
+          "type": "minecard:select_cards",
           "value": {
-            "inner": "minecraft:player"
-          }
-        }
-      },
-      "modifications": [
-        [
-          {
-            "output": {
-              "type": "minecard:property",
-              "value": "minecard:burn"
-            },
-            "operator": {
-              "type": "minecard:add",
-              "value": {
-                "left": {
-                  "type": "minecard:variable",
-                  "value": {
-                    "type": "minecard:property",
-                    "value": "minecard:burn"
-                  }
-                },
-                "right": {
-                  "type": "minecard:constant",
-                  "value": 4
+            "selection": {
+              "groups": [
+                "enemy_board"
+              ],
+              "method": "all",
+              "condition": {
+                "type": "minecard:entity",
+                "value": {
+                  "inner": "minecraft:player"
                 }
               }
             }
           }
-        ]
+        },
+        {
+          "type": "minecard:modify",
+          "value": {
+            "animation": "minecard:fireball",
+            "modifications": [
+              [
+                {
+                  "output": {
+                    "type": "minecard:property",
+                    "value": "minecard:burn"
+                  },
+                  "operator": {
+                    "type": "minecard:add",
+                    "value": {
+                      "left": {
+                        "type": "minecard:variable",
+                        "value": {
+                          "type": "minecard:property",
+                          "value": "minecard:burn"
+                        }
+                      },
+                      "right": {
+                        "type": "minecard:constant",
+                        "value": 4
+                      }
+                    }
+                  }
+                }
+              ]
+            ]
+          }
+        }
       ]
     }
   },

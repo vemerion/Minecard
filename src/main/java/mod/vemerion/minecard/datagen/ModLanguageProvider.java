@@ -101,9 +101,9 @@ public class ModLanguageProvider extends LanguageProvider {
 		add(CardAbilityGroup.TARGET_ADJACENT.getTextKey(), "adjacent to the target");
 
 		// Card selection methods
-		add(CardSelectionMethod.ALL.getTextKey(), "all cards from ");
-		add(CardSelectionMethod.RANDOM.getTextKey(), "a random card from ");
-		add(CardSelectionMethod.CHOICE.getTextKey(), "a selected card from ");
+		add(CardSelectionMethod.ALL.getTextKey(), "for all cards from ");
+		add(CardSelectionMethod.RANDOM.getTextKey(), "for a random card from ");
+		add(CardSelectionMethod.CHOICE.getTextKey(), "for a selected card from ");
 
 		// Card conditions
 		add(ModCardConditions.NO_CONDITION.get().getTranslationKey(), "");
@@ -144,30 +144,32 @@ public class ModLanguageProvider extends LanguageProvider {
 
 		// Card abilities
 		add(ModCardAbilities.NO_CARD_ABILITY.get().getTranslationKey(), "");
-		add(ModCardAbilities.DRAW_CARDS.get().getTranslationKey(), "%s: draw %s card(s).");
-		add(ModCardAbilities.MODIFY.get().getTranslationKey(), "%s: apply%s%s to %s.");
+		add(ModCardAbilities.DRAW_CARDS.get().getTranslationKey(), "%sdraw %s card(s).");
+		add(ModCardAbilities.MODIFY.get().getTranslationKey(), "apply%s%s.");
 		add(ModCardAbilities.MODIFY.get().getTranslationKey() + ".one_of", " one of");
 		add(ModCardAbilities.MODIFY.get().getTranslationKey() + ".element", " [%s]");
-		add(ModCardAbilities.ADD_CARDS.get().getTranslationKey(), "%s: Receive %s.");
+		add(ModCardAbilities.ADD_CARDS.get().getTranslationKey(), "%sReceive %s.");
 		add(ModCardAbilities.ADD_CARDS.get().getTranslationKey() + ".one_of", "one of");
 		add(ModCardAbilities.ADD_CARDS.get().getTranslationKey() + ".element", " [%s]");
 
 		add(ModCardAbilities.RESOURCE.get().getTranslationKey(),
-				"%s: Gain %s temporary resources, and %s permanent resources.");
-		add(ModCardAbilities.COPY_CARDS.get().getTranslationKey(), "%s: copy %s and give it to %s.%s%s");
+				"%sGain %s temporary resources, and %s permanent resources.");
+		add(ModCardAbilities.COPY_CARDS.get().getTranslationKey(), "copy and give it to %s.%s%s");
 		add(ModCardAbilities.COPY_CARDS.get().getTranslationKey() + ".destroy_original", " Destroy the original card.");
 		add(ModCardAbilities.COPY_CARDS.get().getTranslationKey() + ".restore_health",
 				" Restore the copy to full health.");
 		add(ModCardAbilities.COPY_CARDS.get().getTranslationKey() + ".you", "you");
 		add(ModCardAbilities.COPY_CARDS.get().getTranslationKey() + ".enemy", "the enemy");
-		add(ModCardAbilities.SUMMON_CARD.get().getTranslationKey(), "%s: summon a %s %s.");
+		add(ModCardAbilities.SUMMON_CARD.get().getTranslationKey(), "%ssummon a %s %s.");
 		add(ModCardAbilities.SUMMON_CARD.get().getTranslationKey() + "card_text", "%s (%s/%s)");
 		add(ModCardAbilities.MULTI.get().getTranslationKey(), "%s");
 		add(ModCardAbilities.CHANCE.get().getTranslationKey(), "%s%% %s: %s");
 		add(ModCardAbilities.CHANCE.get().getTranslationKey() + ".chance", "chance");
 		add(ModCardAbilities.CHOICE.get().getTranslationKey(), "%s:\n%s");
 		add(ModCardAbilities.CHOICE.get().getTranslationKey() + ".choice_of", "Choice of");
-		add(ModCardAbilities.GAME_OVER.get().getTranslationKey(), "%s: lose the game");
+		add(ModCardAbilities.GAME_OVER.get().getTranslationKey(), "%slose the game");
+		add(ModCardAbilities.SELECT_CARDS.get().getTranslationKey(), "%s");
+		add(ModCardAbilities.CHAIN.get().getTranslationKey(), "%s");
 		add(Helper.gui("card_ability_selection"), "%s%s%s%s");
 		add(Helper.gui("where"), " where ");
 		add(Helper.gui("if"), " if ");

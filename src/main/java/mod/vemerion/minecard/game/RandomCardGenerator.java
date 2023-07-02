@@ -25,6 +25,7 @@ import mod.vemerion.minecard.game.ability.CardOperator;
 import mod.vemerion.minecard.game.ability.CardPlacement;
 import mod.vemerion.minecard.game.ability.CardSelectionMethod;
 import mod.vemerion.minecard.game.ability.CardVariable;
+import mod.vemerion.minecard.game.ability.ChainAbility;
 import mod.vemerion.minecard.game.ability.ChoiceCardAbility;
 import mod.vemerion.minecard.game.ability.CopyCardsAbility;
 import mod.vemerion.minecard.game.ability.DrawCardsAbility;
@@ -32,6 +33,7 @@ import mod.vemerion.minecard.game.ability.ModifyAbility;
 import mod.vemerion.minecard.game.ability.MultiAbility;
 import mod.vemerion.minecard.game.ability.NoCardAbility;
 import mod.vemerion.minecard.game.ability.ResourceAbility;
+import mod.vemerion.minecard.game.ability.SelectCardsAbility;
 import mod.vemerion.minecard.game.ability.SummonCardAbility;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -146,13 +148,15 @@ public class RandomCardGenerator {
 			abilities.add(new SummonCardAbility(randTriggers(),
 					CardPlacement.values()[rand.nextInt(CardPlacement.values().length)],
 					new LazyCardType(next(depth + 1))));
-			abilities.add(new CopyCardsAbility(randTriggers(), rand.nextBoolean(), rand.nextBoolean(),
-					rand.nextBoolean(), Optional.empty(), new CardAbilitySelection(randGroups(),
-							randEnum(CardSelectionMethod.class), CardCondition.NoCondition.NO_CONDITION)));
-			abilities.add(new ModifyAbility(
-					randTriggers(), Optional.empty(), new CardAbilitySelection(randGroups(),
-							randEnum(CardSelectionMethod.class), CardCondition.NoCondition.NO_CONDITION),
-					List.of(randModifications())));
+			abilities.add(new ChainAbility(randTriggers(),
+					List.of(new SelectCardsAbility(new CardAbilitySelection(randGroups(),
+							randEnum(CardSelectionMethod.class), CardCondition.NoCondition.NO_CONDITION)),
+							new CopyCardsAbility(rand.nextBoolean(), rand.nextBoolean(), rand.nextBoolean(),
+									Optional.empty()))));
+			abilities.add(new ChainAbility(randTriggers(),
+					List.of(new SelectCardsAbility(new CardAbilitySelection(randGroups(),
+							randEnum(CardSelectionMethod.class), CardCondition.NoCondition.NO_CONDITION)),
+							new ModifyAbility(Optional.empty(), List.of(randModifications())))));
 			abilities.add(
 					new MultiAbility(IntStream.range(0, rand.nextInt(1, 5)).mapToObj(i -> next(depth + 1).getAbility())
 							.collect(Collectors.toCollection(() -> new ArrayList<>()))));

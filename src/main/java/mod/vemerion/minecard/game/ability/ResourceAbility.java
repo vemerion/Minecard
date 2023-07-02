@@ -46,7 +46,7 @@ public class ResourceAbility extends CardAbility {
 
 	@Override
 	protected void invoke(List<Receiver> receivers, PlayerState state, Card card, @Nullable Card other,
-			ItemStack icon) {
+			List<Card> collected, ItemStack icon) {
 		state.addResources(receivers, temporaryResources, permanentResources);
 		state.getGame().addHistory(receivers, new HistoryEntry(icon, state.getId(), card, List.of()));
 	}

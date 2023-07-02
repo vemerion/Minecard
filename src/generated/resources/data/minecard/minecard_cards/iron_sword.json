@@ -9,42 +9,54 @@
     }
   },
   "abilities": {
-    "type": "minecard:modify",
+    "type": "minecard:chain",
     "value": {
       "triggers": [
         "summon"
       ],
-      "animation": "minecard:throw_iron_sword",
-      "selection": {
-        "groups": [
-          "enemy_board",
-          "your_board"
-        ],
-        "method": "choice"
-      },
-      "modifications": [
-        [
-          {
-            "output": {
-              "type": "minecard:damage"
-            },
-            "operator": {
-              "type": "minecard:add",
-              "value": {
-                "left": {
-                  "type": "minecard:variable",
-                  "value": {
-                    "type": "minecard:damage"
-                  }
-                },
-                "right": {
-                  "type": "minecard:constant",
-                  "value": 2
-                }
-              }
+      "abilities": [
+        {
+          "type": "minecard:select_cards",
+          "value": {
+            "selection": {
+              "groups": [
+                "enemy_board",
+                "your_board"
+              ],
+              "method": "choice"
             }
           }
-        ]
+        },
+        {
+          "type": "minecard:modify",
+          "value": {
+            "animation": "minecard:throw_iron_sword",
+            "modifications": [
+              [
+                {
+                  "output": {
+                    "type": "minecard:damage"
+                  },
+                  "operator": {
+                    "type": "minecard:add",
+                    "value": {
+                      "left": {
+                        "type": "minecard:variable",
+                        "value": {
+                          "type": "minecard:damage"
+                        }
+                      },
+                      "right": {
+                        "type": "minecard:constant",
+                        "value": 2
+                      }
+                    }
+                  }
+                }
+              ]
+            ]
+          }
+        }
       ]
     }
   },

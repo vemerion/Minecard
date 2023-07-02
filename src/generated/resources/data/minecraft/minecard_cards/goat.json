@@ -1,31 +1,43 @@
 {
   "abilities": {
-    "type": "minecard:copy_cards",
+    "type": "minecard:chain",
     "value": {
-      "give_to_enemy": true,
-      "animation": "minecard:goat_charge",
-      "selection": {
-        "groups": [
-          "enemy_board"
-        ],
-        "method": "random",
-        "condition": {
-          "type": "minecard:not",
-          "value": {
-            "inner": {
-              "type": "minecard:entity",
-              "value": {
-                "inner": "minecraft:player"
-              }
-            }
-          }
-        }
-      },
       "triggers": [
         "summon"
       ],
-      "destroy_original": true,
-      "restore_health": false
+      "abilities": [
+        {
+          "type": "minecard:select_cards",
+          "value": {
+            "selection": {
+              "groups": [
+                "enemy_board"
+              ],
+              "method": "random",
+              "condition": {
+                "type": "minecard:not",
+                "value": {
+                  "inner": {
+                    "type": "minecard:entity",
+                    "value": {
+                      "inner": "minecraft:player"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "minecard:copy_cards",
+          "value": {
+            "destroy_original": true,
+            "restore_health": false,
+            "give_to_enemy": true,
+            "animation": "minecard:goat_charge"
+          }
+        }
+      ]
     }
   },
   "entity": "minecraft:goat",

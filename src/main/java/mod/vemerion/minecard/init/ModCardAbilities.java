@@ -6,6 +6,7 @@ import mod.vemerion.minecard.Main;
 import mod.vemerion.minecard.game.ability.AddCardsAbility;
 import mod.vemerion.minecard.game.ability.CardAbility;
 import mod.vemerion.minecard.game.ability.CardAbilityType;
+import mod.vemerion.minecard.game.ability.ChainAbility;
 import mod.vemerion.minecard.game.ability.ChanceAbility;
 import mod.vemerion.minecard.game.ability.ChoiceCardAbility;
 import mod.vemerion.minecard.game.ability.CopyCardsAbility;
@@ -15,6 +16,7 @@ import mod.vemerion.minecard.game.ability.ModifyAbility;
 import mod.vemerion.minecard.game.ability.MultiAbility;
 import mod.vemerion.minecard.game.ability.NoCardAbility;
 import mod.vemerion.minecard.game.ability.ResourceAbility;
+import mod.vemerion.minecard.game.ability.SelectCardsAbility;
 import mod.vemerion.minecard.game.ability.SummonCardAbility;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.registries.DeferredRegister;
@@ -59,5 +61,9 @@ public class ModCardAbilities {
 			.register("choice", () -> new CardAbilityType<ChoiceCardAbility>(ChoiceCardAbility.CODEC));
 	public static final RegistryObject<CardAbilityType<? extends CardAbility>> GAME_OVER = CARD_ABILITIES
 			.register("game_over", () -> new CardAbilityType<GameOverAbility>(GameOverAbility.CODEC));
+	public static final RegistryObject<CardAbilityType<? extends CardAbility>> SELECT_CARDS = CARD_ABILITIES
+			.register("select_cards", () -> new CardAbilityType<SelectCardsAbility>(SelectCardsAbility.CODEC));
+	public static final RegistryObject<CardAbilityType<? extends CardAbility>> CHAIN = CARD_ABILITIES.register("chain",
+			() -> new CardAbilityType<ChainAbility>(ChainAbility.CODEC));
 
 }

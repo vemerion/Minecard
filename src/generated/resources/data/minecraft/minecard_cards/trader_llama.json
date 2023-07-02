@@ -4,31 +4,43 @@
     "value": {
       "abilities": [
         {
-          "type": "minecard:modify",
+          "type": "minecard:chain",
           "value": {
             "triggers": [
               "summon"
             ],
-            "animation": "minecard:llama_spit",
-            "selection": {
-              "groups": [
-                "enemy_board",
-                "your_board"
-              ],
-              "method": "choice"
-            },
-            "modifications": [
-              [
-                {
-                  "output": {
-                    "type": "minecard:health"
-                  },
-                  "operator": {
-                    "type": "minecard:constant",
-                    "value": -2
+            "abilities": [
+              {
+                "type": "minecard:select_cards",
+                "value": {
+                  "selection": {
+                    "groups": [
+                      "enemy_board",
+                      "your_board"
+                    ],
+                    "method": "choice"
                   }
                 }
-              ]
+              },
+              {
+                "type": "minecard:modify",
+                "value": {
+                  "animation": "minecard:llama_spit",
+                  "modifications": [
+                    [
+                      {
+                        "output": {
+                          "type": "minecard:health"
+                        },
+                        "operator": {
+                          "type": "minecard:constant",
+                          "value": -2
+                        }
+                      }
+                    ]
+                  ]
+                }
+              }
             ]
           }
         },

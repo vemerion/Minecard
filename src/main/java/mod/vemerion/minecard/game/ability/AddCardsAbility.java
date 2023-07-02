@@ -24,8 +24,9 @@ import net.minecraft.world.item.ItemStack;
 public class AddCardsAbility extends CardAbility {
 
 	public static final Codec<AddCardsAbility> CODEC = RecordCodecBuilder.create(instance -> instance
-			.group(GameUtil.TRIGGERS_CODEC.fieldOf("triggers").forGetter(CardAbility::getTriggers), ExtraCodecs
-					.nonEmptyList(Codec.list(LazyCardType.CODEC)).fieldOf("cards").forGetter(AddCardsAbility::getCards))
+			.group(GameUtil.TRIGGERS_CODEC.optionalFieldOf("triggers", Set.of()).forGetter(CardAbility::getTriggers),
+					ExtraCodecs.nonEmptyList(Codec.list(LazyCardType.CODEC)).fieldOf("cards")
+							.forGetter(AddCardsAbility::getCards))
 			.apply(instance, AddCardsAbility::new));
 
 	private final List<LazyCardType> toAdd;
@@ -53,11 +54,12 @@ public class AddCardsAbility extends CardAbility {
 
 	@Override
 	protected void invoke(List<Receiver> receivers, PlayerState state, Card card, @Nullable Card other,
-			ItemStack icon) {
+			List<Card> collected, ItemStack icon) {
 		var created = toAdd.get(state.getGame().getRandom().nextInt(toAdd.size())).get(false).create();
 		List<Card> added = new ArrayList<>();
 		added.add(created);
 		state.addCards(receivers, added);
+		collected.addAll(added);
 
 		if (!added.isEmpty())
 			state.getGame().addHistory(receivers, new HistoryEntry(icon, state.getId(), card, added));

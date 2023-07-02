@@ -13,53 +13,65 @@
     "value": {
       "abilities": [
         {
-          "type": "minecard:modify",
+          "type": "minecard:chain",
           "value": {
             "triggers": [
               "summon"
             ],
-            "animation": "minecard:throw_trident",
-            "selection": {
-              "groups": [
-                "enemy_board",
-                "your_board"
-              ],
-              "method": "choice"
-            },
-            "modifications": [
-              [
-                {
-                  "output": {
-                    "type": "minecard:health"
-                  },
-                  "operator": {
-                    "type": "minecard:constant",
-                    "value": -4
-                  }
-                },
-                {
-                  "output": {
-                    "type": "minecard:property",
-                    "value": "minecard:burn"
-                  },
-                  "operator": {
-                    "type": "minecard:add",
-                    "value": {
-                      "left": {
-                        "type": "minecard:variable",
-                        "value": {
-                          "type": "minecard:property",
-                          "value": "minecard:burn"
-                        }
-                      },
-                      "right": {
-                        "type": "minecard:constant",
-                        "value": 4
-                      }
-                    }
+            "abilities": [
+              {
+                "type": "minecard:select_cards",
+                "value": {
+                  "selection": {
+                    "groups": [
+                      "enemy_board",
+                      "your_board"
+                    ],
+                    "method": "choice"
                   }
                 }
-              ]
+              },
+              {
+                "type": "minecard:modify",
+                "value": {
+                  "animation": "minecard:throw_trident",
+                  "modifications": [
+                    [
+                      {
+                        "output": {
+                          "type": "minecard:health"
+                        },
+                        "operator": {
+                          "type": "minecard:constant",
+                          "value": -4
+                        }
+                      },
+                      {
+                        "output": {
+                          "type": "minecard:property",
+                          "value": "minecard:burn"
+                        },
+                        "operator": {
+                          "type": "minecard:add",
+                          "value": {
+                            "left": {
+                              "type": "minecard:variable",
+                              "value": {
+                                "type": "minecard:property",
+                                "value": "minecard:burn"
+                              }
+                            },
+                            "right": {
+                              "type": "minecard:constant",
+                              "value": 4
+                            }
+                          }
+                        }
+                      }
+                    ]
+                  ]
+                }
+              }
             ]
           }
         },

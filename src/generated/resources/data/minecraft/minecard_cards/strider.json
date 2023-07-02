@@ -1,29 +1,41 @@
 {
   "abilities": {
-    "type": "minecard:modify",
+    "type": "minecard:chain",
     "value": {
       "triggers": [
         "summon"
       ],
-      "selection": {
-        "groups": [
-          "adjacent"
-        ],
-        "method": "all"
-      },
-      "modifications": [
-        [
-          {
-            "output": {
-              "type": "minecard:property",
-              "value": "minecard:burn"
-            },
-            "operator": {
-              "type": "minecard:constant",
-              "value": 0
+      "abilities": [
+        {
+          "type": "minecard:select_cards",
+          "value": {
+            "selection": {
+              "groups": [
+                "adjacent"
+              ],
+              "method": "all"
             }
           }
-        ]
+        },
+        {
+          "type": "minecard:modify",
+          "value": {
+            "modifications": [
+              [
+                {
+                  "output": {
+                    "type": "minecard:property",
+                    "value": "minecard:burn"
+                  },
+                  "operator": {
+                    "type": "minecard:constant",
+                    "value": 0
+                  }
+                }
+              ]
+            ]
+          }
+        }
       ]
     }
   },

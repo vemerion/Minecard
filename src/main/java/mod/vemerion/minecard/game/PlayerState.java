@@ -109,7 +109,7 @@ public class PlayerState {
 		return withId(hand, id);
 	}
 
-	public void drawCards(List<Receiver> receivers, int count) {
+	public List<Card> drawCards(List<Receiver> receivers, int count) {
 		List<Card> cards = new ArrayList<>();
 		List<Card> fakes = new ArrayList<>();
 		while (!deck.isEmpty() && count > 0 && hand.size() < GameState.MAX_HAND_SIZE) {
@@ -123,6 +123,7 @@ public class PlayerState {
 		for (var receiver : receivers) {
 			receiver.receiver(new DrawCardsMessage(id, receiver.getId().equals(id) ? cards : fakes, true));
 		}
+		return cards;
 	}
 
 	public void addCards(List<Receiver> receivers, List<Card> cards) {

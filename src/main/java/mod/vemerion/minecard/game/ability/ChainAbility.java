@@ -1,7 +1,8 @@
 package mod.vemerion.minecard.game.ability;
 
-import java.util.EnumSet;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import javax.annotation.Nullable;
 
@@ -9,6 +10,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import mod.vemerion.minecard.game.Card;
+import mod.vemerion.minecard.game.GameUtil;
 import mod.vemerion.minecard.game.PlayerState;
 import mod.vemerion.minecard.game.Receiver;
 import mod.vemerion.minecard.init.ModCardAbilities;
@@ -16,37 +18,34 @@ import net.minecraft.network.chat.TextComponent;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.item.ItemStack;
 
-public class MultiAbility extends CardAbility {
+public class ChainAbility extends CardAbility {
 
-	public static final Codec<MultiAbility> CODEC = ExtraCodecs
+	public static final Codec<ChainAbility> CODEC = ExtraCodecs
 			.lazyInitializedCodec(
-					() -> RecordCodecBuilder
-							.create(instance -> instance
-									.group(ExtraCodecs.nonEmptyList(Codec.list(CardAbility.CODEC)).fieldOf("abilities")
-											.forGetter(MultiAbility::getAbilities))
-									.apply(instance, MultiAbility::new)));
+					() -> RecordCodecBuilder.create(instance -> instance
+							.group(GameUtil.TRIGGERS_CODEC.fieldOf("triggers").forGetter(CardAbility::getTriggers),
+									ExtraCodecs.nonEmptyList(Codec.list(CardAbility.CODEC)).fieldOf("abilities")
+											.forGetter(ChainAbility::getAbilities))
+							.apply(instance, ChainAbility::new)));
 
 	private final List<CardAbility> abilities;
 
-	public MultiAbility(List<CardAbility> abilities) {
-		super(EnumSet.allOf(CardAbilityTrigger.class));
+	public ChainAbility(Set<CardAbilityTrigger> triggers, List<CardAbility> abilities) {
+		super(triggers);
 		this.abilities = abilities;
 	}
 
 	@Override
 	protected CardAbilityType<?> getType() {
-		return ModCardAbilities.MULTI.get();
+		return ModCardAbilities.CHAIN.get();
 	}
 
 	@Override
 	protected Object[] getDescriptionArgs() {
 		var text = TextComponent.EMPTY.copy();
-		int i = 0;
+		text.append(GameUtil.emphasize(GameUtil.triggersToText(triggers)));
 		for (var ability : abilities) {
-			text.append(ability.getDescription());
-			if (i < abilities.size() - 1)
-				text.append("\n");
-			i++;
+			text.append(ability.getDescription()).append(" ");
 		}
 		return new Object[] { text };
 	}
@@ -60,13 +59,16 @@ public class MultiAbility extends CardAbility {
 	@Override
 	protected void invoke(List<Receiver> receivers, PlayerState state, Card card, @Nullable Card other,
 			List<Card> collected, ItemStack icon) {
+		for (var ability : abilities)
+			ability.invoke(receivers, state, card, other, collected, icon);
 	}
 
 	@Override
 	public void trigger(CardAbilityTrigger trigger, List<Receiver> receivers, PlayerState state, Card card, Card target,
 			ItemStack icon) {
-		for (var ability : abilities)
-			ability.trigger(trigger, receivers, state, card, target, icon);
+		if (triggers.contains(trigger)) {
+			invoke(receivers, state, card, target, new ArrayList<>(), icon);
+		}
 	}
 
 	public List<CardAbility> getAbilities() {

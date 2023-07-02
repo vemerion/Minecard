@@ -30,7 +30,7 @@ public class NoCardAbility extends CardAbility {
 
 	@Override
 	protected void invoke(List<Receiver> receivers, PlayerState state, Card card, @Nullable Card other,
-			ItemStack icon) {
+			List<Card> collected, ItemStack icon) {
 
 	}
 

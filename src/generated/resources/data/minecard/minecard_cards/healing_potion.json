@@ -9,31 +9,43 @@
     }
   },
   "abilities": {
-    "type": "minecard:modify",
+    "type": "minecard:chain",
     "value": {
       "triggers": [
         "summon"
       ],
-      "animation": "minecard:throw_healing_potion",
-      "selection": {
-        "groups": [
-          "enemy_board",
-          "your_board"
-        ],
-        "method": "choice"
-      },
-      "modifications": [
-        [
-          {
-            "output": {
-              "type": "minecard:health"
-            },
-            "operator": {
-              "type": "minecard:constant",
-              "value": 5
+      "abilities": [
+        {
+          "type": "minecard:select_cards",
+          "value": {
+            "selection": {
+              "groups": [
+                "enemy_board",
+                "your_board"
+              ],
+              "method": "choice"
             }
           }
-        ]
+        },
+        {
+          "type": "minecard:modify",
+          "value": {
+            "animation": "minecard:throw_healing_potion",
+            "modifications": [
+              [
+                {
+                  "output": {
+                    "type": "minecard:health"
+                  },
+                  "operator": {
+                    "type": "minecard:constant",
+                    "value": 5
+                  }
+                }
+              ]
+            ]
+          }
+        }
       ]
     }
   },

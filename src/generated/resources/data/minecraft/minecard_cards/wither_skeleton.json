@@ -3,47 +3,59 @@
     "minecard:undead": 1
   },
   "abilities": {
-    "type": "minecard:modify",
+    "type": "minecard:chain",
     "value": {
       "triggers": [
         "summon"
       ],
-      "selection": {
-        "groups": [
-          "your_hand",
-          "your_deck"
-        ],
-        "method": "all",
-        "condition": {
-          "type": "minecard:entity",
+      "abilities": [
+        {
+          "type": "minecard:select_cards",
           "value": {
-            "inner": "minecraft:wither"
-          }
-        }
-      },
-      "modifications": [
-        [
-          {
-            "output": {
-              "type": "minecard:cost"
-            },
-            "operator": {
-              "type": "minecard:add",
-              "value": {
-                "left": {
-                  "type": "minecard:variable",
-                  "value": {
-                    "type": "minecard:cost"
-                  }
-                },
-                "right": {
-                  "type": "minecard:constant",
-                  "value": -2
+            "selection": {
+              "groups": [
+                "your_hand",
+                "your_deck"
+              ],
+              "method": "all",
+              "condition": {
+                "type": "minecard:entity",
+                "value": {
+                  "inner": "minecraft:wither"
                 }
               }
             }
           }
-        ]
+        },
+        {
+          "type": "minecard:modify",
+          "value": {
+            "modifications": [
+              [
+                {
+                  "output": {
+                    "type": "minecard:cost"
+                  },
+                  "operator": {
+                    "type": "minecard:add",
+                    "value": {
+                      "left": {
+                        "type": "minecard:variable",
+                        "value": {
+                          "type": "minecard:cost"
+                        }
+                      },
+                      "right": {
+                        "type": "minecard:constant",
+                        "value": -2
+                      }
+                    }
+                  }
+                }
+              ]
+            ]
+          }
+        }
       ]
     }
   },

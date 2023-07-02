@@ -17,68 +17,80 @@
           "minecard:baby": 1
         },
         "abilities": {
-          "type": "minecard:modify",
+          "type": "minecard:chain",
           "value": {
             "triggers": [
               "grow"
             ],
-            "animation": "minecard:throw_bamboo",
-            "selection": {
-              "groups": [
-                "enemy_board",
-                "your_board"
-              ],
-              "method": "all",
-              "condition": {
-                "type": "minecard:entity",
+            "abilities": [
+              {
+                "type": "minecard:select_cards",
                 "value": {
-                  "inner": "minecraft:panda"
+                  "selection": {
+                    "groups": [
+                      "enemy_board",
+                      "your_board"
+                    ],
+                    "method": "all",
+                    "condition": {
+                      "type": "minecard:entity",
+                      "value": {
+                        "inner": "minecraft:panda"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "type": "minecard:modify",
+                "value": {
+                  "animation": "minecard:throw_bamboo",
+                  "modifications": [
+                    [
+                      {
+                        "output": {
+                          "type": "minecard:max_health"
+                        },
+                        "operator": {
+                          "type": "minecard:add",
+                          "value": {
+                            "left": {
+                              "type": "minecard:variable",
+                              "value": {
+                                "type": "minecard:max_health"
+                              }
+                            },
+                            "right": {
+                              "type": "minecard:constant",
+                              "value": 2
+                            }
+                          }
+                        }
+                      },
+                      {
+                        "output": {
+                          "type": "minecard:damage"
+                        },
+                        "operator": {
+                          "type": "minecard:add",
+                          "value": {
+                            "left": {
+                              "type": "minecard:variable",
+                              "value": {
+                                "type": "minecard:damage"
+                              }
+                            },
+                            "right": {
+                              "type": "minecard:constant",
+                              "value": 2
+                            }
+                          }
+                        }
+                      }
+                    ]
+                  ]
                 }
               }
-            },
-            "modifications": [
-              [
-                {
-                  "output": {
-                    "type": "minecard:max_health"
-                  },
-                  "operator": {
-                    "type": "minecard:add",
-                    "value": {
-                      "left": {
-                        "type": "minecard:variable",
-                        "value": {
-                          "type": "minecard:max_health"
-                        }
-                      },
-                      "right": {
-                        "type": "minecard:constant",
-                        "value": 2
-                      }
-                    }
-                  }
-                },
-                {
-                  "output": {
-                    "type": "minecard:damage"
-                  },
-                  "operator": {
-                    "type": "minecard:add",
-                    "value": {
-                      "left": {
-                        "type": "minecard:variable",
-                        "value": {
-                          "type": "minecard:damage"
-                        }
-                      },
-                      "right": {
-                        "type": "minecard:constant",
-                        "value": 2
-                      }
-                    }
-                  }
-                }
-              ]
             ]
           }
         },

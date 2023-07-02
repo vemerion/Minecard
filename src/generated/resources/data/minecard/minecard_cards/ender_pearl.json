@@ -6,32 +6,44 @@
     }
   },
   "abilities": {
-    "type": "minecard:copy_cards",
+    "type": "minecard:chain",
     "value": {
-      "give_to_enemy": false,
-      "animation": "minecard:throw_ender_pearl",
-      "selection": {
-        "groups": [
-          "your_board"
-        ],
-        "method": "choice",
-        "condition": {
-          "type": "minecard:not",
-          "value": {
-            "inner": {
-              "type": "minecard:entity",
-              "value": {
-                "inner": "minecraft:player"
-              }
-            }
-          }
-        }
-      },
       "triggers": [
         "summon"
       ],
-      "destroy_original": true,
-      "restore_health": true
+      "abilities": [
+        {
+          "type": "minecard:select_cards",
+          "value": {
+            "selection": {
+              "groups": [
+                "your_board"
+              ],
+              "method": "choice",
+              "condition": {
+                "type": "minecard:not",
+                "value": {
+                  "inner": {
+                    "type": "minecard:entity",
+                    "value": {
+                      "inner": "minecraft:player"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "minecard:copy_cards",
+          "value": {
+            "destroy_original": true,
+            "restore_health": true,
+            "give_to_enemy": false,
+            "animation": "minecard:throw_ender_pearl"
+          }
+        }
+      ]
     }
   },
   "entity": "minecraft:item",

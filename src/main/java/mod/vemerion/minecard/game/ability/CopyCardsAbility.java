@@ -14,7 +14,6 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import mod.vemerion.minecard.game.Card;
 import mod.vemerion.minecard.game.CardVisibility;
-import mod.vemerion.minecard.game.GameUtil;
 import mod.vemerion.minecard.game.HistoryEntry;
 import mod.vemerion.minecard.game.PlayerState;
 import mod.vemerion.minecard.game.Receiver;
@@ -30,29 +29,25 @@ public class CopyCardsAbility extends CardAbility {
 
 	public static final Codec<CopyCardsAbility> CODEC = ExtraCodecs
 			.lazyInitializedCodec(() -> RecordCodecBuilder.create(instance -> instance
-					.group(GameUtil.TRIGGERS_CODEC.fieldOf("triggers").forGetter(CardAbility::getTriggers),
-							Codec.BOOL.fieldOf("destroy_original").forGetter(CopyCardsAbility::destroyOriginal),
+					.group(Codec.BOOL.fieldOf("destroy_original").forGetter(CopyCardsAbility::destroyOriginal),
 							Codec.BOOL.fieldOf("restore_health").forGetter(CopyCardsAbility::restoreHealth),
 							Codec.BOOL.fieldOf("give_to_enemy").forGetter(CopyCardsAbility::giveToEnemy),
 							ResourceLocation.CODEC.optionalFieldOf("animation")
-									.forGetter(CopyCardsAbility::getAnimation),
-							CardAbilitySelection.CODEC.fieldOf("selection").forGetter(CopyCardsAbility::getSelection))
+									.forGetter(CopyCardsAbility::getAnimation))
 					.apply(instance, CopyCardsAbility::new)));
 
 	private final boolean destroyOriginal;
 	private final boolean restoreHealth;
 	private final boolean giveToEnemy;
 	private final Optional<ResourceLocation> animation;
-	private final CardAbilitySelection selection;
 
-	public CopyCardsAbility(Set<CardAbilityTrigger> triggers, boolean destroyOriginal, boolean restoreHealth,
-			boolean giveToEnemy, Optional<ResourceLocation> animation, CardAbilitySelection selection) {
-		super(triggers);
+	public CopyCardsAbility(boolean destroyOriginal, boolean restoreHealth, boolean giveToEnemy,
+			Optional<ResourceLocation> animation) {
+		super(Set.of());
 		this.destroyOriginal = destroyOriginal;
 		this.restoreHealth = restoreHealth;
 		this.giveToEnemy = giveToEnemy;
 		this.animation = animation;
-		this.selection = selection;
 	}
 
 	@Override
@@ -62,7 +57,7 @@ public class CopyCardsAbility extends CardAbility {
 
 	@Override
 	protected Object[] getDescriptionArgs() {
-		return new Object[] { GameUtil.emphasize(GameUtil.triggersToText(getTriggers())), selection.getText(),
+		return new Object[] {
 				new TranslatableComponent(
 						ModCardAbilities.COPY_CARDS.get().getTranslationKey() + (giveToEnemy ? ".enemy" : ".you")),
 				destroyOriginal
@@ -76,16 +71,9 @@ public class CopyCardsAbility extends CardAbility {
 	}
 
 	@Override
-	public void createChoices(List<Receiver> receivers, PlayerState state, Card card) {
-		selection.createChoice(receivers, this, state, card);
-	}
-
-	@Override
 	protected void invoke(List<Receiver> receivers, PlayerState state, Card card, @Nullable Card other,
-			ItemStack icon) {
-		var selected = selection.select(state.getGame(), this, state.getId(), card, other);
-
-		var copies = selected.stream()
+			List<Card> collected, ItemStack icon) {
+		var copies = collected.stream()
 				.map(c -> new Card(c.getType(), c.getCost(), c.getOriginalCost(), c.getHealth(), c.getMaxHealth(),
 						c.getOriginalHealth(), c.getDamage(), c.getOriginalDamage(), new HashMap<>(c.getProperties()),
 						c.getAbility(), c.getAdditionalData()))
@@ -101,7 +89,7 @@ public class CopyCardsAbility extends CardAbility {
 
 		animation.ifPresent(anim -> {
 			for (var receiver : receivers) {
-				receiver.receiver(new AnimationMessage(card.getId(), selected.stream().filter(c -> {
+				receiver.receiver(new AnimationMessage(card.getId(), collected.stream().filter(c -> {
 					return state.getGame().calcVisibility(receiver.getId(), c) == CardVisibility.VISIBLE
 							|| state.getGame().calcVisibility(state.getId(), c) == CardVisibility.ENEMY_HAND;
 				}).map(c -> c.getId()).collect(Collectors.toList()), anim));
@@ -109,15 +97,11 @@ public class CopyCardsAbility extends CardAbility {
 		});
 
 		state.getGame().addHistory(receivers, new HistoryEntry(icon, state.getId(), card,
-				selected.stream().filter(c -> state.getGame().isInBoard(c)).toList()));
+				collected.stream().filter(c -> state.getGame().isInBoard(c)).toList()));
 
 		if (destroyOriginal)
-			for (var c : selected)
+			for (var c : collected)
 				state.getGame().removeCard(receivers, c);
-	}
-
-	public CardAbilitySelection getSelection() {
-		return selection;
 	}
 
 	public boolean destroyOriginal() {

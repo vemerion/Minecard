@@ -13,58 +13,82 @@
     "value": {
       "abilities": [
         {
-          "type": "minecard:modify",
+          "type": "minecard:chain",
           "value": {
             "triggers": [
               "summon"
             ],
-            "animation": "minecard:throw_splash_potion_of_harming",
-            "selection": {
-              "groups": [
-                "enemy_board"
-              ],
-              "method": "random"
-            },
-            "modifications": [
-              [
-                {
-                  "output": {
-                    "type": "minecard:health"
-                  },
-                  "operator": {
-                    "type": "minecard:constant",
-                    "value": -3
+            "abilities": [
+              {
+                "type": "minecard:select_cards",
+                "value": {
+                  "selection": {
+                    "groups": [
+                      "enemy_board"
+                    ],
+                    "method": "random"
                   }
                 }
-              ]
+              },
+              {
+                "type": "minecard:modify",
+                "value": {
+                  "animation": "minecard:throw_splash_potion_of_harming",
+                  "modifications": [
+                    [
+                      {
+                        "output": {
+                          "type": "minecard:health"
+                        },
+                        "operator": {
+                          "type": "minecard:constant",
+                          "value": -3
+                        }
+                      }
+                    ]
+                  ]
+                }
+              }
             ]
           }
         },
         {
-          "type": "minecard:modify",
+          "type": "minecard:chain",
           "value": {
             "triggers": [
               "summon"
             ],
-            "animation": "minecard:throw_splash_potion_of_harming",
-            "selection": {
-              "groups": [
-                "enemy_board"
-              ],
-              "method": "random"
-            },
-            "modifications": [
-              [
-                {
-                  "output": {
-                    "type": "minecard:health"
-                  },
-                  "operator": {
-                    "type": "minecard:constant",
-                    "value": -3
+            "abilities": [
+              {
+                "type": "minecard:select_cards",
+                "value": {
+                  "selection": {
+                    "groups": [
+                      "enemy_board"
+                    ],
+                    "method": "random"
                   }
                 }
-              ]
+              },
+              {
+                "type": "minecard:modify",
+                "value": {
+                  "animation": "minecard:throw_splash_potion_of_harming",
+                  "modifications": [
+                    [
+                      {
+                        "output": {
+                          "type": "minecard:health"
+                        },
+                        "operator": {
+                          "type": "minecard:constant",
+                          "value": -3
+                        }
+                      }
+                    ]
+                  ]
+                }
+              }
             ]
           }
         }

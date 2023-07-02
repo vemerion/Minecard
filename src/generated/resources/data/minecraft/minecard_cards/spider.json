@@ -1,40 +1,52 @@
 {
   "abilities": {
-    "type": "minecard:modify",
+    "type": "minecard:chain",
     "value": {
       "triggers": [
         "death"
       ],
-      "animation": "minecard:throw_web",
-      "selection": {
-        "groups": [
-          "enemy_hand"
-        ],
-        "method": "random"
-      },
-      "modifications": [
-        [
-          {
-            "output": {
-              "type": "minecard:cost"
-            },
-            "operator": {
-              "type": "minecard:add",
-              "value": {
-                "left": {
-                  "type": "minecard:variable",
-                  "value": {
-                    "type": "minecard:cost"
-                  }
-                },
-                "right": {
-                  "type": "minecard:constant",
-                  "value": 1
-                }
-              }
+      "abilities": [
+        {
+          "type": "minecard:select_cards",
+          "value": {
+            "selection": {
+              "groups": [
+                "enemy_hand"
+              ],
+              "method": "random"
             }
           }
-        ]
+        },
+        {
+          "type": "minecard:modify",
+          "value": {
+            "animation": "minecard:throw_web",
+            "modifications": [
+              [
+                {
+                  "output": {
+                    "type": "minecard:cost"
+                  },
+                  "operator": {
+                    "type": "minecard:add",
+                    "value": {
+                      "left": {
+                        "type": "minecard:variable",
+                        "value": {
+                          "type": "minecard:cost"
+                        }
+                      },
+                      "right": {
+                        "type": "minecard:constant",
+                        "value": 1
+                      }
+                    }
+                  }
+                }
+              ]
+            ]
+          }
+        }
       ]
     }
   },

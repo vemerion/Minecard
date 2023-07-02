@@ -23,7 +23,8 @@ public class SummonCardAbility extends CardAbility {
 
 	public static final Codec<SummonCardAbility> CODEC = ExtraCodecs
 			.lazyInitializedCodec(() -> RecordCodecBuilder.create(instance -> instance
-					.group(GameUtil.TRIGGERS_CODEC.fieldOf("triggers").forGetter(CardAbility::getTriggers),
+					.group(GameUtil.TRIGGERS_CODEC.optionalFieldOf("triggers", Set.of())
+							.forGetter(CardAbility::getTriggers),
 							CardPlacement.CODEC.fieldOf("placement").forGetter(SummonCardAbility::getPlacement),
 							LazyCardType.CODEC.fieldOf("card").forGetter(SummonCardAbility::getSummon))
 					.apply(instance, SummonCardAbility::new)));
@@ -52,7 +53,7 @@ public class SummonCardAbility extends CardAbility {
 
 	@Override
 	protected void invoke(List<Receiver> receivers, PlayerState state, Card card, @Nullable Card other,
-			ItemStack icon) {
+			List<Card> collected, ItemStack icon) {
 
 		var id = placement == CardPlacement.ENEMY ? state.getGame().getEnemyPlayerState(state.getId()).getId()
 				: state.getId();
@@ -72,6 +73,7 @@ public class SummonCardAbility extends CardAbility {
 		}
 
 		var summoned = summon.get(false).create();
+		collected.add(summoned);
 
 		state.getGame().addHistory(receivers, new HistoryEntry(icon, state.getId(), card, List.of(summoned)));
 

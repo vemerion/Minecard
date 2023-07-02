@@ -6,35 +6,47 @@
     }
   },
   "abilities": {
-    "type": "minecard:modify",
+    "type": "minecard:chain",
     "value": {
       "triggers": [
         "tick"
       ],
-      "selection": {
-        "groups": [
-          "adjacent"
-        ],
-        "method": "all",
-        "condition": {
-          "type": "minecard:entity",
+      "abilities": [
+        {
+          "type": "minecard:select_cards",
           "value": {
-            "inner": "minecraft:ender_dragon"
-          }
-        }
-      },
-      "modifications": [
-        [
-          {
-            "output": {
-              "type": "minecard:health"
-            },
-            "operator": {
-              "type": "minecard:constant",
-              "value": 4
+            "selection": {
+              "groups": [
+                "adjacent"
+              ],
+              "method": "all",
+              "condition": {
+                "type": "minecard:entity",
+                "value": {
+                  "inner": "minecraft:ender_dragon"
+                }
+              }
             }
           }
-        ]
+        },
+        {
+          "type": "minecard:modify",
+          "value": {
+            "modifications": [
+              [
+                {
+                  "output": {
+                    "type": "minecard:health"
+                  },
+                  "operator": {
+                    "type": "minecard:constant",
+                    "value": 4
+                  }
+                }
+              ]
+            ]
+          }
+        }
       ]
     }
   },

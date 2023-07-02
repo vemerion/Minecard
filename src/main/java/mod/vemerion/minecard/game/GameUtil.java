@@ -61,6 +61,9 @@ public class GameUtil {
 
 	public static Component triggersToText(Set<CardAbilityTrigger> triggers) {
 		var text = TextComponent.EMPTY.copy();
+		if (triggers.isEmpty())
+			return text;
+
 		boolean first = true;
 		for (var trigger : triggers) {
 			if (!first) {
@@ -69,6 +72,7 @@ public class GameUtil {
 			text.append(trigger.getText());
 			first = false;
 		}
+		text.append(": ");
 		return text;
 	}
 

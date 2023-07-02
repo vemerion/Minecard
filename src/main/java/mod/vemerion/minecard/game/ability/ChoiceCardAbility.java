@@ -77,9 +77,9 @@ public class ChoiceCardAbility extends CardAbility {
 
 	@Override
 	protected void invoke(List<Receiver> receivers, PlayerState state, Card card, @Nullable Card other,
-			ItemStack icon) {
+			List<Card> collected, ItemStack icon) {
 		state.getChoices().getSelected(this)
-				.ifPresent(c -> abilities.get(c.getId()).invoke(receivers, state, card, other, icon));
+				.ifPresent(c -> abilities.get(c.getId()).invoke(receivers, state, card, other, collected, icon));
 	}
 
 	public List<CardAbility> getAbilities() {

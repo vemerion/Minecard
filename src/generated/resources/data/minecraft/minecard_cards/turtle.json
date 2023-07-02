@@ -15,51 +15,63 @@
           }
         },
         "abilities": {
-          "type": "minecard:modify",
+          "type": "minecard:chain",
           "value": {
             "triggers": [
               "summon"
             ],
-            "animation": "minecard:throw_scute",
-            "selection": {
-              "groups": [
-                "your_board"
-              ],
-              "method": "choice"
-            },
-            "modifications": [
-              [
-                {
-                  "output": {
-                    "type": "minecard:max_health"
-                  },
-                  "operator": {
-                    "type": "minecard:add",
-                    "value": {
-                      "left": {
-                        "type": "minecard:variable",
-                        "value": {
-                          "type": "minecard:max_health"
-                        }
-                      },
-                      "right": {
-                        "type": "minecard:constant",
-                        "value": 5
-                      }
-                    }
-                  }
-                },
-                {
-                  "output": {
-                    "type": "minecard:property",
-                    "value": "minecard:taunt"
-                  },
-                  "operator": {
-                    "type": "minecard:constant",
-                    "value": 1
+            "abilities": [
+              {
+                "type": "minecard:select_cards",
+                "value": {
+                  "selection": {
+                    "groups": [
+                      "your_board"
+                    ],
+                    "method": "choice"
                   }
                 }
-              ]
+              },
+              {
+                "type": "minecard:modify",
+                "value": {
+                  "animation": "minecard:throw_scute",
+                  "modifications": [
+                    [
+                      {
+                        "output": {
+                          "type": "minecard:max_health"
+                        },
+                        "operator": {
+                          "type": "minecard:add",
+                          "value": {
+                            "left": {
+                              "type": "minecard:variable",
+                              "value": {
+                                "type": "minecard:max_health"
+                              }
+                            },
+                            "right": {
+                              "type": "minecard:constant",
+                              "value": 5
+                            }
+                          }
+                        }
+                      },
+                      {
+                        "output": {
+                          "type": "minecard:property",
+                          "value": "minecard:taunt"
+                        },
+                        "operator": {
+                          "type": "minecard:constant",
+                          "value": 1
+                        }
+                      }
+                    ]
+                  ]
+                }
+              }
             ]
           }
         },

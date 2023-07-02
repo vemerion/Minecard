@@ -19,7 +19,7 @@ import net.minecraft.world.item.ItemStack;
 public class DrawCardsAbility extends CardAbility {
 
 	public static final Codec<DrawCardsAbility> CODEC = RecordCodecBuilder.create(instance -> instance
-			.group(GameUtil.TRIGGERS_CODEC.fieldOf("triggers").forGetter(CardAbility::getTriggers),
+			.group(GameUtil.TRIGGERS_CODEC.optionalFieldOf("triggers", Set.of()).forGetter(CardAbility::getTriggers),
 					Codec.INT.fieldOf("count").forGetter(DrawCardsAbility::getCount))
 			.apply(instance, DrawCardsAbility::new));
 
@@ -42,8 +42,9 @@ public class DrawCardsAbility extends CardAbility {
 
 	@Override
 	protected void invoke(List<Receiver> receivers, PlayerState state, Card card, @Nullable Card other,
-			ItemStack icon) {
-		state.drawCards(receivers, count);
+			List<Card> collected, ItemStack icon) {
+		var drawn = state.drawCards(receivers, count);
+		collected.addAll(drawn);
 
 		state.getGame().addHistory(receivers, new HistoryEntry(icon, state.getId(), card, List.of()));
 	}

@@ -1,29 +1,41 @@
 {
   "abilities": {
-    "type": "minecard:modify",
+    "type": "minecard:chain",
     "value": {
       "triggers": [
         "death"
       ],
-      "animation": "minecard:origin_explosion",
-      "selection": {
-        "groups": [
-          "adjacent"
-        ],
-        "method": "all"
-      },
-      "modifications": [
-        [
-          {
-            "output": {
-              "type": "minecard:health"
-            },
-            "operator": {
-              "type": "minecard:constant",
-              "value": -3
+      "abilities": [
+        {
+          "type": "minecard:select_cards",
+          "value": {
+            "selection": {
+              "groups": [
+                "adjacent"
+              ],
+              "method": "all"
             }
           }
-        ]
+        },
+        {
+          "type": "minecard:modify",
+          "value": {
+            "animation": "minecard:origin_explosion",
+            "modifications": [
+              [
+                {
+                  "output": {
+                    "type": "minecard:health"
+                  },
+                  "operator": {
+                    "type": "minecard:constant",
+                    "value": -3
+                  }
+                }
+              ]
+            ]
+          }
+        }
       ]
     }
   },

@@ -1,25 +1,31 @@
 {
   "abilities": {
-    "type": "minecard:copy_cards",
+    "type": "minecard:chain",
     "value": {
-      "give_to_enemy": false,
-      "selection": {
-        "groups": [
-          "your_deck"
-        ],
-        "method": "random",
-        "condition": {
-          "type": "minecard:entity",
-          "value": {
-            "inner": "minecraft:silverfish"
-          }
-        }
-      },
       "triggers": [
         "hurt"
       ],
-      "destroy_original": true,
-      "restore_health": false
+      "abilities": [
+        {
+          "type": "minecard:select_cards",
+          "value": {
+            "selection": {
+              "groups": [
+                "self"
+              ],
+              "method": "all"
+            }
+          }
+        },
+        {
+          "type": "minecard:copy_cards",
+          "value": {
+            "destroy_original": true,
+            "restore_health": true,
+            "give_to_enemy": false
+          }
+        }
+      ]
     }
   },
   "entity": "minecraft:silverfish",

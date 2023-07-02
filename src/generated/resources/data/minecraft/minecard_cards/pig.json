@@ -1,35 +1,47 @@
 {
   "abilities": {
-    "type": "minecard:modify",
+    "type": "minecard:chain",
     "value": {
       "triggers": [
         "death"
       ],
-      "animation": "minecard:throw_pork",
-      "selection": {
-        "groups": [
-          "your_board"
-        ],
-        "method": "all",
-        "condition": {
-          "type": "minecard:entity",
+      "abilities": [
+        {
+          "type": "minecard:select_cards",
           "value": {
-            "inner": "minecraft:player"
-          }
-        }
-      },
-      "modifications": [
-        [
-          {
-            "output": {
-              "type": "minecard:health"
-            },
-            "operator": {
-              "type": "minecard:constant",
-              "value": 3
+            "selection": {
+              "groups": [
+                "your_board"
+              ],
+              "method": "all",
+              "condition": {
+                "type": "minecard:entity",
+                "value": {
+                  "inner": "minecraft:player"
+                }
+              }
             }
           }
-        ]
+        },
+        {
+          "type": "minecard:modify",
+          "value": {
+            "animation": "minecard:throw_pork",
+            "modifications": [
+              [
+                {
+                  "output": {
+                    "type": "minecard:health"
+                  },
+                  "operator": {
+                    "type": "minecard:constant",
+                    "value": 3
+                  }
+                }
+              ]
+            ]
+          }
+        }
       ]
     }
   },
