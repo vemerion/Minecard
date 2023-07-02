@@ -1,0 +1,55 @@
+{
+  "additional_data": {
+    "item": {
+      "id": "minecraft:chest",
+      "Count": 1
+    }
+  },
+  "abilities": {
+    "type": "minecard:chain",
+    "value": {
+      "triggers": [
+        "summon"
+      ],
+      "abilities": [
+        {
+          "count": 3,
+          "type": "minecard:draw_cards"
+        },
+        {
+          "type": "minecard:modify",
+          "value": {
+            "modifications": [
+              [
+                {
+                  "output": {
+                    "type": "minecard:cost"
+                  },
+                  "operator": {
+                    "type": "minecard:add",
+                    "value": {
+                      "left": {
+                        "type": "minecard:variable",
+                        "value": {
+                          "type": "minecard:cost"
+                        }
+                      },
+                      "right": {
+                        "type": "minecard:constant",
+                        "value": 1
+                      }
+                    }
+                  }
+                }
+              ]
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "entity": "minecraft:item",
+  "cost": 1,
+  "health": 0,
+  "damage": 0
+}

@@ -1,0 +1,75 @@
+{
+  "additional_data": {
+    "item": {
+      "id": "minecraft:enchanted_book",
+      "Count": 1
+    }
+  },
+  "abilities": {
+    "type": "minecard:chain",
+    "value": {
+      "triggers": [
+        "summon"
+      ],
+      "abilities": [
+        {
+          "count": 1,
+          "type": "minecard:draw_cards"
+        },
+        {
+          "type": "minecard:modify",
+          "value": {
+            "modifications": [
+              [
+                {
+                  "output": {
+                    "type": "minecard:damage"
+                  },
+                  "operator": {
+                    "type": "minecard:add",
+                    "value": {
+                      "left": {
+                        "type": "minecard:variable",
+                        "value": {
+                          "type": "minecard:damage"
+                        }
+                      },
+                      "right": {
+                        "type": "minecard:constant",
+                        "value": 2
+                      }
+                    }
+                  }
+                },
+                {
+                  "output": {
+                    "type": "minecard:max_health"
+                  },
+                  "operator": {
+                    "type": "minecard:add",
+                    "value": {
+                      "left": {
+                        "type": "minecard:variable",
+                        "value": {
+                          "type": "minecard:max_health"
+                        }
+                      },
+                      "right": {
+                        "type": "minecard:constant",
+                        "value": 2
+                      }
+                    }
+                  }
+                }
+              ]
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "entity": "minecraft:item",
+  "cost": 2,
+  "health": 0,
+  "damage": 0
+}

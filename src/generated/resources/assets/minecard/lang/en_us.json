@@ -117,7 +117,7 @@
   "minecard.minecard.choice": "%s:\n%s",
   "minecard.minecard.choice.choice_of": "Choice of",
   "minecard.minecard.constant": "%s",
-  "minecard.minecard.copy_cards": " copy and give it to %s.%s%s",
+  "minecard.minecard.copy_cards": "copy and give it to %s.%s%s",
   "minecard.minecard.copy_cards.destroy_original": " Destroy the original card.",
   "minecard.minecard.copy_cards.enemy": "the enemy",
   "minecard.minecard.copy_cards.restore_health": " Restore the copy to full health.",

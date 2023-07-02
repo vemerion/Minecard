@@ -66,6 +66,14 @@
     {
       "data": "minecard:enchanted_golden_apple",
       "weight": 1
+    },
+    {
+      "data": "minecard:chest",
+      "weight": 1
+    },
+    {
+      "data": "minecard:enchanted_book",
+      "weight": 1
     }
   ],
   "type": "minecard:card_treasure"

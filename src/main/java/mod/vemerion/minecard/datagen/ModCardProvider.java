@@ -570,6 +570,16 @@ public class ModCardProvider implements DataProvider {
 												List.of(new ModificationBuilder().addMaxHealth(6)
 														.setProperty(CardProperty.BURN, 0)
 														.setProperty(CardProperty.SHIELD, 1).build()))))));
+		add(new Builder(EntityType.ITEM, 1, 0, 0).setKey(mod("chest"))
+				.setAdditionalData(new AdditionalCardData.ItemData(Items.CHEST))
+				.setCardAbility(new ChainAbility(EnumSet.of(CardAbilityTrigger.SUMMON), List.of(
+						new DrawCardsAbility(Set.of(), 3),
+						new ModifyAbility(Optional.empty(), List.of(new ModificationBuilder().addCost(1).build()))))));
+		add(new Builder(EntityType.ITEM, 2, 0, 0).setKey(mod("enchanted_book"))
+				.setAdditionalData(new AdditionalCardData.ItemData(Items.ENCHANTED_BOOK))
+				.setCardAbility(new ChainAbility(EnumSet.of(CardAbilityTrigger.SUMMON),
+						List.of(new DrawCardsAbility(Set.of(), 1), new ModifyAbility(Optional.empty(),
+								List.of(new ModificationBuilder().addDamage(2).addMaxHealth(2).build()))))));
 
 		// Auxiliary cards
 		add(new Builder(EntityType.ITEM, 0, 5, 0).setKey(mod("end_crystal"))
