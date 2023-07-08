@@ -194,7 +194,7 @@ public class GameState {
 		if (card.isDead())
 			return;
 
-		card.hurt(amount);
+		var tookDamage = card.hurt(amount);
 
 		PlayerState owner = null;
 		List<Card> container = null;
@@ -213,7 +213,9 @@ public class GameState {
 			return;
 
 		final var playerState = owner;
-		card.ability((a, i) -> a.trigger(CardAbilityTrigger.HURT, receivers, playerState, card, null, i));
+		if (tookDamage) {
+			card.ability((a, i) -> a.trigger(CardAbilityTrigger.HURT, receivers, playerState, card, null, i));
+		}
 
 		for (var receiver : receivers) {
 			updateCards(receiver, List.of(card));

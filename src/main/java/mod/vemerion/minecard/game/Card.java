@@ -114,12 +114,13 @@ public class Card {
 		this.maxHealth = Math.max(0, maxHealth);
 	}
 
-	public void hurt(int amount) {
+	public boolean hurt(int amount) {
 		if (hasProperty(CardProperty.SHIELD) && amount > 0) {
 			removeProperty(CardProperty.SHIELD);
-			return;
+			return false;
 		}
 		this.health -= amount;
+		return amount > 0;
 	}
 
 	public boolean isDead() {
@@ -222,7 +223,7 @@ public class Card {
 	public int getTextScroll() {
 		return textScroll;
 	}
-	
+
 	public void setTextScroll(int value) {
 		textScroll = value;
 	}
