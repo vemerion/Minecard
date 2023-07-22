@@ -6,7 +6,6 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import mod.vemerion.minecard.game.Card;
-import mod.vemerion.minecard.init.ModCardConditions;
 import mod.vemerion.minecard.init.ModCardOperators;
 import net.minecraft.Util;
 import net.minecraft.network.chat.Component;
@@ -49,7 +48,7 @@ public abstract class CardOperator {
 		}
 
 		public String getTranslationKey() {
-			return Util.makeDescriptionId(ModCardConditions.CARD_CONDITIONS.getRegistryName().getPath(),
+			return Util.makeDescriptionId(ModCardOperators.CARD_OPERATORS.getRegistryName().getPath(),
 					getRegistryName());
 		}
 	}

@@ -9,7 +9,6 @@ import mod.vemerion.minecard.game.Card;
 import mod.vemerion.minecard.game.CardProperty;
 import mod.vemerion.minecard.game.PlayerState;
 import mod.vemerion.minecard.game.Receiver;
-import mod.vemerion.minecard.init.ModCardConditions;
 import mod.vemerion.minecard.init.ModCardVariables;
 import net.minecraft.Util;
 import net.minecraft.network.chat.Component;
@@ -77,7 +76,7 @@ public abstract class CardVariable {
 		}
 
 		public String getTranslationKey() {
-			return Util.makeDescriptionId(ModCardConditions.CARD_CONDITIONS.getRegistryName().getPath(),
+			return Util.makeDescriptionId(ModCardVariables.CARD_VARIABLES.getRegistryName().getPath(),
 					getRegistryName());
 		}
 	}

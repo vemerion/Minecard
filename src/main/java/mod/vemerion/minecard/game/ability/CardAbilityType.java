@@ -18,7 +18,6 @@ public class CardAbilityType<T extends CardAbility> extends ForgeRegistryEntry<C
 	}
 
 	public String getTranslationKey() {
-		return Util.makeDescriptionId(ModCardAbilities.CARD_ABILITIES.getRegistryName().getNamespace(),
-				getRegistryName());
+		return Util.makeDescriptionId(ModCardAbilities.CARD_ABILITIES.getRegistryName().getPath(), getRegistryName());
 	}
 }
