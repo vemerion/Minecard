@@ -21,7 +21,9 @@
                     "groups": [
                       "self"
                     ],
-                    "method": "all"
+                    "method": {
+                      "type": "minecard:all"
+                    }
                   }
                 }
               },
@@ -73,7 +75,9 @@
                     "groups": [
                       "self"
                     ],
-                    "method": "all"
+                    "method": {
+                      "type": "minecard:all"
+                    }
                   }
                 }
               },

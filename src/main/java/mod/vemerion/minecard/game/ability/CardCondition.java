@@ -60,7 +60,7 @@ public abstract class CardCondition implements Predicate<Card> {
 		}
 
 		public String getTranslationKey() {
-			return Util.makeDescriptionId(ModCardConditions.CARD_CONDITIONS.getRegistryName().getNamespace(),
+			return Util.makeDescriptionId(ModCardConditions.CARD_CONDITIONS.getRegistryName().getPath(),
 					getRegistryName());
 		}
 	}

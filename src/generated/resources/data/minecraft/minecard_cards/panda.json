@@ -31,7 +31,9 @@
                       "enemy_board",
                       "your_board"
                     ],
-                    "method": "all",
+                    "method": {
+                      "type": "minecard:all"
+                    },
                     "condition": {
                       "type": "minecard:entity",
                       "value": {

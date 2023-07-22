@@ -14,7 +14,9 @@
                 "enemy_board",
                 "your_board"
               ],
-              "method": "all"
+              "method": {
+                "type": "minecard:all"
+              }
             }
           }
         },

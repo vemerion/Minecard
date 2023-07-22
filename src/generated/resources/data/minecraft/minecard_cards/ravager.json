@@ -13,7 +13,9 @@
               "groups": [
                 "target_adjacent"
               ],
-              "method": "all"
+              "method": {
+                "type": "minecard:all"
+              }
             }
           }
         },

@@ -5,12 +5,12 @@ import mod.vemerion.minecard.game.CardProperty;
 import mod.vemerion.minecard.game.ability.CardAbilityGroup;
 import mod.vemerion.minecard.game.ability.CardAbilityTrigger;
 import mod.vemerion.minecard.game.ability.CardPlacement;
-import mod.vemerion.minecard.game.ability.CardSelectionMethod;
 import mod.vemerion.minecard.helper.Helper;
 import mod.vemerion.minecard.init.ModBlocks;
 import mod.vemerion.minecard.init.ModCardAbilities;
 import mod.vemerion.minecard.init.ModCardConditions;
 import mod.vemerion.minecard.init.ModCardOperators;
+import mod.vemerion.minecard.init.ModCardSelectionMethods;
 import mod.vemerion.minecard.init.ModCardVariables;
 import mod.vemerion.minecard.init.ModEntities;
 import mod.vemerion.minecard.init.ModItems;
@@ -101,9 +101,11 @@ public class ModLanguageProvider extends LanguageProvider {
 		add(CardAbilityGroup.TARGET_ADJACENT.getTextKey(), "adjacent to the target");
 
 		// Card selection methods
-		add(CardSelectionMethod.ALL.getTextKey(), "for all cards from ");
-		add(CardSelectionMethod.RANDOM.getTextKey(), "for a random card from ");
-		add(CardSelectionMethod.CHOICE.getTextKey(), "for a selected card from ");
+		add(ModCardSelectionMethods.ALL.get().getTranslationKey(), "for all cards from ");
+		add(ModCardSelectionMethods.RANDOM.get().getTranslationKey(), "for %s random card(s) from ");
+		add(ModCardSelectionMethods.CHOICE.get().getTranslationKey(), "for a %s card from ");
+		add(ModCardSelectionMethods.CHOICE.get().getTranslationKey() + ".selected", "selected");
+		add(ModCardSelectionMethods.CHOICE.get().getTranslationKey() + ".discovered", "discovered");
 
 		// Card conditions
 		add(ModCardConditions.NO_CONDITION.get().getTranslationKey(), "");

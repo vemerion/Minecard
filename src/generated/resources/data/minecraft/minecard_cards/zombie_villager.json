@@ -16,7 +16,9 @@
               "groups": [
                 "your_board"
               ],
-              "method": "all",
+              "method": {
+                "type": "minecard:all"
+              },
               "condition": {
                 "type": "minecard:operator",
                 "value": {

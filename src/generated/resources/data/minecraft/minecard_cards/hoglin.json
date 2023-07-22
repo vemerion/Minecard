@@ -35,7 +35,9 @@
                     "groups": [
                       "self"
                     ],
-                    "method": "all"
+                    "method": {
+                      "type": "minecard:all"
+                    }
                   }
                 }
               },

@@ -35,7 +35,12 @@
                       "enemy_board",
                       "your_board"
                     ],
-                    "method": "choice"
+                    "method": {
+                      "type": "minecard:choice",
+                      "value": {
+                        "discover": false
+                      }
+                    }
                   }
                 }
               },

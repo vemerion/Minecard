@@ -17,7 +17,9 @@
                     "groups": [
                       "target"
                     ],
-                    "method": "all"
+                    "method": {
+                      "type": "minecard:all"
+                    }
                   }
                 }
               },

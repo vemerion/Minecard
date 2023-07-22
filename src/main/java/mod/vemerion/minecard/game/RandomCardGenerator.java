@@ -150,12 +150,12 @@ public class RandomCardGenerator {
 					new LazyCardType(next(depth + 1))));
 			abilities.add(new ChainAbility(randTriggers(),
 					List.of(new SelectCardsAbility(new CardAbilitySelection(randGroups(),
-							randEnum(CardSelectionMethod.class), CardCondition.NoCondition.NO_CONDITION)),
+							new CardSelectionMethod.Random(2, true), CardCondition.NoCondition.NO_CONDITION)),
 							new CopyCardsAbility(rand.nextBoolean(), rand.nextBoolean(), rand.nextBoolean(),
 									Optional.empty()))));
 			abilities.add(new ChainAbility(randTriggers(),
 					List.of(new SelectCardsAbility(new CardAbilitySelection(randGroups(),
-							randEnum(CardSelectionMethod.class), CardCondition.NoCondition.NO_CONDITION)),
+							new CardSelectionMethod.Random(2, true), CardCondition.NoCondition.NO_CONDITION)),
 							new ModifyAbility(Optional.empty(), List.of(randModifications())))));
 			abilities.add(
 					new MultiAbility(IntStream.range(0, rand.nextInt(1, 5)).mapToObj(i -> next(depth + 1).getAbility())

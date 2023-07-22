@@ -16,7 +16,13 @@
               "groups": [
                 "enemy_board"
               ],
-              "method": "random"
+              "method": {
+                "type": "minecard:random",
+                "value": {
+                  "count": 1,
+                  "repeat": false
+                }
+              }
             }
           }
         },

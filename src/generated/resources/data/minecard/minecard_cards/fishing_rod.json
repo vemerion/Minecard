@@ -22,7 +22,12 @@
               "groups": [
                 "enemy_hand"
               ],
-              "method": "choice"
+              "method": {
+                "type": "minecard:choice",
+                "value": {
+                  "discover": false
+                }
+              }
             }
           }
         },

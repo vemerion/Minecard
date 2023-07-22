@@ -16,7 +16,9 @@
               "groups": [
                 "enemy_board"
               ],
-              "method": "all"
+              "method": {
+                "type": "minecard:all"
+              }
             }
           }
         },

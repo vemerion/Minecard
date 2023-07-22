@@ -96,7 +96,7 @@ public class ModCardProvider implements DataProvider {
 				.setCardAbility(new ChainAbility(EnumSet.of(CardAbilityTrigger.DEATH), List.of(
 						new SelectCardsAbility(
 								new CardAbilitySelection(new CardAbilityGroups(EnumSet.of(CardAbilityGroup.ADJACENT)),
-										CardSelectionMethod.ALL, CardCondition.NoCondition.NO_CONDITION)),
+										CardSelectionMethod.All.ALL, CardCondition.NoCondition.NO_CONDITION)),
 						new ModifyAbility(Optional.of(mod("origin_explosion")),
 								List.of(new ModificationBuilder().heal(-3).build()))))));
 		add(new Builder(EntityType.SHULKER, 3, 3, 3).addProperty(CardProperty.SHIELD, 1));
@@ -106,7 +106,7 @@ public class ModCardProvider implements DataProvider {
 				.setCardAbility(new ChainAbility(EnumSet.of(CardAbilityTrigger.SUMMON), List.of(
 						new SelectCardsAbility(
 								new CardAbilitySelection(new CardAbilityGroups(EnumSet.of(CardAbilityGroup.SELF)),
-										CardSelectionMethod.ALL, CardCondition.NoCondition.NO_CONDITION)),
+										CardSelectionMethod.All.ALL, CardCondition.NoCondition.NO_CONDITION)),
 						new ModifyAbility(Optional.empty(),
 								List.of(new ModificationBuilder().addMaxHealth(1).setProperty(CardProperty.SHIELD, 1)
 										.build(), new ModificationBuilder().addMaxHealth(1).addDamage(1).build(),
@@ -116,17 +116,17 @@ public class ModCardProvider implements DataProvider {
 				.setCardAbility(new ChainAbility(EnumSet.of(CardAbilityTrigger.ATTACK), List.of(
 						new SelectCardsAbility(
 								new CardAbilitySelection(new CardAbilityGroups(EnumSet.of(CardAbilityGroup.TARGET)),
-										CardSelectionMethod.ALL, CardCondition.NoCondition.NO_CONDITION)),
+										CardSelectionMethod.All.ALL, CardCondition.NoCondition.NO_CONDITION)),
 						new ModifyAbility(Optional.empty(),
 								List.of(new ModificationBuilder().addProperty(CardProperty.FREEZE, 2).build()))))));
 		add(new Builder(EntityType.VINDICATOR, 6, 4, 8).setCardAbility(
 				new AddCardsAbility(EnumSet.of(CardAbilityTrigger.DEATH), List.of(new LazyCardType(mod("emerald"))))));
 		add(new Builder(EntityType.ENDERMAN, 6, 4, 5)
-				.setCardAbility(new ChainAbility(EnumSet.of(CardAbilityTrigger.SUMMON), List.of(
-						new SelectCardsAbility(
-								new CardAbilitySelection(new CardAbilityGroups(EnumSet.of(CardAbilityGroup.ENEMY_HAND)),
-										CardSelectionMethod.RANDOM, CardCondition.NoCondition.NO_CONDITION)),
-						new CopyCardsAbility(false, false, false, Optional.empty())))));
+				.setCardAbility(new ChainAbility(EnumSet.of(CardAbilityTrigger.SUMMON),
+						List.of(new SelectCardsAbility(new CardAbilitySelection(
+								new CardAbilityGroups(EnumSet.of(CardAbilityGroup.ENEMY_HAND)),
+								new CardSelectionMethod.Random(1, false), CardCondition.NoCondition.NO_CONDITION)),
+								new CopyCardsAbility(false, false, false, Optional.empty())))));
 		add(new Builder(EntityType.GLOW_SQUID, 3, 2, 2)
 				.setCardAbility(
 						new ChainAbility(
@@ -134,7 +134,7 @@ public class ModCardProvider implements DataProvider {
 										new SelectCardsAbility(new CardAbilitySelection(
 												new CardAbilityGroups(EnumSet.of(CardAbilityGroup.YOUR_BOARD,
 														CardAbilityGroup.ENEMY_BOARD)),
-												CardSelectionMethod.ALL, CardCondition.NoCondition.NO_CONDITION)),
+												CardSelectionMethod.All.ALL, CardCondition.NoCondition.NO_CONDITION)),
 										new ModifyAbility(Optional.of(new ResourceLocation(Main.MODID, "glow")),
 												List.of(new ModificationBuilder().setProperty(CardProperty.STEALTH, 0)
 														.build()))))));
@@ -147,7 +147,8 @@ public class ModCardProvider implements DataProvider {
 										new SelectCardsAbility(new CardAbilitySelection(
 												new CardAbilityGroups(EnumSet.of(CardAbilityGroup.YOUR_HAND,
 														CardAbilityGroup.YOUR_DECK)),
-												CardSelectionMethod.ALL, new CardCondition.Entity(EntityType.WITHER))),
+												CardSelectionMethod.All.ALL,
+												new CardCondition.Entity(EntityType.WITHER))),
 										new ModifyAbility(Optional.empty(),
 												List.of(new ModificationBuilder().addCost(-2).build()))))));
 		add(new Builder(EntityType.WITHER, 12, 10, 10)
@@ -157,26 +158,26 @@ public class ModCardProvider implements DataProvider {
 				.setCardAbility(new ChainAbility(EnumSet.of(CardAbilityTrigger.TICK),
 						List.of(new SelectCardsAbility(new CardAbilitySelection(
 								new CardAbilityGroups(EnumSet.of(CardAbilityGroup.ENEMY_BOARD)),
-								CardSelectionMethod.RANDOM, CardCondition.NoCondition.NO_CONDITION)),
+								new CardSelectionMethod.Random(1, false), CardCondition.NoCondition.NO_CONDITION)),
 								new ModifyAbility(Optional.of(mod("wither_projectile")),
 										List.of(new ModificationBuilder().heal(-4).build()))))));
 		add(new Builder(EntityType.SQUID, 1, 1, 1)
 				.setCardAbility(new ChainAbility(EnumSet.of(CardAbilityTrigger.HURT), List.of(
 						new SelectCardsAbility(
 								new CardAbilitySelection(new CardAbilityGroups(EnumSet.of(CardAbilityGroup.SELF)),
-										CardSelectionMethod.ALL, CardCondition.NoCondition.NO_CONDITION)),
+										CardSelectionMethod.All.ALL, CardCondition.NoCondition.NO_CONDITION)),
 						new CopyCardsAbility(true, true, false, Optional.empty())))));
 		add(new Builder(EntityType.SILVERFISH, 1, 1, 1)
 				.setCardAbility(new ChainAbility(EnumSet.of(CardAbilityTrigger.HURT), List.of(
 						new SelectCardsAbility(
 								new CardAbilitySelection(new CardAbilityGroups(EnumSet.of(CardAbilityGroup.SELF)),
-										CardSelectionMethod.ALL, CardCondition.NoCondition.NO_CONDITION)),
+										CardSelectionMethod.All.ALL, CardCondition.NoCondition.NO_CONDITION)),
 						new CopyCardsAbility(true, true, false, Optional.empty())))));
 		add(new Builder(EntityType.EVOKER, 5, 2, 2)
 				.setCardAbility(new ChainAbility(EnumSet.of(CardAbilityTrigger.SUMMON),
 						List.of(new SelectCardsAbility(new CardAbilitySelection(
 								new CardAbilityGroups(EnumSet.of(CardAbilityGroup.ENEMY_BOARD)),
-								CardSelectionMethod.ALL, CardCondition.NoCondition.NO_CONDITION)),
+								CardSelectionMethod.All.ALL, CardCondition.NoCondition.NO_CONDITION)),
 								new ModifyAbility(Optional.of(mod("evoker_fangs")),
 										List.of(new ModificationBuilder().heal(-2).build()))))));
 		add(new Builder(EntityType.SHEEP, 2, 3, 2)
@@ -201,35 +202,35 @@ public class ModCardProvider implements DataProvider {
 								new ChainAbility(EnumSet.of(CardAbilityTrigger.TICK),
 										List.of(new SelectCardsAbility(new CardAbilitySelection(
 												new CardAbilityGroups(EnumSet.of(CardAbilityGroup.ENEMY_BOARD)),
-												CardSelectionMethod.ALL, CardCondition.NoCondition.NO_CONDITION)),
+												CardSelectionMethod.All.ALL, CardCondition.NoCondition.NO_CONDITION)),
 												new ModifyAbility(Optional.of(mod("ender_dragon")),
 														List.of(new ModificationBuilder().heal(-1).build()))))))));
 		add(new Builder(EntityType.RABBIT, 1, 2, 1).setCardAbility(new ChanceAbility(30,
 				new ChainAbility(EnumSet.of(CardAbilityTrigger.SUMMON), List.of(
 						new SelectCardsAbility(
 								new CardAbilitySelection(new CardAbilityGroups(EnumSet.of(CardAbilityGroup.SELF)),
-										CardSelectionMethod.ALL, CardCondition.NoCondition.NO_CONDITION)),
+										CardSelectionMethod.All.ALL, CardCondition.NoCondition.NO_CONDITION)),
 						new ModifyAbility(Optional.empty(), List.of(new ModificationBuilder().addMaxHealth(1)
 								.addDamage(1).setProperty(CardProperty.SPECIAL, 1).build())))))));
 		add(new Builder(EntityType.POLAR_BEAR, 3, 4, 2).addProperty(CardProperty.BABY, 1)
 				.setCardAbility(new ChainAbility(EnumSet.of(CardAbilityTrigger.GROW), List.of(
 						new SelectCardsAbility(
 								new CardAbilitySelection(new CardAbilityGroups(EnumSet.of(CardAbilityGroup.SELF)),
-										CardSelectionMethod.ALL, CardCondition.NoCondition.NO_CONDITION)),
+										CardSelectionMethod.All.ALL, CardCondition.NoCondition.NO_CONDITION)),
 						new ModifyAbility(Optional.empty(), List.of(new ModificationBuilder().addMaxHealth(3)
 								.addDamage(1).setProperty(CardProperty.TAUNT, 1).build()))))));
 		add(new Builder(EntityType.AXOLOTL, 2, 4, 1)
 				.setCardAbility(new ChainAbility(EnumSet.of(CardAbilityTrigger.HURT), List.of(
 						new SelectCardsAbility(
 								new CardAbilitySelection(new CardAbilityGroups(EnumSet.of(CardAbilityGroup.SELF)),
-										CardSelectionMethod.ALL, CardCondition.NoCondition.NO_CONDITION)),
+										CardSelectionMethod.All.ALL, CardCondition.NoCondition.NO_CONDITION)),
 						new ModifyAbility(Optional.empty(),
 								List.of(new ModificationBuilder().setProperty(CardProperty.STEALTH, 1).build()))))));
 		add(new Builder(EntityType.BAT, 1, 2, 1)
 				.setCardAbility(new ChainAbility(EnumSet.of(CardAbilityTrigger.ATTACK), List.of(
 						new SelectCardsAbility(
 								new CardAbilitySelection(new CardAbilityGroups(EnumSet.of(CardAbilityGroup.YOUR_BOARD)),
-										CardSelectionMethod.ALL, new CardCondition.Entity(EntityType.PLAYER))),
+										CardSelectionMethod.All.ALL, new CardCondition.Entity(EntityType.PLAYER))),
 						new ModifyAbility(Optional.empty(), List.of(new ModificationBuilder().heal(1).build()))))));
 		add(cod(50));
 		add(new Builder(EntityType.HORSE, 4, 2, 4).addProperty(CardProperty.CHARGE, 1));
@@ -239,28 +240,28 @@ public class ModCardProvider implements DataProvider {
 				.setCardAbility(new ChainAbility(EnumSet.of(CardAbilityTrigger.DEATH), List.of(
 						new SelectCardsAbility(
 								new CardAbilitySelection(new CardAbilityGroups(EnumSet.of(CardAbilityGroup.YOUR_BOARD)),
-										CardSelectionMethod.ALL, new CardCondition.Entity(EntityType.PLAYER))),
+										CardSelectionMethod.All.ALL, new CardCondition.Entity(EntityType.PLAYER))),
 						new ModifyAbility(Optional.of(mod("throw_pork")),
 								List.of(new ModificationBuilder().heal(3).build()))))));
 		add(new Builder(EntityType.STRIDER, 4, 5, 4)
 				.setCardAbility(new ChainAbility(EnumSet.of(CardAbilityTrigger.SUMMON), List.of(
 						new SelectCardsAbility(
 								new CardAbilitySelection(new CardAbilityGroups(EnumSet.of(CardAbilityGroup.ADJACENT)),
-										CardSelectionMethod.ALL, CardCondition.NoCondition.NO_CONDITION)),
+										CardSelectionMethod.All.ALL, CardCondition.NoCondition.NO_CONDITION)),
 						new ModifyAbility(Optional.empty(),
 								List.of(new ModificationBuilder().setProperty(CardProperty.BURN, 0).build()))))));
 		add(new Builder(EntityType.BLAZE, 6, 6, 5)
 				.setCardAbility(new ChainAbility(EnumSet.of(CardAbilityTrigger.ATTACK), List.of(
 						new SelectCardsAbility(
 								new CardAbilitySelection(new CardAbilityGroups(EnumSet.of(CardAbilityGroup.TARGET)),
-										CardSelectionMethod.ALL, CardCondition.NoCondition.NO_CONDITION)),
+										CardSelectionMethod.All.ALL, CardCondition.NoCondition.NO_CONDITION)),
 						new ModifyAbility(Optional.empty(),
 								List.of(new ModificationBuilder().addProperty(CardProperty.BURN, 3).build()))))));
 		add(new Builder(EntityType.GHAST, 7, 3, 7).setCardAbility(new ChainAbility(
 				EnumSet.of(CardAbilityTrigger.SUMMON),
 				List.of(new SelectCardsAbility(
 						new CardAbilitySelection(new CardAbilityGroups(EnumSet.of(CardAbilityGroup.ENEMY_BOARD)),
-								CardSelectionMethod.ALL, new CardCondition.Entity(EntityType.PLAYER))),
+								CardSelectionMethod.All.ALL, new CardCondition.Entity(EntityType.PLAYER))),
 						new ModifyAbility(Optional.of(mod("fireball")),
 								List.of(new ModificationBuilder().addProperty(CardProperty.BURN, 4).build()))))));
 		add(new Builder(EntityType.BEE, 5, 2, 2).setCardAbility(new SummonCardAbility(
@@ -280,7 +281,8 @@ public class ModCardProvider implements DataProvider {
 										new SelectCardsAbility(new CardAbilitySelection(
 												new CardAbilityGroups(EnumSet.of(CardAbilityGroup.YOUR_BOARD,
 														CardAbilityGroup.ENEMY_BOARD)),
-												CardSelectionMethod.ALL, new CardCondition.Entity(EntityType.PANDA))),
+												CardSelectionMethod.All.ALL,
+												new CardCondition.Entity(EntityType.PANDA))),
 										new ModifyAbility(Optional.of(mod("throw_bamboo")), List
 												.of(new ModificationBuilder().addMaxHealth(2).addDamage(2).build())))))
 								.build()))));
@@ -289,14 +291,14 @@ public class ModCardProvider implements DataProvider {
 				.setCardAbility(new ChainAbility(EnumSet.of(CardAbilityTrigger.HURT), List.of(
 						new SelectCardsAbility(
 								new CardAbilitySelection(new CardAbilityGroups(EnumSet.of(CardAbilityGroup.SELF)),
-										CardSelectionMethod.ALL, CardCondition.NoCondition.NO_CONDITION)),
+										CardSelectionMethod.All.ALL, CardCondition.NoCondition.NO_CONDITION)),
 						new ModifyAbility(Optional.empty(),
 								List.of(new ModificationBuilder().addDamage(3).build()))))));
 		add(new Builder(EntityType.HUSK, 3, 4, 2).addProperty(CardProperty.UNDEAD, 1)
 				.setCardAbility(new ChainAbility(EnumSet.of(CardAbilityTrigger.ATTACK), List.of(
 						new SelectCardsAbility(
 								new CardAbilitySelection(new CardAbilityGroups(EnumSet.of(CardAbilityGroup.TARGET)),
-										CardSelectionMethod.ALL, CardCondition.NoCondition.NO_CONDITION)),
+										CardSelectionMethod.All.ALL, CardCondition.NoCondition.NO_CONDITION)),
 						new ModifyAbility(Optional.empty(),
 								List.of(new ModificationBuilder().addDamage(-2).build()))))));
 		splitter(EntityType.SLIME, 7, NoCardAbility.NO_CARD_ABILITY);
@@ -304,7 +306,7 @@ public class ModCardProvider implements DataProvider {
 				new ChainAbility(EnumSet.of(CardAbilityTrigger.ATTACK), List.of(
 						new SelectCardsAbility(
 								new CardAbilitySelection(new CardAbilityGroups(EnumSet.of(CardAbilityGroup.TARGET)),
-										CardSelectionMethod.ALL, CardCondition.NoCondition.NO_CONDITION)),
+										CardSelectionMethod.All.ALL, CardCondition.NoCondition.NO_CONDITION)),
 						new ModifyAbility(Optional.empty(),
 								List.of(new ModificationBuilder().addProperty(CardProperty.BURN, 2).build())))));
 		add(new Builder(EntityType.PHANTOM, 3, 2, 3).addProperty(CardProperty.UNDEAD, 1)
@@ -316,55 +318,57 @@ public class ModCardProvider implements DataProvider {
 				.setCardAbility(new ChainAbility(EnumSet.of(CardAbilityTrigger.SUMMON),
 						List.of(new SelectCardsAbility(new CardAbilitySelection(
 								new CardAbilityGroups(EnumSet.of(CardAbilityGroup.ENEMY_BOARD)),
-								CardSelectionMethod.ALL, CardCondition.NoCondition.NO_CONDITION)),
+								CardSelectionMethod.All.ALL, CardCondition.NoCondition.NO_CONDITION)),
 								new ModifyAbility(Optional.of(mod("elder_guardian")),
 										List.of(new ModificationBuilder().addDamage(-1).build()))))));
-		add(new Builder(EntityType.GOAT, 5, 4, 4).setCardAbility(new ChainAbility(EnumSet.of(CardAbilityTrigger.SUMMON),
+		add(new Builder(EntityType.GOAT, 5, 4, 4)
+				.setCardAbility(new ChainAbility(EnumSet.of(CardAbilityTrigger.SUMMON),
+						List.of(new SelectCardsAbility(new CardAbilitySelection(
+								new CardAbilityGroups(EnumSet.of(CardAbilityGroup.ENEMY_BOARD)),
+								new CardSelectionMethod.Random(1, false),
+								new CardCondition.Not(new CardCondition.Entity(EntityType.PLAYER)))),
+								new CopyCardsAbility(true, false, true, Optional.of(mod("goat_charge")))))));
+		add(new Builder(EntityType.ENDERMITE, 3, 1, 2).setCardAbility(new ChainAbility(
+				EnumSet.of(CardAbilityTrigger.SUMMON),
 				List.of(new SelectCardsAbility(new CardAbilitySelection(
-						new CardAbilityGroups(EnumSet.of(CardAbilityGroup.ENEMY_BOARD)), CardSelectionMethod.RANDOM,
-						new CardCondition.Not(new CardCondition.Entity(EntityType.PLAYER)))),
-						new CopyCardsAbility(true, false, true, Optional.of(mod("goat_charge")))))));
-		add(new Builder(EntityType.ENDERMITE, 3, 1, 2)
-				.setCardAbility(new ChainAbility(EnumSet.of(CardAbilityTrigger.SUMMON), List.of(
-						new SelectCardsAbility(
-								new CardAbilitySelection(new CardAbilityGroups(EnumSet.of(CardAbilityGroup.YOUR_DECK)),
-										CardSelectionMethod.RANDOM, new CardCondition.Entity(EntityType.ENDERMAN))),
+						new CardAbilityGroups(EnumSet.of(CardAbilityGroup.YOUR_DECK)),
+						new CardSelectionMethod.Random(1, false), new CardCondition.Entity(EntityType.ENDERMAN))),
 						new CopyCardsAbility(true, false, false, Optional.empty())))));
 		add(new Builder(EntityType.PIGLIN_BRUTE, 6, 5, 6).addProperty(CardProperty.TAUNT, 1));
 		add(new Builder(EntityType.PILLAGER, 4, 2, 2)
 				.setCardAbility(new ChainAbility(EnumSet.of(CardAbilityTrigger.SUMMON), List.of(
 						new SelectCardsAbility(
 								new CardAbilitySelection(new CardAbilityGroups(EnumSet.of(CardAbilityGroup.ADJACENT)),
-										CardSelectionMethod.ALL, CardCondition.NoCondition.NO_CONDITION)),
+										CardSelectionMethod.All.ALL, CardCondition.NoCondition.NO_CONDITION)),
 						new ModifyAbility(Optional.of(mod("throw_shield")), List.of(new ModificationBuilder()
 								.addMaxHealth(1).addDamage(1).setProperty(CardProperty.TAUNT, 1).build()))))));
 		add(new Builder(EntityType.RAVAGER, 9, 10, 4)
 				.setCardAbility(new ChainAbility(EnumSet.of(CardAbilityTrigger.ATTACK),
 						List.of(new SelectCardsAbility(new CardAbilitySelection(
 								new CardAbilityGroups(EnumSet.of(CardAbilityGroup.TARGET_ADJACENT)),
-								CardSelectionMethod.ALL, CardCondition.NoCondition.NO_CONDITION)),
+								CardSelectionMethod.All.ALL, CardCondition.NoCondition.NO_CONDITION)),
 								new ModifyAbility(Optional.of(mod("ravager_charge")),
 										List.of(new ModificationBuilder().heal(-4).build()))))));
 		add(new Builder(EntityType.SKELETON, 4, 4, 1).addProperty(CardProperty.UNDEAD, 1)
 				.setCardAbility(new ChainAbility(EnumSet.of(CardAbilityTrigger.TICK),
 						List.of(new SelectCardsAbility(new CardAbilitySelection(
 								new CardAbilityGroups(EnumSet.of(CardAbilityGroup.ENEMY_BOARD)),
-								CardSelectionMethod.RANDOM, CardCondition.NoCondition.NO_CONDITION)),
+								new CardSelectionMethod.Random(1, false), CardCondition.NoCondition.NO_CONDITION)),
 								new ModifyAbility(Optional.of(mod("shoot_arrow")),
 										List.of(new ModificationBuilder().heal(-1).build()))))));
 		add(new Builder(EntityType.SPIDER, 2, 2, 2)
-				.setCardAbility(new ChainAbility(EnumSet.of(CardAbilityTrigger.DEATH), List.of(
-						new SelectCardsAbility(
-								new CardAbilitySelection(new CardAbilityGroups(EnumSet.of(CardAbilityGroup.ENEMY_HAND)),
-										CardSelectionMethod.RANDOM, CardCondition.NoCondition.NO_CONDITION)),
-						new ModifyAbility(Optional.of(mod("throw_web")),
-								List.of(new ModificationBuilder().addCost(1).build()))))));
+				.setCardAbility(new ChainAbility(EnumSet.of(CardAbilityTrigger.DEATH),
+						List.of(new SelectCardsAbility(new CardAbilitySelection(
+								new CardAbilityGroups(EnumSet.of(CardAbilityGroup.ENEMY_HAND)),
+								new CardSelectionMethod.Random(1, false), CardCondition.NoCondition.NO_CONDITION)),
+								new ModifyAbility(Optional.of(mod("throw_web")),
+										List.of(new ModificationBuilder().addCost(1).build()))))));
 		add(new Builder(EntityType.TROPICAL_FISH, 0, 1, 1));
 		add(new Builder(EntityType.SKELETON_HORSE, 4, 4, 4).addProperty(CardProperty.UNDEAD, 1)
 				.setCardAbility(new ChainAbility(EnumSet.of(CardAbilityTrigger.SUMMON), List.of(
 						new SelectCardsAbility(new CardAbilitySelection(
 								new CardAbilityGroups(EnumSet.of(CardAbilityGroup.ENEMY_BOARD)),
-								CardSelectionMethod.RANDOM, CardCondition.NoCondition.NO_CONDITION)),
+								new CardSelectionMethod.Random(1, false), CardCondition.NoCondition.NO_CONDITION)),
 						new ModifyAbility(Optional.of(mod("lightning_bolt")), List
 								.of(new ModificationBuilder().heal(-2).addProperty(CardProperty.BURN, 2).build()))))));
 		add(new Builder(EntityType.SALMON, 1, 1, 1).setCardAbility(new ChanceAbility(50,
@@ -378,17 +382,19 @@ public class ModCardProvider implements DataProvider {
 				.setCardAbility(new ChainAbility(EnumSet.of(CardAbilityTrigger.SUMMON), List.of(
 						new SelectCardsAbility(new CardAbilitySelection(
 								new CardAbilityGroups(EnumSet.of(CardAbilityGroup.ENEMY_BOARD)),
-								CardSelectionMethod.ALL,
+								CardSelectionMethod.All.ALL,
 								new CardCondition.Or(new CardCondition.Entity(EntityType.CREEPER),
 										new CardCondition.Entity(EntityType.PHANTOM)))),
 						new CopyCardsAbility(true, false, true, Optional.empty())))));
-		add(new Builder(EntityType.SNOW_GOLEM, 4, 4, 4).setCardAbility(new ChainAbility(
-				EnumSet.of(CardAbilityTrigger.SUMMON),
-				List.of(new SelectCardsAbility(
-						new CardAbilitySelection(new CardAbilityGroups(EnumSet.of(CardAbilityGroup.ENEMY_BOARD)),
-								CardSelectionMethod.CHOICE, CardCondition.NoCondition.NO_CONDITION)),
-						new ModifyAbility(Optional.of(mod("throw_snowball")), List.of(
-								new ModificationBuilder().heal(-2).addProperty(CardProperty.FREEZE, 1).build()))))));
+		add(new Builder(EntityType.SNOW_GOLEM, 4, 4, 4)
+				.setCardAbility(
+						new ChainAbility(EnumSet.of(CardAbilityTrigger.SUMMON),
+								List.of(new SelectCardsAbility(new CardAbilitySelection(
+										new CardAbilityGroups(EnumSet.of(CardAbilityGroup.ENEMY_BOARD)),
+										new CardSelectionMethod.Choice(false), CardCondition.NoCondition.NO_CONDITION)),
+										new ModifyAbility(Optional.of(mod("throw_snowball")),
+												List.of(new ModificationBuilder().heal(-2)
+														.addProperty(CardProperty.FREEZE, 1).build()))))));
 		add(new Builder(EntityType.CHICKEN, 2, 2, 1).setCardAbility(new ChanceAbility(50,
 				new AddCardsAbility(EnumSet.of(CardAbilityTrigger.SUMMON), List.of(new LazyCardType(
 						new Builder(EntityType.ITEM, 0, 0, 0)
@@ -401,7 +407,7 @@ public class ModCardProvider implements DataProvider {
 																new SelectCardsAbility(new CardAbilitySelection(
 																		new CardAbilityGroups(EnumSet
 																				.of(CardAbilityGroup.ENEMY_BOARD)),
-																		CardSelectionMethod.CHOICE,
+																		new CardSelectionMethod.Choice(false),
 																		CardCondition.NoCondition.NO_CONDITION)),
 																new ModifyAbility(Optional.of(mod("throw_egg")),
 																		List.of(new ModificationBuilder().heal(-1)
@@ -421,7 +427,7 @@ public class ModCardProvider implements DataProvider {
 														new SelectCardsAbility(new CardAbilitySelection(
 																new CardAbilityGroups(
 																		EnumSet.of(CardAbilityGroup.YOUR_BOARD)),
-																CardSelectionMethod.CHOICE,
+																new CardSelectionMethod.Choice(false),
 																CardCondition.NoCondition.NO_CONDITION)),
 														new ModifyAbility(Optional.of(mod("throw_scute")),
 																List.of(new ModificationBuilder().addMaxHealth(5)
@@ -433,30 +439,34 @@ public class ModCardProvider implements DataProvider {
 				EnumSet.of(CardAbilityTrigger.SUMMON),
 				List.of(new LazyCardType(new Builder(EntityType.ITEM, 0, 0, 0)
 						.setAdditionalData(new AdditionalCardData.ItemData(Items.MILK_BUCKET))
-						.setCardAbility(new ChainAbility(EnumSet.of(CardAbilityTrigger.SUMMON), List.of(
-								new SelectCardsAbility(new CardAbilitySelection(
-										new CardAbilityGroups(
-												EnumSet.of(CardAbilityGroup.YOUR_BOARD, CardAbilityGroup.ENEMY_BOARD)),
-										CardSelectionMethod.CHOICE, CardCondition.NoCondition.NO_CONDITION)),
-								new ModifyAbility(Optional.of(mod("throw_milk")),
-										List.of(new ModificationBuilder().setProperty(CardProperty.BURN, 0)
-												.setProperty(CardProperty.FREEZE, 0).setProperty(CardProperty.SHIELD, 0)
-												.setProperty(CardProperty.STEALTH, 0).setProperty(CardProperty.TAUNT, 0)
-												.setProperty(CardProperty.THORNS, 0).setProperty(CardProperty.POISON, 0)
-												.build())))))
+						.setCardAbility(new ChainAbility(EnumSet.of(CardAbilityTrigger.SUMMON),
+								List.of(new SelectCardsAbility(new CardAbilitySelection(new CardAbilityGroups(
+										EnumSet.of(CardAbilityGroup.YOUR_BOARD, CardAbilityGroup.ENEMY_BOARD)),
+										new CardSelectionMethod.Choice(false), CardCondition.NoCondition.NO_CONDITION)),
+										new ModifyAbility(Optional.of(mod("throw_milk")),
+												List.of(new ModificationBuilder().setProperty(CardProperty.BURN, 0)
+														.setProperty(CardProperty.FREEZE, 0)
+														.setProperty(CardProperty.SHIELD, 0)
+														.setProperty(CardProperty.STEALTH, 0)
+														.setProperty(CardProperty.TAUNT, 0)
+														.setProperty(CardProperty.THORNS, 0)
+														.setProperty(CardProperty.POISON, 0).build())))))
 						.build())))));
 		add(new Builder(EntityType.FOX, 4, 3, 2).setCardAbility(new SummonCardAbility(
 				EnumSet.of(CardAbilityTrigger.SUMMON), CardPlacement.RIGHT, new LazyCardType(mod("sweet_berries")))));
 		add(new Builder(EntityType.MOOSHROOM, 2, 2, 2).setCardAbility(new AddCardsAbility(
 				EnumSet.of(CardAbilityTrigger.SUMMON), List.of(new LazyCardType(new Builder(EntityType.ITEM, 0, 0, 0)
 						.setAdditionalData(new AdditionalCardData.ItemData(Items.MUSHROOM_STEW)).setCardAbility(
-								new ChainAbility(EnumSet.of(CardAbilityTrigger.SUMMON), List.of(
-										new SelectCardsAbility(new CardAbilitySelection(
-												new CardAbilityGroups(EnumSet.of(CardAbilityGroup.YOUR_BOARD,
-														CardAbilityGroup.ENEMY_BOARD)),
-												CardSelectionMethod.CHOICE, CardCondition.NoCondition.NO_CONDITION)),
-										new ModifyAbility(Optional.of(mod("throw_mushroom_stew")), List.of(
-												new ModificationBuilder().setProperty(CardProperty.BABY, 0).build())))))
+								new ChainAbility(
+										EnumSet.of(CardAbilityTrigger.SUMMON), List.of(
+												new SelectCardsAbility(new CardAbilitySelection(
+														new CardAbilityGroups(EnumSet.of(CardAbilityGroup.YOUR_BOARD,
+																CardAbilityGroup.ENEMY_BOARD)),
+														new CardSelectionMethod.Choice(false),
+														CardCondition.NoCondition.NO_CONDITION)),
+												new ModifyAbility(Optional.of(mod("throw_mushroom_stew")),
+														List.of(new ModificationBuilder()
+																.setProperty(CardProperty.BABY, 0).build())))))
 						.build())))));
 		add(new Builder(EntityType.PARROT, 1, 2, 1).addProperty(CardProperty.TAUNT, 1));
 		add(new Builder(EntityType.LLAMA, 1, 1, 1)
@@ -466,7 +476,8 @@ public class ModCardProvider implements DataProvider {
 										new SelectCardsAbility(new CardAbilitySelection(
 												new CardAbilityGroups(EnumSet.of(CardAbilityGroup.YOUR_BOARD,
 														CardAbilityGroup.ENEMY_BOARD)),
-												CardSelectionMethod.CHOICE, CardCondition.NoCondition.NO_CONDITION)),
+												new CardSelectionMethod.Choice(false),
+												CardCondition.NoCondition.NO_CONDITION)),
 										new ModifyAbility(Optional.of(mod("llama_spit")),
 												List.of(new ModificationBuilder().heal(-1).build()))))));
 		add(new Builder(EntityType.CAT, 3, 3, 1)
@@ -476,7 +487,7 @@ public class ModCardProvider implements DataProvider {
 				new ChainAbility(EnumSet.of(CardAbilityTrigger.ATTACK), List.of(
 						new SelectCardsAbility(
 								new CardAbilitySelection(new CardAbilityGroups(EnumSet.of(CardAbilityGroup.TARGET)),
-										CardSelectionMethod.ALL, CardCondition.NoCondition.NO_CONDITION)),
+										CardSelectionMethod.All.ALL, CardCondition.NoCondition.NO_CONDITION)),
 						new ModifyAbility(Optional.empty(),
 								List.of(new ModificationBuilder().setProperty(CardProperty.POISON, 1).build())))))));
 		add(new Builder(EntityType.WITCH, 6, 5, 4).setCardAbility(new AddCardsAbility(
@@ -496,7 +507,8 @@ public class ModCardProvider implements DataProvider {
 										new SelectCardsAbility(new CardAbilitySelection(
 												new CardAbilityGroups(EnumSet.of(CardAbilityGroup.YOUR_BOARD,
 														CardAbilityGroup.ENEMY_BOARD)),
-												CardSelectionMethod.CHOICE, CardCondition.NoCondition.NO_CONDITION)),
+												new CardSelectionMethod.Choice(false),
+												CardCondition.NoCondition.NO_CONDITION)),
 										new ModifyAbility(Optional.of(mod("llama_spit")),
 												List.of(new ModificationBuilder().heal(-2).build())))),
 								new DrawCardsAbility(EnumSet.of(CardAbilityTrigger.SUMMON), 1)))));
@@ -504,12 +516,13 @@ public class ModCardProvider implements DataProvider {
 				EnumSet.of(CardAbilityTrigger.SUMMON), CardPlacement.RIGHT, new LazyCardType(mod("buried_treasure")))));
 		add(new Builder(EntityType.ZOMBIE_VILLAGER, 6, 4, 4).addProperty(CardProperty.UNDEAD, 1)
 				.setCardAbility(new ChainAbility(EnumSet.of(CardAbilityTrigger.SUMMON), List.of(
-						new SelectCardsAbility(new CardAbilitySelection(
-								new CardAbilityGroups(EnumSet.of(CardAbilityGroup.YOUR_BOARD)), CardSelectionMethod.ALL,
-								new CardCondition.OperatorCondition(new CardOperator.GreaterThan(
-										new CardOperator.Variable(
-												new CardVariable.PropertyVariable(CardProperty.UNDEAD)),
-										new CardOperator.Constant(0))))),
+						new SelectCardsAbility(
+								new CardAbilitySelection(new CardAbilityGroups(EnumSet.of(CardAbilityGroup.YOUR_BOARD)),
+										CardSelectionMethod.All.ALL,
+										new CardCondition.OperatorCondition(new CardOperator.GreaterThan(
+												new CardOperator.Variable(
+														new CardVariable.PropertyVariable(CardProperty.UNDEAD)),
+												new CardOperator.Constant(0))))),
 						new ModifyAbility(Optional.empty(),
 								List.of(new ModificationBuilder().addMaxHealth(2).addDamage(2).build()))))));
 		add(new Builder(EntityType.HOGLIN, 8, 5, 7).setCardAbility(new ChoiceCardAbility(List.of(
@@ -519,7 +532,7 @@ public class ModCardProvider implements DataProvider {
 				new ChainAbility(EnumSet.of(CardAbilityTrigger.SUMMON), List.of(
 						new SelectCardsAbility(
 								new CardAbilitySelection(new CardAbilityGroups(EnumSet.of(CardAbilityGroup.SELF)),
-										CardSelectionMethod.ALL, CardCondition.NoCondition.NO_CONDITION)),
+										CardSelectionMethod.All.ALL, CardCondition.NoCondition.NO_CONDITION)),
 						new ModifyAbility(Optional.empty(), List.of(new ModificationBuilder().addMaxHealth(1)
 								.addDamage(1).setProperty(CardProperty.TAUNT, 1).build()))))))));
 		add(new Builder(EntityType.ZOGLIN, 9, 6, 12).addProperty(CardProperty.UNDEAD, 1)
@@ -535,29 +548,20 @@ public class ModCardProvider implements DataProvider {
 				.setCardAbility(new ChainAbility(EnumSet.of(CardAbilityTrigger.SUMMON), List.of(
 						new SelectCardsAbility(
 								new CardAbilitySelection(new CardAbilityGroups(EnumSet.of(CardAbilityGroup.ENEMY_HAND)),
-										CardSelectionMethod.CHOICE, CardCondition.NoCondition.NO_CONDITION)),
+										new CardSelectionMethod.Choice(false), CardCondition.NoCondition.NO_CONDITION)),
 						new CopyCardsAbility(true, false, false, Optional.empty())))));
 		add(new Builder(EntityType.ITEM, 3, 0, 0).setKey(mod("book"))
 				.setAdditionalData(new AdditionalCardData.ItemData(Items.BOOK))
 				.setCardAbility(new DrawCardsAbility(EnumSet.of(CardAbilityTrigger.SUMMON), 2)));
 		add(new Builder(EntityType.ITEM, 3, 0, 0).setKey(mod("splash_potion_of_harming"))
-				.setAdditionalData(
-						new AdditionalCardData.ItemData(PotionUtils.setPotion(Items.SPLASH_POTION.getDefaultInstance(),
-								Potions.HARMING)))
-				.setCardAbility(
-						new MultiAbility(List.of(
-								new ChainAbility(EnumSet.of(CardAbilityTrigger.SUMMON),
-										List.of(new SelectCardsAbility(new CardAbilitySelection(
-												new CardAbilityGroups(EnumSet.of(CardAbilityGroup.ENEMY_BOARD)),
-												CardSelectionMethod.RANDOM, CardCondition.NoCondition.NO_CONDITION)),
-												new ModifyAbility(Optional.of(mod("throw_splash_potion_of_harming")),
-														List.of(new ModificationBuilder().heal(-3).build())))),
-								new ChainAbility(EnumSet.of(CardAbilityTrigger.SUMMON),
-										List.of(new SelectCardsAbility(new CardAbilitySelection(
-												new CardAbilityGroups(EnumSet.of(CardAbilityGroup.ENEMY_BOARD)),
-												CardSelectionMethod.RANDOM, CardCondition.NoCondition.NO_CONDITION)),
-												new ModifyAbility(Optional.of(mod("throw_splash_potion_of_harming")),
-														List.of(new ModificationBuilder().heal(-3).build()))))))));
+				.setAdditionalData(new AdditionalCardData.ItemData(
+						PotionUtils.setPotion(Items.SPLASH_POTION.getDefaultInstance(), Potions.HARMING)))
+				.setCardAbility(new ChainAbility(EnumSet.of(CardAbilityTrigger.SUMMON),
+						List.of(new SelectCardsAbility(new CardAbilitySelection(
+								new CardAbilityGroups(EnumSet.of(CardAbilityGroup.ENEMY_BOARD)),
+								new CardSelectionMethod.Random(2, false), CardCondition.NoCondition.NO_CONDITION)),
+								new ModifyAbility(Optional.of(mod("throw_splash_potion_of_harming")),
+										List.of(new ModificationBuilder().heal(-3).build()))))));
 		add(new Builder(EntityType.ITEM, 4, 0, 0).setKey(mod("enchanted_golden_apple"))
 				.setAdditionalData(new AdditionalCardData.ItemData(Items.ENCHANTED_GOLDEN_APPLE)).setCardAbility(
 						new ChainAbility(
@@ -565,7 +569,8 @@ public class ModCardProvider implements DataProvider {
 										new SelectCardsAbility(new CardAbilitySelection(
 												new CardAbilityGroups(EnumSet.of(CardAbilityGroup.ENEMY_BOARD,
 														CardAbilityGroup.YOUR_BOARD)),
-												CardSelectionMethod.CHOICE, CardCondition.NoCondition.NO_CONDITION)),
+												new CardSelectionMethod.Choice(false),
+												CardCondition.NoCondition.NO_CONDITION)),
 										new ModifyAbility(Optional.of(mod("throw_enchanted_golden_apple")),
 												List.of(new ModificationBuilder().addMaxHealth(6)
 														.setProperty(CardProperty.BURN, 0)
@@ -585,9 +590,9 @@ public class ModCardProvider implements DataProvider {
 		add(new Builder(EntityType.ITEM, 0, 5, 0).setKey(mod("end_crystal"))
 				.setAdditionalData(new AdditionalCardData.ItemData(Items.END_CRYSTAL))
 				.setCardAbility(new ChainAbility(EnumSet.of(CardAbilityTrigger.TICK), List.of(
-						new SelectCardsAbility(
-								new CardAbilitySelection(new CardAbilityGroups(EnumSet.of(CardAbilityGroup.ADJACENT)),
-										CardSelectionMethod.ALL, new CardCondition.Entity(EntityType.ENDER_DRAGON))),
+						new SelectCardsAbility(new CardAbilitySelection(
+								new CardAbilityGroups(EnumSet.of(CardAbilityGroup.ADJACENT)),
+								CardSelectionMethod.All.ALL, new CardCondition.Entity(EntityType.ENDER_DRAGON))),
 						new ModifyAbility(Optional.empty(), List.of(new ModificationBuilder().heal(4).build()))))));
 		add(new Builder(EntityType.ITEM, 0, 0, 0).setKey(mod("trident"))
 				.setAdditionalData(new AdditionalCardData.ItemData(Items.TRIDENT)).setCardAbility(
@@ -596,7 +601,8 @@ public class ModCardProvider implements DataProvider {
 										new SelectCardsAbility(new CardAbilitySelection(
 												new CardAbilityGroups(EnumSet.of(CardAbilityGroup.ENEMY_BOARD,
 														CardAbilityGroup.YOUR_BOARD)),
-												CardSelectionMethod.CHOICE, CardCondition.NoCondition.NO_CONDITION)),
+												new CardSelectionMethod.Choice(false),
+												CardCondition.NoCondition.NO_CONDITION)),
 										new ModifyAbility(Optional.of(mod("throw_trident")),
 												List.of(new ModificationBuilder().heal(-4)
 														.addProperty(CardProperty.BURN, 4).build())))),
@@ -612,7 +618,8 @@ public class ModCardProvider implements DataProvider {
 										new SelectCardsAbility(new CardAbilitySelection(
 												new CardAbilityGroups(EnumSet.of(CardAbilityGroup.ENEMY_BOARD,
 														CardAbilityGroup.YOUR_BOARD)),
-												CardSelectionMethod.CHOICE, CardCondition.NoCondition.NO_CONDITION)),
+												new CardSelectionMethod.Choice(false),
+												CardCondition.NoCondition.NO_CONDITION)),
 										new ModifyAbility(Optional.of(mod("throw_sweet_berries")),
 												List.of(new ModificationBuilder().heal(3).build())))))
 								.build())))));
@@ -623,7 +630,8 @@ public class ModCardProvider implements DataProvider {
 										new SelectCardsAbility(new CardAbilitySelection(
 												new CardAbilityGroups(EnumSet.of(CardAbilityGroup.ENEMY_BOARD,
 														CardAbilityGroup.YOUR_BOARD)),
-												CardSelectionMethod.CHOICE, CardCondition.NoCondition.NO_CONDITION)),
+												new CardSelectionMethod.Choice(false),
+												CardCondition.NoCondition.NO_CONDITION)),
 										new ModifyAbility(Optional.of(mod("throw_rotten_flesh")),
 												List.of(new ModificationBuilder().random(CardVariable.HEALTH, -2, 2)
 														.build()))))));
@@ -634,35 +642,30 @@ public class ModCardProvider implements DataProvider {
 										new SelectCardsAbility(new CardAbilitySelection(
 												new CardAbilityGroups(EnumSet.of(CardAbilityGroup.ENEMY_BOARD,
 														CardAbilityGroup.YOUR_BOARD)),
-												CardSelectionMethod.CHOICE, CardCondition.NoCondition.NO_CONDITION)),
+												new CardSelectionMethod.Choice(false),
+												CardCondition.NoCondition.NO_CONDITION)),
 										new ModifyAbility(Optional.of(mod("throw_rabbit_foot")),
 												List.of(new ModificationBuilder().addMaxHealth(1).build()))))));
 		add(new Builder(EntityType.ITEM, 0, 0, 0).setKey(mod("absorption_potion"))
 				.setAdditionalData(new AdditionalCardData.ItemData(
 						PotionUtils.setPotion(Items.POTION.getDefaultInstance(), Potions.TURTLE_MASTER)))
-				.setCardAbility(
-						new ChainAbility(
-								EnumSet.of(CardAbilityTrigger.SUMMON), List.of(
-										new SelectCardsAbility(new CardAbilitySelection(
-												new CardAbilityGroups(EnumSet.of(CardAbilityGroup.ENEMY_BOARD,
-														CardAbilityGroup.YOUR_BOARD)),
-												CardSelectionMethod.CHOICE, CardCondition.NoCondition.NO_CONDITION)),
-										new ModifyAbility(Optional.of(mod("throw_absorption_potion")),
-												List.of(new ModificationBuilder().setProperty(CardProperty.SHIELD, 1)
-														.build()))))));
+				.setCardAbility(new ChainAbility(EnumSet.of(CardAbilityTrigger.SUMMON), List.of(
+						new SelectCardsAbility(new CardAbilitySelection(
+								new CardAbilityGroups(
+										EnumSet.of(CardAbilityGroup.ENEMY_BOARD, CardAbilityGroup.YOUR_BOARD)),
+								new CardSelectionMethod.Choice(false), CardCondition.NoCondition.NO_CONDITION)),
+						new ModifyAbility(Optional.of(mod("throw_absorption_potion")),
+								List.of(new ModificationBuilder().setProperty(CardProperty.SHIELD, 1).build()))))));
 		add(new Builder(EntityType.ITEM, 0, 0, 0).setKey(mod("poison_potion"))
 				.setAdditionalData(new AdditionalCardData.ItemData(
 						PotionUtils.setPotion(Items.POTION.getDefaultInstance(), Potions.POISON)))
-				.setCardAbility(
-						new ChainAbility(
-								EnumSet.of(CardAbilityTrigger.SUMMON), List.of(
-										new SelectCardsAbility(new CardAbilitySelection(
-												new CardAbilityGroups(EnumSet.of(CardAbilityGroup.ENEMY_BOARD,
-														CardAbilityGroup.YOUR_BOARD)),
-												CardSelectionMethod.CHOICE, CardCondition.NoCondition.NO_CONDITION)),
-										new ModifyAbility(Optional.of(mod("throw_poison_potion")),
-												List.of(new ModificationBuilder().setProperty(CardProperty.POISON, 1)
-														.build()))))));
+				.setCardAbility(new ChainAbility(EnumSet.of(CardAbilityTrigger.SUMMON), List.of(
+						new SelectCardsAbility(new CardAbilitySelection(
+								new CardAbilityGroups(
+										EnumSet.of(CardAbilityGroup.ENEMY_BOARD, CardAbilityGroup.YOUR_BOARD)),
+								new CardSelectionMethod.Choice(false), CardCondition.NoCondition.NO_CONDITION)),
+						new ModifyAbility(Optional.of(mod("throw_poison_potion")),
+								List.of(new ModificationBuilder().setProperty(CardProperty.POISON, 1).build()))))));
 		add(new Builder(EntityType.ITEM, 0, 0, 0).setKey(mod("healing_potion"))
 				.setAdditionalData(new AdditionalCardData.ItemData(
 						PotionUtils.setPotion(Items.POTION.getDefaultInstance(), Potions.HEALING)))
@@ -672,7 +675,8 @@ public class ModCardProvider implements DataProvider {
 										new SelectCardsAbility(new CardAbilitySelection(
 												new CardAbilityGroups(EnumSet.of(CardAbilityGroup.ENEMY_BOARD,
 														CardAbilityGroup.YOUR_BOARD)),
-												CardSelectionMethod.CHOICE, CardCondition.NoCondition.NO_CONDITION)),
+												new CardSelectionMethod.Choice(false),
+												CardCondition.NoCondition.NO_CONDITION)),
 										new ModifyAbility(Optional.of(mod("throw_healing_potion")),
 												List.of(new ModificationBuilder().heal(5).build()))))));
 		add(new Builder(EntityType.ITEM, 0, 0, 0).setKey(mod("pufferfish_bucket"))
@@ -686,7 +690,8 @@ public class ModCardProvider implements DataProvider {
 										new SelectCardsAbility(new CardAbilitySelection(
 												new CardAbilityGroups(EnumSet.of(CardAbilityGroup.ENEMY_BOARD,
 														CardAbilityGroup.YOUR_BOARD)),
-												CardSelectionMethod.CHOICE, CardCondition.NoCondition.NO_CONDITION)),
+												new CardSelectionMethod.Choice(false),
+												CardCondition.NoCondition.NO_CONDITION)),
 										new ModifyAbility(Optional.of(mod("throw_packed_ice")),
 												List.of(new ModificationBuilder().addProperty(CardProperty.FREEZE, 2)
 														.build()))))));
@@ -697,7 +702,8 @@ public class ModCardProvider implements DataProvider {
 										new SelectCardsAbility(new CardAbilitySelection(
 												new CardAbilityGroups(EnumSet.of(CardAbilityGroup.ENEMY_BOARD,
 														CardAbilityGroup.YOUR_BOARD)),
-												CardSelectionMethod.CHOICE, CardCondition.NoCondition.NO_CONDITION)),
+												new CardSelectionMethod.Choice(false),
+												CardCondition.NoCondition.NO_CONDITION)),
 										new ModifyAbility(Optional.of(mod("throw_pointed_dripstone")),
 												List.of(new ModificationBuilder().addProperty(CardProperty.THORNS, 3)
 														.build()))))));
@@ -708,7 +714,8 @@ public class ModCardProvider implements DataProvider {
 										new SelectCardsAbility(new CardAbilitySelection(
 												new CardAbilityGroups(EnumSet.of(CardAbilityGroup.ENEMY_BOARD,
 														CardAbilityGroup.YOUR_BOARD)),
-												CardSelectionMethod.CHOICE, CardCondition.NoCondition.NO_CONDITION)),
+												new CardSelectionMethod.Choice(false),
+												CardCondition.NoCondition.NO_CONDITION)),
 										new ModifyAbility(Optional.of(mod("throw_iron_sword")),
 												List.of(new ModificationBuilder().addDamage(2).build()))))));
 		add(new Builder(EntityType.ITEM, 0, 0, 0).setKey(mod("emerald"))
@@ -721,7 +728,8 @@ public class ModCardProvider implements DataProvider {
 										new SelectCardsAbility(new CardAbilitySelection(
 												new CardAbilityGroups(EnumSet.of(CardAbilityGroup.ENEMY_BOARD,
 														CardAbilityGroup.YOUR_BOARD)),
-												CardSelectionMethod.CHOICE, CardCondition.NoCondition.NO_CONDITION)),
+												new CardSelectionMethod.Choice(false),
+												CardCondition.NoCondition.NO_CONDITION)),
 										new ModifyAbility(Optional.of(mod("throw_leather_chestplate")),
 												List.of(new ModificationBuilder().addMaxHealth(2).build()))))));
 		add(new Builder(EntityType.ITEM, 0, 2, 0).setKey(mod("buried_treasure"))
@@ -737,7 +745,8 @@ public class ModCardProvider implements DataProvider {
 										new SelectCardsAbility(new CardAbilitySelection(
 												new CardAbilityGroups(EnumSet.of(CardAbilityGroup.ENEMY_BOARD,
 														CardAbilityGroup.YOUR_BOARD)),
-												CardSelectionMethod.CHOICE, CardCondition.NoCondition.NO_CONDITION)),
+												new CardSelectionMethod.Choice(false),
+												CardCondition.NoCondition.NO_CONDITION)),
 										new ModifyAbility(Optional.of(mod("throw_iron_boots")),
 												List.of(new ModificationBuilder().addMaxHealth(2).build()))))));
 		add(new Builder(EntityType.ITEM, 0, 0, 0).setKey(mod("fire_charge"))
@@ -747,7 +756,8 @@ public class ModCardProvider implements DataProvider {
 										new SelectCardsAbility(new CardAbilitySelection(
 												new CardAbilityGroups(EnumSet.of(CardAbilityGroup.ENEMY_BOARD,
 														CardAbilityGroup.YOUR_BOARD)),
-												CardSelectionMethod.CHOICE, CardCondition.NoCondition.NO_CONDITION)),
+												new CardSelectionMethod.Choice(false),
+												CardCondition.NoCondition.NO_CONDITION)),
 										new ModifyAbility(Optional.of(mod("fireball")),
 												List.of(new ModificationBuilder().addProperty(CardProperty.BURN, 3)
 														.build()))))));
@@ -757,7 +767,7 @@ public class ModCardProvider implements DataProvider {
 				.setCardAbility(new ChainAbility(EnumSet.of(CardAbilityTrigger.SUMMON), List.of(
 						new SelectCardsAbility(
 								new CardAbilitySelection(new CardAbilityGroups(EnumSet.of(CardAbilityGroup.YOUR_BOARD)),
-										CardSelectionMethod.CHOICE,
+										new CardSelectionMethod.Choice(false),
 										new CardCondition.Not(new CardCondition.Entity(EntityType.PLAYER)))),
 						new CopyCardsAbility(true, true, false, Optional.of(mod("throw_ender_pearl")))))));
 

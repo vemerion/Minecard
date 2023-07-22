@@ -71,7 +71,7 @@ public class ModCardPropertyProvider implements DataProvider {
 						new ChainAbility(EnumSet.of(CardAbilityTrigger.SUMMON),
 								List.of(new SelectCardsAbility(new CardAbilitySelection(
 										new CardAbilityGroups(EnumSet.of(CardAbilityGroup.SELF)),
-										CardSelectionMethod.ALL, CardCondition.NoCondition.NO_CONDITION)),
+										CardSelectionMethod.All.ALL, CardCondition.NoCondition.NO_CONDITION)),
 										new ModifyAbility(Optional.empty(),
 
 												List.of(List.of(new CardModification(
@@ -88,7 +88,7 @@ public class ModCardPropertyProvider implements DataProvider {
 				new ChainAbility(EnumSet.of(CardAbilityTrigger.TICK), List.of(
 						new SelectCardsAbility(
 								new CardAbilitySelection(new CardAbilityGroups(EnumSet.of(CardAbilityGroup.SELF)),
-										CardSelectionMethod.ALL, CardCondition.NoCondition.NO_CONDITION)),
+										CardSelectionMethod.All.ALL, CardCondition.NoCondition.NO_CONDITION)),
 						new ModifyAbility(Optional.empty(),
 
 								List.of(List.of(
@@ -106,7 +106,7 @@ public class ModCardPropertyProvider implements DataProvider {
 		properties.put(CardProperty.POISON, new CardProperty(new ItemStack(Items.SPIDER_EYE), new ChainAbility(
 				EnumSet.of(CardAbilityTrigger.TICK),
 				List.of(new SelectCardsAbility(new CardAbilitySelection(
-						new CardAbilityGroups(EnumSet.of(CardAbilityGroup.SELF)), CardSelectionMethod.ALL,
+						new CardAbilityGroups(EnumSet.of(CardAbilityGroup.SELF)), CardSelectionMethod.All.ALL,
 						new CardCondition.OperatorCondition(new CardOperator.GreaterThan(
 								new CardOperator.Variable(CardVariable.HEALTH), new CardOperator.Constant(1))))),
 						new ModifyAbility(Optional.empty(),
@@ -125,7 +125,7 @@ public class ModCardPropertyProvider implements DataProvider {
 																new CardAbilitySelection(
 																		new CardAbilityGroups(
 																				EnumSet.of(CardAbilityGroup.SELF)),
-																		CardSelectionMethod.ALL,
+																		CardSelectionMethod.All.ALL,
 																		CardCondition.NoCondition.NO_CONDITION)),
 														new ModifyAbility(Optional.empty(),
 																List.of(List.of(new CardModification(
@@ -140,7 +140,7 @@ public class ModCardPropertyProvider implements DataProvider {
 														new SelectCardsAbility(new CardAbilitySelection(
 																new CardAbilityGroups(
 																		EnumSet.of(CardAbilityGroup.SELF)),
-																CardSelectionMethod.ALL,
+																CardSelectionMethod.All.ALL,
 																CardCondition.NoCondition.NO_CONDITION)),
 														new ModifyAbility(Optional.empty(),
 																List.of(List.of(new CardModification(

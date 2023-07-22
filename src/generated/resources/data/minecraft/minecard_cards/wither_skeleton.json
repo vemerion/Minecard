@@ -17,7 +17,9 @@
                 "your_hand",
                 "your_deck"
               ],
-              "method": "all",
+              "method": {
+                "type": "minecard:all"
+              },
               "condition": {
                 "type": "minecard:entity",
                 "value": {
