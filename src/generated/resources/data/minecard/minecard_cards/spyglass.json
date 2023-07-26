@@ -1,0 +1,74 @@
+{
+  "additional_data": {
+    "item": {
+      "id": "minecraft:spyglass",
+      "Count": 1
+    }
+  },
+  "abilities": {
+    "type": "minecard:chain",
+    "value": {
+      "triggers": [
+        "summon"
+      ],
+      "abilities": [
+        {
+          "type": "minecard:select_cards",
+          "value": {
+            "selection": {
+              "groups": [
+                "enemy_hand"
+              ],
+              "method": {
+                "type": "minecard:random",
+                "value": {
+                  "count": 3,
+                  "repeat": false
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "minecard:select_cards",
+          "value": {
+            "selection": {
+              "groups": [
+                "collected"
+              ],
+              "method": {
+                "type": "minecard:choice",
+                "value": {
+                  "discover": true
+                }
+              }
+            },
+            "clear": true
+          }
+        },
+        {
+          "type": "minecard:modify",
+          "value": {
+            "modifications": [
+              [
+                {
+                  "output": {
+                    "type": "minecard:cost"
+                  },
+                  "operator": {
+                    "type": "minecard:constant",
+                    "value": 10
+                  }
+                }
+              ]
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "entity": "minecraft:item",
+  "cost": 3,
+  "health": 0,
+  "damage": 0
+}

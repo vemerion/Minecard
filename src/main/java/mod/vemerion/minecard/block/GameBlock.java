@@ -66,4 +66,13 @@ public class GameBlock extends Block implements EntityBlock {
 	public int getFireSpreadSpeed(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
 		return 5;
 	}
+	
+	@SuppressWarnings("deprecation")
+	@Override
+	public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pIsMoving) {
+		pLevel.getBlockEntity(pPos, ModBlockEntities.GAME.get()).ifPresent(game -> {
+			game.exit();
+		});
+		super.onRemove(pState, pLevel, pPos, pNewState, pIsMoving);
+	}
 }

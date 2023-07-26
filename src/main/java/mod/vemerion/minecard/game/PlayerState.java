@@ -39,7 +39,6 @@ public class PlayerState {
 	private int resources;
 	private int maxResources;
 	private boolean mulligan;
-	private PlayerChoices choices;
 	private GameState game;
 
 	public PlayerState(UUID id, List<Card> deck, List<Card> hand, List<Card> board, int resources, int maxResources,
@@ -87,14 +86,6 @@ public class PlayerState {
 
 	public boolean isMulligan() {
 		return mulligan;
-	}
-
-	public PlayerChoices getChoices() {
-		return choices;
-	}
-
-	public void resetChoices() {
-		choices = null;
 	}
 
 	private Card withId(List<Card> list, int id) {
@@ -223,16 +214,6 @@ public class PlayerState {
 		if (card.getCost() > resources || (board.size() >= GameState.MAX_BOARD_SIZE && !card.isSpell()))
 			return;
 
-		if (choices == null) {
-			choices = new PlayerChoices(getId(), card, leftId);
-		}
-
-		card.getAbility().createChoices(receivers, this, card);
-
-		if (choices.getPendingCount() != 0) {
-			return;
-		}
-
 		resources -= card.getCost();
 
 		if (!card.isSpell()) {
@@ -259,8 +240,6 @@ public class PlayerState {
 			game.addHistory(receivers, new HistoryEntry(ItemStack.EMPTY, id, card, List.of()));
 
 		card.ability((a, i) -> a.trigger(CardAbilityTrigger.SUMMON, receivers, this, card, null, i));
-
-		choices = null;
 	}
 
 	public MessagePlayerState toMessage(boolean hide) {

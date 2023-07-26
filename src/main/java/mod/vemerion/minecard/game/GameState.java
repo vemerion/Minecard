@@ -41,6 +41,7 @@ public class GameState {
 	private List<HistoryEntry> history;
 	private Random random;
 	private boolean isGameOver;
+	private PlayerChoice choice = new PlayerChoice();
 
 	public GameState(List<PlayerState> playerStates, int turn, int tutorialStep, List<HistoryEntry> history) {
 		this.playerStates = new ArrayList<>(playerStates);
@@ -87,6 +88,10 @@ public class GameState {
 		for (var receiver : receivers) {
 			receiver.receiver(msg);
 		}
+	}
+
+	public PlayerChoice getChoice() {
+		return choice;
 	}
 
 	public boolean isTutorial() {
@@ -300,13 +305,8 @@ public class GameState {
 				List.of(targetCard)));
 	}
 
-	public void choice(List<Receiver> receivers, int choiceId, int selected) {
-		var choices = getCurrentPlayerState().getChoices();
-		if (choices == null)
-			return;
-		choices.makeChoice(choiceId, selected);
-
-		getCurrentPlayerState().playCard(receivers, choices.getCard().getId(), choices.getLeftId());
+	public void choice(List<Receiver> receivers, int selected) {
+		getChoice().respond(receivers, selected);
 	}
 
 	// Completely remove the card without running onDeath

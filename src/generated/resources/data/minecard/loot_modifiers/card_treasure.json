@@ -74,6 +74,10 @@
     {
       "data": "minecard:enchanted_book",
       "weight": 1
+    },
+    {
+      "data": "minecard:spyglass",
+      "weight": 1
     }
   ],
   "type": "minecard:card_treasure"

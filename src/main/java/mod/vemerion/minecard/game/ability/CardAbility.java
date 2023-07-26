@@ -51,10 +51,6 @@ public abstract class CardAbility {
 		return triggers;
 	}
 
-	public void createChoices(List<Receiver> receivers, PlayerState state, Card card) {
-
-	}
-
 	public void trigger(CardAbilityTrigger trigger, List<Receiver> receivers, PlayerState state, Card card, Card target,
 			ItemStack icon) {
 		if (triggers.contains(trigger)) {

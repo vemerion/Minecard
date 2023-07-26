@@ -71,7 +71,7 @@ public class CardAbilityGroups {
 		return groups.size() == 1 && groups.stream().allMatch(g -> g.singular());
 	}
 
-	public List<Card> get(GameState state, UUID id, Card self, Card target) {
+	public List<Card> get(GameState state, UUID id, Card self, Card target, List<Card> collected) {
 		List<Card> result = new ArrayList<>();
 
 		var yourState = state.getYourPlayerState(id);
@@ -136,6 +136,9 @@ public class CardAbilityGroups {
 				break;
 			case YOUR_DECK:
 				result.addAll(yourState.getDeck());
+				break;
+			case COLLECTED:
+				result.addAll(collected);
 				break;
 			}
 		}

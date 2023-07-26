@@ -585,6 +585,17 @@ public class ModCardProvider implements DataProvider {
 				.setCardAbility(new ChainAbility(EnumSet.of(CardAbilityTrigger.SUMMON),
 						List.of(new DrawCardsAbility(Set.of(), 1), new ModifyAbility(Optional.empty(),
 								List.of(new ModificationBuilder().addDamage(2).addMaxHealth(2).build()))))));
+		add(new Builder(EntityType.ITEM, 3, 0, 0).setKey(mod("spyglass"))
+				.setAdditionalData(new AdditionalCardData.ItemData(Items.SPYGLASS))
+				.setCardAbility(new ChainAbility(EnumSet.of(CardAbilityTrigger.SUMMON), List.of(new SelectCardsAbility(
+						new CardAbilitySelection(new CardAbilityGroups(EnumSet.of(CardAbilityGroup.ENEMY_HAND)),
+								new CardSelectionMethod.Random(3, false), CardCondition.NoCondition.NO_CONDITION),
+						false),
+						new SelectCardsAbility(
+								new CardAbilitySelection(new CardAbilityGroups(EnumSet.of(CardAbilityGroup.COLLECTED)),
+										new CardSelectionMethod.Choice(true), CardCondition.NoCondition.NO_CONDITION),
+								true),
+						new ModifyAbility(Optional.empty(), List.of(new ModificationBuilder().setCost(10).build()))))));
 
 		// Auxiliary cards
 		add(new Builder(EntityType.ITEM, 0, 5, 0).setKey(mod("end_crystal"))
@@ -853,6 +864,11 @@ public class ModCardProvider implements DataProvider {
 		private ModificationBuilder addCost(int value) {
 			modifications.add(new CardModification(CardVariable.COST, new CardOperator.Add(
 					new CardOperator.Variable(CardVariable.COST), new CardOperator.Constant(value))));
+			return this;
+		}
+
+		private ModificationBuilder setCost(int value) {
+			modifications.add(new CardModification(CardVariable.COST, new CardOperator.Constant(value)));
 			return this;
 		}
 

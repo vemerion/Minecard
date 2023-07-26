@@ -52,6 +52,11 @@ public class GameBlockEntity extends BlockEntity {
 	private Set<UUID> receivers;
 	private AIPlayer aiPlayer;
 
+	// Sub thread that runs card ability in playCard() that will block on ability
+	// choice. Sub thread and main thread will never run at the same time, to reduce
+	// need for synchronization to a minimum
+	private Thread thread;
+
 	public GameBlockEntity(BlockPos pWorldPosition, BlockState pBlockState) {
 		super(ModBlockEntities.GAME.get(), pWorldPosition, pBlockState);
 		receivers = new HashSet<>();
@@ -75,6 +80,10 @@ public class GameBlockEntity extends BlockEntity {
 		}
 	}
 
+	private boolean isThreadActive() {
+		return thread != null && thread.isAlive();
+	}
+
 	public boolean canReceiveMessage(ServerPlayer player) {
 		return state.getPlayerStates().size() > 1;
 	}
@@ -95,7 +104,7 @@ public class GameBlockEntity extends BlockEntity {
 	}
 
 	public void endTurn() {
-		if (state.getCurrentPlayerState().getChoices() != null || state.isMulligan())
+		if (isThreadActive() || state.isMulligan())
 			return;
 
 		state.endTurn(getReceivers());
@@ -110,16 +119,23 @@ public class GameBlockEntity extends BlockEntity {
 	}
 
 	public void playCard(int card, int leftId) {
-		if (state.getCurrentPlayerState().getChoices() != null || state.isMulligan())
+		if (isThreadActive() || state.isMulligan())
 			return;
 
-		state.getCurrentPlayerState().playCard(getReceivers(), card, leftId);
+		thread = new Thread(() -> {
+			state.getChoice().setActive(true);
+			state.getCurrentPlayerState().playCard(getReceivers(), card, leftId);
+			state.getChoice().setActive(false);
+			state.getChoice().wakeMain();
+		});
+		thread.start();
+		state.getChoice().mainWaiting();
 
 		setChanged();
 	}
 
 	public void attack(int attacker, int target) {
-		if (state.getCurrentPlayerState().getChoices() != null || state.isMulligan())
+		if (isThreadActive() || state.isMulligan())
 			return;
 
 		state.attack(getReceivers(), attacker, target);
@@ -127,18 +143,15 @@ public class GameBlockEntity extends BlockEntity {
 		setChanged();
 	}
 
-	public void choice(int choiceId, int selected) {
-		if (state.isMulligan())
+	public void choice(int selected) {
+		if (!isThreadActive() || state.isMulligan())
 			return;
 
-		state.choice(getReceivers(), choiceId, selected);
+		state.choice(getReceivers(), selected);
 	}
 
 	public void closeGame(ServerPlayer sender) {
 		receivers.remove(sender.getUUID());
-		if (sender.getUUID().equals(state.getCurrentPlayer())) {
-			state.getCurrentPlayerState().resetChoices();
-		}
 	}
 
 	public void performMulligan(UUID sender, Set<Integer> cards) {
@@ -176,6 +189,9 @@ public class GameBlockEntity extends BlockEntity {
 			Network.INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), createOpenGameMessage(id));
 			Network.INSTANCE.send(PacketDistributor.PLAYER.with(() -> player),
 					new NewTurnMessage(state.getCurrentPlayer()));
+			if (isThreadActive() && state.getCurrentPlayer().equals(id)) {
+				state.getChoice().resend(new Receiver.Player(player));
+			}
 		} else if (stack.is(ItemTags.PLANKS)) {
 			startTutorial(player);
 			setChanged();
@@ -327,5 +343,19 @@ public class GameBlockEntity extends BlockEntity {
 			}
 		}
 
+	}
+
+	@Override
+	public void onChunkUnloaded() {
+		exit();
+		super.onChunkUnloaded();
+	}
+
+	public void exit() {
+		if (isThreadActive()) {
+			state.getChoice().setActive(false);
+			state.getChoice().respond(getReceivers(), -1);
+			setChanged();
+		}
 	}
 }

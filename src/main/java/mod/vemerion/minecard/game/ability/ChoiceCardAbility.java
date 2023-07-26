@@ -60,26 +60,17 @@ public class ChoiceCardAbility extends CardAbility {
 	}
 
 	@Override
-	public void createChoices(List<Receiver> receivers, PlayerState state, Card card) {
-		var choices = state.getChoices();
-		var selected = choices.getSelected(this);
-		selected.ifPresentOrElse(c -> {
-			abilities.get(c.getId()).createChoices(receivers, state, card);
-		}, () -> {
-			var cards = new ArrayList<Card>();
-			for (int i = 0; i < abilities.size(); i++)
-				cards.add(new CardType(card.getType().get(), 0, 0, 0, Map.of(), abilities.get(i),
-						card.getAdditionalData(), CardType.DEFAULT_DECK_COUNT, CardType.DEFAULT_DROP_CHANCE).create()
-						.setId(i));
-			choices.addChoice(receivers, this, cards, false);
-		});
-	}
-
-	@Override
 	protected void invoke(List<Receiver> receivers, PlayerState state, Card card, @Nullable Card other,
 			List<Card> collected, ItemStack icon) {
-		state.getChoices().getSelected(this)
-				.ifPresent(c -> abilities.get(c.getId()).invoke(receivers, state, card, other, collected, icon));
+		var cards = new ArrayList<Card>();
+		for (int i = 0; i < abilities.size(); i++)
+			cards.add(new CardType(card.getType().get(), 0, 0, 0, Map.of(), abilities.get(i), card.getAdditionalData(),
+					CardType.DEFAULT_DECK_COUNT, CardType.DEFAULT_DROP_CHANCE).create().setId(i));
+		state.getGame().getChoice().make(receivers, this, cards, false, state.getGame().getRandom(), state.getId())
+				.ifPresent(c -> {
+					abilities.get(c.getId()).invoke(receivers, state, card, other, collected, icon);
+				});
+		;
 	}
 
 	public List<CardAbility> getAbilities() {

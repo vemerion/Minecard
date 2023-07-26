@@ -8,7 +8,6 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import mod.vemerion.minecard.game.Card;
 import mod.vemerion.minecard.game.GameState;
-import mod.vemerion.minecard.game.PlayerState;
 import mod.vemerion.minecard.game.Receiver;
 import mod.vemerion.minecard.helper.Helper;
 import net.minecraft.network.chat.Component;
@@ -26,19 +25,14 @@ public record CardAbilitySelection(CardAbilityGroups groups, CardSelectionMethod
 									.forGetter(CardAbilitySelection::condition))
 					.apply(instance, CardAbilitySelection::new)));
 
-	public void createChoice(List<Receiver> receivers, CardAbility ability, PlayerState state, Card card) {
-		var candidates = condition.filter(groups.get(state.getGame(), state.getId(), card, null));
-		if (!candidates.isEmpty())
-			method.createChoice(receivers, ability, state, candidates);
-	}
-
-	public List<Card> select(GameState state, CardAbility ability, UUID id, Card self, Card target) {
-		List<Card> candidates = condition.filter(groups.get(state, id, self, target));
+	public List<Card> select(List<Receiver> receivers, GameState state, CardAbility ability, UUID id, Card self,
+			Card target, List<Card> collected) {
+		List<Card> candidates = condition.filter(groups.get(state, id, self, target, collected));
 
 		if (candidates.isEmpty())
 			return candidates;
 
-		return method.select(state, ability, candidates);
+		return method.select(receivers, state, ability, candidates);
 	}
 
 	public Component getText() {

@@ -379,7 +379,7 @@ public class GameScreen extends Screen implements GameClient {
 
 	@Override
 	public void playerChoice(Choice choice) {
-		choices.add(choice);
+		choices.set(choice);
 	}
 
 	@Override
@@ -1013,25 +1013,24 @@ public class GameScreen extends Screen implements GameClient {
 
 	private class Choices {
 		private static final int CARD_DISTANCE = 100;
-		private List<Choice> choices = new ArrayList<>();
+		private Choice choice;
 		private List<ClientCard> cards = new ArrayList<>();
 
-		private void add(Choice choice) {
-			choices.add(choice);
-			if (choices.size() == 1) {
-				update();
-			}
+		private void set(Choice choice) {
+			this.choice = choice;
+			update();
 		}
 
-		private void pop() {
-			choices.remove(0);
+		private void clear() {
+			choice = null;
+			cards.clear();
 			update();
 		}
 
 		private void update() {
 			cards = new ArrayList<>();
-			if (!isEmpty() && !choices.get(0).targeting()) {
-				var selectable = choices.get(0).cards();
+			if (!isEmpty() && !choice.targeting()) {
+				var selectable = choice.cards();
 				var startX = (width - CARD_WIDTH) / 2 - (selectable.size() - 1) * CARD_DISTANCE / 2;
 				for (int i = 0; i < selectable.size(); i++) {
 					var card = new ClientCard(selectable.get(i),
@@ -1043,7 +1042,7 @@ public class GameScreen extends Screen implements GameClient {
 		}
 
 		private boolean isEmpty() {
-			return choices.isEmpty();
+			return choice == null;
 		}
 
 		private void tick() {
@@ -1061,7 +1060,6 @@ public class GameScreen extends Screen implements GameClient {
 			if (!isEmpty()) {
 
 				// Indicate which cards can't be chosen
-				var choice = choices.get(0);
 				var candidates = choice.cards();
 				if (choice.targeting()) {
 					for (var playerState : state.values()) {
@@ -1086,7 +1084,7 @@ public class GameScreen extends Screen implements GameClient {
 				font.drawShadow(poseStack, CHOOSE_TEXT, 0, 0, 0xffffff);
 				poseStack.popPose();
 
-				var lines = font.split(choices.get(0).ability().getDescription(), 200);
+				var lines = font.split(choice.ability().getDescription(), 200);
 				float y = 18;
 				for (var line : lines) {
 					font.drawShadow(poseStack, line, (width - font.width(line)) / 2, y, 0xffffff);
@@ -1103,16 +1101,14 @@ public class GameScreen extends Screen implements GameClient {
 			selectedCard = null;
 			attackingCard = null;
 
-			var choice = choices.get(0);
 			if (choice.targeting()) { // Select target on board/in hand
 				for (var playerState : state.values()) {
 					for (var list : List.of(playerState.board, playerState.hand)) {
 						for (var card : list) {
 							if (card.contains(pMouseX, pMouseY)
 									&& choice.cards().stream().anyMatch(c -> c.getId() == card.getId())) {
-								Network.INSTANCE
-										.sendToServer(new PlayerChoiceResponseMessage(pos, choice.id(), card.getId()));
-								pop();
+								Network.INSTANCE.sendToServer(new PlayerChoiceResponseMessage(pos, card.getId()));
+								clear();
 								return true;
 							}
 						}
@@ -1121,8 +1117,8 @@ public class GameScreen extends Screen implements GameClient {
 			} else { // Select choice from sent cards
 				for (var card : cards) {
 					if (card.contains(pMouseX, pMouseY)) {
-						Network.INSTANCE.sendToServer(new PlayerChoiceResponseMessage(pos, choice.id(), card.getId()));
-						pop();
+						Network.INSTANCE.sendToServer(new PlayerChoiceResponseMessage(pos, card.getId()));
+						clear();
 						return true;
 					}
 				}

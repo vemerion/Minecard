@@ -6,10 +6,8 @@ import java.util.List;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
-import mod.vemerion.minecard.Main;
 import mod.vemerion.minecard.game.Card;
 import mod.vemerion.minecard.game.GameState;
-import mod.vemerion.minecard.game.PlayerState;
 import mod.vemerion.minecard.game.Receiver;
 import mod.vemerion.minecard.init.ModCardSelectionMethods;
 import net.minecraft.Util;
@@ -40,9 +38,7 @@ public abstract class CardSelectionMethod {
 		return description;
 	}
 
-	public abstract List<Card> select(GameState state, CardAbility ability, List<Card> candidates);
-
-	public abstract void createChoice(List<Receiver> receivers, CardAbility ability, PlayerState state,
+	public abstract List<Card> select(List<Receiver> receivers, GameState state, CardAbility ability,
 			List<Card> candidates);
 
 	public static class CardSelectionMethodType<T extends CardSelectionMethod>
@@ -83,14 +79,9 @@ public abstract class CardSelectionMethod {
 		}
 
 		@Override
-		public List<Card> select(GameState state, CardAbility ability, List<Card> candidates) {
-			return candidates;
-		}
-
-		@Override
-		public void createChoice(List<Receiver> receivers, CardAbility ability, PlayerState state,
+		public List<Card> select(List<Receiver> receivers, GameState state, CardAbility ability,
 				List<Card> candidates) {
-
+			return candidates;
 		}
 	}
 
@@ -129,7 +120,8 @@ public abstract class CardSelectionMethod {
 		}
 
 		@Override
-		public List<Card> select(GameState state, CardAbility ability, List<Card> candidates) {
+		public List<Card> select(List<Receiver> receivers, GameState state, CardAbility ability,
+				List<Card> candidates) {
 			var result = new ArrayList<Card>();
 			for (int i = 0; i < count; i++) {
 				if (candidates.isEmpty())
@@ -141,12 +133,6 @@ public abstract class CardSelectionMethod {
 				}
 			}
 			return result;
-		}
-
-		@Override
-		public void createChoice(List<Receiver> receivers, CardAbility ability, PlayerState state,
-				List<Card> candidates) {
-
 		}
 	}
 
@@ -174,23 +160,12 @@ public abstract class CardSelectionMethod {
 		}
 
 		@Override
-		public List<Card> select(GameState state, CardAbility ability, List<Card> candidates) {
-			var result = new ArrayList<Card>();
-			var choices = state.getCurrentPlayerState().getChoices();
-			if (choices == null) {
-				Main.LOGGER.debug(
-						"No choices made (can only make choice is ability trigger is 'summon'). Will pick random card");
-				result.add(candidates.get(state.getRandom().nextInt(candidates.size())));
-			} else {
-				choices.getSelected(ability).ifPresent(c -> result.add(c));
-			}
-			return result;
-		}
-
-		@Override
-		public void createChoice(List<Receiver> receivers, CardAbility ability, PlayerState state,
+		public List<Card> select(List<Receiver> receivers, GameState state, CardAbility ability,
 				List<Card> candidates) {
-			state.getChoices().addChoice(receivers, ability, candidates, !discover);
+			var result = new ArrayList<Card>();
+			state.getChoice().make(receivers, ability, candidates, !discover, state.getRandom(),
+					state.getCurrentPlayerState().getId()).ifPresent(c -> result.add(c));
+			return result;
 		}
 
 		public boolean isDiscover() {

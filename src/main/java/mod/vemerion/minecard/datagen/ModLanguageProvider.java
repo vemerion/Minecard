@@ -99,6 +99,7 @@ public class ModLanguageProvider extends LanguageProvider {
 		add(CardAbilityGroup.YOUR_HAND.getTextKey(), "your hand");
 		add(CardAbilityGroup.ADJACENT.getTextKey(), "adjacent to this");
 		add(CardAbilityGroup.TARGET_ADJACENT.getTextKey(), "adjacent to the target");
+		add(CardAbilityGroup.COLLECTED.getTextKey(), "collected");
 
 		// Card selection methods
 		add(ModCardSelectionMethods.ALL.get().getTranslationKey(), "for all cards from ");

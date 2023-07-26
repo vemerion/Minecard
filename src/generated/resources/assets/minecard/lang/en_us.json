@@ -26,6 +26,7 @@
   "card_abilities.minecard.summon_cardcard_text": "%s (%s/%s)",
   "card_ability_group.minecard.adjacent": "adjacent to this",
   "card_ability_group.minecard.all": "anywhere",
+  "card_ability_group.minecard.collected": "collected",
   "card_ability_group.minecard.enemy_board": "the enemy board",
   "card_ability_group.minecard.enemy_deck": "the enemy deck",
   "card_ability_group.minecard.enemy_hand": "the enemy hand",
