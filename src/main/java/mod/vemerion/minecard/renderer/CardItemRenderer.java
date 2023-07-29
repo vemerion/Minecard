@@ -111,7 +111,8 @@ public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 				int start = 0;
 				var tooLong = i == DESCRIPTION_SIZES.length - 1 && lines.size() > size.maxLines;
 				if (tooLong) {
-					start = card.getTextScroll() % (lines.size() - size.maxLines + 1);
+					var max = (lines.size() - size.maxLines + 1);
+					start = (card.getTextScroll() % max + max) % max;
 				}
 				pose.pushPose();
 				pose.translate(0.131, -0.521, 0.01);
