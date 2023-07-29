@@ -99,14 +99,14 @@ public class ModLanguageProvider extends LanguageProvider {
 		add(CardAbilityGroup.YOUR_HAND.getTextKey(), "your hand");
 		add(CardAbilityGroup.ADJACENT.getTextKey(), "adjacent to this");
 		add(CardAbilityGroup.TARGET_ADJACENT.getTextKey(), "adjacent to the target");
-		add(CardAbilityGroup.COLLECTED.getTextKey(), "collected");
+		add(CardAbilityGroup.COLLECTED.getTextKey(), "the found cards");
 
 		// Card selection methods
-		add(ModCardSelectionMethods.ALL.get().getTranslationKey(), "for all cards from ");
-		add(ModCardSelectionMethods.RANDOM.get().getTranslationKey(), "for %s random card(s) from ");
-		add(ModCardSelectionMethods.CHOICE.get().getTranslationKey(), "for a %s card from ");
-		add(ModCardSelectionMethods.CHOICE.get().getTranslationKey() + ".selected", "selected");
-		add(ModCardSelectionMethods.CHOICE.get().getTranslationKey() + ".discovered", "discovered");
+		add(ModCardSelectionMethods.ALL.get().getTranslationKey(), "find all cards from ");
+		add(ModCardSelectionMethods.RANDOM.get().getTranslationKey(), "find %s random card(s) from ");
+		add(ModCardSelectionMethods.CHOICE.get().getTranslationKey(), "%s a card from ");
+		add(ModCardSelectionMethods.CHOICE.get().getTranslationKey() + ".selected", "select");
+		add(ModCardSelectionMethods.CHOICE.get().getTranslationKey() + ".discovered", "discover");
 
 		// Card conditions
 		add(ModCardConditions.NO_CONDITION.get().getTranslationKey(), "");
