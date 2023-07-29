@@ -616,6 +616,9 @@ public class GameScreen extends Screen implements GameClient {
 
 		background.render(poseStack, mouseX, mouseY, source, partialTicks);
 
+		for (var r : resources)
+			r.setShaking(0);
+
 		for (var playerState : state.values()) {
 			boolean enemy = playerState.isTop;
 
@@ -634,6 +637,13 @@ public class GameScreen extends Screen implements GameClient {
 							!enemy && !isSpectator ? transformCard(card, -CARD_HEIGHT / 2, mouseX, mouseY, partialTicks)
 									: new PoseStack(),
 							mouseX, mouseY, source, partialTicks);
+					if (card.contains(mouseX, mouseY) && !enemy && !isSpectator) {
+						for (var r : resources) {
+							if (r.id.equals(playerState.id)) {
+								r.setShaking(card.getCost());
+							}
+						}
+					}
 				}
 			}
 
@@ -950,6 +960,7 @@ public class GameScreen extends Screen implements GameClient {
 
 		private UUID id;
 		private boolean top;
+		private int shaking;
 
 		private float[] scales = new float[20];
 		private float[] scales0 = new float[20];
@@ -959,11 +970,22 @@ public class GameScreen extends Screen implements GameClient {
 			this.top = top;
 		}
 
+		public void setShaking(int i) {
+			shaking = i;
+		}
+
 		public void render(PoseStack poseStack, int pMouseX, int pMouseY, float pPartialTick, BufferSource source) {
 			var position = new Vec2((top ? 200 : width - 200), top ? 60 : height - 60);
+			var playerState = state.get(id);
+
 			for (int i = 0; i < 10; i++) {
 				poseStack.pushPose();
 				poseStack.translate(position.x + i * OFFSET * (top ? -1 : 1), position.y, 0);
+				if (shaking > 0 && shaking <= playerState.resources && i >= playerState.resources - shaking
+						&& i < playerState.resources) {
+					poseStack.mulPose(new Quaternion(0, 0,
+							Mth.cos(minecraft.level.getGameTime() % 100000 + pPartialTick) * 20, true));
+				}
 
 				renderResource(poseStack, pPartialTick, source, i * 2, true);
 				renderResource(poseStack, pPartialTick, source, i * 2 + 1, false);
@@ -972,7 +994,6 @@ public class GameScreen extends Screen implements GameClient {
 			}
 
 			// Render count text
-			var playerState = state.get(id);
 			int width = Math.max(playerState.resources, playerState.maxResources) * OFFSET;
 			position = position.add(new Vec2(OFFSET / 2 * (top ? 1 : -1), -OFFSET / 2));
 			if (pMouseX > (top ? position.x - width : position.x) && pMouseX < (top ? position.x : position.x + width)
