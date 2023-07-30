@@ -30,9 +30,14 @@
           }
         },
         {
+          "type": "minecard:animation",
+          "value": {
+            "animation": "minecard:throw_packed_ice"
+          }
+        },
+        {
           "type": "minecard:modify",
           "value": {
-            "animation": "minecard:throw_packed_ice",
             "modifications": [
               [
                 {

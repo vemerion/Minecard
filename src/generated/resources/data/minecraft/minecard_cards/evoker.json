@@ -20,9 +20,14 @@
           }
         },
         {
+          "type": "minecard:animation",
+          "value": {
+            "animation": "minecard:evoker_fangs"
+          }
+        },
+        {
           "type": "minecard:modify",
           "value": {
-            "animation": "minecard:evoker_fangs",
             "modifications": [
               [
                 {

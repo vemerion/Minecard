@@ -29,9 +29,14 @@
           }
         },
         {
+          "type": "minecard:animation",
+          "value": {
+            "animation": "minecard:wither_projectile"
+          }
+        },
+        {
           "type": "minecard:modify",
           "value": {
-            "animation": "minecard:wither_projectile",
             "modifications": [
               [
                 {

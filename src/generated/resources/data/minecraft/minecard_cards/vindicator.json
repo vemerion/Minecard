@@ -1,12 +1,23 @@
 {
   "abilities": {
-    "triggers": [
-      "death"
-    ],
-    "cards": [
-      "minecard:emerald"
-    ],
-    "type": "minecard:add_cards"
+    "type": "minecard:chain",
+    "value": {
+      "triggers": [
+        "death"
+      ],
+      "abilities": [
+        {
+          "cards": [
+            "minecard:emerald"
+          ],
+          "type": "minecard:constant_cards"
+        },
+        {
+          "placement": "your_hand",
+          "type": "minecard:place_cards"
+        }
+      ]
+    }
   },
   "entity": "minecraft:vindicator",
   "cost": 6,

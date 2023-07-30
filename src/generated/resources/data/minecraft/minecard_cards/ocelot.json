@@ -37,12 +37,11 @@
           }
         },
         {
-          "type": "minecard:copy_cards",
-          "value": {
-            "destroy_original": true,
-            "restore_health": false,
-            "give_to_enemy": true
-          }
+          "type": "minecard:remove_cards"
+        },
+        {
+          "placement": "enemy_hand",
+          "type": "minecard:place_cards"
         }
       ]
     }

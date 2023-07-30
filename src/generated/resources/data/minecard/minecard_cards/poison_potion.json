@@ -33,9 +33,14 @@
           }
         },
         {
+          "type": "minecard:animation",
+          "value": {
+            "animation": "minecard:throw_poison_potion"
+          }
+        },
+        {
           "type": "minecard:modify",
           "value": {
-            "animation": "minecard:throw_poison_potion",
             "modifications": [
               [
                 {

@@ -1,130 +1,146 @@
 {
   "abilities": {
-    "triggers": [
-      "summon"
-    ],
-    "cards": [
-      {
-        "additional_data": {
-          "item": {
-            "id": "minecraft:milk_bucket",
-            "Count": 1
-          }
-        },
-        "abilities": {
-          "type": "minecard:chain",
-          "value": {
-            "triggers": [
-              "summon"
-            ],
-            "abilities": [
-              {
-                "type": "minecard:select_cards",
-                "value": {
-                  "selection": {
-                    "groups": [
-                      "enemy_board",
-                      "your_board"
-                    ],
-                    "method": {
-                      "type": "minecard:choice",
-                      "value": {
-                        "discover": false
-                      }
-                    }
-                  }
+    "type": "minecard:chain",
+    "value": {
+      "triggers": [
+        "summon"
+      ],
+      "abilities": [
+        {
+          "cards": [
+            {
+              "additional_data": {
+                "item": {
+                  "id": "minecraft:milk_bucket",
+                  "Count": 1
                 }
               },
-              {
-                "type": "minecard:modify",
+              "abilities": {
+                "type": "minecard:chain",
                 "value": {
-                  "animation": "minecard:throw_milk",
-                  "modifications": [
-                    [
-                      {
-                        "output": {
-                          "type": "minecard:property",
-                          "value": "minecard:burn"
-                        },
-                        "operator": {
-                          "type": "minecard:constant",
-                          "value": 0
-                        }
-                      },
-                      {
-                        "output": {
-                          "type": "minecard:property",
-                          "value": "minecard:freeze"
-                        },
-                        "operator": {
-                          "type": "minecard:constant",
-                          "value": 0
-                        }
-                      },
-                      {
-                        "output": {
-                          "type": "minecard:property",
-                          "value": "minecard:shield"
-                        },
-                        "operator": {
-                          "type": "minecard:constant",
-                          "value": 0
-                        }
-                      },
-                      {
-                        "output": {
-                          "type": "minecard:property",
-                          "value": "minecard:stealth"
-                        },
-                        "operator": {
-                          "type": "minecard:constant",
-                          "value": 0
-                        }
-                      },
-                      {
-                        "output": {
-                          "type": "minecard:property",
-                          "value": "minecard:taunt"
-                        },
-                        "operator": {
-                          "type": "minecard:constant",
-                          "value": 0
-                        }
-                      },
-                      {
-                        "output": {
-                          "type": "minecard:property",
-                          "value": "minecard:thorns"
-                        },
-                        "operator": {
-                          "type": "minecard:constant",
-                          "value": 0
-                        }
-                      },
-                      {
-                        "output": {
-                          "type": "minecard:property",
-                          "value": "minecard:poison"
-                        },
-                        "operator": {
-                          "type": "minecard:constant",
-                          "value": 0
+                  "triggers": [
+                    "summon"
+                  ],
+                  "abilities": [
+                    {
+                      "type": "minecard:select_cards",
+                      "value": {
+                        "selection": {
+                          "groups": [
+                            "enemy_board",
+                            "your_board"
+                          ],
+                          "method": {
+                            "type": "minecard:choice",
+                            "value": {
+                              "discover": false
+                            }
+                          }
                         }
                       }
-                    ]
+                    },
+                    {
+                      "type": "minecard:animation",
+                      "value": {
+                        "animation": "minecard:throw_milk"
+                      }
+                    },
+                    {
+                      "type": "minecard:modify",
+                      "value": {
+                        "modifications": [
+                          [
+                            {
+                              "output": {
+                                "type": "minecard:property",
+                                "value": "minecard:burn"
+                              },
+                              "operator": {
+                                "type": "minecard:constant",
+                                "value": 0
+                              }
+                            },
+                            {
+                              "output": {
+                                "type": "minecard:property",
+                                "value": "minecard:freeze"
+                              },
+                              "operator": {
+                                "type": "minecard:constant",
+                                "value": 0
+                              }
+                            },
+                            {
+                              "output": {
+                                "type": "minecard:property",
+                                "value": "minecard:shield"
+                              },
+                              "operator": {
+                                "type": "minecard:constant",
+                                "value": 0
+                              }
+                            },
+                            {
+                              "output": {
+                                "type": "minecard:property",
+                                "value": "minecard:stealth"
+                              },
+                              "operator": {
+                                "type": "minecard:constant",
+                                "value": 0
+                              }
+                            },
+                            {
+                              "output": {
+                                "type": "minecard:property",
+                                "value": "minecard:taunt"
+                              },
+                              "operator": {
+                                "type": "minecard:constant",
+                                "value": 0
+                              }
+                            },
+                            {
+                              "output": {
+                                "type": "minecard:property",
+                                "value": "minecard:thorns"
+                              },
+                              "operator": {
+                                "type": "minecard:constant",
+                                "value": 0
+                              }
+                            },
+                            {
+                              "output": {
+                                "type": "minecard:property",
+                                "value": "minecard:poison"
+                              },
+                              "operator": {
+                                "type": "minecard:constant",
+                                "value": 0
+                              }
+                            }
+                          ]
+                        ]
+                      }
+                    }
                   ]
                 }
-              }
-            ]
-          }
+              },
+              "entity": "minecraft:item",
+              "cost": 0,
+              "health": 0,
+              "damage": 0
+            }
+          ],
+          "type": "minecard:constant_cards"
         },
-        "entity": "minecraft:item",
-        "cost": 0,
-        "health": 0,
-        "damage": 0
-      }
-    ],
-    "type": "minecard:add_cards"
+        {
+          "placement": "your_hand",
+          "type": "minecard:place_cards"
+        }
+      ]
+    }
   },
   "entity": "minecraft:cow",
   "cost": 2,

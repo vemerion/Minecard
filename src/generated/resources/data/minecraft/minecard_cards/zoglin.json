@@ -3,13 +3,24 @@
     "minecard:undead": 1
   },
   "abilities": {
-    "triggers": [
-      "death"
-    ],
-    "cards": [
-      "minecard:rotten_flesh"
-    ],
-    "type": "minecard:add_cards"
+    "type": "minecard:chain",
+    "value": {
+      "triggers": [
+        "death"
+      ],
+      "abilities": [
+        {
+          "cards": [
+            "minecard:rotten_flesh"
+          ],
+          "type": "minecard:constant_cards"
+        },
+        {
+          "placement": "your_hand",
+          "type": "minecard:place_cards"
+        }
+      ]
+    }
   },
   "entity": "minecraft:zoglin",
   "cost": 9,

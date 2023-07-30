@@ -30,9 +30,14 @@
           }
         },
         {
+          "type": "minecard:animation",
+          "value": {
+            "animation": "minecard:throw_rotten_flesh"
+          }
+        },
+        {
           "type": "minecard:modify",
           "value": {
-            "animation": "minecard:throw_rotten_flesh",
             "modifications": [
               [
                 {

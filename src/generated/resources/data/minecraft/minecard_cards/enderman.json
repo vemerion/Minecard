@@ -24,12 +24,8 @@
           }
         },
         {
-          "type": "minecard:copy_cards",
-          "value": {
-            "destroy_original": false,
-            "restore_health": false,
-            "give_to_enemy": false
-          }
+          "placement": "your_hand",
+          "type": "minecard:place_cards"
         }
       ]
     }

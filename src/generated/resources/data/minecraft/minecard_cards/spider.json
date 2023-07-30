@@ -24,9 +24,14 @@
           }
         },
         {
+          "type": "minecard:animation",
+          "value": {
+            "animation": "minecard:throw_web"
+          }
+        },
+        {
           "type": "minecard:modify",
           "value": {
-            "animation": "minecard:throw_web",
             "modifications": [
               [
                 {

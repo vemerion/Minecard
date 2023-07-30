@@ -37,9 +37,14 @@
                 }
               },
               {
+                "type": "minecard:animation",
+                "value": {
+                  "animation": "minecard:throw_trident"
+                }
+              },
+              {
                 "type": "minecard:modify",
                 "value": {
-                  "animation": "minecard:throw_trident",
                   "modifications": [
                     [
                       {
@@ -85,13 +90,24 @@
           "value": {
             "chance": 30,
             "ability": {
-              "triggers": [
-                "summon"
-              ],
-              "cards": [
-                "minecard:trident"
-              ],
-              "type": "minecard:add_cards"
+              "type": "minecard:chain",
+              "value": {
+                "triggers": [
+                  "summon"
+                ],
+                "abilities": [
+                  {
+                    "cards": [
+                      "minecard:trident"
+                    ],
+                    "type": "minecard:constant_cards"
+                  },
+                  {
+                    "placement": "your_hand",
+                    "type": "minecard:place_cards"
+                  }
+                ]
+              }
             }
           }
         }

@@ -6,14 +6,12 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Random;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import mod.vemerion.minecard.capability.DeckData;
-import mod.vemerion.minecard.game.ability.AddCardsAbility;
 import mod.vemerion.minecard.game.ability.CardAbility;
 import mod.vemerion.minecard.game.ability.CardAbilityGroup;
 import mod.vemerion.minecard.game.ability.CardAbilityGroups;
@@ -27,14 +25,14 @@ import mod.vemerion.minecard.game.ability.CardSelectionMethod;
 import mod.vemerion.minecard.game.ability.CardVariable;
 import mod.vemerion.minecard.game.ability.ChainAbility;
 import mod.vemerion.minecard.game.ability.ChoiceCardAbility;
-import mod.vemerion.minecard.game.ability.CopyCardsAbility;
+import mod.vemerion.minecard.game.ability.ConstantCardsAbility;
 import mod.vemerion.minecard.game.ability.DrawCardsAbility;
 import mod.vemerion.minecard.game.ability.ModifyAbility;
 import mod.vemerion.minecard.game.ability.MultiAbility;
 import mod.vemerion.minecard.game.ability.NoCardAbility;
+import mod.vemerion.minecard.game.ability.PlaceCardsAbility;
 import mod.vemerion.minecard.game.ability.ResourceAbility;
 import mod.vemerion.minecard.game.ability.SelectCardsAbility;
-import mod.vemerion.minecard.game.ability.SummonCardAbility;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -139,24 +137,18 @@ public class RandomCardGenerator {
 		List<CardAbility> abilities = new ArrayList<>();
 		abilities.add(NoCardAbility.NO_CARD_ABILITY);
 		if (depth < maxDepth) {
-			abilities.add(new AddCardsAbility(randTriggers(), List.of(new LazyCardType(next(depth + 1)))));
 			abilities.add(new ChoiceCardAbility(
 					IntStream.range(0, rand.nextInt(1, 5)).mapToObj(i -> next(depth + 1).getAbility())
 							.collect(Collectors.toCollection(() -> new ArrayList<>()))));
 			abilities.add(new DrawCardsAbility(randTriggers(), rand.nextInt(1, 3)));
 			abilities.add(new ResourceAbility(randTriggers(), rand.nextInt(3), rand.nextInt(3)));
-			abilities.add(new SummonCardAbility(randTriggers(),
-					CardPlacement.values()[rand.nextInt(CardPlacement.values().length)],
-					new LazyCardType(next(depth + 1))));
+			abilities.add(new ChainAbility(randTriggers(),
+					List.of(new ConstantCardsAbility(List.of(new LazyCardType(next(depth + 1)))),
+							new PlaceCardsAbility(randEnum(CardPlacement.class)))));
 			abilities.add(new ChainAbility(randTriggers(),
 					List.of(new SelectCardsAbility(new CardAbilitySelection(randGroups(),
 							new CardSelectionMethod.Random(2, true), CardCondition.NoCondition.NO_CONDITION)),
-							new CopyCardsAbility(rand.nextBoolean(), rand.nextBoolean(), rand.nextBoolean(),
-									Optional.empty()))));
-			abilities.add(new ChainAbility(randTriggers(),
-					List.of(new SelectCardsAbility(new CardAbilitySelection(randGroups(),
-							new CardSelectionMethod.Random(2, true), CardCondition.NoCondition.NO_CONDITION)),
-							new ModifyAbility(Optional.empty(), List.of(randModifications())))));
+							new ModifyAbility(List.of(randModifications())))));
 			abilities.add(
 					new MultiAbility(IntStream.range(0, rand.nextInt(1, 5)).mapToObj(i -> next(depth + 1).getAbility())
 							.collect(Collectors.toCollection(() -> new ArrayList<>()))));

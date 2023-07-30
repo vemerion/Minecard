@@ -1,14 +1,43 @@
 {
   "abilities": {
-    "triggers": [
-      "summon"
-    ],
-    "cards": [
-      "minecard:iron_boots",
-      "minecard:ender_pearl",
-      "minecard:fire_charge"
-    ],
-    "type": "minecard:add_cards"
+    "type": "minecard:chain",
+    "value": {
+      "triggers": [
+        "summon"
+      ],
+      "abilities": [
+        {
+          "cards": [
+            "minecard:iron_boots",
+            "minecard:ender_pearl",
+            "minecard:fire_charge"
+          ],
+          "type": "minecard:constant_cards"
+        },
+        {
+          "type": "minecard:select_cards",
+          "value": {
+            "selection": {
+              "groups": [
+                "collected"
+              ],
+              "method": {
+                "type": "minecard:random",
+                "value": {
+                  "count": 1,
+                  "repeat": false
+                }
+              }
+            },
+            "clear": true
+          }
+        },
+        {
+          "placement": "your_hand",
+          "type": "minecard:place_cards"
+        }
+      ]
+    }
   },
   "entity": "minecraft:piglin",
   "cost": 5,

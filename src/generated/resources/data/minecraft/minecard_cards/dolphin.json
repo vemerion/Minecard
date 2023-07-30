@@ -1,12 +1,22 @@
 {
   "abilities": {
-    "type": "minecard:summon_card",
+    "type": "minecard:chain",
     "value": {
       "triggers": [
         "summon"
       ],
-      "placement": "right",
-      "card": "minecard:buried_treasure"
+      "abilities": [
+        {
+          "cards": [
+            "minecard:buried_treasure"
+          ],
+          "type": "minecard:constant_cards"
+        },
+        {
+          "placement": "right",
+          "type": "minecard:place_cards"
+        }
+      ]
     }
   },
   "entity": "minecraft:dolphin",

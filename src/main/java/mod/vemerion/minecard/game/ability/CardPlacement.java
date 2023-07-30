@@ -8,7 +8,8 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 
 public enum CardPlacement {
-	LEFT("left"), RIGHT("right"), ENEMY("enemy");
+	LEFT("left"), RIGHT("right"), ENEMY("enemy"), YOUR_HAND("your_hand"), ENEMY_HAND("enemy_hand"),
+	YOUR_DECK("your_deck"), ENEMY_DECK("enemy_deck");
 
 	public static final Codec<CardPlacement> CODEC = GameUtil.enumCodec(CardPlacement.class, CardPlacement::getName);
 

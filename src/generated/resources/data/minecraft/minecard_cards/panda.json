@@ -1,106 +1,121 @@
 {
   "abilities": {
-    "type": "minecard:summon_card",
+    "type": "minecard:chain",
     "value": {
       "triggers": [
         "summon"
       ],
-      "placement": "right",
-      "card": {
-        "additional_data": {
-          "item": {
-            "id": "minecraft:bamboo",
-            "Count": 1
-          }
-        },
-        "properties": {
-          "minecard:baby": 1
-        },
-        "abilities": {
-          "type": "minecard:chain",
-          "value": {
-            "triggers": [
-              "grow"
-            ],
-            "abilities": [
-              {
-                "type": "minecard:select_cards",
-                "value": {
-                  "selection": {
-                    "groups": [
-                      "enemy_board",
-                      "your_board"
-                    ],
-                    "method": {
-                      "type": "minecard:all"
-                    },
-                    "condition": {
-                      "type": "minecard:entity",
-                      "value": {
-                        "inner": "minecraft:panda"
-                      }
-                    }
-                  }
+      "abilities": [
+        {
+          "cards": [
+            {
+              "additional_data": {
+                "item": {
+                  "id": "minecraft:bamboo",
+                  "Count": 1
                 }
               },
-              {
-                "type": "minecard:modify",
+              "properties": {
+                "minecard:baby": 1
+              },
+              "abilities": {
+                "type": "minecard:chain",
                 "value": {
-                  "animation": "minecard:throw_bamboo",
-                  "modifications": [
-                    [
-                      {
-                        "output": {
-                          "type": "minecard:max_health"
-                        },
-                        "operator": {
-                          "type": "minecard:add",
-                          "value": {
-                            "left": {
-                              "type": "minecard:variable",
-                              "value": {
-                                "type": "minecard:max_health"
-                              }
-                            },
-                            "right": {
-                              "type": "minecard:constant",
-                              "value": 2
-                            }
-                          }
-                        }
-                      },
-                      {
-                        "output": {
-                          "type": "minecard:damage"
-                        },
-                        "operator": {
-                          "type": "minecard:add",
-                          "value": {
-                            "left": {
-                              "type": "minecard:variable",
-                              "value": {
-                                "type": "minecard:damage"
-                              }
-                            },
-                            "right": {
-                              "type": "minecard:constant",
-                              "value": 2
+                  "triggers": [
+                    "grow"
+                  ],
+                  "abilities": [
+                    {
+                      "type": "minecard:select_cards",
+                      "value": {
+                        "selection": {
+                          "groups": [
+                            "enemy_board",
+                            "your_board"
+                          ],
+                          "method": {
+                            "type": "minecard:all"
+                          },
+                          "condition": {
+                            "type": "minecard:entity",
+                            "value": {
+                              "inner": "minecraft:panda"
                             }
                           }
                         }
                       }
-                    ]
+                    },
+                    {
+                      "type": "minecard:animation",
+                      "value": {
+                        "animation": "minecard:throw_bamboo"
+                      }
+                    },
+                    {
+                      "type": "minecard:modify",
+                      "value": {
+                        "modifications": [
+                          [
+                            {
+                              "output": {
+                                "type": "minecard:max_health"
+                              },
+                              "operator": {
+                                "type": "minecard:add",
+                                "value": {
+                                  "left": {
+                                    "type": "minecard:variable",
+                                    "value": {
+                                      "type": "minecard:max_health"
+                                    }
+                                  },
+                                  "right": {
+                                    "type": "minecard:constant",
+                                    "value": 2
+                                  }
+                                }
+                              }
+                            },
+                            {
+                              "output": {
+                                "type": "minecard:damage"
+                              },
+                              "operator": {
+                                "type": "minecard:add",
+                                "value": {
+                                  "left": {
+                                    "type": "minecard:variable",
+                                    "value": {
+                                      "type": "minecard:damage"
+                                    }
+                                  },
+                                  "right": {
+                                    "type": "minecard:constant",
+                                    "value": 2
+                                  }
+                                }
+                              }
+                            }
+                          ]
+                        ]
+                      }
+                    }
                   ]
                 }
-              }
-            ]
-          }
+              },
+              "entity": "minecraft:item",
+              "cost": 0,
+              "health": 5,
+              "damage": 0
+            }
+          ],
+          "type": "minecard:constant_cards"
         },
-        "entity": "minecraft:item",
-        "cost": 0,
-        "health": 5,
-        "damage": 0
-      }
+        {
+          "placement": "right",
+          "type": "minecard:place_cards"
+        }
+      ]
     }
   },
   "entity": "minecraft:panda",

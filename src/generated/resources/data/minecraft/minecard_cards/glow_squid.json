@@ -21,9 +21,14 @@
           }
         },
         {
+          "type": "minecard:animation",
+          "value": {
+            "animation": "minecard:glow"
+          }
+        },
+        {
           "type": "minecard:modify",
           "value": {
-            "animation": "minecard:glow",
             "modifications": [
               [
                 {

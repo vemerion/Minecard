@@ -35,13 +35,17 @@
           }
         },
         {
-          "type": "minecard:copy_cards",
+          "type": "minecard:animation",
           "value": {
-            "destroy_original": true,
-            "restore_health": false,
-            "give_to_enemy": true,
             "animation": "minecard:goat_charge"
           }
+        },
+        {
+          "type": "minecard:remove_cards"
+        },
+        {
+          "placement": "enemy_hand",
+          "type": "minecard:place_cards"
         }
       ]
     }

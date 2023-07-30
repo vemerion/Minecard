@@ -27,9 +27,14 @@
           }
         },
         {
+          "type": "minecard:animation",
+          "value": {
+            "animation": "minecard:shoot_arrow"
+          }
+        },
+        {
           "type": "minecard:modify",
           "value": {
-            "animation": "minecard:shoot_arrow",
             "modifications": [
               [
                 {

@@ -3,21 +3,22 @@ package mod.vemerion.minecard.init;
 import java.util.function.Supplier;
 
 import mod.vemerion.minecard.Main;
-import mod.vemerion.minecard.game.ability.AddCardsAbility;
+import mod.vemerion.minecard.game.ability.AnimationAbility;
 import mod.vemerion.minecard.game.ability.CardAbility;
 import mod.vemerion.minecard.game.ability.CardAbilityType;
 import mod.vemerion.minecard.game.ability.ChainAbility;
 import mod.vemerion.minecard.game.ability.ChanceAbility;
 import mod.vemerion.minecard.game.ability.ChoiceCardAbility;
-import mod.vemerion.minecard.game.ability.CopyCardsAbility;
+import mod.vemerion.minecard.game.ability.ConstantCardsAbility;
 import mod.vemerion.minecard.game.ability.DrawCardsAbility;
 import mod.vemerion.minecard.game.ability.GameOverAbility;
 import mod.vemerion.minecard.game.ability.ModifyAbility;
 import mod.vemerion.minecard.game.ability.MultiAbility;
 import mod.vemerion.minecard.game.ability.NoCardAbility;
+import mod.vemerion.minecard.game.ability.PlaceCardsAbility;
+import mod.vemerion.minecard.game.ability.RemoveCardsAbility;
 import mod.vemerion.minecard.game.ability.ResourceAbility;
 import mod.vemerion.minecard.game.ability.SelectCardsAbility;
-import mod.vemerion.minecard.game.ability.SummonCardAbility;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.IForgeRegistry;
@@ -45,14 +46,8 @@ public class ModCardAbilities {
 			.register("draw_cards", () -> new CardAbilityType<DrawCardsAbility>(DrawCardsAbility.CODEC));
 	public static final RegistryObject<CardAbilityType<? extends CardAbility>> MODIFY = CARD_ABILITIES
 			.register("modify", () -> new CardAbilityType<ModifyAbility>(ModifyAbility.CODEC));
-	public static final RegistryObject<CardAbilityType<? extends CardAbility>> ADD_CARDS = CARD_ABILITIES
-			.register("add_cards", () -> new CardAbilityType<AddCardsAbility>(AddCardsAbility.CODEC));
 	public static final RegistryObject<CardAbilityType<? extends CardAbility>> RESOURCE = CARD_ABILITIES
 			.register("resource", () -> new CardAbilityType<ResourceAbility>(ResourceAbility.CODEC));
-	public static final RegistryObject<CardAbilityType<? extends CardAbility>> COPY_CARDS = CARD_ABILITIES
-			.register("copy_cards", () -> new CardAbilityType<CopyCardsAbility>(CopyCardsAbility.CODEC));
-	public static final RegistryObject<CardAbilityType<? extends CardAbility>> SUMMON_CARD = CARD_ABILITIES
-			.register("summon_card", () -> new CardAbilityType<SummonCardAbility>(SummonCardAbility.CODEC));
 	public static final RegistryObject<CardAbilityType<? extends CardAbility>> MULTI = CARD_ABILITIES.register("multi",
 			() -> new CardAbilityType<MultiAbility>(MultiAbility.CODEC));
 	public static final RegistryObject<CardAbilityType<? extends CardAbility>> CHANCE = CARD_ABILITIES
@@ -65,5 +60,13 @@ public class ModCardAbilities {
 			.register("select_cards", () -> new CardAbilityType<SelectCardsAbility>(SelectCardsAbility.CODEC));
 	public static final RegistryObject<CardAbilityType<? extends CardAbility>> CHAIN = CARD_ABILITIES.register("chain",
 			() -> new CardAbilityType<ChainAbility>(ChainAbility.CODEC));
+	public static final RegistryObject<CardAbilityType<? extends CardAbility>> CONSTANT_CARDS = CARD_ABILITIES
+			.register("constant_cards", () -> new CardAbilityType<ConstantCardsAbility>(ConstantCardsAbility.CODEC));
+	public static final RegistryObject<CardAbilityType<? extends CardAbility>> REMOVE_CARDS = CARD_ABILITIES
+			.register("remove_cards", () -> new CardAbilityType<RemoveCardsAbility>(RemoveCardsAbility.CODEC));
+	public static final RegistryObject<CardAbilityType<? extends CardAbility>> PLACE_CARDS = CARD_ABILITIES
+			.register("place_cards", () -> new CardAbilityType<PlaceCardsAbility>(PlaceCardsAbility.CODEC));
+	public static final RegistryObject<CardAbilityType<? extends CardAbility>> ANIMATION = CARD_ABILITIES
+			.register("animation", () -> new CardAbilityType<AnimationAbility>(AnimationAbility.CODEC));
 
 }

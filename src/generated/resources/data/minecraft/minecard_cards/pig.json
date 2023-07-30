@@ -26,9 +26,14 @@
           }
         },
         {
+          "type": "minecard:animation",
+          "value": {
+            "animation": "minecard:throw_pork"
+          }
+        },
+        {
           "type": "minecard:modify",
           "value": {
-            "animation": "minecard:throw_pork",
             "modifications": [
               [
                 {

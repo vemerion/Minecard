@@ -11,15 +11,44 @@
     }
   },
   "abilities": {
-    "triggers": [
-      "death"
-    ],
-    "cards": [
-      "minecard:emerald",
-      "minecard:leather_chestplate",
-      "minecard:iron_sword"
-    ],
-    "type": "minecard:add_cards"
+    "type": "minecard:chain",
+    "value": {
+      "triggers": [
+        "death"
+      ],
+      "abilities": [
+        {
+          "cards": [
+            "minecard:emerald",
+            "minecard:leather_chestplate",
+            "minecard:iron_sword"
+          ],
+          "type": "minecard:constant_cards"
+        },
+        {
+          "type": "minecard:select_cards",
+          "value": {
+            "selection": {
+              "groups": [
+                "collected"
+              ],
+              "method": {
+                "type": "minecard:random",
+                "value": {
+                  "count": 1,
+                  "repeat": false
+                }
+              }
+            },
+            "clear": true
+          }
+        },
+        {
+          "placement": "your_hand",
+          "type": "minecard:place_cards"
+        }
+      ]
+    }
   },
   "entity": "minecraft:item",
   "cost": 0,

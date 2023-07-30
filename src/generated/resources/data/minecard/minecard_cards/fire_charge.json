@@ -30,9 +30,14 @@
           }
         },
         {
+          "type": "minecard:animation",
+          "value": {
+            "animation": "minecard:fireball"
+          }
+        },
+        {
           "type": "minecard:modify",
           "value": {
-            "animation": "minecard:fireball",
             "modifications": [
               [
                 {

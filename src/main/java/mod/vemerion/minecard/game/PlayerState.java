@@ -242,6 +242,14 @@ public class PlayerState {
 		card.ability((a, i) -> a.trigger(CardAbilityTrigger.SUMMON, receivers, this, card, null, i));
 	}
 
+	public void shuffleIn(List<Receiver> receivers, List<Card> cards) {
+		for (var card : cards) {
+			deck.add(game.getRandom().nextInt(deck.size()), card);
+			for (var receiver : receivers)
+				game.updateCards(receiver, board);
+		}
+	}
+
 	public MessagePlayerState toMessage(boolean hide) {
 		List<Card> hand = this.hand;
 		if (hide) {

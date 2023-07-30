@@ -5,7 +5,6 @@ import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -66,19 +65,19 @@ public class ModCardPropertyProvider implements DataProvider {
 	private void addProperties() {
 		properties.put(CardProperty.TAUNT,
 				new CardProperty(new ItemStack(Items.CARROT_ON_A_STICK), NoCardAbility.NO_CARD_ABILITY));
-		properties.put(CardProperty.CHARGE,
-				new CardProperty(new ItemStack(Items.SUGAR),
-						new ChainAbility(EnumSet.of(CardAbilityTrigger.SUMMON),
-								List.of(new SelectCardsAbility(new CardAbilitySelection(
-										new CardAbilityGroups(EnumSet.of(CardAbilityGroup.SELF)),
+		properties.put(CardProperty.CHARGE, new CardProperty(new ItemStack(Items.SUGAR),
+				new ChainAbility(EnumSet.of(CardAbilityTrigger.SUMMON), List.of(
+						new SelectCardsAbility(
+								new CardAbilitySelection(new CardAbilityGroups(EnumSet.of(CardAbilityGroup.SELF)),
 										CardSelectionMethod.All.ALL, CardCondition.NoCondition.NO_CONDITION)),
-										new ModifyAbility(Optional.empty(),
+						new ModifyAbility(
 
-												List.of(List.of(new CardModification(
-														new CardVariable.PropertyVariable(CardProperty.READY),
-														new CardOperator.Add(new CardOperator.Variable(
+								List.of(List
+										.of(new CardModification(new CardVariable.PropertyVariable(CardProperty.READY),
+												new CardOperator.Add(
+														new CardOperator.Variable(
 																new CardVariable.PropertyVariable(CardProperty.READY)),
-																new CardOperator.Constant(1))))))))));
+														new CardOperator.Constant(1))))))))));
 		properties.put(CardProperty.STEALTH,
 				new CardProperty(new ItemStack(Items.TALL_GRASS), NoCardAbility.NO_CARD_ABILITY));
 		properties.put(CardProperty.FREEZE, new CardProperty(new ItemStack(Items.ICE), NoCardAbility.NO_CARD_ABILITY));
@@ -89,7 +88,7 @@ public class ModCardPropertyProvider implements DataProvider {
 						new SelectCardsAbility(
 								new CardAbilitySelection(new CardAbilityGroups(EnumSet.of(CardAbilityGroup.SELF)),
 										CardSelectionMethod.All.ALL, CardCondition.NoCondition.NO_CONDITION)),
-						new ModifyAbility(Optional.empty(),
+						new ModifyAbility(
 
 								List.of(List.of(
 										new CardModification(CardVariable.HEALTH, new CardOperator.Constant(-1)),
@@ -109,44 +108,30 @@ public class ModCardPropertyProvider implements DataProvider {
 						new CardAbilityGroups(EnumSet.of(CardAbilityGroup.SELF)), CardSelectionMethod.All.ALL,
 						new CardCondition.OperatorCondition(new CardOperator.GreaterThan(
 								new CardOperator.Variable(CardVariable.HEALTH), new CardOperator.Constant(1))))),
-						new ModifyAbility(Optional.empty(),
+						new ModifyAbility(
 
 								List.of(List.of(
 										new CardModification(CardVariable.HEALTH, new CardOperator.Constant(-1)))))))));
 		properties.put(CardProperty.UNDEAD,
 				new CardProperty(new ItemStack(Items.ZOMBIE_HEAD), NoCardAbility.NO_CARD_ABILITY));
-		properties
-				.put(CardProperty.READY,
-						new CardProperty(ItemStack.EMPTY,
-								new MultiAbility(List.of(
-										new ChainAbility(
-												EnumSet.of(CardAbilityTrigger.ATTACK), List.of(
-														new SelectCardsAbility(
-																new CardAbilitySelection(
-																		new CardAbilityGroups(
-																				EnumSet.of(CardAbilityGroup.SELF)),
-																		CardSelectionMethod.All.ALL,
-																		CardCondition.NoCondition.NO_CONDITION)),
-														new ModifyAbility(Optional.empty(),
-																List.of(List.of(new CardModification(
-																		new CardVariable.PropertyVariable(
-																				CardProperty.READY),
-																		new CardOperator.Add(new CardOperator.Variable(
-																				new CardVariable.PropertyVariable(
-																						CardProperty.READY)),
-																				new CardOperator.Constant(-1)))))))),
-										new ChainAbility(
-												EnumSet.of(CardAbilityTrigger.TICK), List.of(
-														new SelectCardsAbility(new CardAbilitySelection(
-																new CardAbilityGroups(
-																		EnumSet.of(CardAbilityGroup.SELF)),
-																CardSelectionMethod.All.ALL,
-																CardCondition.NoCondition.NO_CONDITION)),
-														new ModifyAbility(Optional.empty(),
-																List.of(List.of(new CardModification(
-																		new CardVariable.PropertyVariable(
-																				CardProperty.READY),
-																		new CardOperator.Constant(0)))))))))));
+		properties.put(CardProperty.READY, new CardProperty(ItemStack.EMPTY, new MultiAbility(List.of(
+				new ChainAbility(EnumSet.of(CardAbilityTrigger.ATTACK), List.of(
+						new SelectCardsAbility(
+								new CardAbilitySelection(new CardAbilityGroups(EnumSet.of(CardAbilityGroup.SELF)),
+										CardSelectionMethod.All.ALL, CardCondition.NoCondition.NO_CONDITION)),
+						new ModifyAbility(List
+								.of(List.of(new CardModification(new CardVariable.PropertyVariable(CardProperty.READY),
+										new CardOperator.Add(
+												new CardOperator.Variable(
+														new CardVariable.PropertyVariable(CardProperty.READY)),
+												new CardOperator.Constant(-1)))))))),
+				new ChainAbility(EnumSet.of(CardAbilityTrigger.TICK), List.of(
+						new SelectCardsAbility(
+								new CardAbilitySelection(new CardAbilityGroups(EnumSet.of(CardAbilityGroup.SELF)),
+										CardSelectionMethod.All.ALL, CardCondition.NoCondition.NO_CONDITION)),
+						new ModifyAbility(List
+								.of(List.of(new CardModification(new CardVariable.PropertyVariable(CardProperty.READY),
+										new CardOperator.Constant(0)))))))))));
 
 	}
 

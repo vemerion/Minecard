@@ -20,9 +20,14 @@
           }
         },
         {
+          "type": "minecard:animation",
+          "value": {
+            "animation": "minecard:ravager_charge"
+          }
+        },
+        {
           "type": "minecard:modify",
           "value": {
-            "animation": "minecard:ravager_charge",
             "modifications": [
               [
                 {

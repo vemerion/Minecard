@@ -4,34 +4,55 @@
     "value": {
       "chance": 50,
       "ability": {
-        "triggers": [
-          "death"
-        ],
-        "cards": [
-          {
-            "additional_data": {
-              "item": {
-                "id": "minecraft:salmon_bucket",
-                "Count": 1
-              }
+        "type": "minecard:chain",
+        "value": {
+          "triggers": [
+            "death"
+          ],
+          "abilities": [
+            {
+              "cards": [
+                {
+                  "additional_data": {
+                    "item": {
+                      "id": "minecraft:salmon_bucket",
+                      "Count": 1
+                    }
+                  },
+                  "abilities": {
+                    "type": "minecard:chain",
+                    "value": {
+                      "triggers": [
+                        "summon"
+                      ],
+                      "abilities": [
+                        {
+                          "cards": [
+                            "minecraft:salmon"
+                          ],
+                          "type": "minecard:constant_cards"
+                        },
+                        {
+                          "placement": "right",
+                          "type": "minecard:place_cards"
+                        }
+                      ]
+                    }
+                  },
+                  "entity": "minecraft:item",
+                  "cost": 0,
+                  "health": 0,
+                  "damage": 0
+                }
+              ],
+              "type": "minecard:constant_cards"
             },
-            "abilities": {
-              "type": "minecard:summon_card",
-              "value": {
-                "triggers": [
-                  "summon"
-                ],
-                "placement": "right",
-                "card": "minecraft:salmon"
-              }
-            },
-            "entity": "minecraft:item",
-            "cost": 0,
-            "health": 0,
-            "damage": 0
-          }
-        ],
-        "type": "minecard:add_cards"
+            {
+              "placement": "your_hand",
+              "type": "minecard:place_cards"
+            }
+          ]
+        }
       }
     }
   },

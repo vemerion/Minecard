@@ -28,9 +28,14 @@
                 }
               },
               {
+                "type": "minecard:animation",
+                "value": {
+                  "animation": "minecard:llama_spit"
+                }
+              },
+              {
                 "type": "minecard:modify",
                 "value": {
-                  "animation": "minecard:llama_spit",
                   "modifications": [
                     [
                       {

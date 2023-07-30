@@ -4,14 +4,43 @@
     "value": {
       "chance": 50,
       "ability": {
-        "triggers": [
-          "tick"
-        ],
-        "cards": [
-          "minecard:rotten_flesh",
-          "minecard:rabbit_foot"
-        ],
-        "type": "minecard:add_cards"
+        "type": "minecard:chain",
+        "value": {
+          "triggers": [
+            "tick"
+          ],
+          "abilities": [
+            {
+              "cards": [
+                "minecard:rotten_flesh",
+                "minecard:rabbit_foot"
+              ],
+              "type": "minecard:constant_cards"
+            },
+            {
+              "type": "minecard:select_cards",
+              "value": {
+                "selection": {
+                  "groups": [
+                    "collected"
+                  ],
+                  "method": {
+                    "type": "minecard:random",
+                    "value": {
+                      "count": 1,
+                      "repeat": false
+                    }
+                  }
+                },
+                "clear": true
+              }
+            },
+            {
+              "placement": "your_hand",
+              "type": "minecard:place_cards"
+            }
+          ]
+        }
       }
     }
   },

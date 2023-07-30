@@ -33,9 +33,14 @@
           }
         },
         {
+          "type": "minecard:animation",
+          "value": {
+            "animation": "minecard:throw_leather_chestplate"
+          }
+        },
+        {
           "type": "minecard:modify",
           "value": {
-            "animation": "minecard:throw_leather_chestplate",
             "modifications": [
               [
                 {

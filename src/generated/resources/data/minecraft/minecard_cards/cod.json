@@ -4,102 +4,152 @@
     "value": {
       "chance": 50,
       "ability": {
-        "type": "minecard:summon_card",
+        "type": "minecard:chain",
         "value": {
           "triggers": [
             "summon"
           ],
-          "placement": "right",
-          "card": {
-            "abilities": {
-              "type": "minecard:chance",
-              "value": {
-                "chance": 40,
-                "ability": {
-                  "type": "minecard:summon_card",
-                  "value": {
-                    "triggers": [
-                      "summon"
-                    ],
-                    "placement": "right",
-                    "card": {
-                      "abilities": {
-                        "type": "minecard:chance",
+          "abilities": [
+            {
+              "cards": [
+                {
+                  "abilities": {
+                    "type": "minecard:chance",
+                    "value": {
+                      "chance": 40,
+                      "ability": {
+                        "type": "minecard:chain",
                         "value": {
-                          "chance": 30,
-                          "ability": {
-                            "type": "minecard:summon_card",
-                            "value": {
-                              "triggers": [
-                                "summon"
-                              ],
-                              "placement": "right",
-                              "card": {
-                                "abilities": {
-                                  "type": "minecard:chance",
-                                  "value": {
-                                    "chance": 20,
-                                    "ability": {
-                                      "type": "minecard:summon_card",
-                                      "value": {
-                                        "triggers": [
-                                          "summon"
-                                        ],
-                                        "placement": "right",
-                                        "card": {
-                                          "abilities": {
-                                            "type": "minecard:chance",
-                                            "value": {
-                                              "chance": 10,
-                                              "ability": {
-                                                "type": "minecard:summon_card",
-                                                "value": {
-                                                  "triggers": [
-                                                    "summon"
-                                                  ],
-                                                  "placement": "right",
-                                                  "card": {
-                                                    "entity": "minecraft:cod",
-                                                    "cost": 1,
-                                                    "health": 1,
-                                                    "damage": 1
-                                                  }
+                          "triggers": [
+                            "summon"
+                          ],
+                          "abilities": [
+                            {
+                              "cards": [
+                                {
+                                  "abilities": {
+                                    "type": "minecard:chance",
+                                    "value": {
+                                      "chance": 30,
+                                      "ability": {
+                                        "type": "minecard:chain",
+                                        "value": {
+                                          "triggers": [
+                                            "summon"
+                                          ],
+                                          "abilities": [
+                                            {
+                                              "cards": [
+                                                {
+                                                  "abilities": {
+                                                    "type": "minecard:chance",
+                                                    "value": {
+                                                      "chance": 20,
+                                                      "ability": {
+                                                        "type": "minecard:chain",
+                                                        "value": {
+                                                          "triggers": [
+                                                            "summon"
+                                                          ],
+                                                          "abilities": [
+                                                            {
+                                                              "cards": [
+                                                                {
+                                                                  "abilities": {
+                                                                    "type": "minecard:chance",
+                                                                    "value": {
+                                                                      "chance": 10,
+                                                                      "ability": {
+                                                                        "type": "minecard:chain",
+                                                                        "value": {
+                                                                          "triggers": [
+                                                                            "summon"
+                                                                          ],
+                                                                          "abilities": [
+                                                                            {
+                                                                              "cards": [
+                                                                                {
+                                                                                  "entity": "minecraft:cod",
+                                                                                  "cost": 1,
+                                                                                  "health": 1,
+                                                                                  "damage": 1
+                                                                                }
+                                                                              ],
+                                                                              "type": "minecard:constant_cards"
+                                                                            },
+                                                                            {
+                                                                              "placement": "right",
+                                                                              "type": "minecard:place_cards"
+                                                                            }
+                                                                          ]
+                                                                        }
+                                                                      }
+                                                                    }
+                                                                  },
+                                                                  "entity": "minecraft:cod",
+                                                                  "cost": 1,
+                                                                  "health": 1,
+                                                                  "damage": 1
+                                                                }
+                                                              ],
+                                                              "type": "minecard:constant_cards"
+                                                            },
+                                                            {
+                                                              "placement": "right",
+                                                              "type": "minecard:place_cards"
+                                                            }
+                                                          ]
+                                                        }
+                                                      }
+                                                    }
+                                                  },
+                                                  "entity": "minecraft:cod",
+                                                  "cost": 1,
+                                                  "health": 1,
+                                                  "damage": 1
                                                 }
-                                              }
+                                              ],
+                                              "type": "minecard:constant_cards"
+                                            },
+                                            {
+                                              "placement": "right",
+                                              "type": "minecard:place_cards"
                                             }
-                                          },
-                                          "entity": "minecraft:cod",
-                                          "cost": 1,
-                                          "health": 1,
-                                          "damage": 1
+                                          ]
                                         }
                                       }
                                     }
-                                  }
-                                },
-                                "entity": "minecraft:cod",
-                                "cost": 1,
-                                "health": 1,
-                                "damage": 1
-                              }
+                                  },
+                                  "entity": "minecraft:cod",
+                                  "cost": 1,
+                                  "health": 1,
+                                  "damage": 1
+                                }
+                              ],
+                              "type": "minecard:constant_cards"
+                            },
+                            {
+                              "placement": "right",
+                              "type": "minecard:place_cards"
                             }
-                          }
+                          ]
                         }
-                      },
-                      "entity": "minecraft:cod",
-                      "cost": 1,
-                      "health": 1,
-                      "damage": 1
+                      }
                     }
-                  }
+                  },
+                  "entity": "minecraft:cod",
+                  "cost": 1,
+                  "health": 1,
+                  "damage": 1
                 }
-              }
+              ],
+              "type": "minecard:constant_cards"
             },
-            "entity": "minecraft:cod",
-            "cost": 1,
-            "health": 1,
-            "damage": 1
-          }
+            {
+              "placement": "right",
+              "type": "minecard:place_cards"
+            }
+          ]
         }
       }
     }

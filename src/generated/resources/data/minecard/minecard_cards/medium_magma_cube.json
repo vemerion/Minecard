@@ -58,23 +58,43 @@
           }
         },
         {
-          "type": "minecard:summon_card",
+          "type": "minecard:chain",
           "value": {
             "triggers": [
               "death"
             ],
-            "placement": "left",
-            "card": "minecard:small_magma_cube"
+            "abilities": [
+              {
+                "cards": [
+                  "minecard:small_magma_cube"
+                ],
+                "type": "minecard:constant_cards"
+              },
+              {
+                "placement": "left",
+                "type": "minecard:place_cards"
+              }
+            ]
           }
         },
         {
-          "type": "minecard:summon_card",
+          "type": "minecard:chain",
           "value": {
             "triggers": [
               "death"
             ],
-            "placement": "right",
-            "card": "minecard:small_magma_cube"
+            "abilities": [
+              {
+                "cards": [
+                  "minecard:small_magma_cube"
+                ],
+                "type": "minecard:constant_cards"
+              },
+              {
+                "placement": "right",
+                "type": "minecard:place_cards"
+              }
+            ]
           }
         }
       ]

@@ -6,23 +6,43 @@
     "value": {
       "abilities": [
         {
-          "type": "minecard:summon_card",
+          "type": "minecard:chain",
           "value": {
             "triggers": [
               "summon"
             ],
-            "placement": "left",
-            "card": "minecard:end_crystal"
+            "abilities": [
+              {
+                "cards": [
+                  "minecard:end_crystal"
+                ],
+                "type": "minecard:constant_cards"
+              },
+              {
+                "placement": "left",
+                "type": "minecard:place_cards"
+              }
+            ]
           }
         },
         {
-          "type": "minecard:summon_card",
+          "type": "minecard:chain",
           "value": {
             "triggers": [
               "summon"
             ],
-            "placement": "right",
-            "card": "minecard:end_crystal"
+            "abilities": [
+              {
+                "cards": [
+                  "minecard:end_crystal"
+                ],
+                "type": "minecard:constant_cards"
+              },
+              {
+                "placement": "right",
+                "type": "minecard:place_cards"
+              }
+            ]
           }
         },
         {
@@ -46,9 +66,14 @@
                 }
               },
               {
+                "type": "minecard:animation",
+                "value": {
+                  "animation": "minecard:ender_dragon"
+                }
+              },
+              {
                 "type": "minecard:modify",
                 "value": {
-                  "animation": "minecard:ender_dragon",
                   "modifications": [
                     [
                       {

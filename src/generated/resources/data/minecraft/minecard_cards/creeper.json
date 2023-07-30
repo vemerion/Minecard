@@ -20,9 +20,14 @@
           }
         },
         {
+          "type": "minecard:animation",
+          "value": {
+            "animation": "minecard:origin_explosion"
+          }
+        },
+        {
           "type": "minecard:modify",
           "value": {
-            "animation": "minecard:origin_explosion",
             "modifications": [
               [
                 {

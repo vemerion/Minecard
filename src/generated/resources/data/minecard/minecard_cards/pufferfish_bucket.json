@@ -6,13 +6,23 @@
     }
   },
   "abilities": {
-    "type": "minecard:summon_card",
+    "type": "minecard:chain",
     "value": {
       "triggers": [
         "summon"
       ],
-      "placement": "right",
-      "card": "minecraft:pufferfish"
+      "abilities": [
+        {
+          "cards": [
+            "minecraft:pufferfish"
+          ],
+          "type": "minecard:constant_cards"
+        },
+        {
+          "placement": "right",
+          "type": "minecard:place_cards"
+        }
+      ]
     }
   },
   "entity": "minecraft:item",

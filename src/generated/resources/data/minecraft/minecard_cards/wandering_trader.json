@@ -4,31 +4,64 @@
     "value": {
       "abilities": [
         {
-          "triggers": [
-            "summon"
-          ],
-          "cards": [
-            "minecard:pufferfish_bucket"
-          ],
-          "type": "minecard:add_cards"
+          "type": "minecard:chain",
+          "value": {
+            "triggers": [
+              "summon"
+            ],
+            "abilities": [
+              {
+                "cards": [
+                  "minecard:pufferfish_bucket"
+                ],
+                "type": "minecard:constant_cards"
+              },
+              {
+                "placement": "your_hand",
+                "type": "minecard:place_cards"
+              }
+            ]
+          }
         },
         {
-          "triggers": [
-            "summon"
-          ],
-          "cards": [
-            "minecard:packed_ice"
-          ],
-          "type": "minecard:add_cards"
+          "type": "minecard:chain",
+          "value": {
+            "triggers": [
+              "summon"
+            ],
+            "abilities": [
+              {
+                "cards": [
+                  "minecard:packed_ice"
+                ],
+                "type": "minecard:constant_cards"
+              },
+              {
+                "placement": "your_hand",
+                "type": "minecard:place_cards"
+              }
+            ]
+          }
         },
         {
-          "triggers": [
-            "summon"
-          ],
-          "cards": [
-            "minecard:pointed_dripstone"
-          ],
-          "type": "minecard:add_cards"
+          "type": "minecard:chain",
+          "value": {
+            "triggers": [
+              "summon"
+            ],
+            "abilities": [
+              {
+                "cards": [
+                  "minecard:pointed_dripstone"
+                ],
+                "type": "minecard:constant_cards"
+              },
+              {
+                "placement": "your_hand",
+                "type": "minecard:place_cards"
+              }
+            ]
+          }
         }
       ]
     }

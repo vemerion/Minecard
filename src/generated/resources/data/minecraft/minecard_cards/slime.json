@@ -7,23 +7,43 @@
           "type": "minecard:no_card_ability"
         },
         {
-          "type": "minecard:summon_card",
+          "type": "minecard:chain",
           "value": {
             "triggers": [
               "death"
             ],
-            "placement": "left",
-            "card": "minecard:medium_slime"
+            "abilities": [
+              {
+                "cards": [
+                  "minecard:medium_slime"
+                ],
+                "type": "minecard:constant_cards"
+              },
+              {
+                "placement": "left",
+                "type": "minecard:place_cards"
+              }
+            ]
           }
         },
         {
-          "type": "minecard:summon_card",
+          "type": "minecard:chain",
           "value": {
             "triggers": [
               "death"
             ],
-            "placement": "right",
-            "card": "minecard:medium_slime"
+            "abilities": [
+              {
+                "cards": [
+                  "minecard:medium_slime"
+                ],
+                "type": "minecard:constant_cards"
+              },
+              {
+                "placement": "right",
+                "type": "minecard:place_cards"
+              }
+            ]
           }
         }
       ]

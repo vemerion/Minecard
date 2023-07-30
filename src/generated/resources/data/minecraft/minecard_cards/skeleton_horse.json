@@ -27,9 +27,14 @@
           }
         },
         {
+          "type": "minecard:animation",
+          "value": {
+            "animation": "minecard:lightning_bolt"
+          }
+        },
+        {
           "type": "minecard:modify",
           "value": {
-            "animation": "minecard:lightning_bolt",
             "modifications": [
               [
                 {

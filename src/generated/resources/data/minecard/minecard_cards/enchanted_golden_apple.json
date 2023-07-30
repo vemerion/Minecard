@@ -30,9 +30,14 @@
           }
         },
         {
+          "type": "minecard:animation",
+          "value": {
+            "animation": "minecard:throw_enchanted_golden_apple"
+          }
+        },
+        {
           "type": "minecard:modify",
           "value": {
-            "animation": "minecard:throw_enchanted_golden_apple",
             "modifications": [
               [
                 {
