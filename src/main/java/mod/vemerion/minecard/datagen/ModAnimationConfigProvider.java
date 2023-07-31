@@ -21,6 +21,7 @@ import mod.vemerion.minecard.screen.animation.config.GlowAnimationConfig;
 import mod.vemerion.minecard.screen.animation.config.PotionAnimationConfig;
 import mod.vemerion.minecard.screen.animation.config.SplashAnimationConfig;
 import mod.vemerion.minecard.screen.animation.config.ThrowItemAnimationConfig;
+import mod.vemerion.minecard.screen.animation.config.WitherAnimationConfig;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.HashCache;
@@ -158,6 +159,7 @@ public class ModAnimationConfigProvider implements DataProvider {
 				new PotionAnimationConfig(new ParticlesAnimation.Color(0.26f, 0.04f, 0.04f)));
 		animations.put("throw_enchanted_golden_apple", new ThrowItemAnimationConfig(Items.ENCHANTED_GOLDEN_APPLE,
 				Optional.empty(), Optional.of(SoundEvents.PLAYER_BURP), Optional.empty()));
+		animations.put("wither", WitherAnimationConfig.INSTANCE);
 
 	}
 

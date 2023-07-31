@@ -153,13 +153,19 @@ public class ModCardProvider implements DataProvider {
 		add(new Builder(EntityType.WITHER, 12, 10, 10)
 				.addProperty(CardProperty.UNDEAD,
 						1)
-				.setDropChance(1).setDeckCount(1)
-				.setCardAbility(new ChainAbility(EnumSet.of(CardAbilityTrigger.TICK),
-						List.of(new SelectCardsAbility(new CardAbilitySelection(
-								new CardAbilityGroups(EnumSet.of(CardAbilityGroup.ENEMY_BOARD)),
-								new CardSelectionMethod.Random(1, false), CardCondition.NoCondition.NO_CONDITION)),
-								new AnimationAbility(mod("wither_projectile")),
-								new ModifyAbility(List.of(new ModificationBuilder().heal(-4).build()))))));
+				.setDropChance(
+						1)
+				.setDeckCount(
+						1)
+				.setCardAbility(new MultiAbility(List.of(
+						new ChainAbility(EnumSet.of(CardAbilityTrigger.TICK),
+								List.of(new SelectCardsAbility(new CardAbilitySelection(
+										new CardAbilityGroups(EnumSet.of(CardAbilityGroup.ENEMY_BOARD)),
+										new CardSelectionMethod.Random(1, false),
+										CardCondition.NoCondition.NO_CONDITION)),
+										new AnimationAbility(mod("wither_projectile")),
+										new ModifyAbility(List.of(new ModificationBuilder().heal(-4).build())))),
+						new AnimationAbility(Set.of(CardAbilityTrigger.SUMMON), mod("wither"))))));
 		add(new Builder(EntityType.SQUID, 1, 1, 1)
 				.setCardAbility(new ChainAbility(EnumSet.of(CardAbilityTrigger.HURT), List.of(
 						new SelectCardsAbility(

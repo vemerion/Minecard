@@ -5,51 +5,67 @@
     "minecard:undead": 1
   },
   "abilities": {
-    "type": "minecard:chain",
+    "type": "minecard:multi",
     "value": {
-      "triggers": [
-        "tick"
-      ],
       "abilities": [
         {
-          "type": "minecard:select_cards",
+          "type": "minecard:chain",
           "value": {
-            "selection": {
-              "groups": [
-                "enemy_board"
-              ],
-              "method": {
-                "type": "minecard:random",
+            "triggers": [
+              "tick"
+            ],
+            "abilities": [
+              {
+                "type": "minecard:select_cards",
                 "value": {
-                  "count": 1,
-                  "repeat": false
+                  "selection": {
+                    "groups": [
+                      "enemy_board"
+                    ],
+                    "method": {
+                      "type": "minecard:random",
+                      "value": {
+                        "count": 1,
+                        "repeat": false
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "type": "minecard:animation",
+                "value": {
+                  "animation": "minecard:wither_projectile"
+                }
+              },
+              {
+                "type": "minecard:modify",
+                "value": {
+                  "modifications": [
+                    [
+                      {
+                        "output": {
+                          "type": "minecard:health"
+                        },
+                        "operator": {
+                          "type": "minecard:constant",
+                          "value": -4
+                        }
+                      }
+                    ]
+                  ]
                 }
               }
-            }
+            ]
           }
         },
         {
           "type": "minecard:animation",
           "value": {
-            "animation": "minecard:wither_projectile"
-          }
-        },
-        {
-          "type": "minecard:modify",
-          "value": {
-            "modifications": [
-              [
-                {
-                  "output": {
-                    "type": "minecard:health"
-                  },
-                  "operator": {
-                    "type": "minecard:constant",
-                    "value": -4
-                  }
-                }
-              ]
-            ]
+            "triggers": [
+              "summon"
+            ],
+            "animation": "minecard:wither"
           }
         }
       ]

@@ -13,6 +13,7 @@ import mod.vemerion.minecard.screen.animation.config.NoAnimationConfig;
 import mod.vemerion.minecard.screen.animation.config.PotionAnimationConfig;
 import mod.vemerion.minecard.screen.animation.config.SplashAnimationConfig;
 import mod.vemerion.minecard.screen.animation.config.ThrowItemAnimationConfig;
+import mod.vemerion.minecard.screen.animation.config.WitherAnimationConfig;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.IForgeRegistry;
@@ -53,5 +54,7 @@ public class ModAnimationConfigs {
 					() -> new AnimationConfigType<EnderDragonAnimationConfig>(EnderDragonAnimationConfig.CODEC));
 	public static final RegistryObject<AnimationConfigType<? extends AnimationConfig>> SPLASH = ANIMATION_CONFIGS
 			.register("splash", () -> new AnimationConfigType<SplashAnimationConfig>(SplashAnimationConfig.CODEC));
+	public static final RegistryObject<AnimationConfigType<? extends AnimationConfig>> WITHER = ANIMATION_CONFIGS
+			.register("wither", () -> new AnimationConfigType<WitherAnimationConfig>(WitherAnimationConfig.CODEC));
 
 }

@@ -11,6 +11,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import mod.vemerion.minecard.game.Card;
 import mod.vemerion.minecard.game.CardVisibility;
+import mod.vemerion.minecard.game.GameUtil;
 import mod.vemerion.minecard.game.PlayerState;
 import mod.vemerion.minecard.game.Receiver;
 import mod.vemerion.minecard.init.ModCardAbilities;
@@ -23,14 +24,20 @@ public class AnimationAbility extends CardAbility {
 
 	public static final Codec<AnimationAbility> CODEC = ExtraCodecs
 			.lazyInitializedCodec(() -> RecordCodecBuilder.create(instance -> instance
-					.group(ResourceLocation.CODEC.fieldOf("animation").forGetter(AnimationAbility::getAnimation))
+					.group(GameUtil.TRIGGERS_CODEC.optionalFieldOf("triggers", Set.of())
+							.forGetter(CardAbility::getTriggers),
+							ResourceLocation.CODEC.fieldOf("animation").forGetter(AnimationAbility::getAnimation))
 					.apply(instance, AnimationAbility::new)));
 
 	private final ResourceLocation animation;
 
-	public AnimationAbility(ResourceLocation animation) {
-		super(Set.of());
+	public AnimationAbility(Set<CardAbilityTrigger> triggers, ResourceLocation animation) {
+		super(triggers);
 		this.animation = animation;
+	}
+
+	public AnimationAbility(ResourceLocation animation) {
+		this(Set.of(), animation);
 	}
 
 	@Override

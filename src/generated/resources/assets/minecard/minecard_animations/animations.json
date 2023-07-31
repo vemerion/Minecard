@@ -379,6 +379,9 @@
   "glow": {
     "type": "minecard:glow"
   },
+  "wither": {
+    "type": "minecard:wither"
+  },
   "lightning_bolt": {
     "start_sound": "minecraft:entity.lightning_bolt.impact",
     "entity": "minecraft:lightning_bolt",
