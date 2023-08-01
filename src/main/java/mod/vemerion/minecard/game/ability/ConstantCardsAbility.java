@@ -47,9 +47,9 @@ public class ConstantCardsAbility extends CardAbility {
 
 	@Override
 	protected void invoke(List<Receiver> receivers, PlayerState state, Card card, @Nullable Card other,
-			List<Card> collected, ItemStack icon) {
+			Collected collected, ItemStack icon) {
 		for (var c : cards) {
-			collected.add(c.get(false).create());
+			collected.get(0).add(c.get(false).create());
 		}
 	}
 

@@ -1,0 +1,82 @@
+{
+  "additional_data": {
+    "item": {
+      "id": "minecraft:lodestone",
+      "Count": 1
+    }
+  },
+  "abilities": {
+    "type": "minecard:chain",
+    "value": {
+      "triggers": [
+        "summon"
+      ],
+      "abilities": [
+        {
+          "type": "minecard:select_cards",
+          "value": {
+            "selection": {
+              "groups": [
+                "enemy_hand"
+              ],
+              "method": {
+                "type": "minecard:all"
+              }
+            },
+            "clear": true
+          }
+        },
+        {
+          "type": "minecard:remove_cards"
+        },
+        {
+          "type": "minecard:move_collected",
+          "value": {
+            "source": 0,
+            "destination": 1,
+            "clear_source": false,
+            "clear_destination": false
+          }
+        },
+        {
+          "type": "minecard:select_cards",
+          "value": {
+            "selection": {
+              "groups": [
+                "your_hand"
+              ],
+              "method": {
+                "type": "minecard:all"
+              }
+            },
+            "clear": true
+          }
+        },
+        {
+          "type": "minecard:remove_cards"
+        },
+        {
+          "placement": "enemy_hand",
+          "type": "minecard:place_cards"
+        },
+        {
+          "type": "minecard:move_collected",
+          "value": {
+            "source": 1,
+            "destination": 0,
+            "clear_source": false,
+            "clear_destination": true
+          }
+        },
+        {
+          "placement": "your_hand",
+          "type": "minecard:place_cards"
+        }
+      ]
+    }
+  },
+  "entity": "minecraft:item",
+  "cost": 8,
+  "health": 0,
+  "damage": 0
+}

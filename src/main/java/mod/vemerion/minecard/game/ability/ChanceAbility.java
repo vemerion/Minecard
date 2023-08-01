@@ -48,7 +48,7 @@ public class ChanceAbility extends CardAbility {
 
 	@Override
 	protected void invoke(List<Receiver> receivers, PlayerState state, Card card, @Nullable Card other,
-			List<Card> collected, ItemStack icon) {
+			Collected collected, ItemStack icon) {
 		if (state.getGame().getRandom().nextInt(100) < chance) {
 			ability.invoke(receivers, state, card, other, collected, icon);
 		}

@@ -61,7 +61,7 @@ public class ChoiceCardAbility extends CardAbility {
 
 	@Override
 	protected void invoke(List<Receiver> receivers, PlayerState state, Card card, @Nullable Card other,
-			List<Card> collected, ItemStack icon) {
+			Collected collected, ItemStack icon) {
 		var cards = new ArrayList<Card>();
 		for (int i = 0; i < abilities.size(); i++)
 			cards.add(new CardType(card.getType().get(), 0, 0, 0, Map.of(), abilities.get(i), card.getAdditionalData(),

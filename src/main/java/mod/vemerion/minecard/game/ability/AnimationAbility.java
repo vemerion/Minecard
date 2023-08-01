@@ -47,9 +47,9 @@ public class AnimationAbility extends CardAbility {
 
 	@Override
 	protected void invoke(List<Receiver> receivers, PlayerState state, Card card, @Nullable Card other,
-			List<Card> collected, ItemStack icon) {
+			Collected collected, ItemStack icon) {
 		for (var receiver : receivers) {
-			receiver.receiver(new AnimationMessage(card.getId(), collected.stream().filter(c -> {
+			receiver.receiver(new AnimationMessage(card.getId(), collected.get(0).stream().filter(c -> {
 				return state.getGame().calcVisibility(receiver.getId(), c) == CardVisibility.VISIBLE
 						|| state.getGame().calcVisibility(state.getId(), c) == CardVisibility.ENEMY_HAND;
 			}).map(c -> c.getId()).collect(Collectors.toList()), animation));

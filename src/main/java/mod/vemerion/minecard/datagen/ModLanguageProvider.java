@@ -171,6 +171,7 @@ public class ModLanguageProvider extends LanguageProvider {
 		add(ModCardAbilities.REMOVE_CARDS.get().getTranslationKey(), "remove the card(s)");
 		add(ModCardAbilities.PLACE_CARDS.get().getTranslationKey(), "put the card(s) %s");
 		add(ModCardAbilities.ANIMATION.get().getTranslationKey(), "");
+		add(ModCardAbilities.MOVE_COLLECTED.get().getTranslationKey(), "");
 		add(Helper.gui("card_ability_selection"), "%s%s%s%s");
 		add(Helper.gui("where"), " where ");
 		add(Helper.gui("if"), " if ");

@@ -39,6 +39,7 @@ import mod.vemerion.minecard.game.ability.ConstantCardsAbility;
 import mod.vemerion.minecard.game.ability.DrawCardsAbility;
 import mod.vemerion.minecard.game.ability.GameOverAbility;
 import mod.vemerion.minecard.game.ability.ModifyAbility;
+import mod.vemerion.minecard.game.ability.MoveCollectedAbility;
 import mod.vemerion.minecard.game.ability.MultiAbility;
 import mod.vemerion.minecard.game.ability.NoCardAbility;
 import mod.vemerion.minecard.game.ability.PlaceCardsAbility;
@@ -600,6 +601,20 @@ public class ModCardProvider implements DataProvider {
 										new CardSelectionMethod.Choice(true), CardCondition.NoCondition.NO_CONDITION),
 								true),
 						new ModifyAbility(List.of(new ModificationBuilder().setCost(10).build()))))));
+		add(new Builder(EntityType.ITEM, 8, 0, 0).setKey(mod("lodestone"))
+				.setAdditionalData(new AdditionalCardData.ItemData(Items.LODESTONE))
+				.setCardAbility(new ChainAbility(Set.of(CardAbilityTrigger.SUMMON), List.of(
+						new SelectCardsAbility(
+								new CardAbilitySelection(new CardAbilityGroups(EnumSet.of(CardAbilityGroup.ENEMY_HAND)),
+										CardSelectionMethod.All.ALL, CardCondition.NoCondition.NO_CONDITION),
+								true),
+						new RemoveCardsAbility(), new MoveCollectedAbility(0, 1, false, false),
+						new SelectCardsAbility(
+								new CardAbilitySelection(new CardAbilityGroups(EnumSet.of(CardAbilityGroup.YOUR_HAND)),
+										CardSelectionMethod.All.ALL, CardCondition.NoCondition.NO_CONDITION),
+								true),
+						new RemoveCardsAbility(), new PlaceCardsAbility(CardPlacement.ENEMY_HAND),
+						new MoveCollectedAbility(1, 0, false, true), new PlaceCardsAbility(CardPlacement.YOUR_HAND)))));
 
 		// Auxiliary cards
 		add(new Builder(EntityType.ITEM, 0, 5, 0).setKey(mod("end_crystal"))

@@ -37,7 +37,7 @@ public class GameOverAbility extends CardAbility {
 
 	@Override
 	protected void invoke(List<Receiver> receivers, PlayerState state, Card card, @Nullable Card other,
-			List<Card> collected, ItemStack icon) {
+			Collected collected, ItemStack icon) {
 		state.getGame().setGameOver();
 	}
 

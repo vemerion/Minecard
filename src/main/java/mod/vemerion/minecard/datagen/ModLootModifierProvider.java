@@ -36,7 +36,7 @@ public class ModLootModifierProvider extends GlobalLootModifierProvider {
 						SimpleWeightedRandomList.<ResourceLocation>builder().add(rl("fishing_rod"), 1)
 								.add(rl("book"), 1).add(rl("splash_potion_of_harming"), 1)
 								.add(rl("enchanted_golden_apple"), 1).add(rl("chest"), 1).add(rl("enchanted_book"), 1)
-								.add(rl("spyglass"), 1).build()));
+								.add(rl("spyglass"), 1).add(rl("lodestone"), 1).build()));
 
 	}
 

@@ -13,6 +13,7 @@ import mod.vemerion.minecard.game.ability.ConstantCardsAbility;
 import mod.vemerion.minecard.game.ability.DrawCardsAbility;
 import mod.vemerion.minecard.game.ability.GameOverAbility;
 import mod.vemerion.minecard.game.ability.ModifyAbility;
+import mod.vemerion.minecard.game.ability.MoveCollectedAbility;
 import mod.vemerion.minecard.game.ability.MultiAbility;
 import mod.vemerion.minecard.game.ability.NoCardAbility;
 import mod.vemerion.minecard.game.ability.PlaceCardsAbility;
@@ -68,5 +69,7 @@ public class ModCardAbilities {
 			.register("place_cards", () -> new CardAbilityType<PlaceCardsAbility>(PlaceCardsAbility.CODEC));
 	public static final RegistryObject<CardAbilityType<? extends CardAbility>> ANIMATION = CARD_ABILITIES
 			.register("animation", () -> new CardAbilityType<AnimationAbility>(AnimationAbility.CODEC));
+	public static final RegistryObject<CardAbilityType<? extends CardAbility>> MOVE_COLLECTED = CARD_ABILITIES
+			.register("move_collected", () -> new CardAbilityType<MoveCollectedAbility>(MoveCollectedAbility.CODEC));
 
 }

@@ -61,11 +61,11 @@ public class ModifyAbility extends CardAbility {
 
 	@Override
 	protected void invoke(List<Receiver> receivers, PlayerState state, Card card, @Nullable Card other,
-			List<Card> collected, ItemStack icon) {
+			Collected collected, ItemStack icon) {
 		var copy = new Card(card);
 		var modification = modifications.get(state.getGame().getRandom().nextInt(modifications.size()));
 
-		for (var selected : collected) {
+		for (var selected : collected.get(0)) {
 			for (var m : modification)
 				m.getOutput().set(state, selected, receivers,
 						m.getOperator().evaluate(state.getGame().getRandom(), selected));
@@ -73,10 +73,10 @@ public class ModifyAbility extends CardAbility {
 
 		if (!icon.isEmpty())
 			state.getGame().addHistory(receivers, new HistoryEntry(icon, state.getId(), copy,
-					collected.stream().filter(c -> state.getGame().isInBoard(c) || c.isDead()).toList()));
+					collected.get(0).stream().filter(c -> state.getGame().isInBoard(c) || c.isDead()).toList()));
 
 		for (var receiver : receivers) {
-			state.getGame().updateCards(receiver, collected);
+			state.getGame().updateCards(receiver, collected.get(0));
 		}
 	}
 

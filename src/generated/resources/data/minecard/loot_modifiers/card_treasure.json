@@ -78,6 +78,10 @@
     {
       "data": "minecard:spyglass",
       "weight": 1
+    },
+    {
+      "data": "minecard:lodestone",
+      "weight": 1
     }
   ],
   "type": "minecard:card_treasure"

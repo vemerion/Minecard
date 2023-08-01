@@ -13,6 +13,7 @@
   "card_abilities.minecard.modify": "apply%s%s.",
   "card_abilities.minecard.modify.element": " [%s]",
   "card_abilities.minecard.modify.one_of": " one of",
+  "card_abilities.minecard.move_collected": "",
   "card_abilities.minecard.multi": "%s",
   "card_abilities.minecard.no_card_ability": "",
   "card_abilities.minecard.place_cards": "put the card(s) %s",

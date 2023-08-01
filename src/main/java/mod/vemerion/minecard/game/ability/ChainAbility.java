@@ -1,6 +1,5 @@
 package mod.vemerion.minecard.game.ability;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -52,7 +51,7 @@ public class ChainAbility extends CardAbility {
 
 	@Override
 	protected void invoke(List<Receiver> receivers, PlayerState state, Card card, @Nullable Card other,
-			List<Card> collected, ItemStack icon) {
+			Collected collected, ItemStack icon) {
 		for (var ability : abilities)
 			ability.invoke(receivers, state, card, other, collected, icon);
 	}
@@ -61,7 +60,7 @@ public class ChainAbility extends CardAbility {
 	public void trigger(CardAbilityTrigger trigger, List<Receiver> receivers, PlayerState state, Card card, Card target,
 			ItemStack icon) {
 		if (triggers.contains(trigger)) {
-			invoke(receivers, state, card, target, new ArrayList<>(), icon);
+			invoke(receivers, state, card, target, new Collected(), icon);
 		}
 	}
 

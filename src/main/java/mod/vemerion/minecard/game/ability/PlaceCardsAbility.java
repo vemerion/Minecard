@@ -42,9 +42,9 @@ public class PlaceCardsAbility extends CardAbility {
 
 	@Override
 	protected void invoke(List<Receiver> receivers, PlayerState state, Card card, @Nullable Card other,
-			List<Card> collected, ItemStack icon) {
+			Collected collected, ItemStack icon) {
 		List<Card> toAdd = new ArrayList<>();
-		for (var c : collected)
+		for (var c : collected.get(0))
 			toAdd.add(new Card(c.getType(), c.getCost(), c.getOriginalCost(), c.getHealth(), c.getMaxHealth(),
 					c.getOriginalHealth(), c.getDamage(), c.getOriginalDamage(), new HashMap<>(c.getProperties()),
 					c.getAbility(), c.getAdditionalData()));
