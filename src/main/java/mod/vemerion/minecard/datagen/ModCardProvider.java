@@ -615,6 +615,46 @@ public class ModCardProvider implements DataProvider {
 								true),
 						new RemoveCardsAbility(), new PlaceCardsAbility(CardPlacement.ENEMY_HAND),
 						new MoveCollectedAbility(1, 0, false, true), new PlaceCardsAbility(CardPlacement.YOUR_HAND)))));
+		add(new Builder(EntityType.ITEM, 5, 0, 0)
+				.setKey(mod(
+						"firework_rocket"))
+				.setAdditionalData(
+						new AdditionalCardData.ItemData(Items.FIREWORK_ROCKET))
+				.setCardAbility(
+						new ChainAbility(Set.of(CardAbilityTrigger.SUMMON),
+								List.of(new SelectCardsAbility(new CardAbilitySelection(
+										new CardAbilityGroups(EnumSet.of(CardAbilityGroup.ENEMY_BOARD)),
+										CardSelectionMethod.All.ALL, CardCondition.NoCondition.NO_CONDITION), true),
+										new AnimationAbility(mod("rocket")),
+										new ModifyAbility(
+												List.of(new ModificationBuilder()
+														.put(new CardModification(CardVariable.HEALTH,
+																new CardOperator.Negate(
+																		new CardOperator.CollectedCount(0))))
+														.build()))))));
+		add(new Builder(EntityType.ITEM, 2, 0, 0).setKey(mod("amethyst_shard"))
+				.setAdditionalData(
+						new AdditionalCardData.ItemData(Items.AMETHYST_SHARD))
+				.setCardAbility(
+						new ChainAbility(
+								Set.of(CardAbilityTrigger.SUMMON), List
+										.of(new DrawCardsAbility(Set.of(), 1),
+												new MoveCollectedAbility(0, 1, true, false), new SelectCardsAbility(
+														new CardAbilitySelection(
+																new CardAbilityGroups(
+																		EnumSet.of(CardAbilityGroup.ENEMY_BOARD)),
+																new CardSelectionMethod.Random(1, false),
+																CardCondition.NoCondition.NO_CONDITION),
+														true),
+												new AnimationAbility(mod("throw_amethyst_shard")),
+												new ModifyAbility(
+														List.of(new ModificationBuilder()
+																.put(new CardModification(CardVariable.HEALTH,
+																		new CardOperator.Negate(
+																				new CardOperator.CollectedAny(1,
+																						new CardOperator.Variable(
+																								CardVariable.COST)))))
+																.build()))))));
 
 		// Auxiliary cards
 		add(new Builder(EntityType.ITEM, 0, 5, 0).setKey(mod("end_crystal"))
@@ -945,6 +985,11 @@ public class ModCardProvider implements DataProvider {
 		private ModificationBuilder random(CardVariable variable, int min, int max) {
 			modifications.add(new CardModification(variable,
 					new CardOperator.RandomOperator(new CardOperator.Constant(min), new CardOperator.Constant(max))));
+			return this;
+		}
+
+		private ModificationBuilder put(CardModification mod) {
+			modifications.add(mod);
 			return this;
 		}
 

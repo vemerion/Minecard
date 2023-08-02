@@ -3,7 +3,6 @@ package mod.vemerion.minecard.game.ability;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import com.mojang.serialization.Codec;
@@ -19,7 +18,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 
-public abstract class CardCondition implements Predicate<Card> {
+public abstract class CardCondition {
 
 	public static final Codec<CardCondition> CODEC = ExtraCodecs.lazyInitializedCodec(() -> ModCardConditions
 			.getRegistry().getCodec().dispatch("type", CardCondition::getType, CardConditionType::codec));
@@ -44,8 +43,10 @@ public abstract class CardCondition implements Predicate<Card> {
 		return description;
 	}
 
-	public List<Card> filter(List<Card> cards) {
-		return cards.stream().filter(this::test).collect(Collectors.toCollection(() -> new ArrayList<>()));
+	public abstract boolean test(Card t, Collected collected);
+
+	public List<Card> filter(List<Card> cards, Collected collected) {
+		return cards.stream().filter(c -> test(c, collected)).collect(Collectors.toCollection(() -> new ArrayList<>()));
 	}
 
 	public static class CardConditionType<T extends CardCondition> extends ForgeRegistryEntry<CardConditionType<?>> {
@@ -75,7 +76,7 @@ public abstract class CardCondition implements Predicate<Card> {
 		}
 
 		@Override
-		public boolean test(Card t) {
+		public boolean test(Card t, Collected collected) {
 			return true;
 		}
 
@@ -110,8 +111,8 @@ public abstract class CardCondition implements Predicate<Card> {
 		}
 
 		@Override
-		public boolean test(Card t) {
-			return left.test(t) && right.test(t);
+		public boolean test(Card t, Collected collected) {
+			return left.test(t, collected) && right.test(t, collected);
 		}
 
 		@Override
@@ -149,8 +150,8 @@ public abstract class CardCondition implements Predicate<Card> {
 		}
 
 		@Override
-		public boolean test(Card t) {
-			return left.test(t) || right.test(t);
+		public boolean test(Card t, Collected collected) {
+			return left.test(t, collected) || right.test(t, collected);
 		}
 
 		@Override
@@ -185,8 +186,8 @@ public abstract class CardCondition implements Predicate<Card> {
 		}
 
 		@Override
-		public boolean test(Card t) {
-			return !inner.test(t);
+		public boolean test(Card t, Collected collected) {
+			return !inner.test(t, collected);
 		}
 
 		@Override
@@ -218,7 +219,7 @@ public abstract class CardCondition implements Predicate<Card> {
 		}
 
 		@Override
-		public boolean test(Card t) {
+		public boolean test(Card t, Collected collected) {
 			return t.getType().orElse(null) == entity;
 		}
 
@@ -251,8 +252,8 @@ public abstract class CardCondition implements Predicate<Card> {
 		}
 
 		@Override
-		public boolean test(Card t) {
-			return operator.evaluate(new Random(0), t) > 0;
+		public boolean test(Card t, Collected collected) {
+			return operator.evaluate(new Random(0), t, collected) > 0;
 		}
 
 		@Override

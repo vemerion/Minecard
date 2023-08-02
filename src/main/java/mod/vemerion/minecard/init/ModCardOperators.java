@@ -38,8 +38,15 @@ public class ModCardOperators {
 			() -> new CardOperatorType<CardOperator.Sub>(CardOperator.Sub.CODEC));
 	public static final RegistryObject<CardOperatorType<? extends CardOperator>> MUL = CARD_OPERATORS.register("mul",
 			() -> new CardOperatorType<CardOperator.Mul>(CardOperator.Mul.CODEC));
-	public static final RegistryObject<CardOperatorType<? extends CardOperator>> GREATER_THAN = CARD_OPERATORS.register("greater_than",
-			() -> new CardOperatorType<CardOperator.GreaterThan>(CardOperator.GreaterThan.CODEC));
-
+	public static final RegistryObject<CardOperatorType<? extends CardOperator>> GREATER_THAN = CARD_OPERATORS.register(
+			"greater_than", () -> new CardOperatorType<CardOperator.GreaterThan>(CardOperator.GreaterThan.CODEC));
+	public static final RegistryObject<CardOperatorType<? extends CardOperator>> NEGATE = CARD_OPERATORS
+			.register("negate", () -> new CardOperatorType<CardOperator.Negate>(CardOperator.Negate.CODEC));
+	public static final RegistryObject<CardOperatorType<? extends CardOperator>> COLLECTED_COUNT = CARD_OPERATORS
+			.register("collected_count",
+					() -> new CardOperatorType<CardOperator.CollectedCount>(CardOperator.CollectedCount.CODEC));
+	public static final RegistryObject<CardOperatorType<? extends CardOperator>> COLLECTED_ANY = CARD_OPERATORS
+			.register("collected_any",
+					() -> new CardOperatorType<CardOperator.CollectedAny>(CardOperator.CollectedAny.CODEC));
 
 }

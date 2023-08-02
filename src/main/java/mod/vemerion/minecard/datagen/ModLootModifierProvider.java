@@ -27,7 +27,7 @@ public class ModLootModifierProvider extends GlobalLootModifierProvider {
 				new LootItemCondition[] { LootItemKilledByPlayerCondition.killedByPlayer().build() }));
 		add(ModLootModifiers.CARD_TREASURE.get().getRegistryName().getPath(), ModLootModifiers.CARD_TREASURE.get(),
 				new CardTreasureLootModifier(
-						new LootItemCondition[] { LootItemRandomChanceCondition.randomChance(0.1f).build(),
+						new LootItemCondition[] { LootItemRandomChanceCondition.randomChance(0.2f).build(),
 								tables(BuiltInLootTables.ABANDONED_MINESHAFT, BuiltInLootTables.BASTION_TREASURE,
 										BuiltInLootTables.BURIED_TREASURE, BuiltInLootTables.DESERT_PYRAMID,
 										BuiltInLootTables.END_CITY_TREASURE, BuiltInLootTables.JUNGLE_TEMPLE,
@@ -36,7 +36,8 @@ public class ModLootModifierProvider extends GlobalLootModifierProvider {
 						SimpleWeightedRandomList.<ResourceLocation>builder().add(rl("fishing_rod"), 1)
 								.add(rl("book"), 1).add(rl("splash_potion_of_harming"), 1)
 								.add(rl("enchanted_golden_apple"), 1).add(rl("chest"), 1).add(rl("enchanted_book"), 1)
-								.add(rl("spyglass"), 1).add(rl("lodestone"), 1).build()));
+								.add(rl("spyglass"), 1).add(rl("lodestone"), 1).add(rl("firework_rocket"), 1)
+								.add(rl("amethyst_shard"), 1).build()));
 
 	}
 

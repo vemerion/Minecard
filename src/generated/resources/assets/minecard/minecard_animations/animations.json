@@ -43,6 +43,15 @@
     "end_animation": "minecard:green_splash",
     "type": "minecard:throw_item"
   },
+  "rocket": {
+    "start_sound": "minecraft:entity.firework_rocket.launch",
+    "impact_sound": "minecraft:entity.firework_rocket.blast",
+    "entity": "minecraft:firework_rocket",
+    "moving": true,
+    "duration": 15,
+    "size": 25,
+    "type": "minecard:charge"
+  },
   "throw_egg": {
     "item": {
       "id": "minecraft:egg",
@@ -201,6 +210,14 @@
       }
     },
     "impact_sound": "minecraft:item.armor.equip_iron",
+    "type": "minecard:throw_item"
+  },
+  "throw_amethyst_shard": {
+    "item": {
+      "id": "minecraft:amethyst_shard",
+      "Count": 1
+    },
+    "impact_sound": "minecraft:block.amethyst_block.break",
     "type": "minecard:throw_item"
   },
   "throw_web": {

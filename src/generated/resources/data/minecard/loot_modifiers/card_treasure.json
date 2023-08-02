@@ -2,7 +2,7 @@
   "conditions": [
     {
       "condition": "minecraft:random_chance",
-      "chance": 0.1
+      "chance": 0.2
     },
     {
       "condition": "minecraft:alternative",
@@ -81,6 +81,14 @@
     },
     {
       "data": "minecard:lodestone",
+      "weight": 1
+    },
+    {
+      "data": "minecard:firework_rocket",
+      "weight": 1
+    },
+    {
+      "data": "minecard:amethyst_shard",
       "weight": 1
     }
   ],

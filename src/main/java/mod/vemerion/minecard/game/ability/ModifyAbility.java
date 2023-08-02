@@ -68,7 +68,7 @@ public class ModifyAbility extends CardAbility {
 		for (var selected : collected.get(0)) {
 			for (var m : modification)
 				m.getOutput().set(state, selected, receivers,
-						m.getOperator().evaluate(state.getGame().getRandom(), selected));
+						m.getOperator().evaluate(state.getGame().getRandom(), selected, collected));
 		}
 
 		if (!icon.isEmpty())

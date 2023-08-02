@@ -1,0 +1,90 @@
+{
+  "additional_data": {
+    "item": {
+      "id": "minecraft:amethyst_shard",
+      "Count": 1
+    }
+  },
+  "abilities": {
+    "type": "minecard:chain",
+    "value": {
+      "triggers": [
+        "summon"
+      ],
+      "abilities": [
+        {
+          "count": 1,
+          "type": "minecard:draw_cards"
+        },
+        {
+          "type": "minecard:move_collected",
+          "value": {
+            "source": 0,
+            "destination": 1,
+            "clear_source": true,
+            "clear_destination": false
+          }
+        },
+        {
+          "type": "minecard:select_cards",
+          "value": {
+            "selection": {
+              "groups": [
+                "enemy_board"
+              ],
+              "method": {
+                "type": "minecard:random",
+                "value": {
+                  "count": 1,
+                  "repeat": false
+                }
+              }
+            },
+            "clear": true
+          }
+        },
+        {
+          "type": "minecard:animation",
+          "value": {
+            "animation": "minecard:throw_amethyst_shard"
+          }
+        },
+        {
+          "type": "minecard:modify",
+          "value": {
+            "modifications": [
+              [
+                {
+                  "output": {
+                    "type": "minecard:health"
+                  },
+                  "operator": {
+                    "type": "minecard:negate",
+                    "value": {
+                      "inner": {
+                        "type": "minecard:collected_any",
+                        "value": {
+                          "index": 1,
+                          "inner": {
+                            "type": "minecard:variable",
+                            "value": {
+                              "type": "minecard:cost"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              ]
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "entity": "minecraft:item",
+  "cost": 2,
+  "health": 0,
+  "damage": 0
+}

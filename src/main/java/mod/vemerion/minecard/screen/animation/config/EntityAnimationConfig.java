@@ -60,13 +60,18 @@ public class EntityAnimationConfig extends AnimationConfig {
 	@Override
 	public void invoke(GameScreen game, ClientCard origin, List<ClientCard> targets) {
 		for (var target : targets)
-			game.addAnimation(new EntityAnimation(game.getMinecraft(),
-					moving ? origin.getPosition().add(new Vec2(ClientCard.CARD_WIDTH / 2, ClientCard.CARD_HEIGHT / 2))
-							: null,
-					() -> new Vec2(target.getPosition().x + ClientCard.CARD_WIDTH / 2,
-							target.getPosition().y + ClientCard.CARD_HEIGHT / 2),
-					entity, duration, size, soundDelay, startSound, durationSound, impactSound, () -> {
-					}));
+			game.addAnimation(
+					new EntityAnimation(
+							game.getMinecraft(), moving
+									? (origin != null
+											? origin.getPosition().add(
+													new Vec2(ClientCard.CARD_WIDTH / 2, ClientCard.CARD_HEIGHT / 2))
+											: new Vec2(game.width / 2, game.height / 2))
+									: null,
+							() -> new Vec2(target.getPosition().x + ClientCard.CARD_WIDTH / 2,
+									target.getPosition().y + ClientCard.CARD_HEIGHT / 2),
+							entity, duration, size, soundDelay, startSound, durationSound, impactSound, () -> {
+							}));
 	}
 
 	public EntityType<?> getEntity() {

@@ -1,0 +1,70 @@
+{
+  "additional_data": {
+    "item": {
+      "id": "minecraft:firework_rocket",
+      "Count": 1,
+      "tag": {
+        "Flight": 1
+      }
+    }
+  },
+  "abilities": {
+    "type": "minecard:chain",
+    "value": {
+      "triggers": [
+        "summon"
+      ],
+      "abilities": [
+        {
+          "type": "minecard:select_cards",
+          "value": {
+            "selection": {
+              "groups": [
+                "enemy_board"
+              ],
+              "method": {
+                "type": "minecard:all"
+              }
+            },
+            "clear": true
+          }
+        },
+        {
+          "type": "minecard:animation",
+          "value": {
+            "animation": "minecard:rocket"
+          }
+        },
+        {
+          "type": "minecard:modify",
+          "value": {
+            "modifications": [
+              [
+                {
+                  "output": {
+                    "type": "minecard:health"
+                  },
+                  "operator": {
+                    "type": "minecard:negate",
+                    "value": {
+                      "inner": {
+                        "type": "minecard:collected_count",
+                        "value": {
+                          "index": 0
+                        }
+                      }
+                    }
+                  }
+                }
+              ]
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "entity": "minecraft:item",
+  "cost": 5,
+  "health": 0,
+  "damage": 0
+}

@@ -27,7 +27,7 @@ public abstract class CardOperator {
 
 	protected abstract CardOperatorType<?> getType();
 
-	public abstract int evaluate(Random rand, Card card);
+	public abstract int evaluate(Random rand, Card card, Collected collected);
 
 	public Component getDescription() {
 		if (description == null) {
@@ -73,7 +73,7 @@ public abstract class CardOperator {
 		}
 
 		@Override
-		public int evaluate(Random rand, Card card) {
+		public int evaluate(Random rand, Card card, Collected collected) {
 			return variable.get(card);
 		}
 
@@ -104,7 +104,7 @@ public abstract class CardOperator {
 		}
 
 		@Override
-		public int evaluate(Random rand, Card card) {
+		public int evaluate(Random rand, Card card, Collected collected) {
 			return value;
 		}
 
@@ -145,8 +145,8 @@ public abstract class CardOperator {
 		}
 
 		@Override
-		public int evaluate(Random rand, Card card) {
-			return rand.nextInt(min.evaluate(rand, card), max.evaluate(rand, card) + 1);
+		public int evaluate(Random rand, Card card, Collected collected) {
+			return rand.nextInt(min.evaluate(rand, card, collected), max.evaluate(rand, card, collected) + 1);
 		}
 
 		@Override
@@ -186,8 +186,8 @@ public abstract class CardOperator {
 		}
 
 		@Override
-		public int evaluate(Random rand, Card card) {
-			return left.evaluate(rand, card) + right.evaluate(rand, card);
+		public int evaluate(Random rand, Card card, Collected collected) {
+			return left.evaluate(rand, card, collected) + right.evaluate(rand, card, collected);
 		}
 
 		@Override
@@ -227,8 +227,8 @@ public abstract class CardOperator {
 		}
 
 		@Override
-		public int evaluate(Random rand, Card card) {
-			return left.evaluate(rand, card) - right.evaluate(rand, card);
+		public int evaluate(Random rand, Card card, Collected collected) {
+			return left.evaluate(rand, card, collected) - right.evaluate(rand, card, collected);
 		}
 
 		@Override
@@ -268,8 +268,8 @@ public abstract class CardOperator {
 		}
 
 		@Override
-		public int evaluate(Random rand, Card card) {
-			return left.evaluate(rand, card) * right.evaluate(rand, card);
+		public int evaluate(Random rand, Card card, Collected collected) {
+			return left.evaluate(rand, card, collected) * right.evaluate(rand, card, collected);
 		}
 
 		@Override
@@ -309,13 +309,121 @@ public abstract class CardOperator {
 		}
 
 		@Override
-		public int evaluate(Random rand, Card card) {
-			return left.evaluate(rand, card) > right.evaluate(rand, card) ? 1 : 0;
+		public int evaluate(Random rand, Card card, Collected collected) {
+			return left.evaluate(rand, card, collected) > right.evaluate(rand, card, collected) ? 1 : 0;
 		}
 
 		@Override
 		protected Object[] getDescriptionArgs() {
 			return new Object[] { left.getDescription(), right.getDescription() };
+		}
+
+	}
+
+	public static class Negate extends CardOperator {
+
+		public static final Codec<Negate> CODEC = ExtraCodecs.lazyInitializedCodec(() -> RecordCodecBuilder
+				.create(instance -> instance.group(CardOperator.CODEC.fieldOf("inner").forGetter(Negate::getInner))
+						.apply(instance, Negate::new)));
+
+		private CardOperator inner;
+
+		public Negate(CardOperator inner) {
+			this.inner = inner;
+		}
+
+		@Override
+		protected CardOperatorType<?> getType() {
+			return ModCardOperators.NEGATE.get();
+		}
+
+		public CardOperator getInner() {
+			return inner;
+		}
+
+		@Override
+		public int evaluate(Random rand, Card card, Collected collected) {
+			return -inner.evaluate(rand, card, collected);
+		}
+
+		@Override
+		protected Object[] getDescriptionArgs() {
+			return new Object[] {};
+		}
+
+	}
+
+	public static class CollectedCount extends CardOperator {
+
+		public static final Codec<CollectedCount> CODEC = ExtraCodecs.lazyInitializedCodec(() -> RecordCodecBuilder
+				.create(instance -> instance.group(Codec.INT.fieldOf("index").forGetter(CollectedCount::getIndex))
+						.apply(instance, CollectedCount::new)));
+
+		private int index;
+
+		public CollectedCount(int index) {
+			this.index = index;
+		}
+
+		@Override
+		protected CardOperatorType<?> getType() {
+			return ModCardOperators.COLLECTED_COUNT.get();
+		}
+
+		public int getIndex() {
+			return index;
+		}
+
+		@Override
+		public int evaluate(Random rand, Card card, Collected collected) {
+			return collected.get(index).size();
+		}
+
+		@Override
+		protected Object[] getDescriptionArgs() {
+			return new Object[] {};
+		}
+
+	}
+
+	public static class CollectedAny extends CardOperator {
+
+		public static final Codec<CollectedAny> CODEC = ExtraCodecs
+				.lazyInitializedCodec(() -> RecordCodecBuilder.create(instance -> instance
+						.group(Codec.INT.fieldOf("index").forGetter(CollectedAny::getIndex),
+								CardOperator.CODEC.fieldOf("inner").forGetter(CollectedAny::getInner))
+						.apply(instance, CollectedAny::new)));
+
+		private int index;
+		private CardOperator inner;
+
+		public CollectedAny(int index, CardOperator inner) {
+			this.index = index;
+			this.inner = inner;
+		}
+
+		@Override
+		protected CardOperatorType<?> getType() {
+			return ModCardOperators.COLLECTED_ANY.get();
+		}
+
+		public int getIndex() {
+			return index;
+		}
+
+		public CardOperator getInner() {
+			return inner;
+		}
+
+		@Override
+		public int evaluate(Random rand, Card card, Collected collected) {
+			var coll = collected.get(index);
+			return coll.isEmpty() ? 0 : inner.evaluate(rand, coll.get(0), collected);
+		}
+
+		@Override
+		protected Object[] getDescriptionArgs() {
+			return new Object[] {};
 		}
 
 	}
