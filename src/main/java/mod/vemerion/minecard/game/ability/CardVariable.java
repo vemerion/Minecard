@@ -35,6 +35,8 @@ public abstract class CardVariable {
 			});
 	public static final SimpleVariable HEALTH = new CardVariable.SimpleVariable(ModCardVariables.HEALTH,
 			c -> c.getHealth(), (s, c, r, v) -> {
+				if (c.getHealth() < 0)
+					c.setHealth(0);
 				if (v < 0)
 					s.getGame().hurt(r, c, -v);
 				else
