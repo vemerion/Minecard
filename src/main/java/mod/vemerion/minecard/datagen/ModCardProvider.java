@@ -348,12 +348,26 @@ public class ModCardProvider implements DataProvider {
 						new AnimationAbility(mod("throw_shield")), new ModifyAbility(List.of(new ModificationBuilder()
 								.addMaxHealth(1).addDamage(1).setProperty(CardProperty.TAUNT, 1).build()))))));
 		add(new Builder(EntityType.RAVAGER, 9, 10, 4)
-				.setCardAbility(new ChainAbility(EnumSet.of(CardAbilityTrigger.ATTACK),
-						List.of(new SelectCardsAbility(new CardAbilitySelection(
-								new CardAbilityGroups(EnumSet.of(CardAbilityGroup.TARGET_ADJACENT)),
-								CardSelectionMethod.All.ALL, CardCondition.NoCondition.NO_CONDITION)),
-								new AnimationAbility(mod("ravager_charge")),
-								new ModifyAbility(List.of(new ModificationBuilder().heal(-4).build()))))));
+				.setCardAbility(
+						new ChainAbility(
+								EnumSet.of(CardAbilityTrigger.ATTACK), List
+										.of(new SelectCardsAbility(new CardAbilitySelection(
+												new CardAbilityGroups(EnumSet.of(CardAbilityGroup.SELF)),
+												CardSelectionMethod.All.ALL, CardCondition.NoCondition.NO_CONDITION)),
+												new MoveCollectedAbility(0, 1, true, false),
+												new SelectCardsAbility(new CardAbilitySelection(
+														new CardAbilityGroups(
+																EnumSet.of(CardAbilityGroup.TARGET_ADJACENT)),
+														CardSelectionMethod.All.ALL,
+														CardCondition.NoCondition.NO_CONDITION)),
+												new AnimationAbility(mod("ravager_charge")),
+												new ModifyAbility(List.of(new ModificationBuilder()
+														.put(new CardModification(CardVariable.HEALTH,
+																new CardOperator.Negate(
+																		new CardOperator.CollectedAny(1,
+																				new CardOperator.Variable(
+																						CardVariable.DAMAGE)))))
+														.build()))))));
 		add(new Builder(EntityType.SKELETON, 4, 4, 1).addProperty(CardProperty.UNDEAD, 1)
 				.setCardAbility(new ChainAbility(EnumSet.of(CardAbilityTrigger.TICK),
 						List.of(new SelectCardsAbility(new CardAbilitySelection(

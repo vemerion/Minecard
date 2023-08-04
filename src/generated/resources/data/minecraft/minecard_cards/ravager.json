@@ -11,6 +11,28 @@
           "value": {
             "selection": {
               "groups": [
+                "self"
+              ],
+              "method": {
+                "type": "minecard:all"
+              }
+            }
+          }
+        },
+        {
+          "type": "minecard:move_collected",
+          "value": {
+            "source": 0,
+            "destination": 1,
+            "clear_source": true,
+            "clear_destination": false
+          }
+        },
+        {
+          "type": "minecard:select_cards",
+          "value": {
+            "selection": {
+              "groups": [
                 "target_adjacent"
               ],
               "method": {
@@ -35,8 +57,21 @@
                     "type": "minecard:health"
                   },
                   "operator": {
-                    "type": "minecard:constant",
-                    "value": -4
+                    "type": "minecard:negate",
+                    "value": {
+                      "inner": {
+                        "type": "minecard:collected_any",
+                        "value": {
+                          "index": 1,
+                          "inner": {
+                            "type": "minecard:variable",
+                            "value": {
+                              "type": "minecard:damage"
+                            }
+                          }
+                        }
+                      }
+                    }
                   }
                 }
               ]
