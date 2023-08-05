@@ -631,15 +631,15 @@ public class ModCardProvider implements DataProvider {
 						new MoveCollectedAbility(1, 0, false, true), new PlaceCardsAbility(CardPlacement.YOUR_HAND)))));
 		add(new Builder(EntityType.ITEM, 5, 0, 0)
 				.setKey(mod(
-						"firework_rocket"))
+						"soul_sand"))
 				.setAdditionalData(
-						new AdditionalCardData.ItemData(Items.FIREWORK_ROCKET))
+						new AdditionalCardData.ItemData(Items.SOUL_SAND))
 				.setCardAbility(
 						new ChainAbility(Set.of(CardAbilityTrigger.SUMMON),
 								List.of(new SelectCardsAbility(new CardAbilitySelection(
 										new CardAbilityGroups(EnumSet.of(CardAbilityGroup.ENEMY_BOARD)),
 										CardSelectionMethod.All.ALL, CardCondition.NoCondition.NO_CONDITION), true),
-										new AnimationAbility(mod("rocket")),
+										new AnimationAbility(mod("soul_sand")),
 										new ModifyAbility(
 												List.of(new ModificationBuilder()
 														.put(new CardModification(CardVariable.HEALTH,

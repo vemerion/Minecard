@@ -5,6 +5,7 @@ import java.util.function.Supplier;
 import mod.vemerion.minecard.Main;
 import mod.vemerion.minecard.screen.animation.config.AnimationConfig;
 import mod.vemerion.minecard.screen.animation.config.AnimationConfigType;
+import mod.vemerion.minecard.screen.animation.config.BlockAnimationConfig;
 import mod.vemerion.minecard.screen.animation.config.EnderDragonAnimationConfig;
 import mod.vemerion.minecard.screen.animation.config.EntityAnimationConfig;
 import mod.vemerion.minecard.screen.animation.config.ExplosionAnimationConfig;
@@ -56,5 +57,7 @@ public class ModAnimationConfigs {
 			.register("splash", () -> new AnimationConfigType<SplashAnimationConfig>(SplashAnimationConfig.CODEC));
 	public static final RegistryObject<AnimationConfigType<? extends AnimationConfig>> WITHER = ANIMATION_CONFIGS
 			.register("wither", () -> new AnimationConfigType<WitherAnimationConfig>(WitherAnimationConfig.CODEC));
+	public static final RegistryObject<AnimationConfigType<? extends AnimationConfig>> BLOCK = ANIMATION_CONFIGS
+			.register("block", () -> new AnimationConfigType<BlockAnimationConfig>(BlockAnimationConfig.CODEC));
 
 }

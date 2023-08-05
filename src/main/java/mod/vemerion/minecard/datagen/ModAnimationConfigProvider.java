@@ -14,6 +14,7 @@ import mod.vemerion.minecard.Main;
 import mod.vemerion.minecard.screen.animation.ParticlesAnimation;
 import mod.vemerion.minecard.screen.animation.config.AnimationConfig;
 import mod.vemerion.minecard.screen.animation.config.AnimationConfigs;
+import mod.vemerion.minecard.screen.animation.config.BlockAnimationConfig;
 import mod.vemerion.minecard.screen.animation.config.EnderDragonAnimationConfig;
 import mod.vemerion.minecard.screen.animation.config.EntityAnimationConfig;
 import mod.vemerion.minecard.screen.animation.config.ExplosionAnimationConfig;
@@ -31,6 +32,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.item.alchemy.Potions;
+import net.minecraft.world.level.block.Blocks;
 
 public class ModAnimationConfigProvider implements DataProvider {
 	private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
@@ -166,6 +168,7 @@ public class ModAnimationConfigProvider implements DataProvider {
 				new EntityAnimationConfig(EntityType.FIREWORK_ROCKET, true, 15, 25, 1,
 						Optional.of(SoundEvents.FIREWORK_ROCKET_LAUNCH), Optional.empty(),
 						Optional.of(SoundEvents.FIREWORK_ROCKET_BLAST)));
+		animations.put("soul_sand", new BlockAnimationConfig(Blocks.SOUL_SAND));
 
 	}
 

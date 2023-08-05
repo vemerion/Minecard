@@ -1,11 +1,8 @@
 {
   "additional_data": {
     "item": {
-      "id": "minecraft:firework_rocket",
-      "Count": 1,
-      "tag": {
-        "Flight": 1
-      }
+      "id": "minecraft:soul_sand",
+      "Count": 1
     }
   },
   "abilities": {
@@ -32,7 +29,7 @@
         {
           "type": "minecard:animation",
           "value": {
-            "animation": "minecard:rocket"
+            "animation": "minecard:soul_sand"
           }
         },
         {
