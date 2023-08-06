@@ -1,4 +1,12 @@
 {
+  "advancements.minecard.root.description": "Collect a card",
+  "advancements.minecard.root.title": "Minecard",
+  "advancements.minecard.tutorial.description": "Complete the tutorial",
+  "advancements.minecard.tutorial.title": "Learned",
+  "advancements.minecard.win.description": "Win a game",
+  "advancements.minecard.win.title": "Victory",
+  "advancements.minecard.win_ai.description": "Win a game against the AI",
+  "advancements.minecard.win_ai.title": "Man vs Machine",
   "block.minecard.game": "Game Board",
   "card_abilities.minecard.animation": "",
   "card_abilities.minecard.chain": "%s",

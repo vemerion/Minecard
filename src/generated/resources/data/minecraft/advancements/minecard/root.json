@@ -1,0 +1,37 @@
+{
+  "display": {
+    "icon": {
+      "item": "minecard:empty_card_full"
+    },
+    "title": {
+      "translate": "advancements.minecard.root.title"
+    },
+    "description": {
+      "translate": "advancements.minecard.root.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false,
+    "background": "minecard:textures/block/game_top.png"
+  },
+  "criteria": {
+    "has_card": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minecard:card"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_card"
+    ]
+  ]
+}

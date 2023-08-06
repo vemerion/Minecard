@@ -8,10 +8,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import mod.vemerion.minecard.Main;
+import mod.vemerion.minecard.advancement.ModGameTrigger;
 import mod.vemerion.minecard.capability.CardData;
 import mod.vemerion.minecard.capability.DeckData;
 import mod.vemerion.minecard.game.AIPlayer;
@@ -23,6 +25,7 @@ import mod.vemerion.minecard.game.GameState;
 import mod.vemerion.minecard.game.PlayerState;
 import mod.vemerion.minecard.game.Receiver;
 import mod.vemerion.minecard.helper.Helper;
+import mod.vemerion.minecard.init.ModAdvancements;
 import mod.vemerion.minecard.init.ModBlockEntities;
 import mod.vemerion.minecard.init.ModItems;
 import mod.vemerion.minecard.network.GameOverMessage;
@@ -69,6 +72,15 @@ public class GameBlockEntity extends BlockEntity {
 		}
 
 		if (state.isGameOver()) {
+			if (isTutorial()) {
+				advancement(ModGameTrigger.Type.COMPLETE_TUTORIAL, s -> true);
+			} else {
+				if (aiPlayer != null) {
+					advancement(ModGameTrigger.Type.WIN_AI, s -> !s.isGameOver());
+				}
+				advancement(ModGameTrigger.Type.WIN_GAME, s -> !s.isGameOver());
+			}
+
 			for (var receiver : getReceivers()) {
 				receiver.receiver(new GameOverMessage());
 			}
@@ -77,6 +89,14 @@ public class GameBlockEntity extends BlockEntity {
 			aiPlayer = null;
 			receivers.clear();
 			setChanged();
+		}
+	}
+
+	private void advancement(ModGameTrigger.Type type, Predicate<PlayerState> test) {
+		for (var playerState : state.getPlayerStates()) {
+			if (test.test(playerState) && level.getPlayerByUUID(playerState.getId()) instanceof ServerPlayer player) {
+				ModAdvancements.GAME.trigger(player, type);
+			}
 		}
 	}
 

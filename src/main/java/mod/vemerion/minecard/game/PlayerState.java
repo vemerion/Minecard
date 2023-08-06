@@ -40,6 +40,7 @@ public class PlayerState {
 	private int maxResources;
 	private boolean mulligan;
 	private GameState game;
+	private boolean isGameOver;
 
 	public PlayerState(UUID id, List<Card> deck, List<Card> hand, List<Card> board, int resources, int maxResources,
 			boolean mulligan) {
@@ -259,5 +260,13 @@ public class PlayerState {
 			}
 		}
 		return new MessagePlayerState(id, deck.size(), hand, board, resources, maxResources, mulligan);
+	}
+
+	public boolean isGameOver() {
+		return isGameOver;
+	}
+
+	public void setGameOver() {
+		isGameOver = true;
 	}
 }

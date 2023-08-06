@@ -1,0 +1,31 @@
+{
+  "parent": "minecraft:minecard/root",
+  "display": {
+    "icon": {
+      "item": "minecraft:redstone"
+    },
+    "title": {
+      "translate": "advancements.minecard.win_ai.title"
+    },
+    "description": {
+      "translate": "advancements.minecard.win_ai.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "won_agains_ai": {
+      "trigger": "minecard:game",
+      "conditions": {
+        "type": "win_ai"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "won_agains_ai"
+    ]
+  ]
+}

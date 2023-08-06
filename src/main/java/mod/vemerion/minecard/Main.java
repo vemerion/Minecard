@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
 
+import mod.vemerion.minecard.init.ModAdvancements;
 import mod.vemerion.minecard.init.ModAnimationConfigs;
 import mod.vemerion.minecard.init.ModBlockEntities;
 import mod.vemerion.minecard.init.ModBlocks;
@@ -43,6 +44,8 @@ public class Main {
 		ModCardOperators.CARD_OPERATORS.register(bus);
 		ModCardSelectionMethods.CARD_SELECTION_METHODS.register(bus);
 		DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> Client.register(bus));
+
+		ModAdvancements.register();
 	}
 
 	private static class Client {

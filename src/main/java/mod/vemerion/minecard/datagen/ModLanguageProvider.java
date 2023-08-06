@@ -42,6 +42,8 @@ public class ModLanguageProvider extends LanguageProvider {
 
 		add("gui." + Main.MODID + ".game", "Minecard Game");
 
+		advancements();
+
 		add(Helper.gui("cardy"), "Cardy the Creeper");
 		tutorial();
 
@@ -178,6 +180,17 @@ public class ModLanguageProvider extends LanguageProvider {
 		add(Helper.gui("card_modification"), "%s %s %s");
 		add(Helper.gui("equal"), "=");
 		add(Helper.gui("plus_equal"), "+=");
+	}
+
+	private void advancements() {
+		add(ModAdvancementProvider.titleKey("root"), "Minecard");
+		add(ModAdvancementProvider.descriptionKey("root"), "Collect a card");
+		add(ModAdvancementProvider.titleKey("win"), "Victory");
+		add(ModAdvancementProvider.descriptionKey("win"), "Win a game");
+		add(ModAdvancementProvider.titleKey("tutorial"), "Learned");
+		add(ModAdvancementProvider.descriptionKey("tutorial"), "Complete the tutorial");
+		add(ModAdvancementProvider.titleKey("win_ai"), "Man vs Machine");
+		add(ModAdvancementProvider.descriptionKey("win_ai"), "Win a game against the AI");
 	}
 
 	private void tutorial() {

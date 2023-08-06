@@ -40,7 +40,6 @@ public class GameState {
 	private int tutorialStep;
 	private List<HistoryEntry> history;
 	private Random random;
-	private boolean isGameOver;
 	private PlayerChoice choice = new PlayerChoice();
 
 	public GameState(List<PlayerState> playerStates, int turn, int tutorialStep, List<HistoryEntry> history) {
@@ -322,11 +321,7 @@ public class GameState {
 	}
 
 	public boolean isGameOver() {
-		return isGameOver;
-	}
-
-	public void setGameOver() {
-		isGameOver = true;
+		return playerStates.stream().anyMatch(s -> s.isGameOver());
 	}
 
 	public boolean isMulligan() {

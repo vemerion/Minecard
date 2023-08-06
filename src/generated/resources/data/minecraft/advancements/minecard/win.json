@@ -1,0 +1,31 @@
+{
+  "parent": "minecraft:minecard/root",
+  "display": {
+    "icon": {
+      "item": "minecard:game"
+    },
+    "title": {
+      "translate": "advancements.minecard.win.title"
+    },
+    "description": {
+      "translate": "advancements.minecard.win.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "won_game": {
+      "trigger": "minecard:game",
+      "conditions": {
+        "type": "win_game"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "won_game"
+    ]
+  ]
+}

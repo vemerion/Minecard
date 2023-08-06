@@ -1,0 +1,31 @@
+{
+  "parent": "minecraft:minecard/root",
+  "display": {
+    "icon": {
+      "item": "minecraft:book"
+    },
+    "title": {
+      "translate": "advancements.minecard.tutorial.title"
+    },
+    "description": {
+      "translate": "advancements.minecard.tutorial.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "tutorial": {
+      "trigger": "minecard:game",
+      "conditions": {
+        "type": "complete_tutorial"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "tutorial"
+    ]
+  ]
+}
