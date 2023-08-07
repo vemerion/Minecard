@@ -1,0 +1,99 @@
+{
+  "additional_data": {
+    "item": {
+      "id": "minecraft:wooden_sword",
+      "Count": 1,
+      "tag": {
+        "Damage": 0
+      }
+    }
+  },
+  "abilities": {
+    "type": "minecard:chain",
+    "value": {
+      "triggers": [
+        "summon"
+      ],
+      "text_key": "card_ability.minecard.wooden_sword",
+      "abilities": [
+        {
+          "type": "minecard:select_cards",
+          "value": {
+            "selection": {
+              "groups": [
+                "enemy_board",
+                "your_board"
+              ],
+              "method": {
+                "type": "minecard:choice",
+                "value": {
+                  "discover": false
+                }
+              }
+            },
+            "clear": true
+          }
+        },
+        {
+          "type": "minecard:modify",
+          "value": {
+            "modifications": [
+              [
+                {
+                  "output": {
+                    "type": "minecard:damage"
+                  },
+                  "operator": {
+                    "type": "minecard:add",
+                    "value": {
+                      "left": {
+                        "type": "minecard:variable",
+                        "value": {
+                          "type": "minecard:damage"
+                        }
+                      },
+                      "right": {
+                        "type": "minecard:constant",
+                        "value": 3
+                      }
+                    }
+                  }
+                }
+              ]
+            ]
+          }
+        },
+        {
+          "type": "minecard:card_abilities",
+          "value": {
+            "ability": {
+              "type": "minecard:chain",
+              "value": {
+                "triggers": [
+                  "death"
+                ],
+                "text_key": "card_ability.minecard.wooden_sword_return",
+                "abilities": [
+                  {
+                    "cards": [
+                      "minecard:wooden_sword"
+                    ],
+                    "type": "minecard:constant_cards"
+                  },
+                  {
+                    "placement": "your_hand",
+                    "type": "minecard:place_cards"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "entity": "minecraft:item",
+  "cost": 2,
+  "health": 0,
+  "damage": 0
+}

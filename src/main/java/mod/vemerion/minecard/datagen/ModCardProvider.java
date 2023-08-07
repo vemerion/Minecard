@@ -20,6 +20,7 @@ import mod.vemerion.minecard.game.CardProperty;
 import mod.vemerion.minecard.game.CardType;
 import mod.vemerion.minecard.game.Cards;
 import mod.vemerion.minecard.game.LazyCardType;
+import mod.vemerion.minecard.game.ability.AddAbilityAbility;
 import mod.vemerion.minecard.game.ability.AnimationAbility;
 import mod.vemerion.minecard.game.ability.CardAbility;
 import mod.vemerion.minecard.game.ability.CardAbilityGroup;
@@ -693,6 +694,23 @@ public class ModCardProvider implements DataProvider {
 																						new CardOperator.Variable(
 																								CardVariable.COST)))))
 																.build()))))));
+		add(new Builder(EntityType.ITEM, 2, 0, 0).setKey(mod("wooden_sword"))
+				.setAdditionalData(
+						new AdditionalCardData.ItemData(Items.WOODEN_SWORD))
+				.setCardAbility(
+						new ChainAbility(
+								Set.of(CardAbilityTrigger.SUMMON), textKey("wooden_sword"), List.of(
+										new SelectCardsAbility(new CardAbilitySelection(
+												new CardAbilityGroups(EnumSet.of(CardAbilityGroup.ENEMY_BOARD,
+														CardAbilityGroup.YOUR_BOARD)),
+												new CardSelectionMethod.Choice(false),
+												CardCondition.NoCondition.NO_CONDITION), true),
+										new ModifyAbility(List.of(new ModificationBuilder().addDamage(3).build())),
+										new AddAbilityAbility(new ChainAbility(Set.of(CardAbilityTrigger.DEATH),
+												textKey("wooden_sword_return"),
+												List.of(new ConstantCardsAbility(
+														List.of(new LazyCardType(mod("wooden_sword")))),
+														new PlaceCardsAbility(CardPlacement.YOUR_HAND))))))));
 
 		// Auxiliary cards
 		add(new Builder(EntityType.ITEM, 0, 5, 0).setKey(mod("end_crystal"))
@@ -1005,6 +1023,11 @@ public class ModCardProvider implements DataProvider {
 		private ModificationBuilder addMaxHealth(int value) {
 			modifications.add(new CardModification(CardVariable.MAX_HEALTH, new CardOperator.Add(
 					new CardOperator.Variable(CardVariable.MAX_HEALTH), new CardOperator.Constant(value))));
+			return this;
+		}
+
+		private ModificationBuilder setMaxHealth(int value) {
+			modifications.add(new CardModification(CardVariable.MAX_HEALTH, new CardOperator.Constant(value)));
 			return this;
 		}
 

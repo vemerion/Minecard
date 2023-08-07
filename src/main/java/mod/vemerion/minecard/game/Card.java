@@ -50,7 +50,7 @@ public class Card {
 	private int damage;
 	private int originalDamage;
 	private Map<ResourceLocation, Integer> properties;
-	private final CardAbility ability;
+	private CardAbility ability;
 	private int id;
 	private int textScroll; // Client only
 
@@ -176,6 +176,10 @@ public class Card {
 		return ability;
 	}
 
+	public void setAbility(CardAbility ability) {
+		this.ability = ability;
+	}
+
 	public void ability(BiConsumer<CardAbility, ItemStack> func) {
 		func.accept(getAbility(), new ItemStack(Items.BOOK));
 		for (var property : new HashMap<>(properties).entrySet()) {
@@ -218,6 +222,7 @@ public class Card {
 		this.originalDamage = received.originalDamage;
 		this.properties = received.getProperties();
 		this.additionalData = received.getAdditionalData();
+		this.ability = received.getAbility();
 	}
 
 	public int getTextScroll() {

@@ -3,6 +3,7 @@ package mod.vemerion.minecard.init;
 import java.util.function.Supplier;
 
 import mod.vemerion.minecard.Main;
+import mod.vemerion.minecard.game.ability.AddAbilityAbility;
 import mod.vemerion.minecard.game.ability.AnimationAbility;
 import mod.vemerion.minecard.game.ability.CardAbility;
 import mod.vemerion.minecard.game.ability.CardAbilityType;
@@ -71,5 +72,7 @@ public class ModCardAbilities {
 			.register("animation", () -> new CardAbilityType<AnimationAbility>(AnimationAbility.CODEC));
 	public static final RegistryObject<CardAbilityType<? extends CardAbility>> MOVE_COLLECTED = CARD_ABILITIES
 			.register("move_collected", () -> new CardAbilityType<MoveCollectedAbility>(MoveCollectedAbility.CODEC));
+	public static final RegistryObject<CardAbilityType<? extends CardAbility>> ADD_ABILITY = CARD_ABILITIES
+			.register("card_abilities", () -> new CardAbilityType<AddAbilityAbility>(AddAbilityAbility.CODEC));
 
 }

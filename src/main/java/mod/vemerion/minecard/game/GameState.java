@@ -221,12 +221,15 @@ public class GameState {
 			card.ability((a, i) -> a.trigger(CardAbilityTrigger.HURT, receivers, playerState, card, null, i));
 		}
 
+		if (card.isDead()) {
+			card.ability((a, i) -> a.trigger(CardAbilityTrigger.DEATH, receivers, playerState, card, null, i));
+		}
+
 		for (var receiver : receivers) {
 			updateCards(receiver, List.of(card));
 		}
 
 		if (card.isDead()) {
-			card.ability((a, i) -> a.trigger(CardAbilityTrigger.DEATH, receivers, playerState, card, null, i));
 			container.remove(card);
 		}
 	}

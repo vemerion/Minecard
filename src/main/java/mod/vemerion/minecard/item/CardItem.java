@@ -62,7 +62,7 @@ public class CardItem extends Item {
 				});
 			}
 			addSpells(pItems, "fishing_rod", "book", "splash_potion_of_harming", "enchanted_golden_apple", "chest",
-					"enchanted_book", "spyglass", "lodestone", "firework_rocket", "amethyst_shard");
+					"enchanted_book", "spyglass", "lodestone", "firework_rocket", "amethyst_shard", "wooden_sword");
 		}
 
 	}
