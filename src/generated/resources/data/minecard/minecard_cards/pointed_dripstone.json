@@ -11,6 +11,7 @@
       "triggers": [
         "summon"
       ],
+      "text_key": "card_ability.minecard.pointed_dripstone",
       "abilities": [
         {
           "type": "minecard:select_cards",

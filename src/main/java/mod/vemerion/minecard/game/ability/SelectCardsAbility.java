@@ -27,7 +27,7 @@ public class SelectCardsAbility extends CardAbility {
 	private final boolean clear;
 
 	public SelectCardsAbility(CardAbilitySelection selection, boolean clear) {
-		super(Set.of());
+		super(Set.of(), "");
 		this.selection = selection;
 		this.clear = clear;
 	}
@@ -39,11 +39,6 @@ public class SelectCardsAbility extends CardAbility {
 	@Override
 	protected CardAbilityType<?> getType() {
 		return ModCardAbilities.SELECT_CARDS.get();
-	}
-
-	@Override
-	protected Object[] getDescriptionArgs() {
-		return new Object[] { selection.getText() };
 	}
 
 	@Override

@@ -2,6 +2,7 @@
   "abilities": {
     "type": "minecard:choice",
     "value": {
+      "text_key": "card_ability.minecard.hoglin",
       "abilities": [
         {
           "type": "minecard:chain",
@@ -9,6 +10,7 @@
             "triggers": [
               "summon"
             ],
+            "text_key": "card_ability.minecard.hoglin_baby",
             "abilities": [
               {
                 "cards": [
@@ -37,6 +39,7 @@
             "triggers": [
               "summon"
             ],
+            "text_key": "card_ability.minecard.hoglin_buff",
             "abilities": [
               {
                 "type": "minecard:select_cards",

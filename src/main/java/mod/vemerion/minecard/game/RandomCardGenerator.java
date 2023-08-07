@@ -137,21 +137,21 @@ public class RandomCardGenerator {
 		List<CardAbility> abilities = new ArrayList<>();
 		abilities.add(NoCardAbility.NO_CARD_ABILITY);
 		if (depth < maxDepth) {
-			abilities.add(new ChoiceCardAbility(
-					IntStream.range(0, rand.nextInt(1, 5)).mapToObj(i -> next(depth + 1).getAbility())
-							.collect(Collectors.toCollection(() -> new ArrayList<>()))));
-			abilities.add(new DrawCardsAbility(randTriggers(), rand.nextInt(1, 3)));
-			abilities.add(new ResourceAbility(randTriggers(), rand.nextInt(3), rand.nextInt(3)));
-			abilities.add(new ChainAbility(randTriggers(),
-					List.of(new ConstantCardsAbility(List.of(new LazyCardType(next(depth + 1)))),
-							new PlaceCardsAbility(randEnum(CardPlacement.class)))));
-			abilities.add(new ChainAbility(randTriggers(),
-					List.of(new SelectCardsAbility(new CardAbilitySelection(randGroups(),
-							new CardSelectionMethod.Random(2, true), CardCondition.NoCondition.NO_CONDITION)),
-							new ModifyAbility(List.of(randModifications())))));
-			abilities.add(
-					new MultiAbility(IntStream.range(0, rand.nextInt(1, 5)).mapToObj(i -> next(depth + 1).getAbility())
-							.collect(Collectors.toCollection(() -> new ArrayList<>()))));
+//			abilities.add(new ChoiceCardAbility(
+//					IntStream.range(0, rand.nextInt(1, 5)).mapToObj(i -> next(depth + 1).getAbility())
+//							.collect(Collectors.toCollection(() -> new ArrayList<>()))));
+//			abilities.add(new DrawCardsAbility(randTriggers(), rand.nextInt(1, 3)));
+//			abilities.add(new ResourceAbility(randTriggers(), rand.nextInt(3), rand.nextInt(3)));
+//			abilities.add(new ChainAbility(randTriggers(),
+//					List.of(new ConstantCardsAbility(List.of(new LazyCardType(next(depth + 1)))),
+//							new PlaceCardsAbility(randEnum(CardPlacement.class)))));
+//			abilities.add(new ChainAbility(randTriggers(),
+//					List.of(new SelectCardsAbility(new CardAbilitySelection(randGroups(),
+//							new CardSelectionMethod.Random(2, true), CardCondition.NoCondition.NO_CONDITION)),
+//							new ModifyAbility(List.of(randModifications())))));
+//			abilities.add(
+//					new MultiAbility(IntStream.range(0, rand.nextInt(1, 5)).mapToObj(i -> next(depth + 1).getAbility())
+//							.collect(Collectors.toCollection(() -> new ArrayList<>()))));
 		}
 
 		return new CardType(type, cost, health, damage, properties, abilities.get(rand.nextInt(abilities.size())),

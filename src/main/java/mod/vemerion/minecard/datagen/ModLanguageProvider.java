@@ -2,16 +2,8 @@ package mod.vemerion.minecard.datagen;
 
 import mod.vemerion.minecard.Main;
 import mod.vemerion.minecard.game.CardProperty;
-import mod.vemerion.minecard.game.ability.CardAbilityGroup;
-import mod.vemerion.minecard.game.ability.CardAbilityTrigger;
-import mod.vemerion.minecard.game.ability.CardPlacement;
 import mod.vemerion.minecard.helper.Helper;
 import mod.vemerion.minecard.init.ModBlocks;
-import mod.vemerion.minecard.init.ModCardAbilities;
-import mod.vemerion.minecard.init.ModCardConditions;
-import mod.vemerion.minecard.init.ModCardOperators;
-import mod.vemerion.minecard.init.ModCardSelectionMethods;
-import mod.vemerion.minecard.init.ModCardVariables;
 import mod.vemerion.minecard.init.ModEntities;
 import mod.vemerion.minecard.init.ModItems;
 import net.minecraft.data.DataGenerator;
@@ -89,97 +81,116 @@ public class ModLanguageProvider extends LanguageProvider {
 		add(CardProperty.getDescriptionKey(CardProperty.POISON), "Take 1 damage every turn, but cannot kill");
 		add(CardProperty.getDescriptionKey(CardProperty.UNDEAD), "The card belongs to the undead category");
 
-		// Card ability groups
-		add(CardAbilityGroup.ALL.getTextKey(), "anywhere");
-		add(CardAbilityGroup.SELF.getTextKey(), "self");
-		add(CardAbilityGroup.TARGET.getTextKey(), "target");
-		add(CardAbilityGroup.ENEMY_DECK.getTextKey(), "the enemy deck");
-		add(CardAbilityGroup.ENEMY_BOARD.getTextKey(), "the enemy board");
-		add(CardAbilityGroup.YOUR_BOARD.getTextKey(), "your board");
-		add(CardAbilityGroup.YOUR_DECK.getTextKey(), "your deck");
-		add(CardAbilityGroup.ENEMY_HAND.getTextKey(), "the enemy hand");
-		add(CardAbilityGroup.YOUR_HAND.getTextKey(), "your hand");
-		add(CardAbilityGroup.ADJACENT.getTextKey(), "adjacent to this");
-		add(CardAbilityGroup.TARGET_ADJACENT.getTextKey(), "adjacent to the target");
-		add(CardAbilityGroup.COLLECTED.getTextKey(), "the found cards");
-
-		// Card selection methods
-		add(ModCardSelectionMethods.ALL.get().getTranslationKey(), "find all cards from ");
-		add(ModCardSelectionMethods.RANDOM.get().getTranslationKey(), "find %s random card(s) from ");
-		add(ModCardSelectionMethods.CHOICE.get().getTranslationKey(), "%s a card from ");
-		add(ModCardSelectionMethods.CHOICE.get().getTranslationKey() + ".selected", "select");
-		add(ModCardSelectionMethods.CHOICE.get().getTranslationKey() + ".discovered", "discover");
-
-		// Card conditions
-		add(ModCardConditions.NO_CONDITION.get().getTranslationKey(), "");
-		add(ModCardConditions.AND.get().getTranslationKey(), "(%s and %s)");
-		add(ModCardConditions.OR.get().getTranslationKey(), "(%s or %s)");
-		add(ModCardConditions.NOT.get().getTranslationKey(), "not (%s)");
-		add(ModCardConditions.ENTITY.get().getTranslationKey(), "card is %s");
-		add(ModCardConditions.OPERATOR.get().getTranslationKey(), "%s");
-
-		// Card variables
-		add(ModCardVariables.COST.get().getTranslationKey(), "cost");
-		add(ModCardVariables.DAMAGE.get().getTranslationKey(), "damage");
-		add(ModCardVariables.HEALTH.get().getTranslationKey(), "health");
-		add(ModCardVariables.MAX_HEALTH.get().getTranslationKey(), "max health");
-		add(ModCardVariables.PROPERTY.get().getTranslationKey(), "%s");
-
-		// Card Operators
-		add(ModCardOperators.ADD.get().getTranslationKey(), "(%s + %s)");
-		add(ModCardOperators.CONSTANT.get().getTranslationKey(), "%s");
-		add(ModCardOperators.MUL.get().getTranslationKey(), "(%s * %s)");
-		add(ModCardOperators.RANDOM.get().getTranslationKey(), "(value between %s and %s)");
-		add(ModCardOperators.SUB.get().getTranslationKey(), "(%s - %s)");
-		add(ModCardOperators.VARIABLE.get().getTranslationKey(), "%s");
-		add(ModCardOperators.GREATER_THAN.get().getTranslationKey(), "(%s > %s)");
-
-		// Card abilities triggers
-		add(CardAbilityTrigger.SUMMON.getTextKey(), "Summon");
-		add(CardAbilityTrigger.ATTACK.getTextKey(), "Attack");
-		add(CardAbilityTrigger.DEATH.getTextKey(), "Death");
-		add(CardAbilityTrigger.HURT.getTextKey(), "Hurt");
-		add(CardAbilityTrigger.TICK.getTextKey(), "Tick");
-		add(CardAbilityTrigger.GROW.getTextKey(), "Grow");
-
-		// Card placements
-		add(CardPlacement.LEFT.getTextKey(), "to the left");
-		add(CardPlacement.RIGHT.getTextKey(), "to the right");
-		add(CardPlacement.ENEMY.getTextKey(), "for the enemy");
-		add(CardPlacement.YOUR_DECK.getTextKey(), "in your deck");
-		add(CardPlacement.ENEMY_DECK.getTextKey(), "in the enemy deck");
-		add(CardPlacement.YOUR_HAND.getTextKey(), "in your hand");
-		add(CardPlacement.ENEMY_HAND.getTextKey(), "in the enemy hand");
-
 		// Card abilities
-		add(ModCardAbilities.NO_CARD_ABILITY.get().getTranslationKey(), "");
-		add(ModCardAbilities.DRAW_CARDS.get().getTranslationKey(), "%sdraw %s card(s).");
-		add(ModCardAbilities.MODIFY.get().getTranslationKey(), "apply%s%s.");
-		add(ModCardAbilities.MODIFY.get().getTranslationKey() + ".one_of", " one of");
-		add(ModCardAbilities.MODIFY.get().getTranslationKey() + ".element", " [%s]");
+		card("tutorial_creeper", "Attack: Draw 2 cards");
+		card("player", "Death: Game Over");
+		card("creeper", "Death: Explode and deal 3 damage to adjacent cards.");
+		card("donkey", "Summon: Draw a card.");
+		card("zombie", "Summon: Gain a random piece of equipment.");
+		card("stray", "Attack: Freeze the target.");
+		card("enderman", "Summon: Copy a random card from the enemy hand.");
+		card("glow_squid", "Summon: Reveal all cards on the board.");
+		card("wither_skeleton", "Summon: Reduce the cost of your Wither by two.");
+		card("wither", "Tick: Deal 4 damage to a random enemy card.");
+		card("squid", "Hurt: Return this card to your hand.");
+		card("silverfish", "Hurt: Draw a Silverfish from your deck.");
+		card("evoker", "Summon: Deal 2 damage to all enemy cards on the board.");
+		card("ender_dragon", "Summon: Create two end crystals.\nTick: Deal 1 damage to all enemy cards on the board.");
+		card("rabbit", "Summon: 30% chance to gain +1/+1.");
+		card("polar_bear", "Grow: Gain +1/+3 and taunt.");
+		card("axolotl", "Hurt: Gain stealth.");
+		card("bat", "Attack: Heal your player for one health.");
+		card("mule", "Grow: Draw 2 cards.");
+		card("pig", "Death: Heal your player for 3 health.");
+		card("strider", "Summon: Remove burn from adjacent cards.");
+		card("blaze", "Attack: Apply 3 burn to the target.");
+		card("ghast", "Summon: Apply 4 burn to the enemy player.");
+		card("bamboo", "Grow: Give all pands on the board +2/+2.");
+		card("zombified_piglin", "Hurt: Gain 3 attack.");
+		card("husk", "Attack: Reduce the attack of your target by 2.");
+		card("elder_guardian", "Summon: Reduce the attack of all enemy cards on the board by 1.");
+		card("goat", "Summon: Return an enemy card to their hand.");
+		card("endermite", "Summon: Draw an Enderman from your deck.");
+		card("pillager", "Summon: Give adjacent cards +1/+1 and taunt.");
+		card("ravager", "Attack: Also deal damage to the cards adjacent to the target.");
+		card("skeleton", "Tick: Deal 1 damage to a random enemy card on the board.");
+		card("spider", "Death: Increase the cost of a random card from the enemy hand by 1.");
+		card("skeleton_horse", "Summon: Deal 2 damage and apply 2 burn to a random enemy card on the board.");
+		card("salmon", "Death: 50% chance to pick up the Salmon in a bucket.");
+		card("ocelot", "Summon: Scare all enemy Phantoms and Creepers.");
+		card("snow_golem", "Summon: Deal 2 damage and freeze a selected enemy card from the board.");
+		card("chicken", "Summon: 50% chance to gain an egg.");
+		card("egg",
+				"Throw the egg at a selected card on the board, dealing 1 damage and 50% chance to summon a chicken.");
+		card("scute", "Give a selected card from the board 5 health and taunt.");
+		card("milk_bucket", "Remove burn/freeze/shield/stealth/taunt/thorns/poison from a selected card.");
+		card("mushroom_stew", "Select a card from the board and make it grow up instantly.");
+		card("llama", "Summon: Deal 1 damage to a selected card on the board.");
+		card("cat", "Tick: 50% chance to give you a gift.");
+		card("cave_spider", "Attack: 50% chance to poison the target.");
+		card("wandering_trader", "Summon: Do a trade!");
+		card("trader_llama", "Summon: Either deal 2 damage to a selected card on the board, or draw a card.");
+		card("trader_llama_spit", "Deal 2 damage to a selected card on the board.");
+		card("trader_llama_draw", "Draw a card.");
+		card("zombie_villager", "Summon: Give all your undead cards on the board +2/+2.");
+		card("hoglin", "Summon: Either gain +1/+1 and taunt, or summon a 4/3 Hoglin baby.");
+		card("hoglin_baby", "Summon a 4/3 Hoglin baby.");
+		card("hoglin_buff", "Gain +1/+1 and taunt.");
+		card("fishing_rod", "Steal a selected card from the enemy hand.");
+		card("book", "Draw 2 cards.");
+		card("splash_potion_of_harming", "Deal 3 damage to 2 random enemy cards on the board.");
+		card("enchanted_golden_apple", "Give a selected friendly card on the board 6 health, shield, and remove burn.");
+		card("chest", "Draw 3 cards, but increase their cost by 1.");
+		card("enchanted_book", "Draw a card, and give it +2/+2.");
+		card("spyglass", "Discover a card from the enemy hand. Set its cost to 10.");
+		card("lodestone", "Swap hand with your enemy.");
+		card("soul_sand", "Deal X damage to the enemy board. X = number of enemy cards on the board.");
+		card("amethyst_shard",
+				"Draw a card. Deal damage equal to the cost of the drawn card to a random enemy card on the board.");
+		card("end_crystal", "Tick: Heal adjacent Ender Dragons by 4.");
+		card("trident",
+				"Deal 4 damage and apply 4 burn to a selected card from the board. 30% chance to return this card to your hand.");
+		card("throw_sweet_berries", "Select a card from the board and heal it by 4.");
+		card("rotten_flesh", "Select a card from the board and either heal or hurt it, choosen randomly.");
+		card("rabbit_foot", "Select a card from the board and give it 1 health.");
+		card("absorption_potion", "Select a card from the board and give it shield.");
+		card("poison_potion", "Select a card from the board and give it poison.");
+		card("healing_potion", "Select a card from the board and heal it by 5.");
+		card("packed_ice", "Select a card from the board and freeze it.");
+		card("pointed_dripstone", "Select a card from the board and give it 3 thorns.");
+		card("iron_sword", "Select a card from the board and give it 2 attack.");
+		card("emerald", "Gain 1 temporary resource.");
+		card("leather_chestplate", "Select a card from the board and give it 2 health.");
+		card("iron_boots", "Select a card from the board and give it 2 health.");
+		card("fire_charge", "Select a card from the board and give it 3 burn.");
+		card("ender_pearl", "Select a friendly card from the board and return it to your hand.");
+		card("cod", "Summon: Chance to summon another Cod.");
+		card("splitter", "Death: Split into 2 smaller versions of itself.");
+		card("vindicator", "Death: Gain an emerald card.");
+		card("sheep", "Death: Summon a wool card for the enemy.");
+		card("villager", "Hurt: Summon an Iron Golem.");
+		card("bee", "Summon: Spawn a bee nest.");
+		card("bee_nest", "Tick: Summon a bee.");
+		card("panda", "Summon: Spawn a bamboo card.");
+		card("magma_cube", "Attack: Apply 2 burn to the target.");
+		card("salmon_bucket", "Summon a Salmon.");
+		card("turtle", "Grow: Gain a scute card.");
+		card("drowned", "Death: Gain a trident card.");
+		card("cow", "Death: Gain a milk bucket card.");
+		card("fox", "Summon: Spawn a sweet berries card.");
+		card("mooshroom", "Summon: Gain a mushroom stew card.");
+		card("witch", "Summon: Gain a random potion card.");
+		card("dolphin", "Summon: Spawn a treasure chest.");
+		card("zoglin", "Death: Gain a rotten flesh card.");
+		card("piglin", "Summon: Gain a random barter card.");
+		card("sweet_berries", "Death: Gain a sweet berries card.");
+		card("pufferfish_bucket", "Summon: Spawn a Pufferfish card.");
+		card("buried_treasure", "Death: Gain a random treasure card.");
 
-		add(ModCardAbilities.RESOURCE.get().getTranslationKey(),
-				"%sGain %s temporary resources, and %s permanent resources.");
-		add(ModCardAbilities.MULTI.get().getTranslationKey(), "%s");
-		add(ModCardAbilities.CHANCE.get().getTranslationKey(), "%s%% %s: %s");
-		add(ModCardAbilities.CHANCE.get().getTranslationKey() + ".chance", "chance");
-		add(ModCardAbilities.CHOICE.get().getTranslationKey(), "%s:\n%s");
-		add(ModCardAbilities.CHOICE.get().getTranslationKey() + ".choice_of", "Choice of");
-		add(ModCardAbilities.GAME_OVER.get().getTranslationKey(), "%slose the game");
-		add(ModCardAbilities.SELECT_CARDS.get().getTranslationKey(), "%s");
-		add(ModCardAbilities.CHAIN.get().getTranslationKey(), "%s");
-		add(ModCardAbilities.CONSTANT_CARDS.get().getTranslationKey(), "create%s");
-		add(ModCardAbilities.CONSTANT_CARDS.get().getTranslationKey() + ".element", " [%s]");
-		add(ModCardAbilities.REMOVE_CARDS.get().getTranslationKey(), "remove the card(s)");
-		add(ModCardAbilities.PLACE_CARDS.get().getTranslationKey(), "put the card(s) %s");
-		add(ModCardAbilities.ANIMATION.get().getTranslationKey(), "");
-		add(ModCardAbilities.MOVE_COLLECTED.get().getTranslationKey(), "");
-		add(Helper.gui("card_ability_selection"), "%s%s%s%s");
-		add(Helper.gui("where"), " where ");
-		add(Helper.gui("if"), " if ");
-		add(Helper.gui("card_modification"), "%s %s %s");
-		add(Helper.gui("equal"), "=");
-		add(Helper.gui("plus_equal"), "+=");
+	}
+
+	public void card(String key, String text) {
+		add(ModCardProvider.textKey(key), text);
 	}
 
 	private void advancements() {

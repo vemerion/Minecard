@@ -5,6 +5,7 @@
       "triggers": [
         "hurt"
       ],
+      "text_key": "card_ability.minecard.axolotl",
       "abilities": [
         {
           "type": "minecard:select_cards",

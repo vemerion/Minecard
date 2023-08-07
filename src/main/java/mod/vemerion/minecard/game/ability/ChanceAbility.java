@@ -8,11 +8,9 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import mod.vemerion.minecard.game.Card;
-import mod.vemerion.minecard.game.GameUtil;
 import mod.vemerion.minecard.game.PlayerState;
 import mod.vemerion.minecard.game.Receiver;
 import mod.vemerion.minecard.init.ModCardAbilities;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.item.ItemStack;
 
@@ -20,15 +18,16 @@ public class ChanceAbility extends CardAbility {
 
 	public static final Codec<ChanceAbility> CODEC = ExtraCodecs
 			.lazyInitializedCodec(() -> RecordCodecBuilder.create(instance -> instance
-					.group(Codec.INT.fieldOf("chance").forGetter(ChanceAbility::getChance),
+					.group(Codec.STRING.fieldOf("text_key").forGetter(CardAbility::getTextKey),
+							Codec.INT.fieldOf("chance").forGetter(ChanceAbility::getChance),
 							CardAbility.CODEC.fieldOf("ability").forGetter(ChanceAbility::getAbility))
 					.apply(instance, ChanceAbility::new)));
 
 	private final int chance;
 	private final CardAbility ability;
 
-	public ChanceAbility(int chance, CardAbility ability) {
-		super(ability.getTriggers());
+	public ChanceAbility(String textKey, int chance, CardAbility ability) {
+		super(ability.getTriggers(), textKey);
 		this.chance = chance;
 		this.ability = ability;
 	}
@@ -36,14 +35,6 @@ public class ChanceAbility extends CardAbility {
 	@Override
 	protected CardAbilityType<?> getType() {
 		return ModCardAbilities.CHANCE.get();
-	}
-
-	@Override
-	protected Object[] getDescriptionArgs() {
-		return new Object[] { chance,
-				GameUtil.emphasize(
-						new TranslatableComponent(ModCardAbilities.CHANCE.get().getTranslationKey() + ".chance")),
-				ability.getDescription() };
 	}
 
 	@Override

@@ -12,6 +12,7 @@ import mod.vemerion.minecard.game.PlayerState;
 import mod.vemerion.minecard.game.Receiver;
 import mod.vemerion.minecard.init.ModCardAbilities;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.item.ItemStack;
@@ -21,33 +22,29 @@ public abstract class CardAbility {
 	public static final Codec<CardAbility> CODEC = ExtraCodecs.lazyInitializedCodec(() -> ModCardAbilities.getRegistry()
 			.getCodec().dispatch("type", CardAbility::getType, CardAbilityType::codec));
 
-	private static final Object[] NO_ARGS = {};
-
 	protected final Set<CardAbilityTrigger> triggers;
-	private Component description;
+	protected final String textKey;
 
-	public CardAbility(Set<CardAbilityTrigger> triggers) {
+	public CardAbility(Set<CardAbilityTrigger> triggers, String textKey) {
 		this.triggers = triggers;
+		this.textKey = textKey;
 	}
 
 	protected abstract CardAbilityType<?> getType();
 
-	protected Object[] getDescriptionArgs() {
-		return NO_ARGS;
-	}
-
 	protected abstract void invoke(List<Receiver> receivers, PlayerState state, Card card, @Nullable Card other,
 			Collected collected, ItemStack icon);
 
-	public Component getDescription() {
-		if (description == null) {
-			description = new TranslatableComponent(getType().getTranslationKey(), getDescriptionArgs());
-		}
-		return description;
+	public Component getText() {
+		return textKey.isEmpty() ? TextComponent.EMPTY : new TranslatableComponent(textKey);
 	}
 
 	public Set<CardAbilityTrigger> getTriggers() {
 		return triggers;
+	}
+
+	public String getTextKey() {
+		return textKey;
 	}
 
 	public void trigger(CardAbilityTrigger trigger, List<Receiver> receivers, PlayerState state, Card card, Card target,

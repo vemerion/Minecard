@@ -29,7 +29,7 @@ public class ClientForgeEventSubscriber {
 							new TextComponent(String.valueOf(card.getDamage())).withStyle(ChatFormatting.YELLOW),
 							new TextComponent(String.valueOf(card.getHealth())).withStyle(ChatFormatting.RED));
 			tooltip.add(descr);
-			tooltip.add(Screen.hasShiftDown() ? card.getAbility().getDescription()
+			tooltip.add(Screen.hasShiftDown() ? card.getAbility().getText()
 					: new TranslatableComponent(ModItems.CARD.get().getDescriptionId() + ".tooltip_more")
 							.withStyle(ChatFormatting.ITALIC));
 		});

@@ -5,6 +5,7 @@
       "triggers": [
         "summon"
       ],
+      "text_key": "card_ability.minecard.cow",
       "abilities": [
         {
           "cards": [
@@ -21,6 +22,7 @@
                   "triggers": [
                     "summon"
                   ],
+                  "text_key": "card_ability.minecard.milk_bucket",
                   "abilities": [
                     {
                       "type": "minecard:select_cards",

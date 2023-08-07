@@ -2,10 +2,7 @@ package mod.vemerion.minecard.game.ability;
 
 import com.mojang.serialization.Codec;
 
-import mod.vemerion.minecard.Main;
 import mod.vemerion.minecard.game.GameUtil;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 
 public enum CardAbilityTrigger {
 	SUMMON("summon"), ATTACK("attack"), DEATH("death"), HURT("hurt"), TICK("tick"), GROW("grow");
@@ -21,13 +18,5 @@ public enum CardAbilityTrigger {
 
 	public String getName() {
 		return name;
-	}
-
-	public String getTextKey() {
-		return "card_ability_trigger." + Main.MODID + "." + getName();
-	}
-
-	public Component getText() {
-		return new TranslatableComponent(getTextKey());
 	}
 }

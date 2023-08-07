@@ -8,6 +8,7 @@
       "triggers": [
         "tick"
       ],
+      "text_key": "card_ability.minecard.skeleton",
       "abilities": [
         {
           "type": "minecard:select_cards",

@@ -4,6 +4,7 @@
   "abilities": {
     "type": "minecard:multi",
     "value": {
+      "text_key": "card_ability.minecard.ender_dragon",
       "abilities": [
         {
           "type": "minecard:chain",
@@ -11,6 +12,7 @@
             "triggers": [
               "summon"
             ],
+            "text_key": "",
             "abilities": [
               {
                 "cards": [
@@ -31,6 +33,7 @@
             "triggers": [
               "summon"
             ],
+            "text_key": "",
             "abilities": [
               {
                 "cards": [
@@ -51,6 +54,7 @@
             "triggers": [
               "tick"
             ],
+            "text_key": "",
             "abilities": [
               {
                 "type": "minecard:select_cards",

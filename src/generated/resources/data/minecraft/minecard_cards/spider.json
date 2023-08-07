@@ -5,6 +5,7 @@
       "triggers": [
         "death"
       ],
+      "text_key": "card_ability.minecard.spider",
       "abilities": [
         {
           "type": "minecard:select_cards",

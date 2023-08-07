@@ -11,6 +11,7 @@
       "triggers": [
         "summon"
       ],
+      "text_key": "card_ability.minecard.chest",
       "abilities": [
         {
           "count": 3,

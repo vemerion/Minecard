@@ -5,6 +5,7 @@
       "triggers": [
         "attack"
       ],
+      "text_key": "card_ability.minecard.magma_cube",
       "abilities": [
         {
           "type": "minecard:select_cards",

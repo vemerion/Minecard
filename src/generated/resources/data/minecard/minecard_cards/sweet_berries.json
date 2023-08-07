@@ -14,6 +14,7 @@
       "triggers": [
         "death"
       ],
+      "text_key": "card_ability.minecard.sweet_berries",
       "abilities": [
         {
           "cards": [
@@ -30,6 +31,7 @@
                   "triggers": [
                     "summon"
                   ],
+                  "text_key": "card_ability.minecard.throw_sweet_berries",
                   "abilities": [
                     {
                       "type": "minecard:select_cards",

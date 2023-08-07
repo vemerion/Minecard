@@ -13,7 +13,6 @@ import mod.vemerion.minecard.game.GameUtil;
 import mod.vemerion.minecard.game.PlayerState;
 import mod.vemerion.minecard.game.Receiver;
 import mod.vemerion.minecard.init.ModCardAbilities;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.item.ItemStack;
 
@@ -23,30 +22,21 @@ public class ChainAbility extends CardAbility {
 			.lazyInitializedCodec(
 					() -> RecordCodecBuilder.create(instance -> instance
 							.group(GameUtil.TRIGGERS_CODEC.fieldOf("triggers").forGetter(CardAbility::getTriggers),
+									Codec.STRING.fieldOf("text_key").forGetter(CardAbility::getTextKey),
 									ExtraCodecs.nonEmptyList(Codec.list(CardAbility.CODEC)).fieldOf("abilities")
 											.forGetter(ChainAbility::getAbilities))
 							.apply(instance, ChainAbility::new)));
 
 	private final List<CardAbility> abilities;
 
-	public ChainAbility(Set<CardAbilityTrigger> triggers, List<CardAbility> abilities) {
-		super(triggers);
+	public ChainAbility(Set<CardAbilityTrigger> triggers, String textKey, List<CardAbility> abilities) {
+		super(triggers, textKey);
 		this.abilities = abilities;
 	}
 
 	@Override
 	protected CardAbilityType<?> getType() {
 		return ModCardAbilities.CHAIN.get();
-	}
-
-	@Override
-	protected Object[] getDescriptionArgs() {
-		var text = TextComponent.EMPTY.copy();
-		text.append(GameUtil.emphasize(GameUtil.triggersToText(triggers)));
-		for (var ability : abilities) {
-			text.append(ability.getDescription()).append(" ");
-		}
-		return new Object[] { text };
 	}
 
 	@Override

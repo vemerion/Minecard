@@ -2,6 +2,7 @@
   "abilities": {
     "type": "minecard:chance",
     "value": {
+      "text_key": "card_ability.minecard.salmon",
       "chance": 50,
       "ability": {
         "type": "minecard:chain",
@@ -9,6 +10,7 @@
           "triggers": [
             "death"
           ],
+          "text_key": "",
           "abilities": [
             {
               "cards": [
@@ -25,6 +27,7 @@
                       "triggers": [
                         "summon"
                       ],
+                      "text_key": "card_ability.minecard.salmon_bucket",
                       "abilities": [
                         {
                           "cards": [

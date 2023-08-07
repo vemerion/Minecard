@@ -32,7 +32,7 @@ public class AnimationAbility extends CardAbility {
 	private final ResourceLocation animation;
 
 	public AnimationAbility(Set<CardAbilityTrigger> triggers, ResourceLocation animation) {
-		super(triggers);
+		super(triggers, "");
 		this.animation = animation;
 	}
 

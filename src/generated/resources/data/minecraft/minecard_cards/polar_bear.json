@@ -8,6 +8,7 @@
       "triggers": [
         "grow"
       ],
+      "text_key": "card_ability.minecard.polar_bear",
       "abilities": [
         {
           "type": "minecard:select_cards",

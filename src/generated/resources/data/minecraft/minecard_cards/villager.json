@@ -5,6 +5,7 @@
       "triggers": [
         "hurt"
       ],
+      "text_key": "card_ability.minecard.villager",
       "abilities": [
         {
           "cards": [

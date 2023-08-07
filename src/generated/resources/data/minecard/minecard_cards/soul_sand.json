@@ -11,6 +11,7 @@
       "triggers": [
         "summon"
       ],
+      "text_key": "card_ability.minecard.soul_sand",
       "abilities": [
         {
           "type": "minecard:select_cards",

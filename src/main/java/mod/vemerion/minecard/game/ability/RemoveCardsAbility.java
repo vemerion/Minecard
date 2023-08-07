@@ -20,7 +20,7 @@ public class RemoveCardsAbility extends CardAbility {
 	public static final Codec<RemoveCardsAbility> CODEC = Codec.unit(RemoveCardsAbility::new);
 
 	public RemoveCardsAbility() {
-		super(Set.of());
+		super(Set.of(), "");
 	}
 
 	@Override

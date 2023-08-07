@@ -9,6 +9,7 @@
             "triggers": [
               "attack"
             ],
+            "text_key": "card_ability.minecard.magma_cube",
             "abilities": [
               {
                 "type": "minecard:select_cards",
@@ -63,6 +64,7 @@
             "triggers": [
               "death"
             ],
+            "text_key": "card_ability.minecard.splitter",
             "abilities": [
               {
                 "cards": [
@@ -83,6 +85,7 @@
             "triggers": [
               "death"
             ],
+            "text_key": "",
             "abilities": [
               {
                 "cards": [

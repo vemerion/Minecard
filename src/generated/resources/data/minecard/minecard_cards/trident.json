@@ -11,6 +11,7 @@
   "abilities": {
     "type": "minecard:multi",
     "value": {
+      "text_key": "card_ability.minecard.trident",
       "abilities": [
         {
           "type": "minecard:chain",
@@ -18,6 +19,7 @@
             "triggers": [
               "summon"
             ],
+            "text_key": "",
             "abilities": [
               {
                 "type": "minecard:select_cards",
@@ -88,6 +90,7 @@
         {
           "type": "minecard:chance",
           "value": {
+            "text_key": "",
             "chance": 30,
             "ability": {
               "type": "minecard:chain",
@@ -95,6 +98,7 @@
                 "triggers": [
                   "summon"
                 ],
+                "text_key": "",
                 "abilities": [
                   {
                     "cards": [

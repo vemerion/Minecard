@@ -7,6 +7,7 @@
   "abilities": {
     "type": "minecard:multi",
     "value": {
+      "text_key": "card_ability.minecard.wither",
       "abilities": [
         {
           "type": "minecard:chain",
@@ -14,6 +15,7 @@
             "triggers": [
               "tick"
             ],
+            "text_key": "",
             "abilities": [
               {
                 "type": "minecard:select_cards",

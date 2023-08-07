@@ -11,6 +11,7 @@
       "triggers": [
         "summon"
       ],
+      "text_key": "card_ability.minecard.amethyst_shard",
       "abilities": [
         {
           "count": 1,

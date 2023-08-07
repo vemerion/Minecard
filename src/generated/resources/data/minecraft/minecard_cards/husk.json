@@ -8,6 +8,7 @@
       "triggers": [
         "attack"
       ],
+      "text_key": "card_ability.minecard.husk",
       "abilities": [
         {
           "type": "minecard:select_cards",

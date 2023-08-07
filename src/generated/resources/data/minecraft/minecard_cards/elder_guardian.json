@@ -8,6 +8,7 @@
       "triggers": [
         "summon"
       ],
+      "text_key": "card_ability.minecard.elder_guardian",
       "abilities": [
         {
           "type": "minecard:select_cards",

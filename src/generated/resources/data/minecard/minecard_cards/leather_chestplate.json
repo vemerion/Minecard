@@ -14,6 +14,7 @@
       "triggers": [
         "summon"
       ],
+      "text_key": "card_ability.minecard.leather_chestplate",
       "abilities": [
         {
           "type": "minecard:select_cards",

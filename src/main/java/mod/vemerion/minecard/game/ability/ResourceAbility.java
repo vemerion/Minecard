@@ -20,6 +20,7 @@ public class ResourceAbility extends CardAbility {
 
 	public static final Codec<ResourceAbility> CODEC = RecordCodecBuilder.create(instance -> instance
 			.group(GameUtil.TRIGGERS_CODEC.fieldOf("triggers").forGetter(CardAbility::getTriggers),
+					Codec.STRING.fieldOf("text_key").forGetter(CardAbility::getTextKey),
 					Codec.INT.fieldOf("temporary_resources").forGetter(ResourceAbility::getTemporaryResources),
 					Codec.INT.fieldOf("permanent_resources").forGetter(ResourceAbility::getPermanentResources))
 			.apply(instance, ResourceAbility::new));
@@ -27,8 +28,9 @@ public class ResourceAbility extends CardAbility {
 	private final int temporaryResources;
 	private final int permanentResources;
 
-	public ResourceAbility(Set<CardAbilityTrigger> triggers, int temporaryResources, int permanentResources) {
-		super(triggers);
+	public ResourceAbility(Set<CardAbilityTrigger> triggers, String textKey, int temporaryResources,
+			int permanentResources) {
+		super(triggers, textKey);
 		this.temporaryResources = temporaryResources;
 		this.permanentResources = permanentResources;
 	}
@@ -36,12 +38,6 @@ public class ResourceAbility extends CardAbility {
 	@Override
 	protected CardAbilityType<?> getType() {
 		return ModCardAbilities.RESOURCE.get();
-	}
-
-	@Override
-	protected Object[] getDescriptionArgs() {
-		return new Object[] { GameUtil.emphasize(GameUtil.triggersToText(triggers)), temporaryResources,
-				permanentResources };
 	}
 
 	@Override

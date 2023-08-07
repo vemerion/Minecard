@@ -7,9 +7,6 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import mod.vemerion.minecard.game.Card;
 import mod.vemerion.minecard.init.ModCardOperators;
-import net.minecraft.Util;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 
@@ -18,23 +15,12 @@ public abstract class CardOperator {
 	public static final Codec<CardOperator> CODEC = ExtraCodecs.lazyInitializedCodec(() -> ModCardOperators
 			.getRegistry().getCodec().dispatch("type", CardOperator::getType, CardOperatorType::codec));
 
-	private Component description;
-
 	private CardOperator() {
 	}
-
-	protected abstract Object[] getDescriptionArgs();
 
 	protected abstract CardOperatorType<?> getType();
 
 	public abstract int evaluate(Random rand, Card card, Collected collected);
-
-	public Component getDescription() {
-		if (description == null) {
-			description = new TranslatableComponent(getType().getTranslationKey(), getDescriptionArgs());
-		}
-		return description;
-	}
 
 	public static class CardOperatorType<T extends CardOperator> extends ForgeRegistryEntry<CardOperatorType<?>> {
 		private final Codec<T> codec;
@@ -45,11 +31,6 @@ public abstract class CardOperator {
 
 		Codec<T> codec() {
 			return codec;
-		}
-
-		public String getTranslationKey() {
-			return Util.makeDescriptionId(ModCardOperators.CARD_OPERATORS.getRegistryName().getPath(),
-					getRegistryName());
 		}
 	}
 
@@ -76,12 +57,6 @@ public abstract class CardOperator {
 		public int evaluate(Random rand, Card card, Collected collected) {
 			return variable.get(card);
 		}
-
-		@Override
-		protected Object[] getDescriptionArgs() {
-			return new Object[] { variable.getDescription() };
-		}
-
 	}
 
 	public static class Constant extends CardOperator {
@@ -107,12 +82,6 @@ public abstract class CardOperator {
 		public int evaluate(Random rand, Card card, Collected collected) {
 			return value;
 		}
-
-		@Override
-		protected Object[] getDescriptionArgs() {
-			return new Object[] { value };
-		}
-
 	}
 
 	public static class RandomOperator extends CardOperator {
@@ -148,12 +117,6 @@ public abstract class CardOperator {
 		public int evaluate(Random rand, Card card, Collected collected) {
 			return rand.nextInt(min.evaluate(rand, card, collected), max.evaluate(rand, card, collected) + 1);
 		}
-
-		@Override
-		protected Object[] getDescriptionArgs() {
-			return new Object[] { min.getDescription(), max.getDescription() };
-		}
-
 	}
 
 	public static class Add extends CardOperator {
@@ -189,12 +152,6 @@ public abstract class CardOperator {
 		public int evaluate(Random rand, Card card, Collected collected) {
 			return left.evaluate(rand, card, collected) + right.evaluate(rand, card, collected);
 		}
-
-		@Override
-		protected Object[] getDescriptionArgs() {
-			return new Object[] { left.getDescription(), right.getDescription() };
-		}
-
 	}
 
 	public static class Sub extends CardOperator {
@@ -230,12 +187,6 @@ public abstract class CardOperator {
 		public int evaluate(Random rand, Card card, Collected collected) {
 			return left.evaluate(rand, card, collected) - right.evaluate(rand, card, collected);
 		}
-
-		@Override
-		protected Object[] getDescriptionArgs() {
-			return new Object[] { left.getDescription(), right.getDescription() };
-		}
-
 	}
 
 	public static class Mul extends CardOperator {
@@ -271,12 +222,6 @@ public abstract class CardOperator {
 		public int evaluate(Random rand, Card card, Collected collected) {
 			return left.evaluate(rand, card, collected) * right.evaluate(rand, card, collected);
 		}
-
-		@Override
-		protected Object[] getDescriptionArgs() {
-			return new Object[] { left.getDescription(), right.getDescription() };
-		}
-
 	}
 
 	public static class GreaterThan extends CardOperator {
@@ -312,12 +257,6 @@ public abstract class CardOperator {
 		public int evaluate(Random rand, Card card, Collected collected) {
 			return left.evaluate(rand, card, collected) > right.evaluate(rand, card, collected) ? 1 : 0;
 		}
-
-		@Override
-		protected Object[] getDescriptionArgs() {
-			return new Object[] { left.getDescription(), right.getDescription() };
-		}
-
 	}
 
 	public static class Negate extends CardOperator {
@@ -345,12 +284,6 @@ public abstract class CardOperator {
 		public int evaluate(Random rand, Card card, Collected collected) {
 			return -inner.evaluate(rand, card, collected);
 		}
-
-		@Override
-		protected Object[] getDescriptionArgs() {
-			return new Object[] {};
-		}
-
 	}
 
 	public static class CollectedCount extends CardOperator {
@@ -378,12 +311,6 @@ public abstract class CardOperator {
 		public int evaluate(Random rand, Card card, Collected collected) {
 			return collected.get(index).size();
 		}
-
-		@Override
-		protected Object[] getDescriptionArgs() {
-			return new Object[] {};
-		}
-
 	}
 
 	public static class CollectedAny extends CardOperator {
@@ -420,11 +347,5 @@ public abstract class CardOperator {
 			var coll = collected.get(index);
 			return coll.isEmpty() ? 0 : inner.evaluate(rand, coll.get(0), collected);
 		}
-
-		@Override
-		protected Object[] getDescriptionArgs() {
-			return new Object[] {};
-		}
-
 	}
 }

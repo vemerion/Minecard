@@ -5,6 +5,7 @@
       "triggers": [
         "hurt"
       ],
+      "text_key": "card_ability.minecard.squid",
       "abilities": [
         {
           "type": "minecard:select_cards",

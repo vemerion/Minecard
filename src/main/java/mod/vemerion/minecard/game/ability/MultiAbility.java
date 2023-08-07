@@ -12,6 +12,7 @@ import mod.vemerion.minecard.game.Card;
 import mod.vemerion.minecard.game.PlayerState;
 import mod.vemerion.minecard.game.Receiver;
 import mod.vemerion.minecard.init.ModCardAbilities;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.item.ItemStack;
@@ -20,16 +21,16 @@ public class MultiAbility extends CardAbility {
 
 	public static final Codec<MultiAbility> CODEC = ExtraCodecs
 			.lazyInitializedCodec(
-					() -> RecordCodecBuilder
-							.create(instance -> instance
-									.group(ExtraCodecs.nonEmptyList(Codec.list(CardAbility.CODEC)).fieldOf("abilities")
+					() -> RecordCodecBuilder.create(instance -> instance
+							.group(Codec.STRING.optionalFieldOf("text_key", "").forGetter(CardAbility::getTextKey),
+									ExtraCodecs.nonEmptyList(Codec.list(CardAbility.CODEC)).fieldOf("abilities")
 											.forGetter(MultiAbility::getAbilities))
-									.apply(instance, MultiAbility::new)));
+							.apply(instance, MultiAbility::new)));
 
 	private final List<CardAbility> abilities;
 
-	public MultiAbility(List<CardAbility> abilities) {
-		super(EnumSet.allOf(CardAbilityTrigger.class));
+	public MultiAbility(String textKey, List<CardAbility> abilities) {
+		super(EnumSet.allOf(CardAbilityTrigger.class), textKey);
 		this.abilities = abilities;
 	}
 
@@ -39,16 +40,19 @@ public class MultiAbility extends CardAbility {
 	}
 
 	@Override
-	protected Object[] getDescriptionArgs() {
-		var text = TextComponent.EMPTY.copy();
-		int i = 0;
-		for (var ability : abilities) {
-			text.append(ability.getDescription());
-			if (i < abilities.size() - 1)
-				text.append("\n");
-			i++;
+	public Component getText() {
+		if (getTextKey().isEmpty()) {
+			var text = TextComponent.EMPTY.copy();
+			int i = 0;
+			for (var ability : abilities) {
+				text.append(ability.getText());
+				if (i < abilities.size() - 1)
+					text.append("\n");
+				i++;
+			}
+			return text;
 		}
-		return new Object[] { text };
+		return super.getText();
 	}
 
 	@Override

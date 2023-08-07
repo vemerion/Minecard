@@ -19,7 +19,6 @@ import com.mojang.serialization.codecs.UnboundedMapCodec;
 
 import mod.vemerion.minecard.game.ability.CardAbilityTrigger;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 
 public class GameUtil {
 
@@ -58,23 +57,6 @@ public class GameUtil {
 				}
 				return DataResult.success(set);
 			}, set -> List.copyOf(set));
-
-	public static Component triggersToText(Set<CardAbilityTrigger> triggers) {
-		var text = TextComponent.EMPTY.copy();
-		if (triggers.isEmpty())
-			return text;
-
-		boolean first = true;
-		for (var trigger : triggers) {
-			if (!first) {
-				text.append("/");
-			}
-			text.append(trigger.getText());
-			first = false;
-		}
-		text.append(": ");
-		return text;
-	}
 
 	public static boolean canBeAttacked(Card card, List<? extends Card> board) {
 		if (card.hasProperty(CardProperty.STEALTH) || card.isDead())

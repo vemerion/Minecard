@@ -5,6 +5,7 @@
       "triggers": [
         "summon"
       ],
+      "text_key": "card_ability.minecard.snow_golem",
       "abilities": [
         {
           "type": "minecard:select_cards",

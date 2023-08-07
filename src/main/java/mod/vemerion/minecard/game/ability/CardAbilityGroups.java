@@ -13,8 +13,6 @@ import com.mojang.serialization.DataResult;
 
 import mod.vemerion.minecard.game.Card;
 import mod.vemerion.minecard.game.GameState;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 
 public class CardAbilityGroups {
 
@@ -52,23 +50,6 @@ public class CardAbilityGroups {
 
 	public CardAbilityGroups(Set<CardAbilityGroup> groups) {
 		this.groups = groups;
-	}
-
-	public Component getText() {
-		var result = TextComponent.EMPTY.copy();
-		int i = 0;
-		for (var group : groups) {
-			result.append(group.getText());
-			if (i != groups.size() - 1) {
-				result.append("/");
-			}
-			i++;
-		}
-		return result;
-	}
-
-	public boolean singular() {
-		return groups.size() == 1 && groups.stream().allMatch(g -> g.singular());
 	}
 
 	public List<Card> get(GameState state, UUID id, Card self, Card target, List<Card> collected) {

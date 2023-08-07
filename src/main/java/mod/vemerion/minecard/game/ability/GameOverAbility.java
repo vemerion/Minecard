@@ -17,22 +17,18 @@ import net.minecraft.world.item.ItemStack;
 
 public class GameOverAbility extends CardAbility {
 
-	public static final Codec<GameOverAbility> CODEC = RecordCodecBuilder.create(
-			instance -> instance.group(GameUtil.TRIGGERS_CODEC.fieldOf("triggers").forGetter(CardAbility::getTriggers))
-					.apply(instance, GameOverAbility::new));
+	public static final Codec<GameOverAbility> CODEC = RecordCodecBuilder.create(instance -> instance
+			.group(GameUtil.TRIGGERS_CODEC.fieldOf("triggers").forGetter(CardAbility::getTriggers),
+					Codec.STRING.fieldOf("text_key").forGetter(CardAbility::getTextKey))
+			.apply(instance, GameOverAbility::new));
 
-	public GameOverAbility(Set<CardAbilityTrigger> triggers) {
-		super(triggers);
+	public GameOverAbility(Set<CardAbilityTrigger> triggers, String textKey) {
+		super(triggers, textKey);
 	}
 
 	@Override
 	protected CardAbilityType<?> getType() {
 		return ModCardAbilities.GAME_OVER.get();
-	}
-
-	@Override
-	protected Object[] getDescriptionArgs() {
-		return new Object[] { GameUtil.emphasize(GameUtil.triggersToText(triggers)) };
 	}
 
 	@Override

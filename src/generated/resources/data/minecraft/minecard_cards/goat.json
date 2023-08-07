@@ -5,6 +5,7 @@
       "triggers": [
         "summon"
       ],
+      "text_key": "card_ability.minecard.goat",
       "abilities": [
         {
           "type": "minecard:select_cards",

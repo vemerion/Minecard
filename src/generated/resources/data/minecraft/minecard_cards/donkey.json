@@ -3,6 +3,7 @@
     "triggers": [
       "summon"
     ],
+    "text_key": "card_ability.minecard.donkey",
     "count": 1,
     "type": "minecard:draw_cards"
   },

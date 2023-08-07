@@ -11,6 +11,7 @@
       "triggers": [
         "summon"
       ],
+      "text_key": "card_ability.minecard.ender_pearl",
       "abilities": [
         {
           "type": "minecard:select_cards",

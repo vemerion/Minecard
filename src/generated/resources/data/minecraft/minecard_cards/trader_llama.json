@@ -2,6 +2,7 @@
   "abilities": {
     "type": "minecard:choice",
     "value": {
+      "text_key": "card_ability.minecard.trader_llama",
       "abilities": [
         {
           "type": "minecard:chain",
@@ -9,6 +10,7 @@
             "triggers": [
               "summon"
             ],
+            "text_key": "card_ability.minecard.trader_llama_spit",
             "abilities": [
               {
                 "type": "minecard:select_cards",
@@ -58,6 +60,7 @@
           "triggers": [
             "summon"
           ],
+          "text_key": "card_ability.minecard.trader_llama_draw",
           "count": 1,
           "type": "minecard:draw_cards"
         }

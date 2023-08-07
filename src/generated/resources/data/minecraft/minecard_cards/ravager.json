@@ -5,6 +5,7 @@
       "triggers": [
         "attack"
       ],
+      "text_key": "card_ability.minecard.ravager",
       "abilities": [
         {
           "type": "minecard:select_cards",

@@ -11,6 +11,7 @@
       "triggers": [
         "tick"
       ],
+      "text_key": "card_ability.minecard.end_crystal",
       "abilities": [
         {
           "type": "minecard:select_cards",

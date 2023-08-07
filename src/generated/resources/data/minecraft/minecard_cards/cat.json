@@ -2,6 +2,7 @@
   "abilities": {
     "type": "minecard:chance",
     "value": {
+      "text_key": "card_ability.minecard.cat",
       "chance": 50,
       "ability": {
         "type": "minecard:chain",
@@ -9,6 +10,7 @@
           "triggers": [
             "tick"
           ],
+          "text_key": "",
           "abilities": [
             {
               "cards": [

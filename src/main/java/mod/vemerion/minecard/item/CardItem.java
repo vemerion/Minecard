@@ -61,13 +61,20 @@ public class CardItem extends Item {
 					pItems.add(stack);
 				});
 			}
-			var rod = new ItemStack(this);
-			CardData.get(rod).ifPresent(data -> {
-				data.setType(new ResourceLocation(Main.MODID, "fishing_rod"));
-				pItems.add(rod);
-			});
+			addSpells(pItems, "fishing_rod", "book", "splash_potion_of_harming", "enchanted_golden_apple", "chest",
+					"enchanted_book", "spyglass", "lodestone", "firework_rocket", "amethyst_shard");
 		}
 
+	}
+
+	void addSpells(NonNullList<ItemStack> items, String... spells) {
+		for (var spell : spells) {
+			var stack = new ItemStack(this);
+			CardData.get(stack).ifPresent(data -> {
+				data.setType(new ResourceLocation(Main.MODID, spell));
+				items.add(stack);
+			});
+		}
 	}
 
 	@Override

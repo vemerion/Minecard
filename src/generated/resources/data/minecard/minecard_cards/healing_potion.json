@@ -14,6 +14,7 @@
       "triggers": [
         "summon"
       ],
+      "text_key": "card_ability.minecard.healing_potion",
       "abilities": [
         {
           "type": "minecard:select_cards",

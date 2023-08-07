@@ -13,8 +13,6 @@ import mod.vemerion.minecard.game.LazyCardType;
 import mod.vemerion.minecard.game.PlayerState;
 import mod.vemerion.minecard.game.Receiver;
 import mod.vemerion.minecard.init.ModCardAbilities;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.item.ItemStack;
 
@@ -27,22 +25,13 @@ public class ConstantCardsAbility extends CardAbility {
 	private final List<LazyCardType> cards;
 
 	public ConstantCardsAbility(List<LazyCardType> cards) {
-		super(Set.of());
+		super(Set.of(), "");
 		this.cards = cards;
 	}
 
 	@Override
 	protected CardAbilityType<?> getType() {
 		return ModCardAbilities.CONSTANT_CARDS.get();
-	}
-
-	@Override
-	protected Object[] getDescriptionArgs() {
-		var text = TextComponent.EMPTY.copy();
-		for (var card : cards)
-			text.append(new TranslatableComponent(
-					ModCardAbilities.CONSTANT_CARDS.get().getTranslationKey() + ".element", card.get(true).getName()));
-		return new Object[] { text };
 	}
 
 	@Override

@@ -106,7 +106,7 @@ public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 		// Render text
 		for (int i = 0; i < DESCRIPTION_SIZES.length; i++) {
 			var size = DESCRIPTION_SIZES[i];
-			var lines = mc.font.split(card.getAbility().getDescription(), size.maxWidth);
+			var lines = mc.font.split(card.getAbility().getText(), size.maxWidth);
 			if (lines.size() <= size.maxLines || i == DESCRIPTION_SIZES.length - 1) {
 				int start = 0;
 				var tooLong = i == DESCRIPTION_SIZES.length - 1 && lines.size() > size.maxLines;

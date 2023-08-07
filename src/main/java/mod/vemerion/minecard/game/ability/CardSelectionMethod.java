@@ -10,9 +10,6 @@ import mod.vemerion.minecard.game.Card;
 import mod.vemerion.minecard.game.GameState;
 import mod.vemerion.minecard.game.Receiver;
 import mod.vemerion.minecard.init.ModCardSelectionMethods;
-import net.minecraft.Util;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 
@@ -22,21 +19,10 @@ public abstract class CardSelectionMethod {
 			.lazyInitializedCodec(() -> ModCardSelectionMethods.getRegistry().getCodec().dispatch("type",
 					CardSelectionMethod::getType, CardSelectionMethodType::codec));
 
-	private Component description;
-
 	private CardSelectionMethod() {
 	}
 
 	protected abstract CardSelectionMethodType<?> getType();
-
-	protected abstract Object[] getDescriptionArgs();
-
-	public Component getDescription() {
-		if (description == null) {
-			description = new TranslatableComponent(getType().getTranslationKey(), getDescriptionArgs());
-		}
-		return description;
-	}
 
 	public abstract List<Card> select(List<Receiver> receivers, GameState state, CardAbility ability,
 			List<Card> candidates);
@@ -52,11 +38,6 @@ public abstract class CardSelectionMethod {
 		Codec<T> codec() {
 			return codec;
 		}
-
-		public String getTranslationKey() {
-			return Util.makeDescriptionId(ModCardSelectionMethods.CARD_SELECTION_METHODS.getRegistryName().getPath(),
-					getRegistryName());
-		}
 	}
 
 	public static class All extends CardSelectionMethod {
@@ -71,11 +52,6 @@ public abstract class CardSelectionMethod {
 		@Override
 		protected CardSelectionMethodType<?> getType() {
 			return ModCardSelectionMethods.ALL.get();
-		}
-
-		@Override
-		protected Object[] getDescriptionArgs() {
-			return new Object[] {};
 		}
 
 		@Override
@@ -104,11 +80,6 @@ public abstract class CardSelectionMethod {
 		@Override
 		protected CardSelectionMethodType<?> getType() {
 			return ModCardSelectionMethods.RANDOM.get();
-		}
-
-		@Override
-		protected Object[] getDescriptionArgs() {
-			return new Object[] { count, repeat };
 		}
 
 		public int getCount() {
@@ -151,12 +122,6 @@ public abstract class CardSelectionMethod {
 		@Override
 		protected CardSelectionMethodType<?> getType() {
 			return ModCardSelectionMethods.CHOICE.get();
-		}
-
-		@Override
-		protected Object[] getDescriptionArgs() {
-			return new Object[] { new TranslatableComponent(ModCardSelectionMethods.CHOICE.get().getTranslationKey()
-					+ (discover ? ".discovered" : ".selected")) };
 		}
 
 		@Override

@@ -26,18 +26,13 @@ public class PlaceCardsAbility extends CardAbility {
 	private final CardPlacement placement;
 
 	public PlaceCardsAbility(CardPlacement placement) {
-		super(Set.of());
+		super(Set.of(), "");
 		this.placement = placement;
 	}
 
 	@Override
 	protected CardAbilityType<?> getType() {
 		return ModCardAbilities.PLACE_CARDS.get();
-	}
-
-	@Override
-	protected Object[] getDescriptionArgs() {
-		return new Object[] { placement.getText() };
 	}
 
 	@Override

@@ -20,7 +20,7 @@ public class NoCardAbility extends CardAbility {
 	public static final Codec<NoCardAbility> CODEC = Codec.unit(NO_CARD_ABILITY);
 
 	public NoCardAbility() {
-		super(Set.of());
+		super(Set.of(), "");
 	}
 
 	@Override

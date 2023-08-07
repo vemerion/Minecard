@@ -3,6 +3,7 @@
     "triggers": [
       "death"
     ],
+    "text_key": "card_ability.minecard.player",
     "type": "minecard:game_over"
   },
   "entity": "minecraft:player",

@@ -2,10 +2,7 @@ package mod.vemerion.minecard.game.ability;
 
 import com.mojang.serialization.Codec;
 
-import mod.vemerion.minecard.Main;
 import mod.vemerion.minecard.game.GameUtil;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 
 public enum CardAbilityGroup {
 	ALL("all"), SELF("self"), TARGET("target"), ENEMY_BOARD("enemy_board"), YOUR_BOARD("your_board"),
@@ -23,17 +20,5 @@ public enum CardAbilityGroup {
 
 	public String getName() {
 		return name;
-	}
-
-	public String getTextKey() {
-		return "card_ability_group." + Main.MODID + "." + getName();
-	}
-
-	public Component getText() {
-		return new TranslatableComponent(getTextKey());
-	}
-
-	public boolean singular() {
-		return this == SELF || this == TARGET;
 	}
 }

@@ -6,6 +6,7 @@
     "triggers": [
       "grow"
     ],
+    "text_key": "card_ability.minecard.mule",
     "count": 2,
     "type": "minecard:draw_cards"
   },

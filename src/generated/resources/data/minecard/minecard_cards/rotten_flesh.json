@@ -11,6 +11,7 @@
       "triggers": [
         "summon"
       ],
+      "text_key": "card_ability.minecard.rotten_flesh",
       "abilities": [
         {
           "type": "minecard:select_cards",

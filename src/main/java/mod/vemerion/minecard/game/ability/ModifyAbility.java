@@ -13,8 +13,6 @@ import mod.vemerion.minecard.game.HistoryEntry;
 import mod.vemerion.minecard.game.PlayerState;
 import mod.vemerion.minecard.game.Receiver;
 import mod.vemerion.minecard.init.ModCardAbilities;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.item.ItemStack;
 
@@ -33,30 +31,13 @@ public class ModifyAbility extends CardAbility {
 	private final List<List<CardModification>> modifications;
 
 	public ModifyAbility(List<List<CardModification>> modifications) {
-		super(Set.of());
+		super(Set.of(), "");
 		this.modifications = modifications;
 	}
 
 	@Override
 	protected CardAbilityType<?> getType() {
 		return ModCardAbilities.MODIFY.get();
-	}
-
-	@Override
-	protected Object[] getDescriptionArgs() {
-		var elements = TextComponent.EMPTY.copy();
-		for (var modification : modifications) {
-			var modificationText = TextComponent.EMPTY.copy();
-			for (int i = 0; i < modification.size(); i++) {
-				modificationText.append(modification.get(i).getText()).append(i < modification.size() - 1 ? ", " : "");
-			}
-			elements.append(new TranslatableComponent(ModCardAbilities.MODIFY.get().getTranslationKey() + ".element",
-					modificationText));
-		}
-		return new Object[] {
-				modifications.size() == 1 ? TextComponent.EMPTY
-						: new TranslatableComponent(ModCardAbilities.MODIFY.get().getTranslationKey() + ".one_of"),
-				elements };
 	}
 
 	@Override

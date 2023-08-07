@@ -10,9 +10,6 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import mod.vemerion.minecard.game.Card;
 import mod.vemerion.minecard.init.ModCardConditions;
-import net.minecraft.Util;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.entity.EntityType;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -23,24 +20,13 @@ public abstract class CardCondition {
 	public static final Codec<CardCondition> CODEC = ExtraCodecs.lazyInitializedCodec(() -> ModCardConditions
 			.getRegistry().getCodec().dispatch("type", CardCondition::getType, CardConditionType::codec));
 
-	private Component description;
-
 	private CardCondition() {
 	}
 
 	protected abstract CardConditionType<?> getType();
 
-	protected abstract Object[] getDescriptionArgs();
-
 	public boolean isEmpty() {
 		return false;
-	}
-
-	public Component getDescription() {
-		if (description == null) {
-			description = new TranslatableComponent(getType().getTranslationKey(), getDescriptionArgs());
-		}
-		return description;
 	}
 
 	public abstract boolean test(Card t, Collected collected);
@@ -58,11 +44,6 @@ public abstract class CardCondition {
 
 		Codec<T> codec() {
 			return codec;
-		}
-
-		public String getTranslationKey() {
-			return Util.makeDescriptionId(ModCardConditions.CARD_CONDITIONS.getRegistryName().getPath(),
-					getRegistryName());
 		}
 	}
 
@@ -83,11 +64,6 @@ public abstract class CardCondition {
 		@Override
 		protected CardConditionType<?> getType() {
 			return ModCardConditions.NO_CONDITION.get();
-		}
-
-		@Override
-		protected Object[] getDescriptionArgs() {
-			return new Object[] {};
 		}
 
 		public boolean isEmpty() {
@@ -127,11 +103,6 @@ public abstract class CardCondition {
 		public CardCondition getRight() {
 			return right;
 		}
-
-		@Override
-		protected Object[] getDescriptionArgs() {
-			return new Object[] { left.getDescription(), right.getDescription() };
-		}
 	}
 
 	public static class Or extends CardCondition {
@@ -166,11 +137,6 @@ public abstract class CardCondition {
 		public CardCondition getRight() {
 			return right;
 		}
-
-		@Override
-		protected Object[] getDescriptionArgs() {
-			return new Object[] { left.getDescription(), right.getDescription() };
-		}
 	}
 
 	public static class Not extends CardCondition {
@@ -197,11 +163,6 @@ public abstract class CardCondition {
 
 		public CardCondition getInner() {
 			return inner;
-		}
-
-		@Override
-		protected Object[] getDescriptionArgs() {
-			return new Object[] { inner.getDescription() };
 		}
 	}
 
@@ -231,11 +192,6 @@ public abstract class CardCondition {
 		public EntityType<?> getEntity() {
 			return entity;
 		}
-
-		@Override
-		protected Object[] getDescriptionArgs() {
-			return new Object[] { entity.getDescription() };
-		}
 	}
 
 	public static class OperatorCondition extends CardCondition {
@@ -263,11 +219,6 @@ public abstract class CardCondition {
 
 		public CardOperator getOperator() {
 			return operator;
-		}
-
-		@Override
-		protected Object[] getDescriptionArgs() {
-			return new Object[] { operator.getDescription() };
 		}
 	}
 }

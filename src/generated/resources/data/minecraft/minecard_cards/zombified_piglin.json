@@ -8,6 +8,7 @@
       "triggers": [
         "hurt"
       ],
+      "text_key": "card_ability.minecard.zombified_piglin",
       "abilities": [
         {
           "type": "minecard:select_cards",

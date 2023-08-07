@@ -5,6 +5,7 @@
       "triggers": [
         "summon"
       ],
+      "text_key": "card_ability.minecard.glow_squid",
       "abilities": [
         {
           "type": "minecard:select_cards",

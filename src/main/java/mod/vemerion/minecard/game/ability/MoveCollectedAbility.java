@@ -32,7 +32,7 @@ public class MoveCollectedAbility extends CardAbility {
 	private final boolean clearDestination;
 
 	public MoveCollectedAbility(int source, int destination, boolean clearSource, boolean clearDestination) {
-		super(Set.of());
+		super(Set.of(), "");
 		this.source = source;
 		this.destination = destination;
 		this.clearSource = clearSource;

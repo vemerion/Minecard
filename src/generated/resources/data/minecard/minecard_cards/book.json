@@ -9,6 +9,7 @@
     "triggers": [
       "summon"
     ],
+    "text_key": "card_ability.minecard.book",
     "count": 2,
     "type": "minecard:draw_cards"
   },

@@ -12,51 +12,31 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import mod.vemerion.minecard.game.Card;
 import mod.vemerion.minecard.game.CardType;
-import mod.vemerion.minecard.game.GameUtil;
 import mod.vemerion.minecard.game.PlayerState;
 import mod.vemerion.minecard.game.Receiver;
 import mod.vemerion.minecard.init.ModCardAbilities;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.item.ItemStack;
 
 public class ChoiceCardAbility extends CardAbility {
 
 	public static final Codec<ChoiceCardAbility> CODEC = ExtraCodecs
-			.lazyInitializedCodec(
-					() -> RecordCodecBuilder.create(instance -> instance
-							.group(ExtraCodecs.nonEmptyList(Codec.list(CardAbility.CODEC)).fieldOf("abilities")
+			.lazyInitializedCodec(() -> RecordCodecBuilder.create(instance -> instance
+					.group(Codec.STRING.fieldOf("text_key").forGetter(CardAbility::getTextKey),
+							ExtraCodecs.nonEmptyList(Codec.list(CardAbility.CODEC)).fieldOf("abilities")
 									.forGetter(ChoiceCardAbility::getAbilities))
-							.apply(instance, ChoiceCardAbility::new)));
+					.apply(instance, ChoiceCardAbility::new)));
 
 	private final List<CardAbility> abilities;
 
-	public ChoiceCardAbility(List<CardAbility> abilities) {
-		super(Set.of(CardAbilityTrigger.SUMMON));
+	public ChoiceCardAbility(String textKey, List<CardAbility> abilities) {
+		super(Set.of(CardAbilityTrigger.SUMMON), textKey);
 		this.abilities = abilities;
 	}
 
 	@Override
 	protected CardAbilityType<?> getType() {
 		return ModCardAbilities.CHOICE.get();
-	}
-
-	@Override
-	protected Object[] getDescriptionArgs() {
-		var text = TextComponent.EMPTY.copy();
-		int i = 0;
-		for (var ability : abilities) {
-			text.append("  ");
-			text.append(ability.getDescription());
-			if (i < abilities.size() - 1)
-				text.append("\n");
-			i++;
-		}
-		return new Object[] {
-				GameUtil.emphasize(
-						new TranslatableComponent(ModCardAbilities.CHOICE.get().getTranslationKey() + ".choice_of")),
-				text };
 	}
 
 	@Override

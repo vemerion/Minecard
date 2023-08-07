@@ -16,6 +16,7 @@
       "triggers": [
         "death"
       ],
+      "text_key": "card_ability.minecard.buried_treasure",
       "abilities": [
         {
           "cards": [

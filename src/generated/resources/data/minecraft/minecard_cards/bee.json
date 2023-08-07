@@ -5,6 +5,7 @@
       "triggers": [
         "summon"
       ],
+      "text_key": "card_ability.minecard.bee",
       "abilities": [
         {
           "cards": [
@@ -21,6 +22,7 @@
                   "triggers": [
                     "tick"
                   ],
+                  "text_key": "card_ability.minecard.bee_nest",
                   "abilities": [
                     {
                       "cards": [

@@ -11,6 +11,7 @@
       "triggers": [
         "summon"
       ],
+      "text_key": "card_ability.minecard.enchanted_golden_apple",
       "abilities": [
         {
           "type": "minecard:select_cards",

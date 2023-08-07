@@ -5,42 +5,33 @@
       "triggers": [
         "hurt"
       ],
+      "text_key": "card_ability.minecard.silverfish",
       "abilities": [
         {
           "type": "minecard:select_cards",
           "value": {
             "selection": {
               "groups": [
-                "self"
+                "your_deck"
               ],
               "method": {
-                "type": "minecard:all"
+                "type": "minecard:random",
+                "value": {
+                  "count": 1,
+                  "repeat": false
+                }
+              },
+              "condition": {
+                "type": "minecard:entity",
+                "value": {
+                  "inner": "minecraft:silverfish"
+                }
               }
             }
           }
         },
         {
           "type": "minecard:remove_cards"
-        },
-        {
-          "type": "minecard:modify",
-          "value": {
-            "modifications": [
-              [
-                {
-                  "output": {
-                    "type": "minecard:health"
-                  },
-                  "operator": {
-                    "type": "minecard:variable",
-                    "value": {
-                      "type": "minecard:max_health"
-                    }
-                  }
-                }
-              ]
-            ]
-          }
         },
         {
           "placement": "your_hand",

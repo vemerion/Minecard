@@ -5,6 +5,7 @@
       "triggers": [
         "summon"
       ],
+      "text_key": "card_ability.minecard.panda",
       "abilities": [
         {
           "cards": [
@@ -24,6 +25,7 @@
                   "triggers": [
                     "grow"
                   ],
+                  "text_key": "card_ability.minecard.bamboo",
                   "abilities": [
                     {
                       "type": "minecard:select_cards",

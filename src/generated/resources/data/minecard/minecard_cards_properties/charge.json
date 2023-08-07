@@ -9,6 +9,7 @@
       "triggers": [
         "summon"
       ],
+      "text_key": "",
       "abilities": [
         {
           "type": "minecard:select_cards",

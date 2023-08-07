@@ -20,24 +20,20 @@ public class DrawCardsAbility extends CardAbility {
 
 	public static final Codec<DrawCardsAbility> CODEC = RecordCodecBuilder.create(instance -> instance
 			.group(GameUtil.TRIGGERS_CODEC.optionalFieldOf("triggers", Set.of()).forGetter(CardAbility::getTriggers),
+					Codec.STRING.optionalFieldOf("text_key", "").forGetter(CardAbility::getTextKey),
 					Codec.INT.fieldOf("count").forGetter(DrawCardsAbility::getCount))
 			.apply(instance, DrawCardsAbility::new));
 
 	private final int count;
 
-	public DrawCardsAbility(Set<CardAbilityTrigger> triggers, int count) {
-		super(triggers);
+	public DrawCardsAbility(Set<CardAbilityTrigger> triggers, String textKey, int count) {
+		super(triggers, textKey);
 		this.count = count;
 	}
 
 	@Override
 	protected CardAbilityType<?> getType() {
 		return ModCardAbilities.DRAW_CARDS.get();
-	}
-
-	@Override
-	protected Object[] getDescriptionArgs() {
-		return new Object[] { GameUtil.emphasize(GameUtil.triggersToText(triggers)), count };
 	}
 
 	@Override

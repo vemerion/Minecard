@@ -13,6 +13,7 @@
             "triggers": [
               "attack"
             ],
+            "text_key": "",
             "abilities": [
               {
                 "type": "minecard:select_cards",
@@ -67,6 +68,7 @@
             "triggers": [
               "tick"
             ],
+            "text_key": "",
             "abilities": [
               {
                 "type": "minecard:select_cards",

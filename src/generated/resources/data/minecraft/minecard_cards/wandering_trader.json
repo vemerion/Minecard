@@ -1,67 +1,40 @@
 {
   "abilities": {
-    "type": "minecard:choice",
+    "type": "minecard:chain",
     "value": {
+      "triggers": [
+        "summon"
+      ],
+      "text_key": "card_ability.minecard.wandering_trader",
       "abilities": [
         {
-          "type": "minecard:chain",
+          "cards": [
+            "minecard:pufferfish_bucket",
+            "minecard:packed_ice",
+            "minecard:pointed_dripstone"
+          ],
+          "type": "minecard:constant_cards"
+        },
+        {
+          "type": "minecard:select_cards",
           "value": {
-            "triggers": [
-              "summon"
-            ],
-            "abilities": [
-              {
-                "cards": [
-                  "minecard:pufferfish_bucket"
-                ],
-                "type": "minecard:constant_cards"
-              },
-              {
-                "placement": "your_hand",
-                "type": "minecard:place_cards"
+            "selection": {
+              "groups": [
+                "collected"
+              ],
+              "method": {
+                "type": "minecard:choice",
+                "value": {
+                  "discover": true
+                }
               }
-            ]
+            },
+            "clear": true
           }
         },
         {
-          "type": "minecard:chain",
-          "value": {
-            "triggers": [
-              "summon"
-            ],
-            "abilities": [
-              {
-                "cards": [
-                  "minecard:packed_ice"
-                ],
-                "type": "minecard:constant_cards"
-              },
-              {
-                "placement": "your_hand",
-                "type": "minecard:place_cards"
-              }
-            ]
-          }
-        },
-        {
-          "type": "minecard:chain",
-          "value": {
-            "triggers": [
-              "summon"
-            ],
-            "abilities": [
-              {
-                "cards": [
-                  "minecard:pointed_dripstone"
-                ],
-                "type": "minecard:constant_cards"
-              },
-              {
-                "placement": "your_hand",
-                "type": "minecard:place_cards"
-              }
-            ]
-          }
+          "placement": "your_hand",
+          "type": "minecard:place_cards"
         }
       ]
     }

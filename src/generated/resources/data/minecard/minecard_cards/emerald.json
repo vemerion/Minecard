@@ -9,6 +9,7 @@
     "triggers": [
       "summon"
     ],
+    "text_key": "card_ability.minecard.emerald",
     "temporary_resources": 1,
     "permanent_resources": 0,
     "type": "minecard:resource"

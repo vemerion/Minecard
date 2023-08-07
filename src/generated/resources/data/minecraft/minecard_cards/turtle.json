@@ -8,6 +8,7 @@
       "triggers": [
         "grow"
       ],
+      "text_key": "card_ability.minecard.turtle",
       "abilities": [
         {
           "cards": [
@@ -24,6 +25,7 @@
                   "triggers": [
                     "summon"
                   ],
+                  "text_key": "card_ability.minecard.scute",
                   "abilities": [
                     {
                       "type": "minecard:select_cards",

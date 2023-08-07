@@ -2,6 +2,7 @@
   "abilities": {
     "type": "minecard:chance",
     "value": {
+      "text_key": "card_ability.minecard.cave_spider",
       "chance": 50,
       "ability": {
         "type": "minecard:chain",
@@ -9,6 +10,7 @@
           "triggers": [
             "attack"
           ],
+          "text_key": "",
           "abilities": [
             {
               "type": "minecard:select_cards",

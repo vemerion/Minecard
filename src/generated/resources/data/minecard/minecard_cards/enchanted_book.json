@@ -11,6 +11,7 @@
       "triggers": [
         "summon"
       ],
+      "text_key": "card_ability.minecard.enchanted_book",
       "abilities": [
         {
           "count": 1,
