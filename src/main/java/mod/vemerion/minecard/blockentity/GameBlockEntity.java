@@ -328,7 +328,8 @@ public class GameBlockEntity extends BlockEntity {
 
 		return new OpenGameMessage(
 				List.of(state1.toMessage(!state1.getId().equals(id)), state2.toMessage(!state2.getId().equals(id))),
-				state.getTutorialStep(), state.getHistory(), getBlockPos());
+				state.getTutorialStep(),
+				state.getHistory().stream().map(e -> e.censor(id, state.isSpectator(id))).toList(), getBlockPos());
 	}
 
 	@Override

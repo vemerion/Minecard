@@ -12,7 +12,6 @@ import mod.vemerion.minecard.game.PlayerState;
 import mod.vemerion.minecard.game.Receiver;
 import mod.vemerion.minecard.init.ModCardAbilities;
 import net.minecraft.util.ExtraCodecs;
-import net.minecraft.world.item.ItemStack;
 
 public class ChanceAbility extends CardAbility {
 
@@ -39,9 +38,9 @@ public class ChanceAbility extends CardAbility {
 
 	@Override
 	protected void invoke(List<Receiver> receivers, PlayerState state, Card card, @Nullable Card other,
-			Collected collected, ItemStack icon) {
+			Collected collected) {
 		if (state.getGame().getRandom().nextInt(100) < chance) {
-			ability.invoke(receivers, state, card, other, collected, icon);
+			ability.invoke(receivers, state, card, other, collected);
 		}
 	}
 

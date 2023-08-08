@@ -164,10 +164,6 @@ public class ModAnimationConfigProvider implements DataProvider {
 		animations.put("wither", WitherAnimationConfig.INSTANCE);
 		animations.put("throw_amethyst_shard", new ThrowItemAnimationConfig(Items.AMETHYST_SHARD, Optional.empty(),
 				Optional.of(SoundEvents.AMETHYST_BLOCK_BREAK), Optional.empty()));
-		animations.put("rocket",
-				new EntityAnimationConfig(EntityType.FIREWORK_ROCKET, true, 15, 25, 1,
-						Optional.of(SoundEvents.FIREWORK_ROCKET_LAUNCH), Optional.empty(),
-						Optional.of(SoundEvents.FIREWORK_ROCKET_BLAST)));
 		animations.put("soul_sand", new BlockAnimationConfig(Blocks.SOUL_SAND));
 
 	}

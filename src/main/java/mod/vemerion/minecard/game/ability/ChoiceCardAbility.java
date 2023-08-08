@@ -16,7 +16,6 @@ import mod.vemerion.minecard.game.PlayerState;
 import mod.vemerion.minecard.game.Receiver;
 import mod.vemerion.minecard.init.ModCardAbilities;
 import net.minecraft.util.ExtraCodecs;
-import net.minecraft.world.item.ItemStack;
 
 public class ChoiceCardAbility extends CardAbility {
 
@@ -41,14 +40,14 @@ public class ChoiceCardAbility extends CardAbility {
 
 	@Override
 	protected void invoke(List<Receiver> receivers, PlayerState state, Card card, @Nullable Card other,
-			Collected collected, ItemStack icon) {
+			Collected collected) {
 		var cards = new ArrayList<Card>();
 		for (int i = 0; i < abilities.size(); i++)
 			cards.add(new CardType(card.getType().get(), 0, 0, 0, Map.of(), abilities.get(i), card.getAdditionalData(),
 					CardType.DEFAULT_DECK_COUNT, CardType.DEFAULT_DROP_CHANCE).create().setId(i));
 		state.getGame().getChoice().make(receivers, this, cards, false, state.getGame().getRandom(), state.getId())
 				.ifPresent(c -> {
-					abilities.get(c.getId()).invoke(receivers, state, card, other, collected, icon);
+					abilities.get(c.getId()).invoke(receivers, state, card, other, collected);
 				});
 		;
 	}

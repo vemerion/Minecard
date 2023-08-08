@@ -63,6 +63,15 @@
         {
           "type": "minecard:move_collected",
           "value": {
+            "source": 0,
+            "destination": 2,
+            "clear_source": false,
+            "clear_destination": false
+          }
+        },
+        {
+          "type": "minecard:move_collected",
+          "value": {
             "source": 1,
             "destination": 0,
             "clear_source": false,
@@ -72,6 +81,25 @@
         {
           "placement": "your_hand",
           "type": "minecard:place_cards"
+        },
+        {
+          "type": "minecard:move_collected",
+          "value": {
+            "source": 2,
+            "destination": 0,
+            "clear_source": false,
+            "clear_destination": false
+          }
+        },
+        {
+          "type": "minecard:history",
+          "value": {
+            "icon": {
+              "id": "minecraft:book",
+              "Count": 1
+            },
+            "visibility": "all"
+          }
         }
       ]
     }

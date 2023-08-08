@@ -15,7 +15,6 @@ import mod.vemerion.minecard.init.ModCardAbilities;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.util.ExtraCodecs;
-import net.minecraft.world.item.ItemStack;
 
 public class MultiAbility extends CardAbility {
 
@@ -45,6 +44,9 @@ public class MultiAbility extends CardAbility {
 			var text = TextComponent.EMPTY.copy();
 			int i = 0;
 			for (var ability : abilities) {
+				var abilityText = ability.getText();
+				if (abilityText == TextComponent.EMPTY)
+					continue;
 				text.append(ability.getText());
 				if (i < abilities.size() - 1)
 					text.append("\n");
@@ -57,14 +59,14 @@ public class MultiAbility extends CardAbility {
 
 	@Override
 	protected void invoke(List<Receiver> receivers, PlayerState state, Card card, @Nullable Card other,
-			Collected collected, ItemStack icon) {
+			Collected collected) {
 	}
 
 	@Override
-	public void trigger(CardAbilityTrigger trigger, List<Receiver> receivers, PlayerState state, Card card, Card target,
-			ItemStack icon) {
+	public void trigger(CardAbilityTrigger trigger, List<Receiver> receivers, PlayerState state, Card card,
+			Card target) {
 		for (var ability : abilities)
-			ability.trigger(trigger, receivers, state, card, target, icon);
+			ability.trigger(trigger, receivers, state, card, target);
 	}
 
 	public List<CardAbility> getAbilities() {

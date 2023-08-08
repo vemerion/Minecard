@@ -38,6 +38,15 @@
               ]
             ]
           }
+        },
+        {
+          "type": "minecard:history",
+          "value": {
+            "icon": {
+              "id": "minecraft:book",
+              "Count": 1
+            }
+          }
         }
       ]
     }

@@ -13,6 +13,7 @@ import mod.vemerion.minecard.game.ability.ChoiceCardAbility;
 import mod.vemerion.minecard.game.ability.ConstantCardsAbility;
 import mod.vemerion.minecard.game.ability.DrawCardsAbility;
 import mod.vemerion.minecard.game.ability.GameOverAbility;
+import mod.vemerion.minecard.game.ability.HistoryAbility;
 import mod.vemerion.minecard.game.ability.ModifyAbility;
 import mod.vemerion.minecard.game.ability.MoveCollectedAbility;
 import mod.vemerion.minecard.game.ability.MultiAbility;
@@ -74,5 +75,7 @@ public class ModCardAbilities {
 			.register("move_collected", () -> new CardAbilityType<MoveCollectedAbility>(MoveCollectedAbility.CODEC));
 	public static final RegistryObject<CardAbilityType<? extends CardAbility>> ADD_ABILITY = CARD_ABILITIES
 			.register("card_abilities", () -> new CardAbilityType<AddAbilityAbility>(AddAbilityAbility.CODEC));
+	public static final RegistryObject<CardAbilityType<? extends CardAbility>> HISTORY = CARD_ABILITIES
+			.register("history", () -> new CardAbilityType<HistoryAbility>(HistoryAbility.CODEC));
 
 }

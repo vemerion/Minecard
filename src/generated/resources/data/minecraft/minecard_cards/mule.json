@@ -3,12 +3,28 @@
     "minecard:baby": 1
   },
   "abilities": {
-    "triggers": [
-      "grow"
-    ],
-    "text_key": "card_ability.minecard.mule",
-    "count": 2,
-    "type": "minecard:draw_cards"
+    "type": "minecard:chain",
+    "value": {
+      "triggers": [
+        "grow"
+      ],
+      "text_key": "card_ability.minecard.mule",
+      "abilities": [
+        {
+          "count": 2,
+          "type": "minecard:draw_cards"
+        },
+        {
+          "type": "minecard:history",
+          "value": {
+            "icon": {
+              "id": "minecraft:book",
+              "Count": 1
+            }
+          }
+        }
+      ]
+    }
   },
   "entity": "minecraft:mule",
   "cost": 4,

@@ -13,7 +13,6 @@ import mod.vemerion.minecard.game.Card;
 import mod.vemerion.minecard.game.PlayerState;
 import mod.vemerion.minecard.game.Receiver;
 import mod.vemerion.minecard.init.ModCardAbilities;
-import net.minecraft.world.item.ItemStack;
 
 public class RemoveCardsAbility extends CardAbility {
 
@@ -30,7 +29,7 @@ public class RemoveCardsAbility extends CardAbility {
 
 	@Override
 	protected void invoke(List<Receiver> receivers, PlayerState state, Card card, @Nullable Card other,
-			Collected collected, ItemStack icon) {
+			Collected collected) {
 		List<Card> copies = new ArrayList<>();
 		for (var c : collected.get(0)) {
 			copies.add(new Card(c.getType(), c.getCost(), c.getOriginalCost(), c.getHealth(), c.getMaxHealth(),

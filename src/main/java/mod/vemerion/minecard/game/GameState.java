@@ -83,10 +83,17 @@ public class GameState {
 		if (history.size() > MAX_HISTORY_SIZE)
 			history.remove(0);
 
-		var msg = new HistoryMessage(entry);
 		for (var receiver : receivers) {
-			receiver.receiver(msg);
+			receiver.receiver(new HistoryMessage(entry.censor(receiver.getId(), isSpectator(receiver.getId()))));
 		}
+	}
+
+	public boolean isSpectator(UUID id) {
+		for (var playerState : playerStates) {
+			if (playerState.getId().equals(id))
+				return false;
+		}
+		return true;
 	}
 
 	public PlayerChoice getChoice() {
@@ -218,11 +225,11 @@ public class GameState {
 
 		final var playerState = owner;
 		if (tookDamage) {
-			card.ability((a, i) -> a.trigger(CardAbilityTrigger.HURT, receivers, playerState, card, null, i));
+			card.ability(a -> a.trigger(CardAbilityTrigger.HURT, receivers, playerState, card, null));
 		}
 
 		if (card.isDead()) {
-			card.ability((a, i) -> a.trigger(CardAbilityTrigger.DEATH, receivers, playerState, card, null, i));
+			card.ability(a -> a.trigger(CardAbilityTrigger.DEATH, receivers, playerState, card, null));
 		}
 
 		for (var receiver : receivers) {
@@ -267,7 +274,7 @@ public class GameState {
 			receiver.receiver(new PlaceCardMessage(id, card, leftId));
 		}
 
-		card.ability((a, i) -> a.trigger(CardAbilityTrigger.SUMMON, receivers, playerState, card, null, i));
+		card.ability(a -> a.trigger(CardAbilityTrigger.SUMMON, receivers, playerState, card, null));
 	}
 
 	public void endTurn(List<Receiver> receivers) {
@@ -291,8 +298,7 @@ public class GameState {
 			return;
 		}
 
-		attackerCard.ability(
-				(a, i) -> a.trigger(CardAbilityTrigger.ATTACK, receivers, current, attackerCard, targetCard, i));
+		attackerCard.ability(a -> a.trigger(CardAbilityTrigger.ATTACK, receivers, current, attackerCard, targetCard));
 
 		attackerCard.removeProperty(CardProperty.STEALTH);
 		hurt(receivers, attackerCard, targetCard.getDamage() + targetCard.getProperty(CardProperty.THORNS));
@@ -304,7 +310,7 @@ public class GameState {
 		}
 
 		addHistory(receivers, new HistoryEntry(new ItemStack(Items.NETHERITE_SWORD), current.getId(), attackerCard,
-				List.of(targetCard)));
+				List.of(targetCard.toHistory(HistoryEntry.Visibility.ALL))));
 	}
 
 	public void choice(List<Receiver> receivers, int selected) {

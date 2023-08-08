@@ -14,7 +14,6 @@ import mod.vemerion.minecard.game.PlayerState;
 import mod.vemerion.minecard.game.Receiver;
 import mod.vemerion.minecard.init.ModCardAbilities;
 import net.minecraft.util.ExtraCodecs;
-import net.minecraft.world.item.ItemStack;
 
 public class ChainAbility extends CardAbility {
 
@@ -41,16 +40,16 @@ public class ChainAbility extends CardAbility {
 
 	@Override
 	protected void invoke(List<Receiver> receivers, PlayerState state, Card card, @Nullable Card other,
-			Collected collected, ItemStack icon) {
+			Collected collected) {
 		for (var ability : abilities)
-			ability.invoke(receivers, state, card, other, collected, icon);
+			ability.invoke(receivers, state, card, other, collected);
 	}
 
 	@Override
-	public void trigger(CardAbilityTrigger trigger, List<Receiver> receivers, PlayerState state, Card card, Card target,
-			ItemStack icon) {
+	public void trigger(CardAbilityTrigger trigger, List<Receiver> receivers, PlayerState state, Card card,
+			Card target) {
 		if (triggers.contains(trigger)) {
-			invoke(receivers, state, card, target, new Collected(), icon);
+			invoke(receivers, state, card, target, new Collected());
 		}
 	}
 

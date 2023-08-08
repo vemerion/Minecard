@@ -6,12 +6,28 @@
     }
   },
   "abilities": {
-    "triggers": [
-      "summon"
-    ],
-    "text_key": "card_ability.minecard.book",
-    "count": 2,
-    "type": "minecard:draw_cards"
+    "type": "minecard:chain",
+    "value": {
+      "triggers": [
+        "summon"
+      ],
+      "text_key": "card_ability.minecard.book",
+      "abilities": [
+        {
+          "count": 2,
+          "type": "minecard:draw_cards"
+        },
+        {
+          "type": "minecard:history",
+          "value": {
+            "icon": {
+              "id": "minecraft:book",
+              "Count": 1
+            }
+          }
+        }
+      ]
+    }
   },
   "entity": "minecraft:item",
   "cost": 3,

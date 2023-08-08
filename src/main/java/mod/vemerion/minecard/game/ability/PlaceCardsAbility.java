@@ -11,11 +11,9 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import mod.vemerion.minecard.game.Card;
-import mod.vemerion.minecard.game.HistoryEntry;
 import mod.vemerion.minecard.game.PlayerState;
 import mod.vemerion.minecard.game.Receiver;
 import mod.vemerion.minecard.init.ModCardAbilities;
-import net.minecraft.world.item.ItemStack;
 
 public class PlaceCardsAbility extends CardAbility {
 
@@ -37,7 +35,7 @@ public class PlaceCardsAbility extends CardAbility {
 
 	@Override
 	protected void invoke(List<Receiver> receivers, PlayerState state, Card card, @Nullable Card other,
-			Collected collected, ItemStack icon) {
+			Collected collected) {
 		List<Card> toAdd = new ArrayList<>();
 		for (var c : collected.get(0))
 			toAdd.add(new Card(c.getType(), c.getCost(), c.getOriginalCost(), c.getHealth(), c.getMaxHealth(),
@@ -79,7 +77,8 @@ public class PlaceCardsAbility extends CardAbility {
 			state.addCards(receivers, toAdd);
 			break;
 		}
-		state.getGame().addHistory(receivers, new HistoryEntry(icon, state.getId(), card, toAdd));
+		collected.clear(0);
+		collected.get(0).addAll(toAdd);
 	}
 
 	public CardPlacement getPlacement() {

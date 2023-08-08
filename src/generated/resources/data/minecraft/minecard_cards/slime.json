@@ -23,18 +23,11 @@
               {
                 "placement": "left",
                 "type": "minecard:place_cards"
-              }
-            ]
-          }
-        },
-        {
-          "type": "minecard:chain",
-          "value": {
-            "triggers": [
-              "death"
-            ],
-            "text_key": "",
-            "abilities": [
+              },
+              {
+                "placement": "right",
+                "type": "minecard:place_cards"
+              },
               {
                 "cards": [
                   "minecard:medium_slime"
@@ -42,8 +35,13 @@
                 "type": "minecard:constant_cards"
               },
               {
-                "placement": "right",
-                "type": "minecard:place_cards"
+                "type": "minecard:history",
+                "value": {
+                  "icon": {
+                    "id": "minecraft:book",
+                    "Count": 1
+                  }
+                }
               }
             ]
           }

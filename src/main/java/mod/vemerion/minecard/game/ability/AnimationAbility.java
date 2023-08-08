@@ -18,7 +18,6 @@ import mod.vemerion.minecard.init.ModCardAbilities;
 import mod.vemerion.minecard.network.AnimationMessage;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.ExtraCodecs;
-import net.minecraft.world.item.ItemStack;
 
 public class AnimationAbility extends CardAbility {
 
@@ -47,7 +46,7 @@ public class AnimationAbility extends CardAbility {
 
 	@Override
 	protected void invoke(List<Receiver> receivers, PlayerState state, Card card, @Nullable Card other,
-			Collected collected, ItemStack icon) {
+			Collected collected) {
 		for (var receiver : receivers) {
 			receiver.receiver(new AnimationMessage(card.getId(), collected.get(0).stream().filter(c -> {
 				return state.getGame().calcVisibility(receiver.getId(), c) == CardVisibility.VISIBLE

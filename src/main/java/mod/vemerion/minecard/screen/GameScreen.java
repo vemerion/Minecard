@@ -1234,7 +1234,7 @@ public class GameScreen extends Screen implements GameClient {
 						0.3f, ENTRY_CARD_SCALE);
 				float yStart = y + (ENTRY_CARD_SCALE - targetScale) * CARD_HEIGHT / 2;
 				for (int i = 0; i < targets.size(); i++) {
-					var target = new ClientCard(targets.get(i), Vec2.ZERO, GameScreen.this);
+					var target = new ClientCard(targets.get(i).card(), Vec2.ZERO, GameScreen.this);
 					poseStack.pushPose();
 					poseStack.translate(xStart + i * (targetScale * (CARD_WIDTH + TARGETS_SPACING)), yStart, 500);
 					poseStack.scale(targetScale, targetScale, targetScale);

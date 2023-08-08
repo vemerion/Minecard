@@ -15,7 +15,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.util.ExtraCodecs;
-import net.minecraft.world.item.ItemStack;
 
 public abstract class CardAbility {
 
@@ -33,7 +32,7 @@ public abstract class CardAbility {
 	protected abstract CardAbilityType<?> getType();
 
 	protected abstract void invoke(List<Receiver> receivers, PlayerState state, Card card, @Nullable Card other,
-			Collected collected, ItemStack icon);
+			Collected collected);
 
 	public Component getText() {
 		return textKey.isEmpty() ? TextComponent.EMPTY : new TranslatableComponent(textKey);
@@ -47,10 +46,10 @@ public abstract class CardAbility {
 		return textKey;
 	}
 
-	public void trigger(CardAbilityTrigger trigger, List<Receiver> receivers, PlayerState state, Card card, Card target,
-			ItemStack icon) {
+	public void trigger(CardAbilityTrigger trigger, List<Receiver> receivers, PlayerState state, Card card,
+			Card target) {
 		if (triggers.contains(trigger)) {
-			invoke(receivers, state, card, target, new Collected(), icon);
+			invoke(receivers, state, card, target, new Collected());
 		}
 	}
 }

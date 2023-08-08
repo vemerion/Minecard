@@ -6,13 +6,41 @@
     }
   },
   "abilities": {
-    "triggers": [
-      "summon"
-    ],
-    "text_key": "card_ability.minecard.emerald",
-    "temporary_resources": 1,
-    "permanent_resources": 0,
-    "type": "minecard:resource"
+    "type": "minecard:multi",
+    "value": {
+      "text_key": "card_ability.minecard.emerald",
+      "abilities": [
+        {
+          "triggers": [
+            "summon"
+          ],
+          "text_key": "",
+          "temporary_resources": 1,
+          "permanent_resources": 0,
+          "type": "minecard:resource"
+        },
+        {
+          "type": "minecard:chain",
+          "value": {
+            "triggers": [
+              "summon"
+            ],
+            "text_key": "",
+            "abilities": [
+              {
+                "type": "minecard:history",
+                "value": {
+                  "icon": {
+                    "id": "minecraft:book",
+                    "Count": 1
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
   },
   "entity": "minecraft:item",
   "cost": 0,

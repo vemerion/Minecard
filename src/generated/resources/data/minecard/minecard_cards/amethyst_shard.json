@@ -80,6 +80,24 @@
               ]
             ]
           }
+        },
+        {
+          "type": "minecard:move_collected",
+          "value": {
+            "source": 1,
+            "destination": 0,
+            "clear_source": false,
+            "clear_destination": false
+          }
+        },
+        {
+          "type": "minecard:history",
+          "value": {
+            "icon": {
+              "id": "minecraft:book",
+              "Count": 1
+            }
+          }
         }
       ]
     }

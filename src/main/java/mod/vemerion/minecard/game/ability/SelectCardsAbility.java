@@ -13,7 +13,6 @@ import mod.vemerion.minecard.game.PlayerState;
 import mod.vemerion.minecard.game.Receiver;
 import mod.vemerion.minecard.init.ModCardAbilities;
 import net.minecraft.util.ExtraCodecs;
-import net.minecraft.world.item.ItemStack;
 
 public class SelectCardsAbility extends CardAbility {
 
@@ -43,7 +42,7 @@ public class SelectCardsAbility extends CardAbility {
 
 	@Override
 	protected void invoke(List<Receiver> receivers, PlayerState state, Card card, @Nullable Card other,
-			Collected collected, ItemStack icon) {
+			Collected collected) {
 		var selected = selection.select(receivers, state.getGame(), this, state.getId(), card, other, collected);
 		if (shouldClear()) {
 			collected.get(0).clear();

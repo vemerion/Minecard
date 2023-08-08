@@ -9,12 +9,10 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import mod.vemerion.minecard.game.Card;
-import mod.vemerion.minecard.game.HistoryEntry;
 import mod.vemerion.minecard.game.PlayerState;
 import mod.vemerion.minecard.game.Receiver;
 import mod.vemerion.minecard.init.ModCardAbilities;
 import net.minecraft.util.ExtraCodecs;
-import net.minecraft.world.item.ItemStack;
 
 public class AddAbilityAbility extends CardAbility {
 
@@ -37,16 +35,10 @@ public class AddAbilityAbility extends CardAbility {
 
 	@Override
 	protected void invoke(List<Receiver> receivers, PlayerState state, Card card, @Nullable Card other,
-			Collected collected, ItemStack icon) {
-		var copy = new Card(card);
-
+			Collected collected) {
 		for (var selected : collected.get(0)) {
 			selected.setAbility(new MultiAbility("", List.of(ability, selected.getAbility())));
 		}
-
-		if (!icon.isEmpty())
-			state.getGame().addHistory(receivers, new HistoryEntry(icon, state.getId(), copy,
-					collected.get(0).stream().filter(c -> state.getGame().isInBoard(c) || c.isDead()).toList()));
 
 		for (var receiver : receivers) {
 			state.getGame().updateCards(receiver, collected.get(0));

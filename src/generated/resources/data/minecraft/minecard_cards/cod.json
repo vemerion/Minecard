@@ -90,6 +90,15 @@
                                                                             {
                                                                               "placement": "right",
                                                                               "type": "minecard:place_cards"
+                                                                            },
+                                                                            {
+                                                                              "type": "minecard:history",
+                                                                              "value": {
+                                                                                "icon": {
+                                                                                  "id": "minecraft:book",
+                                                                                  "Count": 1
+                                                                                }
+                                                                              }
                                                                             }
                                                                           ]
                                                                         }
@@ -107,6 +116,15 @@
                                                             {
                                                               "placement": "right",
                                                               "type": "minecard:place_cards"
+                                                            },
+                                                            {
+                                                              "type": "minecard:history",
+                                                              "value": {
+                                                                "icon": {
+                                                                  "id": "minecraft:book",
+                                                                  "Count": 1
+                                                                }
+                                                              }
                                                             }
                                                           ]
                                                         }
@@ -124,6 +142,15 @@
                                             {
                                               "placement": "right",
                                               "type": "minecard:place_cards"
+                                            },
+                                            {
+                                              "type": "minecard:history",
+                                              "value": {
+                                                "icon": {
+                                                  "id": "minecraft:book",
+                                                  "Count": 1
+                                                }
+                                              }
                                             }
                                           ]
                                         }
@@ -141,6 +168,15 @@
                             {
                               "placement": "right",
                               "type": "minecard:place_cards"
+                            },
+                            {
+                              "type": "minecard:history",
+                              "value": {
+                                "icon": {
+                                  "id": "minecraft:book",
+                                  "Count": 1
+                                }
+                              }
                             }
                           ]
                         }
@@ -158,6 +194,15 @@
             {
               "placement": "right",
               "type": "minecard:place_cards"
+            },
+            {
+              "type": "minecard:history",
+              "value": {
+                "icon": {
+                  "id": "minecraft:book",
+                  "Count": 1
+                }
+              }
             }
           ]
         }

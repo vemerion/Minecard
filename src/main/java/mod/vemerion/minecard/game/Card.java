@@ -3,7 +3,7 @@ package mod.vemerion.minecard.game;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
-import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -14,8 +14,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraftforge.registries.ForgeRegistries;
 
 public class Card {
@@ -180,12 +178,12 @@ public class Card {
 		this.ability = ability;
 	}
 
-	public void ability(BiConsumer<CardAbility, ItemStack> func) {
-		func.accept(getAbility(), new ItemStack(Items.BOOK));
+	public void ability(Consumer<CardAbility> func) {
+		func.accept(getAbility());
 		for (var property : new HashMap<>(properties).entrySet()) {
 			if (property.getValue() > 0) {
 				var p = CardProperties.getInstance(false).get(property.getKey());
-				func.accept(p.getAbility(), p.getItem());
+				func.accept(p.getAbility());
 			}
 		}
 	}
@@ -223,6 +221,10 @@ public class Card {
 		this.properties = received.getProperties();
 		this.additionalData = received.getAdditionalData();
 		this.ability = received.getAbility();
+	}
+
+	public HistoryEntry.Target toHistory(HistoryEntry.Visibility visibility) {
+		return new HistoryEntry.Target(this, visibility);
 	}
 
 	public int getTextScroll() {

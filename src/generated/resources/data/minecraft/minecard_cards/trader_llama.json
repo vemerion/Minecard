@@ -52,17 +52,42 @@
                     ]
                   ]
                 }
+              },
+              {
+                "type": "minecard:history",
+                "value": {
+                  "icon": {
+                    "id": "minecraft:book",
+                    "Count": 1
+                  }
+                }
               }
             ]
           }
         },
         {
-          "triggers": [
-            "summon"
-          ],
-          "text_key": "card_ability.minecard.trader_llama_draw",
-          "count": 1,
-          "type": "minecard:draw_cards"
+          "type": "minecard:chain",
+          "value": {
+            "triggers": [
+              "summon"
+            ],
+            "text_key": "card_ability.minecard.trader_llama_draw",
+            "abilities": [
+              {
+                "count": 1,
+                "type": "minecard:draw_cards"
+              },
+              {
+                "type": "minecard:history",
+                "value": {
+                  "icon": {
+                    "id": "minecraft:book",
+                    "Count": 1
+                  }
+                }
+              }
+            ]
+          }
         }
       ]
     }
