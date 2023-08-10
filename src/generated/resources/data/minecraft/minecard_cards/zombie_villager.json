@@ -94,6 +94,32 @@
           }
         },
         {
+          "type": "minecard:trigger_advancement",
+          "value": {
+            "id": "minecard:zombie_buff",
+            "condition": {
+              "type": "minecard:operator",
+              "value": {
+                "operator": {
+                  "type": "minecard:greater_than",
+                  "value": {
+                    "left": {
+                      "type": "minecard:collected_count",
+                      "value": {
+                        "index": 0
+                      }
+                    },
+                    "right": {
+                      "type": "minecard:constant",
+                      "value": 3
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
           "type": "minecard:history",
           "value": {
             "icon": {

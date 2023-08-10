@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import mod.vemerion.minecard.Main;
-import mod.vemerion.minecard.advancement.ModGameTrigger;
+import mod.vemerion.minecard.advancement.ModFinishGameTrigger;
 import mod.vemerion.minecard.capability.CardData;
 import mod.vemerion.minecard.capability.DeckData;
 import mod.vemerion.minecard.game.AIPlayer;
@@ -42,6 +42,7 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.network.PacketDistributor;
@@ -65,6 +66,12 @@ public class GameBlockEntity extends BlockEntity {
 		receivers = new HashSet<>();
 		state = new GameState();
 	}
+	
+	@Override
+	public void setLevel(Level pLevel) {
+		super.setLevel(pLevel);
+		state.setLevel(pLevel);
+	}
 
 	public void tick() {
 		if (aiPlayer != null) {
@@ -73,12 +80,12 @@ public class GameBlockEntity extends BlockEntity {
 
 		if (state.isGameOver()) {
 			if (isTutorial()) {
-				advancement(ModGameTrigger.Type.COMPLETE_TUTORIAL, s -> true);
+				advancement(ModFinishGameTrigger.Type.COMPLETE_TUTORIAL, s -> true);
 			} else {
 				if (aiPlayer != null) {
-					advancement(ModGameTrigger.Type.WIN_AI, s -> !s.isGameOver());
+					advancement(ModFinishGameTrigger.Type.WIN_AI, s -> !s.isGameOver());
 				}
-				advancement(ModGameTrigger.Type.WIN_GAME, s -> !s.isGameOver());
+				advancement(ModFinishGameTrigger.Type.WIN_GAME, s -> !s.isGameOver());
 			}
 
 			for (var receiver : getReceivers()) {
@@ -92,10 +99,10 @@ public class GameBlockEntity extends BlockEntity {
 		}
 	}
 
-	private void advancement(ModGameTrigger.Type type, Predicate<PlayerState> test) {
+	private void advancement(ModFinishGameTrigger.Type type, Predicate<PlayerState> test) {
 		for (var playerState : state.getPlayerStates()) {
 			if (test.test(playerState) && level.getPlayerByUUID(playerState.getId()) instanceof ServerPlayer player) {
-				ModAdvancements.GAME.trigger(player, type);
+				ModAdvancements.FINISH_GAME.trigger(player, type);
 			}
 		}
 	}

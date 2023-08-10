@@ -1,11 +1,9 @@
 package mod.vemerion.minecard.advancement;
 
 import com.google.gson.JsonObject;
-import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
 
 import mod.vemerion.minecard.Main;
-import mod.vemerion.minecard.game.GameUtil;
 import net.minecraft.advancements.critereon.AbstractCriterionTriggerInstance;
 import net.minecraft.advancements.critereon.DeserializationContext;
 import net.minecraft.advancements.critereon.EntityPredicate;
@@ -15,22 +13,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 
 public class ModGameTrigger extends SimpleCriterionTrigger<ModGameTrigger.Instance> {
-
-	public static final Codec<Type> TYPE_CODEC = GameUtil.enumCodec(Type.class, Type::getName);
-
-	public static enum Type {
-		COMPLETE_TUTORIAL("complete_tutorial"), WIN_GAME("win_game"), WIN_AI("win_ai");
-
-		private final String name;
-
-		private Type(String name) {
-			this.name = name;
-		}
-
-		public String getName() {
-			return name;
-		}
-	}
 
 	static final ResourceLocation ID = new ResourceLocation(Main.MODID, "game");
 
@@ -43,32 +25,32 @@ public class ModGameTrigger extends SimpleCriterionTrigger<ModGameTrigger.Instan
 	public ModGameTrigger.Instance createInstance(JsonObject pJson, EntityPredicate.Composite pEntityPredicate,
 			DeserializationContext pConditionsParser) {
 		return new Instance(pEntityPredicate,
-				TYPE_CODEC.parse(JsonOps.INSTANCE, pJson.get("type")).getOrThrow(false, s -> {
+				ResourceLocation.CODEC.parse(JsonOps.INSTANCE, pJson.get("id")).getOrThrow(false, s -> {
 				}));
 	}
 
-	public void trigger(ServerPlayer pPlayer, Type type) {
+	public void trigger(ServerPlayer pPlayer, ResourceLocation id) {
 		this.trigger(pPlayer, instance -> {
-			return instance.type.equals(type);
+			return instance.id.equals(id);
 		});
 	}
 
 	public static class Instance extends AbstractCriterionTriggerInstance {
-		private final Type type;
+		private final ResourceLocation id;
 
-		public Instance(EntityPredicate.Composite pPlayer, Type type) {
+		public Instance(EntityPredicate.Composite pPlayer, ResourceLocation id) {
 			super(ModGameTrigger.ID, pPlayer);
-			this.type = type;
+			this.id = id;
 		}
 
-		public static ModGameTrigger.Instance create(Type type) {
-			return new ModGameTrigger.Instance(EntityPredicate.Composite.ANY, type);
+		public static ModGameTrigger.Instance create(ResourceLocation id) {
+			return new ModGameTrigger.Instance(EntityPredicate.Composite.ANY, id);
 		}
 
 		@Override
 		public JsonObject serializeToJson(SerializationContext pConditions) {
 			var json = super.serializeToJson(pConditions);
-			json.add("type", TYPE_CODEC.encodeStart(JsonOps.INSTANCE, type).getOrThrow(false, s -> {
+			json.add("id", ResourceLocation.CODEC.encodeStart(JsonOps.INSTANCE, id).getOrThrow(false, s -> {
 			}));
 			return json;
 		}

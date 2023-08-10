@@ -20,6 +20,7 @@ import mod.vemerion.minecard.network.UpdateDecksMessage;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.Level;
 
 public class GameState {
 
@@ -41,6 +42,7 @@ public class GameState {
 	private List<HistoryEntry> history;
 	private Random random;
 	private PlayerChoice choice = new PlayerChoice();
+	private Level level;
 
 	public GameState(List<PlayerState> playerStates, int turn, int tutorialStep, List<HistoryEntry> history) {
 		this.playerStates = new ArrayList<>(playerStates);
@@ -335,5 +337,13 @@ public class GameState {
 
 	public boolean isMulligan() {
 		return playerStates.stream().anyMatch(s -> s.isMulligan());
+	}
+
+	public void setLevel(Level level) {
+		this.level = level;
+	}
+
+	public Level getLevel() {
+		return level;
 	}
 }

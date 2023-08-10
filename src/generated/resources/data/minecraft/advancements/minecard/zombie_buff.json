@@ -2,30 +2,30 @@
   "parent": "minecraft:minecard/root",
   "display": {
     "icon": {
-      "item": "minecraft:book"
+      "item": "minecraft:zombie_head"
     },
     "title": {
-      "translate": "advancements.minecard.tutorial.title"
+      "translate": "advancements.minecard.zombie_buff.title"
     },
     "description": {
-      "translate": "advancements.minecard.tutorial.description"
+      "translate": "advancements.minecard.zombie_buff.description"
     },
-    "frame": "task",
+    "frame": "goal",
     "show_toast": true,
     "announce_to_chat": true,
     "hidden": false
   },
   "criteria": {
-    "tutorial": {
-      "trigger": "minecard:finish_game",
+    "zombie_buff": {
+      "trigger": "minecard:game",
       "conditions": {
-        "type": "complete_tutorial"
+        "id": "minecard:zombie_buff"
       }
     }
   },
   "requirements": [
     [
-      "tutorial"
+      "zombie_buff"
     ]
   ]
 }

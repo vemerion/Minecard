@@ -17,7 +17,7 @@
   },
   "criteria": {
     "won_agains_ai": {
-      "trigger": "minecard:game",
+      "trigger": "minecard:finish_game",
       "conditions": {
         "type": "win_ai"
       }

@@ -204,6 +204,12 @@ public class ModLanguageProvider extends LanguageProvider {
 		add(ModAdvancementProvider.descriptionKey("tutorial"), "Complete the tutorial");
 		add(ModAdvancementProvider.titleKey("win_ai"), "Man vs Machine");
 		add(ModAdvancementProvider.descriptionKey("win_ai"), "Win a game against the AI");
+		add(ModAdvancementProvider.titleKey("zombie_buff"), "Zombie horde");
+		add(ModAdvancementProvider.descriptionKey("zombie_buff"), "Buff 3 other undead cards with a Zombie Villager");
+		add(ModAdvancementProvider.titleKey("discount_wither"), "Full discount");
+		add(ModAdvancementProvider.descriptionKey("discount_wither"), "Play a Wither card costing 6 or less");
+		add(ModAdvancementProvider.titleKey("sweeping_edge"), "Sweeping edge");
+		add(ModAdvancementProvider.descriptionKey("sweeping_edge"), "Kill both adjacent cards in one Ravager attack");
 	}
 
 	private void tutorial() {

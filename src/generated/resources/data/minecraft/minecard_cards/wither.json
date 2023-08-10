@@ -78,6 +78,48 @@
             ],
             "animation": "minecard:wither"
           }
+        },
+        {
+          "type": "minecard:chain",
+          "value": {
+            "triggers": [
+              "summon"
+            ],
+            "text_key": "",
+            "abilities": [
+              {
+                "type": "minecard:trigger_advancement",
+                "value": {
+                  "id": "minecard:discount_wither",
+                  "condition": {
+                    "type": "minecard:not",
+                    "value": {
+                      "inner": {
+                        "type": "minecard:operator",
+                        "value": {
+                          "operator": {
+                            "type": "minecard:greater_than",
+                            "value": {
+                              "left": {
+                                "type": "minecard:variable",
+                                "value": {
+                                  "type": "minecard:cost"
+                                }
+                              },
+                              "right": {
+                                "type": "minecard:constant",
+                                "value": 6
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          }
         }
       ]
     }

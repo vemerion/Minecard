@@ -87,6 +87,71 @@
               "Count": 1
             }
           }
+        },
+        {
+          "type": "minecard:select_cards",
+          "value": {
+            "selection": {
+              "groups": [
+                "collected"
+              ],
+              "method": {
+                "type": "minecard:all"
+              },
+              "condition": {
+                "type": "minecard:not",
+                "value": {
+                  "inner": {
+                    "type": "minecard:operator",
+                    "value": {
+                      "operator": {
+                        "type": "minecard:greater_than",
+                        "value": {
+                          "left": {
+                            "type": "minecard:variable",
+                            "value": {
+                              "type": "minecard:health"
+                            }
+                          },
+                          "right": {
+                            "type": "minecard:constant",
+                            "value": 0
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "clear": true
+          }
+        },
+        {
+          "type": "minecard:trigger_advancement",
+          "value": {
+            "id": "minecard:sweeping_edge",
+            "condition": {
+              "type": "minecard:operator",
+              "value": {
+                "operator": {
+                  "type": "minecard:greater_than",
+                  "value": {
+                    "left": {
+                      "type": "minecard:collected_count",
+                      "value": {
+                        "index": 0
+                      }
+                    },
+                    "right": {
+                      "type": "minecard:constant",
+                      "value": 1
+                    }
+                  }
+                }
+              }
+            }
+          }
         }
       ]
     }

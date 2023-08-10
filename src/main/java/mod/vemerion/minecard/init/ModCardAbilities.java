@@ -22,6 +22,7 @@ import mod.vemerion.minecard.game.ability.PlaceCardsAbility;
 import mod.vemerion.minecard.game.ability.RemoveCardsAbility;
 import mod.vemerion.minecard.game.ability.ResourceAbility;
 import mod.vemerion.minecard.game.ability.SelectCardsAbility;
+import mod.vemerion.minecard.game.ability.TriggerAdvancementAbility;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.IForgeRegistry;
@@ -77,5 +78,8 @@ public class ModCardAbilities {
 			.register("card_abilities", () -> new CardAbilityType<AddAbilityAbility>(AddAbilityAbility.CODEC));
 	public static final RegistryObject<CardAbilityType<? extends CardAbility>> HISTORY = CARD_ABILITIES
 			.register("history", () -> new CardAbilityType<HistoryAbility>(HistoryAbility.CODEC));
+	public static final RegistryObject<CardAbilityType<? extends CardAbility>> TRIGGER_ADVANCEMENT = CARD_ABILITIES
+			.register("trigger_advancement",
+					() -> new CardAbilityType<TriggerAdvancementAbility>(TriggerAdvancementAbility.CODEC));
 
 }

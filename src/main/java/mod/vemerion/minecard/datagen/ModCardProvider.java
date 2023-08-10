@@ -50,6 +50,7 @@ import mod.vemerion.minecard.game.ability.PlaceCardsAbility;
 import mod.vemerion.minecard.game.ability.RemoveCardsAbility;
 import mod.vemerion.minecard.game.ability.ResourceAbility;
 import mod.vemerion.minecard.game.ability.SelectCardsAbility;
+import mod.vemerion.minecard.game.ability.TriggerAdvancementAbility;
 import mod.vemerion.minecard.helper.Helper;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
@@ -182,7 +183,14 @@ public class ModCardProvider implements DataProvider {
 														new ModifyAbility(
 																List.of(new ModificationBuilder().heal(-4).build())),
 														history())),
-										new AnimationAbility(Set.of(CardAbilityTrigger.SUMMON), mod("wither"))))));
+										new AnimationAbility(Set.of(CardAbilityTrigger.SUMMON), mod("wither")),
+										new ChainAbility(EnumSet.of(CardAbilityTrigger.SUMMON), "",
+												List.of(new TriggerAdvancementAbility(
+														new ResourceLocation(Main.MODID, "discount_wither"),
+														new CardCondition.Not(new CardCondition.OperatorCondition(
+																new CardOperator.GreaterThan(
+																		new CardOperator.Variable(CardVariable.COST),
+																		new CardOperator.Constant(6)))))))))));
 		add(new Builder(EntityType.SQUID, 1, 1, 1).setCardAbility(new ChainAbility(EnumSet.of(CardAbilityTrigger.HURT),
 				textKey("squid"), List.of(
 						new SelectCardsAbility(
@@ -404,7 +412,19 @@ public class ModCardProvider implements DataProvider {
 														new CardOperator.Negate(new CardOperator.CollectedAny(1,
 																new CardOperator.Variable(CardVariable.DAMAGE)))))
 												.build())),
-										history()))));
+										history(),
+										new SelectCardsAbility(new CardAbilitySelection(
+												new CardAbilityGroups(EnumSet.of(CardAbilityGroup.COLLECTED)),
+												CardSelectionMethod.All.ALL,
+												new CardCondition.Not(new CardCondition.OperatorCondition(
+														new CardOperator.GreaterThan(
+																new CardOperator.Variable(CardVariable.HEALTH),
+																new CardOperator.Constant(0))))),
+												true),
+										new TriggerAdvancementAbility(new ResourceLocation(Main.MODID, "sweeping_edge"),
+												new CardCondition.OperatorCondition(
+														new CardOperator.GreaterThan(new CardOperator.CollectedCount(0),
+																new CardOperator.Constant(1))))))));
 		add(new Builder(EntityType.SKELETON, 4, 4, 1).addProperty(CardProperty.UNDEAD, 1)
 				.setCardAbility(new ChainAbility(EnumSet.of(CardAbilityTrigger.TICK), textKey("skeleton"),
 						List.of(new SelectCardsAbility(new CardAbilitySelection(
@@ -596,6 +616,9 @@ public class ModCardProvider implements DataProvider {
 														new CardVariable.PropertyVariable(CardProperty.UNDEAD)),
 												new CardOperator.Constant(0))))),
 						new ModifyAbility(List.of(new ModificationBuilder().addMaxHealth(2).addDamage(2).build())),
+						new TriggerAdvancementAbility(new ResourceLocation(Main.MODID, "zombie_buff"),
+								new CardCondition.OperatorCondition(new CardOperator.GreaterThan(
+										new CardOperator.CollectedCount(0), new CardOperator.Constant(3)))),
 						history()))));
 		add(new Builder(EntityType.HOGLIN, 8, 5, 7).setCardAbility(new ChoiceCardAbility(textKey("hoglin"), List.of(
 				summon(EnumSet.of(CardAbilityTrigger.SUMMON), textKey("hoglin_baby"), CardPlacement.RIGHT,
