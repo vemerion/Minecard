@@ -48,7 +48,7 @@ public class PlaceCardsAbility extends CardAbility {
 			var id = placement == CardPlacement.ENEMY ? state.getGame().getEnemyPlayerState(state.getId()).getId()
 					: state.getId();
 			var leftId = -1;
-			for (var c : toAdd) {
+			for (var c : new ArrayList<>(toAdd)) {
 				if (placement != CardPlacement.ENEMY) {
 					var board = state.getBoard();
 					for (int i = 0; i < board.size(); i++) {
@@ -61,7 +61,9 @@ public class PlaceCardsAbility extends CardAbility {
 						}
 					}
 				}
-				state.getGame().summonCard(receivers, c, id, leftId);
+				if (!state.getGame().summonCard(receivers, c, id, leftId)) {
+					toAdd.remove(c);
+				}
 			}
 			break;
 		case ENEMY_DECK:

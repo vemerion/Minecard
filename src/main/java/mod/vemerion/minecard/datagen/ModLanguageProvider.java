@@ -210,6 +210,8 @@ public class ModLanguageProvider extends LanguageProvider {
 		add(ModAdvancementProvider.descriptionKey("discount_wither"), "Play a Wither card costing 6 or less");
 		add(ModAdvancementProvider.titleKey("sweeping_edge"), "Sweeping edge");
 		add(ModAdvancementProvider.descriptionKey("sweeping_edge"), "Kill both adjacent cards in one Ravager attack");
+		add(ModAdvancementProvider.titleKey("iron_golem_farm"), "Iron golem farm");
+		add(ModAdvancementProvider.descriptionKey("iron_golem_farm"), "Summon 3 Iron Golems from a single Villager");
 	}
 
 	private void tutorial() {

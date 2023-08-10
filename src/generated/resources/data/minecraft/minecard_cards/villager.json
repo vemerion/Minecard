@@ -30,6 +30,88 @@
               "Count": 1
             }
           }
+        },
+        {
+          "type": "minecard:move_collected",
+          "value": {
+            "source": 0,
+            "destination": 1,
+            "clear_source": true,
+            "clear_destination": false
+          }
+        },
+        {
+          "type": "minecard:select_cards",
+          "value": {
+            "selection": {
+              "groups": [
+                "self"
+              ],
+              "method": {
+                "type": "minecard:all"
+              }
+            }
+          }
+        },
+        {
+          "type": "minecard:modify",
+          "value": {
+            "modifications": [
+              [
+                {
+                  "output": {
+                    "type": "minecard:property",
+                    "value": "minecard:advancement_counter"
+                  },
+                  "operator": {
+                    "type": "minecard:add",
+                    "value": {
+                      "left": {
+                        "type": "minecard:variable",
+                        "value": {
+                          "type": "minecard:property",
+                          "value": "minecard:advancement_counter"
+                        }
+                      },
+                      "right": {
+                        "type": "minecard:collected_count",
+                        "value": {
+                          "index": 1
+                        }
+                      }
+                    }
+                  }
+                }
+              ]
+            ]
+          }
+        },
+        {
+          "type": "minecard:trigger_advancement",
+          "value": {
+            "id": "minecard:iron_golem_farm",
+            "condition": {
+              "type": "minecard:operator",
+              "value": {
+                "operator": {
+                  "type": "minecard:greater_than",
+                  "value": {
+                    "left": {
+                      "type": "minecard:variable",
+                      "value": {
+                        "type": "minecard:property",
+                        "value": "minecard:advancement_counter"
+                      }
+                    },
+                    "right": {
+                      "type": "minecard:constant",
+                      "value": 2
+                    }
+                  }
+                }
+              }
+            }
+          }
         }
       ]
     }

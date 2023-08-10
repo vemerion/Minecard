@@ -65,6 +65,12 @@ public class ModAdvancementProvider extends AdvancementProvider {
 				.addCriterion("sweeping_edge",
 						ModGameTrigger.Instance.create(new ResourceLocation(Main.MODID, "sweeping_edge")))
 				.save(consumer, path("sweeping_edge"));
+		Advancement.Builder.advancement().parent(root)
+				.display(Items.IRON_INGOT, title("iron_golem_farm"), description("iron_golem_farm"), null,
+						FrameType.GOAL, true, true, false)
+				.addCriterion("iron_golem_farm",
+						ModGameTrigger.Instance.create(new ResourceLocation(Main.MODID, "iron_golem_farm")))
+				.save(consumer, path("iron_golem_farm"));
 	}
 
 	private TranslatableComponent title(String s) {

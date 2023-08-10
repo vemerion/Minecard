@@ -215,9 +215,23 @@ public class ModCardProvider implements DataProvider {
 		add(new Builder(EntityType.SHEEP, 2, 3, 2).setCardAbility(summon(EnumSet.of(CardAbilityTrigger.DEATH),
 				textKey("sheep"), CardPlacement.ENEMY, new LazyCardType(new Builder(EntityType.ITEM, 0, 3, 0)
 						.setAdditionalData(new AdditionalCardData.ItemData(Items.WHITE_WOOL)).build()))));
-		add(new Builder(EntityType.VILLAGER, 6, 3, 3)
-				.setCardAbility(summon(EnumSet.of(CardAbilityTrigger.HURT), textKey("villager"), CardPlacement.RIGHT,
-						new LazyCardType(new Builder(EntityType.IRON_GOLEM, 0, 7, 7).build()))));
+		add(new Builder(EntityType.VILLAGER, 6, 3, 3).setCardAbility(new ChainAbility(
+				EnumSet.of(CardAbilityTrigger.HURT), textKey("villager"),
+				List.of(new ConstantCardsAbility(
+						List.of(new LazyCardType(new Builder(EntityType.IRON_GOLEM, 0, 7, 7).build()))),
+						new PlaceCardsAbility(CardPlacement.RIGHT), history(),
+						new MoveCollectedAbility(0, 1, true, false),
+						new SelectCardsAbility(
+								new CardAbilitySelection(new CardAbilityGroups(EnumSet.of(CardAbilityGroup.SELF)),
+										CardSelectionMethod.All.ALL, CardCondition.NoCondition.NO_CONDITION)),
+						new ModifyAbility(List.of(new ModificationBuilder()
+								.addProperty(CardProperty.ADVANCEMENT_COUNTER, new CardOperator.CollectedCount(1))
+								.build())),
+						new TriggerAdvancementAbility(new ResourceLocation(Main.MODID, "iron_golem_farm"),
+								new CardCondition.OperatorCondition(new CardOperator.GreaterThan(
+										new CardOperator.Variable(
+												new CardVariable.PropertyVariable(CardProperty.ADVANCEMENT_COUNTER)),
+										new CardOperator.Constant(2))))))));
 		add(new Builder(EntityType.ENDER_DRAGON, 10, 13, 5)
 				.setDeckCount(1).setDropChance(
 						1)
@@ -1153,9 +1167,13 @@ public class ModCardProvider implements DataProvider {
 		}
 
 		private ModificationBuilder addProperty(ResourceLocation property, int value) {
-			modifications.add(new CardModification(new CardVariable.PropertyVariable(property),
-					new CardOperator.Add(new CardOperator.Variable(new CardVariable.PropertyVariable(property)),
-							new CardOperator.Constant(value))));
+			addProperty(property, new CardOperator.Constant(value));
+			return this;
+		}
+
+		private ModificationBuilder addProperty(ResourceLocation property, CardOperator operator) {
+			modifications.add(new CardModification(new CardVariable.PropertyVariable(property), new CardOperator.Add(
+					new CardOperator.Variable(new CardVariable.PropertyVariable(property)), operator)));
 			return this;
 		}
 

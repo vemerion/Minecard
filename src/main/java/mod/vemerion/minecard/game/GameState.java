@@ -254,12 +254,12 @@ public class GameState {
 		}
 	}
 
-	public void summonCard(List<Receiver> receivers, Card card, UUID id, int leftId) {
+	public boolean summonCard(List<Receiver> receivers, Card card, UUID id, int leftId) {
 		var playerState = getYourPlayerState(id);
 		var board = playerState.getBoard();
 
 		if (board.size() >= MAX_BOARD_SIZE)
-			return;
+			return false;
 
 		if (leftId == -1) {
 			board.add(0, card);
@@ -277,6 +277,7 @@ public class GameState {
 		}
 
 		card.ability(a -> a.trigger(CardAbilityTrigger.SUMMON, receivers, playerState, card, null));
+		return true;
 	}
 
 	public void endTurn(List<Receiver> receivers) {

@@ -1,6 +1,8 @@
 {
   "advancements.minecard.discount_wither.description": "Play a Wither card costing 6 or less",
   "advancements.minecard.discount_wither.title": "Full discount",
+  "advancements.minecard.iron_golem_farm.description": "Summon 3 Iron Golems from a single Villager",
+  "advancements.minecard.iron_golem_farm.title": "Iron golem farm",
   "advancements.minecard.root.description": "Collect a card",
   "advancements.minecard.root.title": "Minecard",
   "advancements.minecard.sweeping_edge.description": "Kill both adjacent cards in one Ravager attack",

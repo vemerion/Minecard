@@ -142,6 +142,8 @@ public class ModCardPropertyProvider implements DataProvider {
 														new ModifyAbility(List.of(List.of(new CardModification(
 																new CardVariable.PropertyVariable(CardProperty.READY),
 																new CardOperator.Constant(0)))))))))));
+		properties.put(CardProperty.ADVANCEMENT_COUNTER,
+				new CardProperty(ItemStack.EMPTY, NoCardAbility.NO_CARD_ABILITY));
 
 	}
 
