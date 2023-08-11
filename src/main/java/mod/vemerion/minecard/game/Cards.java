@@ -40,6 +40,13 @@ public class Cards extends SimpleJsonResourceReloadListener {
 					"card_ability." + Main.MODID + ".tutorial_creeper", 2),
 			AdditionalCardData.EMPTY, 0, 0);
 
+	public static final Set<ResourceLocation> SPELLS = Set.of(new ResourceLocation(Main.MODID, "fishing_rod"),
+			new ResourceLocation(Main.MODID, "book"), new ResourceLocation(Main.MODID, "splash_potion_of_harming"),
+			new ResourceLocation(Main.MODID, "enchanted_golden_apple"), new ResourceLocation(Main.MODID, "chest"),
+			new ResourceLocation(Main.MODID, "enchanted_book"), new ResourceLocation(Main.MODID, "spyglass"),
+			new ResourceLocation(Main.MODID, "lodestone"), new ResourceLocation(Main.MODID, "soul_sand"),
+			new ResourceLocation(Main.MODID, "amethyst_shard"), new ResourceLocation(Main.MODID, "wooden_sword"));
+
 	private static Cards clientInstance;
 	private static Cards serverInstance;
 

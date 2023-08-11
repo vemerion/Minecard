@@ -1,4 +1,10 @@
 {
+  "advancements.minecard.collect_boss.description": "Collect a card from one of the vanilla bosses",
+  "advancements.minecard.collect_boss.title": "Rare collector",
+  "advancements.minecard.collect_mobs.description": "Collect all vanilla non-boss mob cards",
+  "advancements.minecard.collect_mobs.title": "Collect 'em all",
+  "advancements.minecard.collect_spells.description": "Collect all spell cards from treasure chests",
+  "advancements.minecard.collect_spells.title": "Explorer",
   "advancements.minecard.discount_wither.description": "Play a Wither card costing 6 or less",
   "advancements.minecard.discount_wither.title": "Full discount",
   "advancements.minecard.iron_golem_farm.description": "Summon 3 Iron Golems from a single Villager",

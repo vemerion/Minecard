@@ -1,0 +1,121 @@
+{
+  "parent": "minecraft:minecard/root",
+  "display": {
+    "icon": {
+      "item": "minecraft:chest"
+    },
+    "title": {
+      "translate": "advancements.minecard.collect_spells.title"
+    },
+    "description": {
+      "translate": "advancements.minecard.collect_spells.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "has_minecard:enchanted_golden_apple": {
+      "trigger": "minecard:collect_card",
+      "conditions": {
+        "card": "minecard:enchanted_golden_apple"
+      }
+    },
+    "has_minecard:book": {
+      "trigger": "minecard:collect_card",
+      "conditions": {
+        "card": "minecard:book"
+      }
+    },
+    "has_minecard:lodestone": {
+      "trigger": "minecard:collect_card",
+      "conditions": {
+        "card": "minecard:lodestone"
+      }
+    },
+    "has_minecard:amethyst_shard": {
+      "trigger": "minecard:collect_card",
+      "conditions": {
+        "card": "minecard:amethyst_shard"
+      }
+    },
+    "has_minecard:splash_potion_of_harming": {
+      "trigger": "minecard:collect_card",
+      "conditions": {
+        "card": "minecard:splash_potion_of_harming"
+      }
+    },
+    "has_minecard:chest": {
+      "trigger": "minecard:collect_card",
+      "conditions": {
+        "card": "minecard:chest"
+      }
+    },
+    "has_minecard:fishing_rod": {
+      "trigger": "minecard:collect_card",
+      "conditions": {
+        "card": "minecard:fishing_rod"
+      }
+    },
+    "has_minecard:enchanted_book": {
+      "trigger": "minecard:collect_card",
+      "conditions": {
+        "card": "minecard:enchanted_book"
+      }
+    },
+    "has_minecard:spyglass": {
+      "trigger": "minecard:collect_card",
+      "conditions": {
+        "card": "minecard:spyglass"
+      }
+    },
+    "has_minecard:wooden_sword": {
+      "trigger": "minecard:collect_card",
+      "conditions": {
+        "card": "minecard:wooden_sword"
+      }
+    },
+    "has_minecard:soul_sand": {
+      "trigger": "minecard:collect_card",
+      "conditions": {
+        "card": "minecard:soul_sand"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_minecard:enchanted_golden_apple"
+    ],
+    [
+      "has_minecard:book"
+    ],
+    [
+      "has_minecard:lodestone"
+    ],
+    [
+      "has_minecard:amethyst_shard"
+    ],
+    [
+      "has_minecard:splash_potion_of_harming"
+    ],
+    [
+      "has_minecard:chest"
+    ],
+    [
+      "has_minecard:fishing_rod"
+    ],
+    [
+      "has_minecard:enchanted_book"
+    ],
+    [
+      "has_minecard:spyglass"
+    ],
+    [
+      "has_minecard:wooden_sword"
+    ],
+    [
+      "has_minecard:soul_sand"
+    ]
+  ]
+}

@@ -2,7 +2,6 @@ package mod.vemerion.minecard.item;
 
 import java.util.function.Consumer;
 
-import mod.vemerion.minecard.Main;
 import mod.vemerion.minecard.capability.CardData;
 import mod.vemerion.minecard.game.Cards;
 import mod.vemerion.minecard.init.ModItems;
@@ -14,7 +13,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.LivingEntity;
@@ -61,20 +59,15 @@ public class CardItem extends Item {
 					pItems.add(stack);
 				});
 			}
-			addSpells(pItems, "fishing_rod", "book", "splash_potion_of_harming", "enchanted_golden_apple", "chest",
-					"enchanted_book", "spyglass", "lodestone", "soul_sand", "amethyst_shard", "wooden_sword");
+			for (var spell : Cards.SPELLS) {
+				var stack = new ItemStack(this);
+				CardData.get(stack).ifPresent(data -> {
+					data.setType(spell);
+					pItems.add(stack);
+				});
+			}
 		}
 
-	}
-
-	void addSpells(NonNullList<ItemStack> items, String... spells) {
-		for (var spell : spells) {
-			var stack = new ItemStack(this);
-			CardData.get(stack).ifPresent(data -> {
-				data.setType(new ResourceLocation(Main.MODID, spell));
-				items.add(stack);
-			});
-		}
 	}
 
 	@Override

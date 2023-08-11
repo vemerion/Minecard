@@ -212,6 +212,13 @@ public class ModLanguageProvider extends LanguageProvider {
 		add(ModAdvancementProvider.descriptionKey("sweeping_edge"), "Kill both adjacent cards in one Ravager attack");
 		add(ModAdvancementProvider.titleKey("iron_golem_farm"), "Iron golem farm");
 		add(ModAdvancementProvider.descriptionKey("iron_golem_farm"), "Summon 3 Iron Golems from a single Villager");
+		add(ModAdvancementProvider.titleKey("collect_boss"), "Rare collector");
+		add(ModAdvancementProvider.descriptionKey("collect_boss"), "Collect a card from one of the vanilla bosses");
+		add(ModAdvancementProvider.titleKey("collect_spells"), "Explorer");
+		add(ModAdvancementProvider.descriptionKey("collect_spells"), "Collect all spell cards from treasure chests");
+		add(ModAdvancementProvider.titleKey("collect_mobs"), "Collect 'em all");
+		add(ModAdvancementProvider.descriptionKey("collect_mobs"), "Collect all vanilla non-boss mob cards");
+
 	}
 
 	private void tutorial() {

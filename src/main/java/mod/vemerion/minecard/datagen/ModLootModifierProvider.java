@@ -1,6 +1,7 @@
 package mod.vemerion.minecard.datagen;
 
 import mod.vemerion.minecard.Main;
+import mod.vemerion.minecard.game.Cards;
 import mod.vemerion.minecard.init.ModLootModifiers;
 import mod.vemerion.minecard.lootmodifier.CardLootModifier;
 import mod.vemerion.minecard.lootmodifier.CardTreasureLootModifier;
@@ -25,6 +26,11 @@ public class ModLootModifierProvider extends GlobalLootModifierProvider {
 	protected void start() {
 		add(ModLootModifiers.CARD.get().getRegistryName().getPath(), ModLootModifiers.CARD.get(), new CardLootModifier(
 				new LootItemCondition[] { LootItemKilledByPlayerCondition.killedByPlayer().build() }));
+
+		var builder = SimpleWeightedRandomList.<ResourceLocation>builder();
+		for (var spell : Cards.SPELLS) {
+			builder.add(spell, 1);
+		}
 		add(ModLootModifiers.CARD_TREASURE.get().getRegistryName().getPath(), ModLootModifiers.CARD_TREASURE.get(),
 				new CardTreasureLootModifier(
 						new LootItemCondition[] { LootItemRandomChanceCondition.randomChance(0.2f).build(),
@@ -33,16 +39,8 @@ public class ModLootModifierProvider extends GlobalLootModifierProvider {
 										BuiltInLootTables.END_CITY_TREASURE, BuiltInLootTables.JUNGLE_TEMPLE,
 										BuiltInLootTables.NETHER_BRIDGE, BuiltInLootTables.SIMPLE_DUNGEON,
 										BuiltInLootTables.STRONGHOLD_CORRIDOR, BuiltInLootTables.WOODLAND_MANSION) },
-						SimpleWeightedRandomList.<ResourceLocation>builder().add(rl("fishing_rod"), 1)
-								.add(rl("book"), 1).add(rl("splash_potion_of_harming"), 1)
-								.add(rl("enchanted_golden_apple"), 1).add(rl("chest"), 1).add(rl("enchanted_book"), 1)
-								.add(rl("spyglass"), 1).add(rl("lodestone"), 1).add(rl("soul_sand"), 1)
-								.add(rl("amethyst_shard"), 1).add(rl("wooden_sword"), 1).build()));
+						builder.build()));
 
-	}
-
-	private ResourceLocation rl(String s) {
-		return new ResourceLocation(Main.MODID, s);
 	}
 
 	private LootItemCondition tables(ResourceLocation... tables) {

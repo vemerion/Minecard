@@ -1,23 +1,45 @@
 package mod.vemerion.minecard.datagen;
 
+import java.util.Set;
 import java.util.function.Consumer;
 
 import mod.vemerion.minecard.Main;
+import mod.vemerion.minecard.advancement.ModCollectCardTrigger;
 import mod.vemerion.minecard.advancement.ModFinishGameTrigger;
 import mod.vemerion.minecard.advancement.ModGameTrigger;
+import mod.vemerion.minecard.game.Cards;
 import mod.vemerion.minecard.init.ModItems;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.FrameType;
+import net.minecraft.advancements.RequirementsStrategy;
 import net.minecraft.advancements.critereon.InventoryChangeTrigger;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.advancements.AdvancementProvider;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.raid.Raid;
 import net.minecraft.world.item.Items;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
 public class ModAdvancementProvider extends AdvancementProvider {
+
+	private static final Set<EntityType<?>> BOSSES = Set.of(EntityType.ENDER_DRAGON, EntityType.WITHER);
+	private static final Set<EntityType<?>> MOBS = Set.of(EntityType.SNOW_GOLEM, EntityType.WITHER_SKELETON,
+			EntityType.VILLAGER, EntityType.PHANTOM, EntityType.ELDER_GUARDIAN, EntityType.SHULKER,
+			EntityType.ENDERMITE, EntityType.DONKEY, EntityType.WOLF, EntityType.STRAY, EntityType.LLAMA,
+			EntityType.STRIDER, EntityType.CAVE_SPIDER, EntityType.WITCH, EntityType.PILLAGER, EntityType.PIGLIN_BRUTE,
+			EntityType.ZOMBIE, EntityType.CAT, EntityType.VINDICATOR, EntityType.MULE, EntityType.SHEEP,
+			EntityType.CREEPER, EntityType.SPIDER, EntityType.SKELETON_HORSE, EntityType.PIG, EntityType.TRADER_LLAMA,
+			EntityType.GOAT, EntityType.FOX, EntityType.HORSE, EntityType.ENDERMAN, EntityType.BLAZE, EntityType.SALMON,
+			EntityType.MAGMA_CUBE, EntityType.GLOW_SQUID, EntityType.ZOGLIN, EntityType.BEE, EntityType.CHICKEN,
+			EntityType.AXOLOTL, EntityType.MOOSHROOM, EntityType.DROWNED, EntityType.IRON_GOLEM, EntityType.SQUID,
+			EntityType.COW, EntityType.DOLPHIN, EntityType.ZOMBIE_VILLAGER, EntityType.PIGLIN, EntityType.VEX,
+			EntityType.HOGLIN, EntityType.SLIME, EntityType.RABBIT, EntityType.PUFFERFISH, EntityType.OCELOT,
+			EntityType.GHAST, EntityType.TURTLE, EntityType.WANDERING_TRADER, EntityType.POLAR_BEAR, EntityType.RAVAGER,
+			EntityType.HUSK, EntityType.GUARDIAN, EntityType.SKELETON, EntityType.SILVERFISH, EntityType.EVOKER,
+			EntityType.TROPICAL_FISH, EntityType.PARROT, EntityType.COD, EntityType.BAT, EntityType.PANDA,
+			EntityType.ZOMBIFIED_PIGLIN);
 
 	public ModAdvancementProvider(DataGenerator generatorIn, ExistingFileHelper fileHelperIn) {
 		super(generatorIn, fileHelperIn);
@@ -71,6 +93,25 @@ public class ModAdvancementProvider extends AdvancementProvider {
 				.addCriterion("iron_golem_farm",
 						ModGameTrigger.Instance.create(new ResourceLocation(Main.MODID, "iron_golem_farm")))
 				.save(consumer, path("iron_golem_farm"));
+
+		collect(Advancement.Builder.advancement(), BOSSES.stream().map(e -> e.getRegistryName()).toList())
+				.parent(root).display(Items.DRAGON_HEAD, title("collect_boss"), description("collect_boss"), null,
+						FrameType.GOAL, true, true, false)
+				.requirements(RequirementsStrategy.OR).save(consumer, path("collect_boss"));
+		collect(Advancement.Builder.advancement(), Cards.SPELLS).parent(root).display(Items.CHEST,
+				title("collect_spells"), description("collect_spells"), null, FrameType.CHALLENGE, true, true, false)
+				.save(consumer, path("collect_spells"));
+		collect(Advancement.Builder.advancement(), MOBS.stream().map(e -> e.getRegistryName()).toList()).parent(root)
+				.display(Items.EGG, title("collect_mobs"), description("collect_mobs"), null, FrameType.CHALLENGE, true,
+						true, false)
+				.save(consumer, path("collect_mobs"));
+	}
+
+	private Advancement.Builder collect(Advancement.Builder builder, Iterable<ResourceLocation> cards) {
+		for (var c : cards) {
+			builder.addCriterion("has_" + c.toString(), ModCollectCardTrigger.Instance.create(c));
+		}
+		return builder;
 	}
 
 	private TranslatableComponent title(String s) {

@@ -1,0 +1,38 @@
+{
+  "parent": "minecraft:minecard/root",
+  "display": {
+    "icon": {
+      "item": "minecraft:dragon_head"
+    },
+    "title": {
+      "translate": "advancements.minecard.collect_boss.title"
+    },
+    "description": {
+      "translate": "advancements.minecard.collect_boss.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "has_minecraft:wither": {
+      "trigger": "minecard:collect_card",
+      "conditions": {
+        "card": "minecraft:wither"
+      }
+    },
+    "has_minecraft:ender_dragon": {
+      "trigger": "minecard:collect_card",
+      "conditions": {
+        "card": "minecraft:ender_dragon"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_minecraft:wither",
+      "has_minecraft:ender_dragon"
+    ]
+  ]
+}
