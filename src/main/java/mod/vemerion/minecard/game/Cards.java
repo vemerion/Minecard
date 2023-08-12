@@ -1,6 +1,7 @@
 package mod.vemerion.minecard.game;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
@@ -40,7 +41,7 @@ public class Cards extends SimpleJsonResourceReloadListener {
 					"card_ability." + Main.MODID + ".tutorial_creeper", 2),
 			AdditionalCardData.EMPTY, 0, 0);
 
-	public static final Set<ResourceLocation> SPELLS = Set.of(new ResourceLocation(Main.MODID, "fishing_rod"),
+	public static final List<ResourceLocation> SPELLS = List.of(new ResourceLocation(Main.MODID, "fishing_rod"),
 			new ResourceLocation(Main.MODID, "book"), new ResourceLocation(Main.MODID, "splash_potion_of_harming"),
 			new ResourceLocation(Main.MODID, "enchanted_golden_apple"), new ResourceLocation(Main.MODID, "chest"),
 			new ResourceLocation(Main.MODID, "enchanted_book"), new ResourceLocation(Main.MODID, "spyglass"),

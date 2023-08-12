@@ -3,6 +3,7 @@ package mod.vemerion.minecard.eventsubscriber;
 import mod.vemerion.minecard.Main;
 import mod.vemerion.minecard.capability.CardData;
 import mod.vemerion.minecard.capability.DeckData;
+import mod.vemerion.minecard.capability.StatsData;
 import mod.vemerion.minecard.network.AnimationMessage;
 import mod.vemerion.minecard.network.AttackMessage;
 import mod.vemerion.minecard.network.CloseGameMessage;
@@ -40,6 +41,7 @@ public class ModEventSubscriber {
 	public static void registerCapabilities(RegisterCapabilitiesEvent event) {
 		event.register(CardData.class);
 		event.register(DeckData.class);
+		event.register(StatsData.class);
 	}
 
 	@SubscribeEvent

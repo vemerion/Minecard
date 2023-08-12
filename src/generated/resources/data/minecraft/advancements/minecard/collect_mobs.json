@@ -16,118 +16,58 @@
     "hidden": false
   },
   "criteria": {
-    "has_minecraft:blaze": {
+    "has_minecraft:wandering_trader": {
       "trigger": "minecard:collect_card",
       "conditions": {
-        "card": "minecraft:blaze"
+        "card": "minecraft:wandering_trader"
       }
     },
-    "has_minecraft:snow_golem": {
+    "has_minecraft:husk": {
       "trigger": "minecard:collect_card",
       "conditions": {
-        "card": "minecraft:snow_golem"
+        "card": "minecraft:husk"
       }
     },
-    "has_minecraft:pufferfish": {
+    "has_minecraft:guardian": {
       "trigger": "minecard:collect_card",
       "conditions": {
-        "card": "minecraft:pufferfish"
+        "card": "minecraft:guardian"
       }
     },
-    "has_minecraft:shulker": {
+    "has_minecraft:cat": {
       "trigger": "minecard:collect_card",
       "conditions": {
-        "card": "minecraft:shulker"
+        "card": "minecraft:cat"
       }
     },
-    "has_minecraft:tropical_fish": {
+    "has_minecraft:slime": {
       "trigger": "minecard:collect_card",
       "conditions": {
-        "card": "minecraft:tropical_fish"
+        "card": "minecraft:slime"
       }
     },
-    "has_minecraft:glow_squid": {
+    "has_minecraft:fox": {
       "trigger": "minecard:collect_card",
       "conditions": {
-        "card": "minecraft:glow_squid"
+        "card": "minecraft:fox"
       }
     },
-    "has_minecraft:stray": {
+    "has_minecraft:panda": {
       "trigger": "minecard:collect_card",
       "conditions": {
-        "card": "minecraft:stray"
+        "card": "minecraft:panda"
       }
     },
-    "has_minecraft:rabbit": {
+    "has_minecraft:chicken": {
       "trigger": "minecard:collect_card",
       "conditions": {
-        "card": "minecraft:rabbit"
+        "card": "minecraft:chicken"
       }
     },
-    "has_minecraft:creeper": {
+    "has_minecraft:hoglin": {
       "trigger": "minecard:collect_card",
       "conditions": {
-        "card": "minecraft:creeper"
-      }
-    },
-    "has_minecraft:bat": {
-      "trigger": "minecard:collect_card",
-      "conditions": {
-        "card": "minecraft:bat"
-      }
-    },
-    "has_minecraft:bee": {
-      "trigger": "minecard:collect_card",
-      "conditions": {
-        "card": "minecraft:bee"
-      }
-    },
-    "has_minecraft:pillager": {
-      "trigger": "minecard:collect_card",
-      "conditions": {
-        "card": "minecraft:pillager"
-      }
-    },
-    "has_minecraft:piglin": {
-      "trigger": "minecard:collect_card",
-      "conditions": {
-        "card": "minecraft:piglin"
-      }
-    },
-    "has_minecraft:cave_spider": {
-      "trigger": "minecard:collect_card",
-      "conditions": {
-        "card": "minecraft:cave_spider"
-      }
-    },
-    "has_minecraft:llama": {
-      "trigger": "minecard:collect_card",
-      "conditions": {
-        "card": "minecraft:llama"
-      }
-    },
-    "has_minecraft:strider": {
-      "trigger": "minecard:collect_card",
-      "conditions": {
-        "card": "minecraft:strider"
-      }
-    },
-    "has_minecraft:dolphin": {
-      "trigger": "minecard:collect_card",
-      "conditions": {
-        "card": "minecraft:dolphin"
-      }
-    },
-    "has_minecraft:vindicator": {
-      "trigger": "minecard:collect_card",
-      "conditions": {
-        "card": "minecraft:vindicator"
-      }
-    },
-    "has_minecraft:zombie_villager": {
-      "trigger": "minecard:collect_card",
-      "conditions": {
-        "card": "minecraft:zombie_villager"
+        "card": "minecraft:hoglin"
       }
     },
     "has_minecraft:mule": {
@@ -136,16 +76,58 @@
         "card": "minecraft:mule"
       }
     },
-    "has_minecraft:mooshroom": {
+    "has_minecraft:donkey": {
       "trigger": "minecard:collect_card",
       "conditions": {
-        "card": "minecraft:mooshroom"
+        "card": "minecraft:donkey"
       }
     },
-    "has_minecraft:wither_skeleton": {
+    "has_minecraft:squid": {
       "trigger": "minecard:collect_card",
       "conditions": {
-        "card": "minecraft:wither_skeleton"
+        "card": "minecraft:squid"
+      }
+    },
+    "has_minecraft:vindicator": {
+      "trigger": "minecard:collect_card",
+      "conditions": {
+        "card": "minecraft:vindicator"
+      }
+    },
+    "has_minecraft:goat": {
+      "trigger": "minecard:collect_card",
+      "conditions": {
+        "card": "minecraft:goat"
+      }
+    },
+    "has_minecraft:tropical_fish": {
+      "trigger": "minecard:collect_card",
+      "conditions": {
+        "card": "minecraft:tropical_fish"
+      }
+    },
+    "has_minecraft:rabbit": {
+      "trigger": "minecard:collect_card",
+      "conditions": {
+        "card": "minecraft:rabbit"
+      }
+    },
+    "has_minecraft:horse": {
+      "trigger": "minecard:collect_card",
+      "conditions": {
+        "card": "minecraft:horse"
+      }
+    },
+    "has_minecraft:zombie": {
+      "trigger": "minecard:collect_card",
+      "conditions": {
+        "card": "minecraft:zombie"
+      }
+    },
+    "has_minecraft:vex": {
+      "trigger": "minecard:collect_card",
+      "conditions": {
+        "card": "minecraft:vex"
       }
     },
     "has_minecraft:drowned": {
@@ -160,196 +142,10 @@
         "card": "minecraft:zombified_piglin"
       }
     },
-    "has_minecraft:squid": {
+    "has_minecraft:mooshroom": {
       "trigger": "minecard:collect_card",
       "conditions": {
-        "card": "minecraft:squid"
-      }
-    },
-    "has_minecraft:hoglin": {
-      "trigger": "minecard:collect_card",
-      "conditions": {
-        "card": "minecraft:hoglin"
-      }
-    },
-    "has_minecraft:goat": {
-      "trigger": "minecard:collect_card",
-      "conditions": {
-        "card": "minecraft:goat"
-      }
-    },
-    "has_minecraft:wandering_trader": {
-      "trigger": "minecard:collect_card",
-      "conditions": {
-        "card": "minecraft:wandering_trader"
-      }
-    },
-    "has_minecraft:skeleton": {
-      "trigger": "minecard:collect_card",
-      "conditions": {
-        "card": "minecraft:skeleton"
-      }
-    },
-    "has_minecraft:witch": {
-      "trigger": "minecard:collect_card",
-      "conditions": {
-        "card": "minecraft:witch"
-      }
-    },
-    "has_minecraft:sheep": {
-      "trigger": "minecard:collect_card",
-      "conditions": {
-        "card": "minecraft:sheep"
-      }
-    },
-    "has_minecraft:magma_cube": {
-      "trigger": "minecard:collect_card",
-      "conditions": {
-        "card": "minecraft:magma_cube"
-      }
-    },
-    "has_minecraft:evoker": {
-      "trigger": "minecard:collect_card",
-      "conditions": {
-        "card": "minecraft:evoker"
-      }
-    },
-    "has_minecraft:spider": {
-      "trigger": "minecard:collect_card",
-      "conditions": {
-        "card": "minecraft:spider"
-      }
-    },
-    "has_minecraft:cow": {
-      "trigger": "minecard:collect_card",
-      "conditions": {
-        "card": "minecraft:cow"
-      }
-    },
-    "has_minecraft:guardian": {
-      "trigger": "minecard:collect_card",
-      "conditions": {
-        "card": "minecraft:guardian"
-      }
-    },
-    "has_minecraft:elder_guardian": {
-      "trigger": "minecard:collect_card",
-      "conditions": {
-        "card": "minecraft:elder_guardian"
-      }
-    },
-    "has_minecraft:chicken": {
-      "trigger": "minecard:collect_card",
-      "conditions": {
-        "card": "minecraft:chicken"
-      }
-    },
-    "has_minecraft:axolotl": {
-      "trigger": "minecard:collect_card",
-      "conditions": {
-        "card": "minecraft:axolotl"
-      }
-    },
-    "has_minecraft:ocelot": {
-      "trigger": "minecard:collect_card",
-      "conditions": {
-        "card": "minecraft:ocelot"
-      }
-    },
-    "has_minecraft:zombie": {
-      "trigger": "minecard:collect_card",
-      "conditions": {
-        "card": "minecraft:zombie"
-      }
-    },
-    "has_minecraft:turtle": {
-      "trigger": "minecard:collect_card",
-      "conditions": {
-        "card": "minecraft:turtle"
-      }
-    },
-    "has_minecraft:phantom": {
-      "trigger": "minecard:collect_card",
-      "conditions": {
-        "card": "minecraft:phantom"
-      }
-    },
-    "has_minecraft:trader_llama": {
-      "trigger": "minecard:collect_card",
-      "conditions": {
-        "card": "minecraft:trader_llama"
-      }
-    },
-    "has_minecraft:fox": {
-      "trigger": "minecard:collect_card",
-      "conditions": {
-        "card": "minecraft:fox"
-      }
-    },
-    "has_minecraft:salmon": {
-      "trigger": "minecard:collect_card",
-      "conditions": {
-        "card": "minecraft:salmon"
-      }
-    },
-    "has_minecraft:husk": {
-      "trigger": "minecard:collect_card",
-      "conditions": {
-        "card": "minecraft:husk"
-      }
-    },
-    "has_minecraft:donkey": {
-      "trigger": "minecard:collect_card",
-      "conditions": {
-        "card": "minecraft:donkey"
-      }
-    },
-    "has_minecraft:skeleton_horse": {
-      "trigger": "minecard:collect_card",
-      "conditions": {
-        "card": "minecraft:skeleton_horse"
-      }
-    },
-    "has_minecraft:pig": {
-      "trigger": "minecard:collect_card",
-      "conditions": {
-        "card": "minecraft:pig"
-      }
-    },
-    "has_minecraft:enderman": {
-      "trigger": "minecard:collect_card",
-      "conditions": {
-        "card": "minecraft:enderman"
-      }
-    },
-    "has_minecraft:cat": {
-      "trigger": "minecard:collect_card",
-      "conditions": {
-        "card": "minecraft:cat"
-      }
-    },
-    "has_minecraft:cod": {
-      "trigger": "minecard:collect_card",
-      "conditions": {
-        "card": "minecraft:cod"
-      }
-    },
-    "has_minecraft:ravager": {
-      "trigger": "minecard:collect_card",
-      "conditions": {
-        "card": "minecraft:ravager"
-      }
-    },
-    "has_minecraft:wolf": {
-      "trigger": "minecard:collect_card",
-      "conditions": {
-        "card": "minecraft:wolf"
-      }
-    },
-    "has_minecraft:endermite": {
-      "trigger": "minecard:collect_card",
-      "conditions": {
-        "card": "minecraft:endermite"
+        "card": "minecraft:mooshroom"
       }
     },
     "has_minecraft:zoglin": {
@@ -358,10 +154,22 @@
         "card": "minecraft:zoglin"
       }
     },
-    "has_minecraft:slime": {
+    "has_minecraft:strider": {
       "trigger": "minecard:collect_card",
       "conditions": {
-        "card": "minecraft:slime"
+        "card": "minecraft:strider"
+      }
+    },
+    "has_minecraft:wolf": {
+      "trigger": "minecard:collect_card",
+      "conditions": {
+        "card": "minecraft:wolf"
+      }
+    },
+    "has_minecraft:bat": {
+      "trigger": "minecard:collect_card",
+      "conditions": {
+        "card": "minecraft:bat"
       }
     },
     "has_minecraft:silverfish": {
@@ -370,16 +178,94 @@
         "card": "minecraft:silverfish"
       }
     },
+    "has_minecraft:skeleton": {
+      "trigger": "minecard:collect_card",
+      "conditions": {
+        "card": "minecraft:skeleton"
+      }
+    },
+    "has_minecraft:ocelot": {
+      "trigger": "minecard:collect_card",
+      "conditions": {
+        "card": "minecraft:ocelot"
+      }
+    },
+    "has_minecraft:blaze": {
+      "trigger": "minecard:collect_card",
+      "conditions": {
+        "card": "minecraft:blaze"
+      }
+    },
+    "has_minecraft:glow_squid": {
+      "trigger": "minecard:collect_card",
+      "conditions": {
+        "card": "minecraft:glow_squid"
+      }
+    },
+    "has_minecraft:skeleton_horse": {
+      "trigger": "minecard:collect_card",
+      "conditions": {
+        "card": "minecraft:skeleton_horse"
+      }
+    },
+    "has_minecraft:elder_guardian": {
+      "trigger": "minecard:collect_card",
+      "conditions": {
+        "card": "minecraft:elder_guardian"
+      }
+    },
+    "has_minecraft:cow": {
+      "trigger": "minecard:collect_card",
+      "conditions": {
+        "card": "minecraft:cow"
+      }
+    },
+    "has_minecraft:spider": {
+      "trigger": "minecard:collect_card",
+      "conditions": {
+        "card": "minecraft:spider"
+      }
+    },
+    "has_minecraft:creeper": {
+      "trigger": "minecard:collect_card",
+      "conditions": {
+        "card": "minecraft:creeper"
+      }
+    },
+    "has_minecraft:endermite": {
+      "trigger": "minecard:collect_card",
+      "conditions": {
+        "card": "minecraft:endermite"
+      }
+    },
+    "has_minecraft:dolphin": {
+      "trigger": "minecard:collect_card",
+      "conditions": {
+        "card": "minecraft:dolphin"
+      }
+    },
+    "has_minecraft:enderman": {
+      "trigger": "minecard:collect_card",
+      "conditions": {
+        "card": "minecraft:enderman"
+      }
+    },
     "has_minecraft:villager": {
       "trigger": "minecard:collect_card",
       "conditions": {
         "card": "minecraft:villager"
       }
     },
-    "has_minecraft:piglin_brute": {
+    "has_minecraft:cod": {
       "trigger": "minecard:collect_card",
       "conditions": {
-        "card": "minecraft:piglin_brute"
+        "card": "minecraft:cod"
+      }
+    },
+    "has_minecraft:pufferfish": {
+      "trigger": "minecard:collect_card",
+      "conditions": {
+        "card": "minecraft:pufferfish"
       }
     },
     "has_minecraft:iron_golem": {
@@ -388,16 +274,70 @@
         "card": "minecraft:iron_golem"
       }
     },
-    "has_minecraft:horse": {
+    "has_minecraft:piglin_brute": {
       "trigger": "minecard:collect_card",
       "conditions": {
-        "card": "minecraft:horse"
+        "card": "minecraft:piglin_brute"
       }
     },
-    "has_minecraft:ghast": {
+    "has_minecraft:cave_spider": {
       "trigger": "minecard:collect_card",
       "conditions": {
-        "card": "minecraft:ghast"
+        "card": "minecraft:cave_spider"
+      }
+    },
+    "has_minecraft:evoker": {
+      "trigger": "minecard:collect_card",
+      "conditions": {
+        "card": "minecraft:evoker"
+      }
+    },
+    "has_minecraft:bee": {
+      "trigger": "minecard:collect_card",
+      "conditions": {
+        "card": "minecraft:bee"
+      }
+    },
+    "has_minecraft:snow_golem": {
+      "trigger": "minecard:collect_card",
+      "conditions": {
+        "card": "minecraft:snow_golem"
+      }
+    },
+    "has_minecraft:polar_bear": {
+      "trigger": "minecard:collect_card",
+      "conditions": {
+        "card": "minecraft:polar_bear"
+      }
+    },
+    "has_minecraft:stray": {
+      "trigger": "minecard:collect_card",
+      "conditions": {
+        "card": "minecraft:stray"
+      }
+    },
+    "has_minecraft:piglin": {
+      "trigger": "minecard:collect_card",
+      "conditions": {
+        "card": "minecraft:piglin"
+      }
+    },
+    "has_minecraft:ravager": {
+      "trigger": "minecard:collect_card",
+      "conditions": {
+        "card": "minecraft:ravager"
+      }
+    },
+    "has_minecraft:witch": {
+      "trigger": "minecard:collect_card",
+      "conditions": {
+        "card": "minecraft:witch"
+      }
+    },
+    "has_minecraft:phantom": {
+      "trigger": "minecard:collect_card",
+      "conditions": {
+        "card": "minecraft:phantom"
       }
     },
     "has_minecraft:parrot": {
@@ -406,91 +346,142 @@
         "card": "minecraft:parrot"
       }
     },
-    "has_minecraft:panda": {
+    "has_minecraft:turtle": {
       "trigger": "minecard:collect_card",
       "conditions": {
-        "card": "minecraft:panda"
+        "card": "minecraft:turtle"
       }
     },
-    "has_minecraft:vex": {
+    "has_minecraft:trader_llama": {
       "trigger": "minecard:collect_card",
       "conditions": {
-        "card": "minecraft:vex"
+        "card": "minecraft:trader_llama"
       }
     },
-    "has_minecraft:polar_bear": {
+    "has_minecraft:wither_skeleton": {
       "trigger": "minecard:collect_card",
       "conditions": {
-        "card": "minecraft:polar_bear"
+        "card": "minecraft:wither_skeleton"
+      }
+    },
+    "has_minecraft:salmon": {
+      "trigger": "minecard:collect_card",
+      "conditions": {
+        "card": "minecraft:salmon"
+      }
+    },
+    "has_minecraft:pig": {
+      "trigger": "minecard:collect_card",
+      "conditions": {
+        "card": "minecraft:pig"
+      }
+    },
+    "has_minecraft:axolotl": {
+      "trigger": "minecard:collect_card",
+      "conditions": {
+        "card": "minecraft:axolotl"
+      }
+    },
+    "has_minecraft:sheep": {
+      "trigger": "minecard:collect_card",
+      "conditions": {
+        "card": "minecraft:sheep"
+      }
+    },
+    "has_minecraft:zombie_villager": {
+      "trigger": "minecard:collect_card",
+      "conditions": {
+        "card": "minecraft:zombie_villager"
+      }
+    },
+    "has_minecraft:shulker": {
+      "trigger": "minecard:collect_card",
+      "conditions": {
+        "card": "minecraft:shulker"
+      }
+    },
+    "has_minecraft:pillager": {
+      "trigger": "minecard:collect_card",
+      "conditions": {
+        "card": "minecraft:pillager"
+      }
+    },
+    "has_minecraft:ghast": {
+      "trigger": "minecard:collect_card",
+      "conditions": {
+        "card": "minecraft:ghast"
+      }
+    },
+    "has_minecraft:magma_cube": {
+      "trigger": "minecard:collect_card",
+      "conditions": {
+        "card": "minecraft:magma_cube"
+      }
+    },
+    "has_minecraft:llama": {
+      "trigger": "minecard:collect_card",
+      "conditions": {
+        "card": "minecraft:llama"
       }
     }
   },
   "requirements": [
     [
-      "has_minecraft:blaze"
+      "has_minecraft:wandering_trader"
     ],
     [
-      "has_minecraft:snow_golem"
+      "has_minecraft:husk"
     ],
     [
-      "has_minecraft:pufferfish"
+      "has_minecraft:guardian"
     ],
     [
-      "has_minecraft:shulker"
+      "has_minecraft:cat"
     ],
     [
-      "has_minecraft:tropical_fish"
+      "has_minecraft:slime"
     ],
     [
-      "has_minecraft:glow_squid"
+      "has_minecraft:fox"
     ],
     [
-      "has_minecraft:stray"
+      "has_minecraft:panda"
     ],
     [
-      "has_minecraft:rabbit"
+      "has_minecraft:chicken"
     ],
     [
-      "has_minecraft:creeper"
-    ],
-    [
-      "has_minecraft:bat"
-    ],
-    [
-      "has_minecraft:bee"
-    ],
-    [
-      "has_minecraft:pillager"
-    ],
-    [
-      "has_minecraft:piglin"
-    ],
-    [
-      "has_minecraft:cave_spider"
-    ],
-    [
-      "has_minecraft:llama"
-    ],
-    [
-      "has_minecraft:strider"
-    ],
-    [
-      "has_minecraft:dolphin"
-    ],
-    [
-      "has_minecraft:vindicator"
-    ],
-    [
-      "has_minecraft:zombie_villager"
+      "has_minecraft:hoglin"
     ],
     [
       "has_minecraft:mule"
     ],
     [
-      "has_minecraft:mooshroom"
+      "has_minecraft:donkey"
     ],
     [
-      "has_minecraft:wither_skeleton"
+      "has_minecraft:squid"
+    ],
+    [
+      "has_minecraft:vindicator"
+    ],
+    [
+      "has_minecraft:goat"
+    ],
+    [
+      "has_minecraft:tropical_fish"
+    ],
+    [
+      "has_minecraft:rabbit"
+    ],
+    [
+      "has_minecraft:horse"
+    ],
+    [
+      "has_minecraft:zombie"
+    ],
+    [
+      "has_minecraft:vex"
     ],
     [
       "has_minecraft:drowned"
@@ -499,136 +490,145 @@
       "has_minecraft:zombified_piglin"
     ],
     [
-      "has_minecraft:squid"
-    ],
-    [
-      "has_minecraft:hoglin"
-    ],
-    [
-      "has_minecraft:goat"
-    ],
-    [
-      "has_minecraft:wandering_trader"
-    ],
-    [
-      "has_minecraft:skeleton"
-    ],
-    [
-      "has_minecraft:witch"
-    ],
-    [
-      "has_minecraft:sheep"
-    ],
-    [
-      "has_minecraft:magma_cube"
-    ],
-    [
-      "has_minecraft:evoker"
-    ],
-    [
-      "has_minecraft:spider"
-    ],
-    [
-      "has_minecraft:cow"
-    ],
-    [
-      "has_minecraft:guardian"
-    ],
-    [
-      "has_minecraft:elder_guardian"
-    ],
-    [
-      "has_minecraft:chicken"
-    ],
-    [
-      "has_minecraft:axolotl"
-    ],
-    [
-      "has_minecraft:ocelot"
-    ],
-    [
-      "has_minecraft:zombie"
-    ],
-    [
-      "has_minecraft:turtle"
-    ],
-    [
-      "has_minecraft:phantom"
-    ],
-    [
-      "has_minecraft:trader_llama"
-    ],
-    [
-      "has_minecraft:fox"
-    ],
-    [
-      "has_minecraft:salmon"
-    ],
-    [
-      "has_minecraft:husk"
-    ],
-    [
-      "has_minecraft:donkey"
-    ],
-    [
-      "has_minecraft:skeleton_horse"
-    ],
-    [
-      "has_minecraft:pig"
-    ],
-    [
-      "has_minecraft:enderman"
-    ],
-    [
-      "has_minecraft:cat"
-    ],
-    [
-      "has_minecraft:cod"
-    ],
-    [
-      "has_minecraft:ravager"
-    ],
-    [
-      "has_minecraft:wolf"
-    ],
-    [
-      "has_minecraft:endermite"
+      "has_minecraft:mooshroom"
     ],
     [
       "has_minecraft:zoglin"
     ],
     [
-      "has_minecraft:slime"
+      "has_minecraft:strider"
+    ],
+    [
+      "has_minecraft:wolf"
+    ],
+    [
+      "has_minecraft:bat"
     ],
     [
       "has_minecraft:silverfish"
     ],
     [
+      "has_minecraft:skeleton"
+    ],
+    [
+      "has_minecraft:ocelot"
+    ],
+    [
+      "has_minecraft:blaze"
+    ],
+    [
+      "has_minecraft:glow_squid"
+    ],
+    [
+      "has_minecraft:skeleton_horse"
+    ],
+    [
+      "has_minecraft:elder_guardian"
+    ],
+    [
+      "has_minecraft:cow"
+    ],
+    [
+      "has_minecraft:spider"
+    ],
+    [
+      "has_minecraft:creeper"
+    ],
+    [
+      "has_minecraft:endermite"
+    ],
+    [
+      "has_minecraft:dolphin"
+    ],
+    [
+      "has_minecraft:enderman"
+    ],
+    [
       "has_minecraft:villager"
     ],
     [
-      "has_minecraft:piglin_brute"
+      "has_minecraft:cod"
+    ],
+    [
+      "has_minecraft:pufferfish"
     ],
     [
       "has_minecraft:iron_golem"
     ],
     [
-      "has_minecraft:horse"
+      "has_minecraft:piglin_brute"
     ],
     [
-      "has_minecraft:ghast"
+      "has_minecraft:cave_spider"
+    ],
+    [
+      "has_minecraft:evoker"
+    ],
+    [
+      "has_minecraft:bee"
+    ],
+    [
+      "has_minecraft:snow_golem"
+    ],
+    [
+      "has_minecraft:polar_bear"
+    ],
+    [
+      "has_minecraft:stray"
+    ],
+    [
+      "has_minecraft:piglin"
+    ],
+    [
+      "has_minecraft:ravager"
+    ],
+    [
+      "has_minecraft:witch"
+    ],
+    [
+      "has_minecraft:phantom"
     ],
     [
       "has_minecraft:parrot"
     ],
     [
-      "has_minecraft:panda"
+      "has_minecraft:turtle"
     ],
     [
-      "has_minecraft:vex"
+      "has_minecraft:trader_llama"
     ],
     [
-      "has_minecraft:polar_bear"
+      "has_minecraft:wither_skeleton"
+    ],
+    [
+      "has_minecraft:salmon"
+    ],
+    [
+      "has_minecraft:pig"
+    ],
+    [
+      "has_minecraft:axolotl"
+    ],
+    [
+      "has_minecraft:sheep"
+    ],
+    [
+      "has_minecraft:zombie_villager"
+    ],
+    [
+      "has_minecraft:shulker"
+    ],
+    [
+      "has_minecraft:pillager"
+    ],
+    [
+      "has_minecraft:ghast"
+    ],
+    [
+      "has_minecraft:magma_cube"
+    ],
+    [
+      "has_minecraft:llama"
     ]
   ]
 }

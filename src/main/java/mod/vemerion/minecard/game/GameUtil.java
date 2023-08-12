@@ -8,7 +8,9 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
+import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.DynamicOps;
@@ -74,6 +76,12 @@ public class GameUtil {
 			}
 			return DataResult.error("Invalid value '" + s + "'");
 		}, e -> getName.apply(e));
+	}
+
+	public static <K, V> Codec<Map<K, V>> mapCodec(Codec<K> keyCodec, Codec<V> valueCodec) {
+		return Codec.list(Codec.pair(keyCodec.fieldOf("key").codec(), valueCodec.fieldOf("value").codec())).xmap(
+				list -> new HashMap<>(list.stream().collect(Collectors.toMap(Pair::getFirst, Pair::getSecond))),
+				map -> map.entrySet().stream().map(e -> new Pair<>(e.getKey(), e.getValue())).toList());
 	}
 
 	public static <T, U> Codec<Map<T, U>> toMutable(UnboundedMapCodec<T, U> codec) {

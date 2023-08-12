@@ -16,23 +16,23 @@
     "hidden": false
   },
   "criteria": {
-    "has_minecraft:wither": {
-      "trigger": "minecard:collect_card",
-      "conditions": {
-        "card": "minecraft:wither"
-      }
-    },
     "has_minecraft:ender_dragon": {
       "trigger": "minecard:collect_card",
       "conditions": {
         "card": "minecraft:ender_dragon"
       }
+    },
+    "has_minecraft:wither": {
+      "trigger": "minecard:collect_card",
+      "conditions": {
+        "card": "minecraft:wither"
+      }
     }
   },
   "requirements": [
     [
-      "has_minecraft:wither",
-      "has_minecraft:ender_dragon"
+      "has_minecraft:ender_dragon",
+      "has_minecraft:wither"
     ]
   ]
 }

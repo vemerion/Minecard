@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.function.Predicate;
@@ -16,6 +17,8 @@ import mod.vemerion.minecard.Main;
 import mod.vemerion.minecard.advancement.ModFinishGameTrigger;
 import mod.vemerion.minecard.capability.CardData;
 import mod.vemerion.minecard.capability.DeckData;
+import mod.vemerion.minecard.capability.PlayerStats;
+import mod.vemerion.minecard.capability.StatsData;
 import mod.vemerion.minecard.game.AIPlayer;
 import mod.vemerion.minecard.game.AdditionalCardData;
 import mod.vemerion.minecard.game.Card;
@@ -66,7 +69,7 @@ public class GameBlockEntity extends BlockEntity {
 		receivers = new HashSet<>();
 		state = new GameState();
 	}
-	
+
 	@Override
 	public void setLevel(Level pLevel) {
 		super.setLevel(pLevel);
@@ -86,6 +89,7 @@ public class GameBlockEntity extends BlockEntity {
 					advancement(ModFinishGameTrigger.Type.WIN_AI, s -> !s.isGameOver());
 				}
 				advancement(ModFinishGameTrigger.Type.WIN_GAME, s -> !s.isGameOver());
+				gameOverStats();
 			}
 
 			for (var receiver : getReceivers()) {
@@ -104,6 +108,16 @@ public class GameBlockEntity extends BlockEntity {
 			if (test.test(playerState) && level.getPlayerByUUID(playerState.getId()) instanceof ServerPlayer player) {
 				ModAdvancements.FINISH_GAME.trigger(player, type);
 			}
+		}
+	}
+
+	private void gameOverStats() {
+		for (var playerState : state.getPlayerStates()) {
+			StatsData.inc(level, playerState.getId(),
+					playerState.isGameOver() ? PlayerStats.Key.LOSSES : PlayerStats.Key.WINS,
+					Optional.of(state.getEnemyPlayerState(playerState.getId()).getId()));
+			StatsData.inc(level, playerState.getId(),
+					playerState.isGameOver() ? PlayerStats.Key.LOSSES : PlayerStats.Key.WINS, Optional.empty());
 		}
 	}
 
@@ -336,7 +350,8 @@ public class GameBlockEntity extends BlockEntity {
 		return new OpenGameMessage(
 				List.of(state1.toMessage(!state1.getId().equals(id)), state2.toMessage(!state2.getId().equals(id))),
 				state.getTutorialStep(),
-				state.getHistory().stream().map(e -> e.censor(id, state.isSpectator(id))).toList(), getBlockPos());
+				state.getHistory().stream().map(e -> e.censor(id, state.isSpectator(id))).toList(),
+				StatsData.get(level, id).orElse(new PlayerStats()), getBlockPos());
 	}
 
 	@Override

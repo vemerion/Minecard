@@ -52,7 +52,7 @@
   ],
   "cards": [
     {
-      "data": "minecard:enchanted_golden_apple",
+      "data": "minecard:fishing_rod",
       "weight": 1
     },
     {
@@ -60,23 +60,15 @@
       "weight": 1
     },
     {
-      "data": "minecard:lodestone",
-      "weight": 1
-    },
-    {
-      "data": "minecard:amethyst_shard",
-      "weight": 1
-    },
-    {
       "data": "minecard:splash_potion_of_harming",
       "weight": 1
     },
     {
-      "data": "minecard:chest",
+      "data": "minecard:enchanted_golden_apple",
       "weight": 1
     },
     {
-      "data": "minecard:fishing_rod",
+      "data": "minecard:chest",
       "weight": 1
     },
     {
@@ -88,11 +80,19 @@
       "weight": 1
     },
     {
-      "data": "minecard:wooden_sword",
+      "data": "minecard:lodestone",
       "weight": 1
     },
     {
       "data": "minecard:soul_sand",
+      "weight": 1
+    },
+    {
+      "data": "minecard:amethyst_shard",
+      "weight": 1
+    },
+    {
+      "data": "minecard:wooden_sword",
       "weight": 1
     }
   ],

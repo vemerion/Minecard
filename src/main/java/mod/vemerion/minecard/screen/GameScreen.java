@@ -19,6 +19,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Quaternion;
 
 import mod.vemerion.minecard.Main;
+import mod.vemerion.minecard.capability.PlayerStats;
 import mod.vemerion.minecard.game.Card;
 import mod.vemerion.minecard.game.CardProperties;
 import mod.vemerion.minecard.game.CardProperty;
@@ -103,8 +104,9 @@ public class GameScreen extends Screen implements GameClient {
 	private static final int CARD_PADDING = 4;
 	private static final int INFO_BUTTON_SIZE = 12;
 	private static final int INFO_BUTTON_X_OFFSET = 8 + INFO_BUTTON_SIZE;
-	private static final int INFO_BUTTON_Y_OFFSET = 15 + INFO_BUTTON_SIZE;
+	private static final int INFO_BUTTON_Y_OFFSET = 11 + INFO_BUTTON_SIZE;
 	private static final int INFO_SCREEN_PROPERTY_COUNT = 3 * 4;
+	private static final int STATS_BUTTON_Y_OFFSET = 11;
 
 	private static final Card EMPTY_CARD = Cards.EMPTY_CARD_TYPE.create();
 
@@ -117,6 +119,7 @@ public class GameScreen extends Screen implements GameClient {
 	private History history = new History();
 	private int tutorialStep;
 	private List<HistoryEntry> historyList;
+	private PlayerStats stats;
 	private Set<Integer> mulliganTargets = new HashSet<>();
 
 	// Widgets
@@ -129,12 +132,14 @@ public class GameScreen extends Screen implements GameClient {
 	private Card selectedCard;
 	private Card attackingCard;
 
-	public GameScreen(List<MessagePlayerState> list, int tutorialStep, List<HistoryEntry> historyList, BlockPos pos) {
+	public GameScreen(List<MessagePlayerState> list, int tutorialStep, List<HistoryEntry> historyList,
+			PlayerStats stats, BlockPos pos) {
 		super(TITLE);
 		this.tutorialStep = tutorialStep;
 		this.historyList = historyList;
 		this.animations = new ArrayList<>();
 		this.state = initState(list);
+		this.stats = stats;
 		this.pos = pos;
 		this.popup = new PopupText();
 	}
@@ -191,6 +196,7 @@ public class GameScreen extends Screen implements GameClient {
 		}
 
 		addRenderableWidget(new InfoButton());
+		addRenderableWidget(new StatsButton());
 
 		if (!isSpectator)
 			addRenderableWidget(new NextTurnButton(width - 24, height / 2 - NEXT_TURN_BUTTON_SIZE / 2,
@@ -912,6 +918,50 @@ public class GameScreen extends Screen implements GameClient {
 			font.drawShadow(poseStack, pageText, 4, GameScreen.this.height - 12, 0xffaaaaaa);
 
 			poseStack.popPose();
+		}
+
+	}
+
+	private class StatsButton extends AbstractButton {
+
+		private static final ResourceLocation TEXTURE = new ResourceLocation(Main.MODID, "textures/gui/info.png");
+
+		public StatsButton() {
+			super(GameScreen.this.width - INFO_BUTTON_X_OFFSET, GameScreen.this.height / 2 + STATS_BUTTON_Y_OFFSET,
+					INFO_BUTTON_SIZE, INFO_BUTTON_SIZE, TextComponent.EMPTY);
+		}
+
+		@Override
+		public void updateNarration(NarrationElementOutput pNarrationElementOutput) {
+
+		}
+
+		@Override
+		public void onPress() {
+		}
+
+		@Override
+		public void renderButton(PoseStack pPoseStack, int pMouseX, int pMouseY, float pPartialTick) {
+			if (isHovered) {
+				pPoseStack.pushPose();
+				pPoseStack.translate(0, 0, 500);
+				GuiComponent.fill(pPoseStack, 0, 0, GameScreen.this.width, GameScreen.this.height, 0xcc000000);
+				pPoseStack.popPose();
+			}
+
+			RenderSystem.setShader(GameRenderer::getPositionTexShader);
+			RenderSystem.setShaderTexture(0, TEXTURE);
+
+			RenderSystem.enableDepthTest();
+			RenderSystem.setShaderColor(isHovered ? 0.6f : 1, isHovered ? 0.6f : 1, 1, 1);
+			blit(pPoseStack, x, y, 0, 0, width, height, INFO_BUTTON_SIZE, INFO_BUTTON_SIZE);
+			if (isHovered) {
+				pPoseStack.pushPose();
+				pPoseStack.translate(0, 0, 500);
+				font.drawShadow(pPoseStack, String.valueOf(stats.get(PlayerStats.Key.LOSSES, Optional.empty())), 4,
+						GameScreen.this.height - 12, 0xffffffff);
+				pPoseStack.popPose();
+			}
 		}
 
 	}

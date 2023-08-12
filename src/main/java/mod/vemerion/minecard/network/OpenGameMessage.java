@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
+import mod.vemerion.minecard.capability.PlayerStats;
 import mod.vemerion.minecard.game.Card;
 import mod.vemerion.minecard.game.HistoryEntry;
 import mod.vemerion.minecard.game.MessagePlayerState;
@@ -20,13 +21,16 @@ public class OpenGameMessage extends ServerToClientMessage {
 
 	private List<MessagePlayerState> state;
 	private int tutorialStep;
-	List<HistoryEntry> history;
+	private List<HistoryEntry> history;
+	private PlayerStats stats;
 	private BlockPos pos;
 
-	public OpenGameMessage(List<MessagePlayerState> state, int tutorialStep, List<HistoryEntry> history, BlockPos pos) {
+	public OpenGameMessage(List<MessagePlayerState> state, int tutorialStep, List<HistoryEntry> history,
+			PlayerStats stats, BlockPos pos) {
 		this.state = state;
 		this.tutorialStep = tutorialStep;
 		this.history = history;
+		this.stats = stats;
 		this.pos = pos;
 	}
 
@@ -36,6 +40,7 @@ public class OpenGameMessage extends ServerToClientMessage {
 			writePlayer(buffer, player);
 		buffer.writeInt(tutorialStep);
 		buffer.writeCollection(history, (b, e) -> MessageUtil.encode(b, e, HistoryEntry.CODEC));
+		MessageUtil.encode(buffer, stats, PlayerStats.CODEC);
 		buffer.writeBlockPos(pos);
 	}
 
@@ -72,7 +77,8 @@ public class OpenGameMessage extends ServerToClientMessage {
 
 	public static OpenGameMessage decode(final FriendlyByteBuf buffer) {
 		return new OpenGameMessage(List.of(readPlayer(buffer), readPlayer(buffer)), buffer.readInt(),
-				buffer.readList(b -> MessageUtil.decode(b, HistoryEntry.CODEC)), buffer.readBlockPos());
+				buffer.readList(b -> MessageUtil.decode(b, HistoryEntry.CODEC)),
+				MessageUtil.decode(buffer, PlayerStats.CODEC), buffer.readBlockPos());
 	}
 
 	@Override
@@ -103,7 +109,8 @@ public class OpenGameMessage extends ServerToClientMessage {
 					if (mc == null)
 						return;
 
-					mc.setScreen(new GameScreen(message.state, message.tutorialStep, message.history, message.pos));
+					mc.setScreen(new GameScreen(message.state, message.tutorialStep, message.history, message.stats,
+							message.pos));
 				}
 			};
 		}
