@@ -1,6 +1,8 @@
 package mod.vemerion.minecard.capability;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -12,6 +14,8 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import mod.vemerion.minecard.Main;
 import mod.vemerion.minecard.game.GameUtil;
 import net.minecraft.core.SerializableUUID;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 
 public class PlayerStats {
@@ -32,6 +36,32 @@ public class PlayerStats {
 
 	public Map<Key, Integer> getStats() {
 		return stats;
+	}
+
+	public static record StatLine(Component component, String value) {
+
+	}
+
+	public List<StatLine> getGeneral() {
+		List<StatLine> result = new ArrayList<>();
+		for (var entry : stats.entrySet()) {
+			if (entry.getKey().getEnemy().isEmpty()) {
+				result.add(new StatLine(new TranslatableComponent(entry.getKey().textKey()),
+						String.valueOf(entry.getValue())));
+			}
+		}
+		return result;
+	}
+
+	public Map<UUID, List<StatLine>> getEnemies() {
+		Map<UUID, List<StatLine>> result = new HashMap<>();
+		for (var entry : stats.entrySet()) {
+			if (entry.getKey().getEnemy().isPresent()) {
+				result.computeIfAbsent(entry.getKey().getEnemy().get(), id -> new ArrayList<>()).add(new StatLine(
+						new TranslatableComponent(entry.getKey().textKey()), String.valueOf(entry.getValue())));
+			}
+		}
+		return result;
 	}
 
 	public int inc(Key key) {
@@ -70,6 +100,14 @@ public class PlayerStats {
 
 		public Optional<UUID> getEnemy() {
 			return enemy;
+		}
+
+		public static String textKey(ResourceLocation id) {
+			return "gui." + id.getNamespace() + ".stats." + id.getPath();
+		}
+
+		public String textKey() {
+			return textKey(id);
 		}
 
 		@Override

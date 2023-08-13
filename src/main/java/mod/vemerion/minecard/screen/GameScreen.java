@@ -20,6 +20,8 @@ import com.mojang.math.Quaternion;
 
 import mod.vemerion.minecard.Main;
 import mod.vemerion.minecard.capability.PlayerStats;
+import mod.vemerion.minecard.capability.PlayerStats.StatLine;
+import mod.vemerion.minecard.game.AIPlayer;
 import mod.vemerion.minecard.game.Card;
 import mod.vemerion.minecard.game.CardProperties;
 import mod.vemerion.minecard.game.CardProperty;
@@ -28,6 +30,7 @@ import mod.vemerion.minecard.game.GameUtil;
 import mod.vemerion.minecard.game.HistoryEntry;
 import mod.vemerion.minecard.game.MessagePlayerState;
 import mod.vemerion.minecard.helper.Helper;
+import mod.vemerion.minecard.init.ModEntities;
 import mod.vemerion.minecard.network.AttackMessage;
 import mod.vemerion.minecard.network.CloseGameMessage;
 import mod.vemerion.minecard.network.EndTurnMessage;
@@ -128,6 +131,7 @@ public class GameScreen extends Screen implements GameClient {
 	private List<Resources> resources;
 	private GameBackground background;
 	private Optional<GameTutorial> tutorial = Optional.empty();
+	private StatsButton statsButton;
 
 	private Card selectedCard;
 	private Card attackingCard;
@@ -196,7 +200,7 @@ public class GameScreen extends Screen implements GameClient {
 		}
 
 		addRenderableWidget(new InfoButton());
-		addRenderableWidget(new StatsButton());
+		statsButton = addRenderableWidget(new StatsButton());
 
 		if (!isSpectator)
 			addRenderableWidget(new NextTurnButton(width - 24, height / 2 - NEXT_TURN_BUTTON_SIZE / 2,
@@ -446,6 +450,7 @@ public class GameScreen extends Screen implements GameClient {
 	@Override
 	public void stat(PlayerStats.Key key, int value) {
 		stats.put(key, value);
+		statsButton.clear();
 	}
 
 	private ClientPlayerState yourState() {
@@ -929,11 +934,26 @@ public class GameScreen extends Screen implements GameClient {
 
 	private class StatsButton extends AbstractButton {
 
+		private static final int SEPARATOR_OFFSET = 10;
+		private static final int STATS_START = 30;
+		private static final int SPACING = 10;
+
+		private static final Component GENERAL_HEADER = new TranslatableComponent(Helper.gui("stats_general"));
+		private static final Component ENEMIES_HEADER = new TranslatableComponent(Helper.gui("stats_enemies"));
+
 		private static final ResourceLocation TEXTURE = new ResourceLocation(Main.MODID, "textures/gui/info.png");
+
+		private List<PlayerStats.StatLine> general;
+		private Map<UUID, List<StatLine>> enemies;
 
 		public StatsButton() {
 			super(GameScreen.this.width - INFO_BUTTON_X_OFFSET, GameScreen.this.height / 2 + STATS_BUTTON_Y_OFFSET,
 					INFO_BUTTON_SIZE, INFO_BUTTON_SIZE, TextComponent.EMPTY);
+		}
+
+		private void clear() {
+			general = null;
+			enemies = null;
 		}
 
 		@Override
@@ -947,6 +967,11 @@ public class GameScreen extends Screen implements GameClient {
 
 		@Override
 		public void renderButton(PoseStack pPoseStack, int pMouseX, int pMouseY, float pPartialTick) {
+			if (general == null || enemies == null) {
+				general = stats.getGeneral();
+				enemies = stats.getEnemies();
+			}
+
 			if (isHovered) {
 				pPoseStack.pushPose();
 				pPoseStack.translate(0, 0, 500);
@@ -961,12 +986,68 @@ public class GameScreen extends Screen implements GameClient {
 			RenderSystem.setShaderColor(isHovered ? 0.6f : 1, isHovered ? 0.6f : 1, 1, 1);
 			blit(pPoseStack, x, y, 0, 0, width, height, INFO_BUTTON_SIZE, INFO_BUTTON_SIZE);
 			if (isHovered) {
-				pPoseStack.pushPose();
-				pPoseStack.translate(0, 0, 500);
-				font.drawShadow(pPoseStack, String.valueOf(stats.get(PlayerStats.Key.LOSSES, Optional.empty())), 4,
-						GameScreen.this.height - 12, 0xffffffff);
-				pPoseStack.popPose();
+				drawStats(pPoseStack, pMouseX, pMouseY, pPartialTick);
 			}
+		}
+
+		private void drawStats(PoseStack pPoseStack, int pMouseX, int pMouseY, float pPartialTick) {
+			pPoseStack.pushPose();
+			pPoseStack.translate(0, 0, 500);
+			vLine(pPoseStack, GameScreen.this.width / 2, SEPARATOR_OFFSET, GameScreen.this.height - SEPARATOR_OFFSET,
+					0xffffffff);
+
+			drawHeader(pPoseStack, GENERAL_HEADER, 0, 1.5f);
+			drawHeader(pPoseStack, ENEMIES_HEADER, GameScreen.this.width / 2, 1.5f);
+
+			// General
+			for (int i = 0; i < general.size(); i++) {
+				drawStatLine(pPoseStack, general.get(i), SPACING, STATS_START + i * 15,
+						i % 2 == 0 ? 0xffffffff : 0xffbbbbbb, GameScreen.this.width / 2 - SPACING * 2);
+			}
+
+			// Enemies
+			int i = 0;
+			for (var entry : enemies.entrySet()) {
+				font.drawShadow(pPoseStack, getPlayerName(entry.getKey()), GameScreen.this.width / 2 + SPACING,
+						STATS_START + i * 15, 0xffffffff);
+				i++;
+				int j = 0;
+				for (var line : entry.getValue()) {
+					drawStatLine(pPoseStack, line, GameScreen.this.width / 2 + SPACING * 2, STATS_START + i * 15,
+							j % 2 == 0 ? 0xffbbbbbb : 0xff888888, GameScreen.this.width / 2 - SPACING * 3);
+					i++;
+					j++;
+				}
+			}
+			pPoseStack.popPose();
+		}
+
+		private void drawStatLine(PoseStack poseStack, PlayerStats.StatLine line, int x, int y, int color, int width) {
+			font.drawShadow(poseStack, line.component(), x, y, color);
+			font.drawShadow(poseStack, line.value(), x + width - font.width(line.value()), y, color);
+		}
+
+		private Component getPlayerName(UUID id) {
+			if (id.equals(AIPlayer.ID)) {
+				return new TranslatableComponent(ModEntities.CARD_GAME_ROBOT.get().getDescriptionId());
+			}
+			var info = minecraft.player.connection.getPlayerInfo(id);
+			if (info != null) {
+				if (info.getTabListDisplayName() != null) {
+					return info.getTabListDisplayName();
+				} else if (info.getProfile().getName() != null && !info.getProfile().getName().isEmpty()) {
+					return new TextComponent(info.getProfile().getName());
+				}
+			}
+			return new TextComponent(id.toString());
+		}
+
+		private void drawHeader(PoseStack poseStack, Component text, int x, float scale) {
+			poseStack.pushPose();
+			poseStack.translate(x + (GameScreen.this.width / 2 - font.width(text) * scale) / 2, SEPARATOR_OFFSET, 0);
+			poseStack.scale(scale, scale, scale);
+			font.drawShadow(poseStack, text, 0, 0, 0xffffffff);
+			poseStack.popPose();
 		}
 
 	}

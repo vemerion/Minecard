@@ -1,6 +1,7 @@
 package mod.vemerion.minecard.datagen;
 
 import mod.vemerion.minecard.Main;
+import mod.vemerion.minecard.capability.PlayerStats;
 import mod.vemerion.minecard.game.CardProperty;
 import mod.vemerion.minecard.helper.Helper;
 import mod.vemerion.minecard.init.ModBlocks;
@@ -35,6 +36,11 @@ public class ModLanguageProvider extends LanguageProvider {
 		add("gui." + Main.MODID + ".game", "Minecard Game");
 
 		advancements();
+
+		add(Helper.gui("stats_general"), "General");
+		add(Helper.gui("stats_enemies"), "Opponents");
+		add(PlayerStats.Key.textKey(PlayerStats.Key.WINS), "Wins");
+		add(PlayerStats.Key.textKey(PlayerStats.Key.LOSSES), "Losses");
 
 		add(Helper.gui("cardy"), "Cardy the Creeper");
 		tutorial();

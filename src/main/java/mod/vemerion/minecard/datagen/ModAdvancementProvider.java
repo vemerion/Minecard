@@ -1,6 +1,6 @@
 package mod.vemerion.minecard.datagen;
 
-import java.util.Set;
+import java.util.List;
 import java.util.function.Consumer;
 
 import mod.vemerion.minecard.Main;
@@ -24,8 +24,8 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 
 public class ModAdvancementProvider extends AdvancementProvider {
 
-	private static final Set<EntityType<?>> BOSSES = Set.of(EntityType.ENDER_DRAGON, EntityType.WITHER);
-	private static final Set<EntityType<?>> MOBS = Set.of(EntityType.SNOW_GOLEM, EntityType.WITHER_SKELETON,
+	private static final List<EntityType<?>> BOSSES = List.of(EntityType.ENDER_DRAGON, EntityType.WITHER);
+	private static final List<EntityType<?>> MOBS = List.of(EntityType.SNOW_GOLEM, EntityType.WITHER_SKELETON,
 			EntityType.VILLAGER, EntityType.PHANTOM, EntityType.ELDER_GUARDIAN, EntityType.SHULKER,
 			EntityType.ENDERMITE, EntityType.DONKEY, EntityType.WOLF, EntityType.STRAY, EntityType.LLAMA,
 			EntityType.STRIDER, EntityType.CAVE_SPIDER, EntityType.WITCH, EntityType.PILLAGER, EntityType.PIGLIN_BRUTE,
