@@ -8,11 +8,14 @@ import java.util.UUID;
 import com.mojang.serialization.Codec;
 
 import mod.vemerion.minecard.game.GameUtil;
+import mod.vemerion.minecard.network.Network;
+import mod.vemerion.minecard.network.StatMessage;
 import net.minecraft.core.Direction;
 import net.minecraft.core.SerializableUUID;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityManager;
@@ -20,6 +23,7 @@ import net.minecraftforge.common.capabilities.CapabilityToken;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.network.PacketDistributor;
 
 // Player might not be online while stats need to be updated, so need to put capability on level instead of player
 public class StatsData implements INBTSerializable<CompoundTag> {
@@ -46,7 +50,12 @@ public class StatsData implements INBTSerializable<CompoundTag> {
 
 	public static void inc(Level level, UUID player, ResourceLocation id, Optional<UUID> enemy) {
 		level.getServer().getLevel(Level.OVERWORLD).getCapability(CAPABILITY).ifPresent(c -> {
-			c.get(player).inc(id, enemy);
+			var key = new PlayerStats.Key(id, enemy);
+			var value = c.get(player).inc(key);
+
+			if (level.getPlayerByUUID(player) instanceof ServerPlayer serverPlayer) {
+				Network.INSTANCE.send(PacketDistributor.PLAYER.with(() -> serverPlayer), new StatMessage(key, value));
+			}
 		});
 	}
 

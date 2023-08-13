@@ -9,6 +9,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import mod.vemerion.minecard.blockentity.GameBlockEntity;
+import mod.vemerion.minecard.capability.PlayerStats;
 import mod.vemerion.minecard.network.GameClient;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
@@ -255,5 +256,10 @@ public class AIPlayer implements GameClient {
 		} else {
 			enemyMulligan = false;
 		}
+	}
+
+	@Override
+	public void stat(PlayerStats.Key key, int value) {
+
 	}
 }

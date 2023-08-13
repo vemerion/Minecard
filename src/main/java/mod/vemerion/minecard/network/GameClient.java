@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import mod.vemerion.minecard.capability.PlayerStats;
 import mod.vemerion.minecard.game.Card;
 import mod.vemerion.minecard.game.HistoryEntry;
 import mod.vemerion.minecard.game.MessagePlayerState;
@@ -43,4 +44,6 @@ public interface GameClient {
 	public void history(HistoryEntry entry);
 
 	public void mulliganDone(UUID id);
+
+	public void stat(PlayerStats.Key key, int value);
 }

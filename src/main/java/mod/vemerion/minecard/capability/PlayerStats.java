@@ -34,8 +34,12 @@ public class PlayerStats {
 		return stats;
 	}
 
-	public void inc(ResourceLocation id, Optional<UUID> enemy) {
-		stats.merge(new Key(id, enemy), 1, (a, b) -> a + 1);
+	public int inc(Key key) {
+		return stats.merge(key, 1, (a, b) -> a + 1);
+	}
+
+	public void put(Key key, int value) {
+		stats.put(key, value);
 	}
 
 	public int get(ResourceLocation id, Optional<UUID> enemy) {

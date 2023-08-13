@@ -443,6 +443,11 @@ public class GameScreen extends Screen implements GameClient {
 		state.get(id).mulligan = false;
 	}
 
+	@Override
+	public void stat(PlayerStats.Key key, int value) {
+		stats.put(key, value);
+	}
+
 	private ClientPlayerState yourState() {
 		return state.get(minecraft.player.getUUID());
 	}
