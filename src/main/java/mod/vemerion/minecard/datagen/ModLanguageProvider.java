@@ -59,7 +59,7 @@ public class ModLanguageProvider extends LanguageProvider {
 		add(Helper.gui("buried_treasure"), "Buried Treasure");
 		add(Helper.gui("mulligan"), "Choose cards to mulligan");
 		add(Helper.gui("confirm"), "Confirm");
-		add(Helper.gui("info_button_hover"), "Click to cycle between pages");
+		add(Helper.gui("button_hover"), "Click to cycle between pages");
 
 		// Card properties
 		add(CardProperty.getTextKey(CardProperty.CHARGE), "charge");

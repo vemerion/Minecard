@@ -821,19 +821,18 @@ public class GameScreen extends Screen implements GameClient {
 
 	}
 
-	private class InfoButton extends AbstractButton {
+	private abstract class OverlayButton extends AbstractButton {
 
-		private static final ResourceLocation TEXTURE = new ResourceLocation(Main.MODID, "textures/gui/info.png");
-		private static final TranslatableComponent INFO_BUTTON_HOVER = new TranslatableComponent(
-				Helper.gui("info_button_hover"));
+		private static final TranslatableComponent BUTTON_HOVER = new TranslatableComponent(Helper.gui("button_hover"));
 
-		private long page = 0;
+		private int page = 0;
 		private boolean isHovered0;
 		private long hoverTimestamp;
+		private ResourceLocation texture;
 
-		public InfoButton() {
-			super(GameScreen.this.width - INFO_BUTTON_X_OFFSET, GameScreen.this.height / 2 - INFO_BUTTON_Y_OFFSET,
-					INFO_BUTTON_SIZE, INFO_BUTTON_SIZE, TextComponent.EMPTY);
+		public OverlayButton(int x, int y, ResourceLocation texture) {
+			super(x, y, INFO_BUTTON_SIZE, INFO_BUTTON_SIZE, TextComponent.EMPTY);
+			this.texture = texture;
 		}
 
 		@Override
@@ -843,7 +842,7 @@ public class GameScreen extends Screen implements GameClient {
 
 		@Override
 		public void onPress() {
-			page = (page + 1) % infoPages();
+			page = (page + 1) % maxPages();
 		}
 
 		@Override
@@ -857,28 +856,45 @@ public class GameScreen extends Screen implements GameClient {
 				pPoseStack.pushPose();
 				pPoseStack.translate(0, 0, 500);
 				GuiComponent.fill(pPoseStack, 0, 0, GameScreen.this.width, GameScreen.this.height, 0xcc000000);
-				if (infoPages() > 1 && (minecraft.level.getGameTime() - hoverTimestamp < 60))
-					GameScreen.this.renderTooltip(pPoseStack, INFO_BUTTON_HOVER, pMouseX, pMouseY);
+				if (maxPages() > 1 && (minecraft.level.getGameTime() - hoverTimestamp < 60))
+					GameScreen.this.renderTooltip(pPoseStack, BUTTON_HOVER, pMouseX, pMouseY);
 				pPoseStack.popPose();
 			}
 
 			RenderSystem.setShader(GameRenderer::getPositionTexShader);
-			RenderSystem.setShaderTexture(0, TEXTURE);
+			RenderSystem.setShaderTexture(0, texture);
 
 			RenderSystem.enableDepthTest();
 			RenderSystem.setShaderColor(isHovered ? 0.6f : 1, isHovered ? 0.6f : 1, 1, 1);
 			blit(pPoseStack, x, y, 0, 0, width, height, INFO_BUTTON_SIZE, INFO_BUTTON_SIZE);
 			if (isHovered) {
-				drawPropertyInfo(pPoseStack);
+				drawOverlay(pPoseStack, pMouseX, pMouseY, pPartialTick, page);
 			}
 		}
 
-		private long infoPages() {
-			return 1 + Math.max(0, CardProperties.getInstance(true).entries().stream()
+		protected abstract int maxPages();
+
+		protected abstract void drawOverlay(PoseStack pPoseStack, int pMouseX, int pMouseY, float pPartialTick,
+				int page);
+	}
+
+	private class InfoButton extends OverlayButton {
+
+		private static final ResourceLocation TEXTURE = new ResourceLocation(Main.MODID, "textures/gui/info.png");
+
+		public InfoButton() {
+			super(GameScreen.this.width - INFO_BUTTON_X_OFFSET, GameScreen.this.height / 2 - INFO_BUTTON_Y_OFFSET,
+					TEXTURE);
+		}
+
+		@Override
+		protected int maxPages() {
+			return 1 + (int) Math.max(0, CardProperties.getInstance(true).entries().stream()
 					.filter(e -> !e.getValue().getItem().isEmpty()).count() - 1) / INFO_SCREEN_PROPERTY_COUNT;
 		}
 
-		private void drawPropertyInfo(PoseStack poseStack) {
+		@Override
+		protected void drawOverlay(PoseStack poseStack, int pMouseX, int pMouseY, float pPartialTick, int page) {
 			poseStack.pushPose();
 			poseStack.translate(0, 0, 500);
 
@@ -924,7 +940,7 @@ public class GameScreen extends Screen implements GameClient {
 			}
 
 			// Page count
-			var pageText = new TextComponent((page + 1) + "/" + infoPages());
+			var pageText = new TextComponent((page + 1) + "/" + maxPages());
 			font.drawShadow(poseStack, pageText, 4, GameScreen.this.height - 12, 0xffaaaaaa);
 
 			poseStack.popPose();
@@ -932,11 +948,12 @@ public class GameScreen extends Screen implements GameClient {
 
 	}
 
-	private class StatsButton extends AbstractButton {
+	private class StatsButton extends OverlayButton {
 
 		private static final int SEPARATOR_OFFSET = 10;
 		private static final int STATS_START = 30;
 		private static final int SPACING = 10;
+		private static final int ENEMIES_PER_PAGE = 4;
 
 		private static final Component GENERAL_HEADER = new TranslatableComponent(Helper.gui("stats_general"));
 		private static final Component ENEMIES_HEADER = new TranslatableComponent(Helper.gui("stats_enemies"));
@@ -948,7 +965,7 @@ public class GameScreen extends Screen implements GameClient {
 
 		public StatsButton() {
 			super(GameScreen.this.width - INFO_BUTTON_X_OFFSET, GameScreen.this.height / 2 + STATS_BUTTON_Y_OFFSET,
-					INFO_BUTTON_SIZE, INFO_BUTTON_SIZE, TextComponent.EMPTY);
+					TEXTURE);
 		}
 
 		private void clear() {
@@ -957,44 +974,14 @@ public class GameScreen extends Screen implements GameClient {
 		}
 
 		@Override
-		public void updateNarration(NarrationElementOutput pNarrationElementOutput) {
-
-		}
-
-		@Override
-		public void onPress() {
-		}
-
-		@Override
-		public void renderButton(PoseStack pPoseStack, int pMouseX, int pMouseY, float pPartialTick) {
+		protected void drawOverlay(PoseStack pPoseStack, int pMouseX, int pMouseY, float pPartialTick, int page) {
 			if (general == null || enemies == null) {
 				general = stats.getGeneral();
 				enemies = stats.getEnemies();
 			}
 
-			if (isHovered) {
-				pPoseStack.pushPose();
-				pPoseStack.translate(0, 0, 500);
-				GuiComponent.fill(pPoseStack, 0, 0, GameScreen.this.width, GameScreen.this.height, 0xcc000000);
-				pPoseStack.popPose();
-			}
-
-			RenderSystem.setShader(GameRenderer::getPositionTexShader);
-			RenderSystem.setShaderTexture(0, TEXTURE);
-
-			RenderSystem.enableDepthTest();
-			RenderSystem.setShaderColor(isHovered ? 0.6f : 1, isHovered ? 0.6f : 1, 1, 1);
-			blit(pPoseStack, x, y, 0, 0, width, height, INFO_BUTTON_SIZE, INFO_BUTTON_SIZE);
-			if (isHovered) {
-				drawStats(pPoseStack, pMouseX, pMouseY, pPartialTick);
-			}
-		}
-
-		private void drawStats(PoseStack pPoseStack, int pMouseX, int pMouseY, float pPartialTick) {
 			pPoseStack.pushPose();
 			pPoseStack.translate(0, 0, 500);
-			vLine(pPoseStack, GameScreen.this.width / 2, SEPARATOR_OFFSET, GameScreen.this.height - SEPARATOR_OFFSET,
-					0xffffffff);
 
 			drawHeader(pPoseStack, GENERAL_HEADER, 0, 1.5f);
 			drawHeader(pPoseStack, ENEMIES_HEADER, GameScreen.this.width / 2, 1.5f);
@@ -1006,19 +993,33 @@ public class GameScreen extends Screen implements GameClient {
 			}
 
 			// Enemies
-			int i = 0;
+			int i = -ENEMIES_PER_PAGE * page;
+			int enemyHeight = (GameScreen.this.height - STATS_START) / ENEMIES_PER_PAGE;
 			for (var entry : enemies.entrySet()) {
-				font.drawShadow(pPoseStack, getPlayerName(entry.getKey()), GameScreen.this.width / 2 + SPACING,
-						STATS_START + i * 15, 0xffffffff);
-				i++;
-				int j = 0;
-				for (var line : entry.getValue()) {
-					drawStatLine(pPoseStack, line, GameScreen.this.width / 2 + SPACING * 2, STATS_START + i * 15,
-							j % 2 == 0 ? 0xffbbbbbb : 0xff888888, GameScreen.this.width / 2 - SPACING * 3);
+				if (i < 0) {
 					i++;
+					continue;
+				} else if (i >= ENEMIES_PER_PAGE) {
+					break;
+				}
+				font.drawShadow(pPoseStack, getPlayerName(entry.getKey()), GameScreen.this.width / 2 + SPACING,
+						STATS_START + i * enemyHeight, 0xffffffff);
+				int j = 1;
+				for (var line : entry.getValue()) {
+					drawStatLine(pPoseStack, line, GameScreen.this.width / 2 + SPACING * 2,
+							STATS_START + i * enemyHeight + j * 15, j % 2 == 0 ? 0xffbbbbbb : 0xff888888,
+							GameScreen.this.width / 2 - SPACING * 3);
 					j++;
 				}
+				i++;
 			}
+			vLine(pPoseStack, GameScreen.this.width / 2, SEPARATOR_OFFSET, GameScreen.this.height - SEPARATOR_OFFSET,
+					0xffffffff);
+
+			// Page count
+			var pageText = new TextComponent((page + 1) + "/" + maxPages());
+			font.drawShadow(pPoseStack, pageText, 4, GameScreen.this.height - 12, 0xffaaaaaa);
+
 			pPoseStack.popPose();
 		}
 
@@ -1048,6 +1049,12 @@ public class GameScreen extends Screen implements GameClient {
 			poseStack.scale(scale, scale, scale);
 			font.drawShadow(poseStack, text, 0, 0, 0xffffffff);
 			poseStack.popPose();
+		}
+
+		@Override
+		protected int maxPages() {
+			return enemies == null || enemies.isEmpty() ? 1
+					: (int) Math.ceil((double) enemies.size() / ENEMIES_PER_PAGE);
 		}
 
 	}
