@@ -8,6 +8,8 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
@@ -17,6 +19,7 @@ import net.minecraft.core.SerializableUUID;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.Level;
 
 public class PlayerStats {
 
@@ -60,6 +63,22 @@ public class PlayerStats {
 				result.computeIfAbsent(entry.getKey().getEnemy().get(), id -> new ArrayList<>()).add(new StatLine(
 						new TranslatableComponent(entry.getKey().textKey()), String.valueOf(entry.getValue())));
 			}
+		}
+		return result;
+	}
+
+	public static Optional<String> getName(Level level, Key key) {
+		var cache = level.getServer().getProfileCache();
+		return key.enemy.flatMap(id -> cache.get(id)).map(profile -> profile.getName())
+				.flatMap(name -> StringUtils.isBlank(name) ? Optional.empty() : Optional.of(name));
+	}
+
+	public Map<UUID, String> getNames(Level level) {
+		Map<UUID, String> result = new HashMap<>();
+		for (var key : stats.keySet()) {
+			getName(level, key).ifPresent(name -> {
+				result.put(key.enemy.get(), name);
+			});
 		}
 		return result;
 	}

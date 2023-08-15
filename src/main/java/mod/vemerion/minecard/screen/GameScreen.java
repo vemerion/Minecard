@@ -12,6 +12,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import org.codehaus.plexus.util.StringUtils;
 import org.lwjgl.glfw.GLFW;
 
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -123,6 +124,7 @@ public class GameScreen extends Screen implements GameClient {
 	private int tutorialStep;
 	private List<HistoryEntry> historyList;
 	private PlayerStats stats;
+	private Map<UUID, String> names;
 	private Set<Integer> mulliganTargets = new HashSet<>();
 
 	// Widgets
@@ -137,13 +139,14 @@ public class GameScreen extends Screen implements GameClient {
 	private Card attackingCard;
 
 	public GameScreen(List<MessagePlayerState> list, int tutorialStep, List<HistoryEntry> historyList,
-			PlayerStats stats, BlockPos pos) {
+			PlayerStats stats, Map<UUID, String> names, BlockPos pos) {
 		super(TITLE);
 		this.tutorialStep = tutorialStep;
 		this.historyList = historyList;
 		this.animations = new ArrayList<>();
 		this.state = initState(list);
 		this.stats = stats;
+		this.names = names;
 		this.pos = pos;
 		this.popup = new PopupText();
 	}
@@ -448,8 +451,11 @@ public class GameScreen extends Screen implements GameClient {
 	}
 
 	@Override
-	public void stat(PlayerStats.Key key, int value) {
+	public void stat(PlayerStats.Key key, int value, String name) {
 		stats.put(key, value);
+		if (!StringUtils.isBlank(name)) {
+			names.put(key.getEnemy().get(), name);
+		}
 		statsButton.clear();
 	}
 
@@ -1032,15 +1038,8 @@ public class GameScreen extends Screen implements GameClient {
 			if (id.equals(AIPlayer.ID)) {
 				return new TranslatableComponent(ModEntities.CARD_GAME_ROBOT.get().getDescriptionId());
 			}
-			var info = minecraft.player.connection.getPlayerInfo(id);
-			if (info != null) {
-				if (info.getTabListDisplayName() != null) {
-					return info.getTabListDisplayName();
-				} else if (info.getProfile().getName() != null && !info.getProfile().getName().isEmpty()) {
-					return new TextComponent(info.getProfile().getName());
-				}
-			}
-			return new TextComponent(id.toString());
+
+			return new TextComponent(names.getOrDefault(id, id.toString()));
 		}
 
 		private void drawHeader(PoseStack poseStack, Component text, int x, float scale) {

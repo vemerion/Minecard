@@ -45,5 +45,5 @@ public interface GameClient {
 
 	public void mulliganDone(UUID id);
 
-	public void stat(PlayerStats.Key key, int value);
+	public void stat(PlayerStats.Key key, int value, String name);
 }

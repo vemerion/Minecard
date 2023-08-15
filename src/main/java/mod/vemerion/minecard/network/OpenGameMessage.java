@@ -2,6 +2,8 @@ package mod.vemerion.minecard.network;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 import java.util.function.Supplier;
 
 import mod.vemerion.minecard.capability.PlayerStats;
@@ -23,14 +25,16 @@ public class OpenGameMessage extends ServerToClientMessage {
 	private int tutorialStep;
 	private List<HistoryEntry> history;
 	private PlayerStats stats;
+	Map<UUID, String> names;
 	private BlockPos pos;
 
 	public OpenGameMessage(List<MessagePlayerState> state, int tutorialStep, List<HistoryEntry> history,
-			PlayerStats stats, BlockPos pos) {
+			PlayerStats stats, Map<UUID, String> names, BlockPos pos) {
 		this.state = state;
 		this.tutorialStep = tutorialStep;
 		this.history = history;
 		this.stats = stats;
+		this.names = names;
 		this.pos = pos;
 	}
 
@@ -41,6 +45,7 @@ public class OpenGameMessage extends ServerToClientMessage {
 		buffer.writeInt(tutorialStep);
 		buffer.writeCollection(history, (b, e) -> MessageUtil.encode(b, e, HistoryEntry.CODEC));
 		MessageUtil.encode(buffer, stats, PlayerStats.CODEC);
+		buffer.writeMap(names, (b, key) -> b.writeUUID(key), (b, value) -> b.writeUtf(value));
 		buffer.writeBlockPos(pos);
 	}
 
@@ -78,7 +83,8 @@ public class OpenGameMessage extends ServerToClientMessage {
 	public static OpenGameMessage decode(final FriendlyByteBuf buffer) {
 		return new OpenGameMessage(List.of(readPlayer(buffer), readPlayer(buffer)), buffer.readInt(),
 				buffer.readList(b -> MessageUtil.decode(b, HistoryEntry.CODEC)),
-				MessageUtil.decode(buffer, PlayerStats.CODEC), buffer.readBlockPos());
+				MessageUtil.decode(buffer, PlayerStats.CODEC), buffer.readMap(b -> b.readUUID(), b -> b.readUtf()),
+				buffer.readBlockPos());
 	}
 
 	@Override
@@ -110,7 +116,7 @@ public class OpenGameMessage extends ServerToClientMessage {
 						return;
 
 					mc.setScreen(new GameScreen(message.state, message.tutorialStep, message.history, message.stats,
-							message.pos));
+							message.names, message.pos));
 				}
 			};
 		}

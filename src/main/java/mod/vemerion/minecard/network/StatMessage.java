@@ -7,20 +7,23 @@ public class StatMessage extends ServerToClientMessage {
 
 	private PlayerStats.Key key;
 	private int value;
+	private String name;
 
-	public StatMessage(PlayerStats.Key key, int value) {
+	public StatMessage(PlayerStats.Key key, int value, String name) {
 		this.key = key;
 		this.value = value;
+		this.name = name;
 	}
 
 	@Override
 	public void encode(final FriendlyByteBuf buffer) {
 		MessageUtil.encode(buffer, key, PlayerStats.Key.CODEC);
 		buffer.writeInt(value);
+		buffer.writeUtf(name);
 	}
 
 	public static StatMessage decode(final FriendlyByteBuf buffer) {
-		return new StatMessage(MessageUtil.decode(buffer, PlayerStats.Key.CODEC), buffer.readInt());
+		return new StatMessage(MessageUtil.decode(buffer, PlayerStats.Key.CODEC), buffer.readInt(), buffer.readUtf());
 	}
 
 	@Override
@@ -30,6 +33,6 @@ public class StatMessage extends ServerToClientMessage {
 
 	@Override
 	public void handle(GameClient client) {
-		client.stat(key, value);
+		client.stat(key, value, name);
 	}
 }

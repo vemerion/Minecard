@@ -259,7 +259,7 @@ public class AIPlayer implements GameClient {
 	}
 
 	@Override
-	public void stat(PlayerStats.Key key, int value) {
+	public void stat(PlayerStats.Key key, int value, String name) {
 
 	}
 }

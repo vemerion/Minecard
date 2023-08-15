@@ -347,11 +347,12 @@ public class GameBlockEntity extends BlockEntity {
 		var state1 = state.getPlayerStates().get(0);
 		var state2 = state.getPlayerStates().get(1);
 
+		var stats = StatsData.get(level, id).orElse(new PlayerStats());
 		return new OpenGameMessage(
 				List.of(state1.toMessage(!state1.getId().equals(id)), state2.toMessage(!state2.getId().equals(id))),
 				state.getTutorialStep(),
-				state.getHistory().stream().map(e -> e.censor(id, state.isSpectator(id))).toList(),
-				StatsData.get(level, id).orElse(new PlayerStats()), getBlockPos());
+				state.getHistory().stream().map(e -> e.censor(id, state.isSpectator(id))).toList(), stats,
+				stats.getNames(level), getBlockPos());
 	}
 
 	@Override

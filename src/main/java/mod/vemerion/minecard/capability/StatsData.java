@@ -54,7 +54,8 @@ public class StatsData implements INBTSerializable<CompoundTag> {
 			var value = c.get(player).inc(key);
 
 			if (level.getPlayerByUUID(player) instanceof ServerPlayer serverPlayer) {
-				Network.INSTANCE.send(PacketDistributor.PLAYER.with(() -> serverPlayer), new StatMessage(key, value));
+				Network.INSTANCE.send(PacketDistributor.PLAYER.with(() -> serverPlayer),
+						new StatMessage(key, value, PlayerStats.getName(level, key).orElse("")));
 			}
 		});
 	}
