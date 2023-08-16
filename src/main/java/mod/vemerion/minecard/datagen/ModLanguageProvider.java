@@ -41,6 +41,8 @@ public class ModLanguageProvider extends LanguageProvider {
 		add(Helper.gui("stats_enemies"), "Opponents");
 		add(PlayerStats.Key.textKey(PlayerStats.Key.WINS), "Wins");
 		add(PlayerStats.Key.textKey(PlayerStats.Key.LOSSES), "Losses");
+		add(PlayerStats.Key.textKey(PlayerStats.Key.CARDS_PLAYED), "Cards Played");
+		add(PlayerStats.Key.textKey(PlayerStats.Key.TURNS_ENDED), "Turns Ended");
 
 		add(Helper.gui("cardy"), "Cardy the Creeper");
 		tutorial();

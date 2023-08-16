@@ -99,6 +99,8 @@ public class PlayerStats {
 
 		public static final ResourceLocation WINS = new ResourceLocation(Main.MODID, "wins");
 		public static final ResourceLocation LOSSES = new ResourceLocation(Main.MODID, "losses");
+		public static final ResourceLocation CARDS_PLAYED = new ResourceLocation(Main.MODID, "cards_played");
+		public static final ResourceLocation TURNS_ENDED = new ResourceLocation(Main.MODID, "turns_ended");
 
 		public static final Codec<Key> CODEC = RecordCodecBuilder.create(instance -> instance
 				.group(ResourceLocation.CODEC.fieldOf("id").forGetter(Key::getId),

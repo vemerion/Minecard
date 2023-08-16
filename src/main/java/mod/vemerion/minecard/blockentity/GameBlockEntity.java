@@ -148,6 +148,8 @@ public class GameBlockEntity extends BlockEntity {
 		if (isThreadActive() || state.isMulligan())
 			return;
 
+		StatsData.inc(level, state.getCurrentPlayer(), PlayerStats.Key.TURNS_ENDED, Optional.empty());
+
 		state.endTurn(getReceivers());
 		var current = state.getCurrentPlayerState();
 		for (var receiver : getReceivers()) {

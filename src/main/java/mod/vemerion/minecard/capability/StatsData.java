@@ -45,7 +45,8 @@ public class StatsData implements INBTSerializable<CompoundTag> {
 	}
 
 	public static LazyOptional<PlayerStats> get(Level level, UUID player) {
-		return level.getServer().getLevel(Level.OVERWORLD).getCapability(CAPABILITY).lazyMap(c -> c.get(player));
+		return level == null ? LazyOptional.empty()
+				: level.getServer().getLevel(Level.OVERWORLD).getCapability(CAPABILITY).lazyMap(c -> c.get(player));
 	}
 
 	public static void inc(Level level, UUID player, ResourceLocation id, Optional<UUID> enemy) {

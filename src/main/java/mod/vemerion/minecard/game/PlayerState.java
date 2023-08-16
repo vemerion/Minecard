@@ -3,12 +3,15 @@ package mod.vemerion.minecard.game;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
+import mod.vemerion.minecard.capability.PlayerStats;
+import mod.vemerion.minecard.capability.StatsData;
 import mod.vemerion.minecard.game.ability.CardAbilityTrigger;
 import mod.vemerion.minecard.network.DrawCardsMessage;
 import mod.vemerion.minecard.network.MulliganDoneMessage;
@@ -241,6 +244,8 @@ public class PlayerState {
 			game.addHistory(receivers, new HistoryEntry(ItemStack.EMPTY, id, card, List.of()));
 
 		card.ability(a -> a.trigger(CardAbilityTrigger.SUMMON, receivers, this, card, null));
+
+		StatsData.inc(game.getLevel(), id, PlayerStats.Key.CARDS_PLAYED, Optional.empty());
 	}
 
 	public void shuffleIn(List<Receiver> receivers, List<Card> cards) {
