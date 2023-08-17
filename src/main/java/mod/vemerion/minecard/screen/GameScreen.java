@@ -107,10 +107,10 @@ public class GameScreen extends Screen implements GameClient {
 	private static final int DECK_VERTICAL_OFFSET = 55;
 	private static final int CARD_PADDING = 4;
 	private static final int INFO_BUTTON_SIZE = 12;
-	private static final int INFO_BUTTON_X_OFFSET = 8 + INFO_BUTTON_SIZE;
+	private static final int INFO_BUTTON_X_OFFSET = 15 + INFO_BUTTON_SIZE;
 	private static final int INFO_BUTTON_Y_OFFSET = 11 + INFO_BUTTON_SIZE;
 	private static final int INFO_SCREEN_PROPERTY_COUNT = 3 * 4;
-	private static final int STATS_BUTTON_Y_OFFSET = 11;
+	private static final int STATS_BUTTON_X_OFFSET = 1 + INFO_BUTTON_SIZE;
 
 	private static final Card EMPTY_CARD = Cards.EMPTY_CARD_TYPE.create();
 
@@ -857,6 +857,7 @@ public class GameScreen extends Screen implements GameClient {
 				hoverTimestamp = minecraft.level.getGameTime();
 			}
 			isHovered0 = isHovered;
+			RenderSystem.enableDepthTest();
 
 			if (isHovered) {
 				pPoseStack.pushPose();
@@ -870,7 +871,6 @@ public class GameScreen extends Screen implements GameClient {
 			RenderSystem.setShader(GameRenderer::getPositionTexShader);
 			RenderSystem.setShaderTexture(0, texture);
 
-			RenderSystem.enableDepthTest();
 			RenderSystem.setShaderColor(isHovered ? 0.6f : 1, isHovered ? 0.6f : 1, 1, 1);
 			blit(pPoseStack, x, y, 0, 0, width, height, INFO_BUTTON_SIZE, INFO_BUTTON_SIZE);
 			if (isHovered) {
@@ -964,13 +964,13 @@ public class GameScreen extends Screen implements GameClient {
 		private static final Component GENERAL_HEADER = new TranslatableComponent(Helper.gui("stats_general"));
 		private static final Component ENEMIES_HEADER = new TranslatableComponent(Helper.gui("stats_enemies"));
 
-		private static final ResourceLocation TEXTURE = new ResourceLocation(Main.MODID, "textures/gui/info.png");
+		private static final ResourceLocation TEXTURE = new ResourceLocation(Main.MODID, "textures/gui/stats.png");
 
 		private List<PlayerStats.StatLine> general;
 		private Map<UUID, List<StatLine>> enemies;
 
 		public StatsButton() {
-			super(GameScreen.this.width - INFO_BUTTON_X_OFFSET, GameScreen.this.height / 2 + STATS_BUTTON_Y_OFFSET,
+			super(GameScreen.this.width - STATS_BUTTON_X_OFFSET, GameScreen.this.height / 2 - INFO_BUTTON_Y_OFFSET,
 					TEXTURE);
 		}
 

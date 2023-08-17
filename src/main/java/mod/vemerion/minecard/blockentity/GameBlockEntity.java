@@ -97,6 +97,7 @@ public class GameBlockEntity extends BlockEntity {
 			}
 
 			state = new GameState();
+			state.setLevel(level);
 			aiPlayer = null;
 			receivers.clear();
 			setChanged();
@@ -253,6 +254,7 @@ public class GameBlockEntity extends BlockEntity {
 
 	private void startTutorial(ServerPlayer player) {
 		state = new GameState();
+		state.setLevel(level);
 		aiPlayer = new AIPlayer(this);
 		receivers.add(AIPlayer.ID);
 

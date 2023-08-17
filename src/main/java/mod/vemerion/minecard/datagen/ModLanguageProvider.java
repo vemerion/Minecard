@@ -243,6 +243,7 @@ public class ModLanguageProvider extends LanguageProvider {
 				"The column to the right of the card lists all the special properties a card has. For example, this card has thorns, so it will deal extra damage when attacked.");
 		addTutorialStep(
 				"You can hover over this button at any time during the game to see a list of all the different properties.");
+		addTutorialStep("And you can hover over this button to see your Minecard game statistics.");
 		addTutorialStep(
 				"This area describes any abilities the card has. Abilities have a trigger and an effect. In this case, the trigger is 'attack', which means the effect will happen every time the card attacks.");
 		addTutorialStep("Enough about the cards! Let's move on to the rest of the game.");

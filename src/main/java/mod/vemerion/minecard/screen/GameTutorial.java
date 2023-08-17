@@ -69,37 +69,39 @@ public class GameTutorial implements GuiEventListener, NarratableEntry {
 			new Step(new TranslatableComponent(Helper.tutorial(7)),
 					new Rect((w, h) -> w / 2 + 35, (w, h) -> h / 2 - 50, 20, 100)),
 			new Step(new TranslatableComponent(Helper.tutorial(8)),
-					new Rect((w, h) -> w - 23, (w, h) -> h / 2 - 30, 18, 18)),
+					new Rect((w, h) -> w - 28, (w, h) -> h / 2 - 24, 14, 14)),
 			new Step(new TranslatableComponent(Helper.tutorial(9)),
+					new Rect((w, h) -> w - 14, (w, h) -> h / 2 - 24, 14, 14)),
+			new Step(new TranslatableComponent(Helper.tutorial(10)),
 					new Rect((w, h) -> w / 2 - 40, (w, h) -> h / 2 + 10, 86, 40)),
-			new Step(new TranslatableComponent(Helper.tutorial(10))),
-			new Step(new TranslatableComponent(Helper.tutorial(11)), new Rect((w, h) -> 0, (w, h) -> h / 2, 500, 500)),
-			new Step(new TranslatableComponent(Helper.tutorial(12)),
-					new Rect((w, h) -> w - 19, (w, h) -> h - 110, 18, 62)),
+			new Step(new TranslatableComponent(Helper.tutorial(11))),
+			new Step(new TranslatableComponent(Helper.tutorial(12)), new Rect((w, h) -> 0, (w, h) -> h / 2, 500, 500)),
 			new Step(new TranslatableComponent(Helper.tutorial(13)),
+					new Rect((w, h) -> w - 19, (w, h) -> h - 110, 18, 62)),
+			new Step(new TranslatableComponent(Helper.tutorial(14)),
 					new Rect((w, h) -> w / 2 - 130, (w, h) -> h - 54, 260, 50)),
-			new Step(new TranslatableComponent(Helper.tutorial(14))),
 			new Step(new TranslatableComponent(Helper.tutorial(15))),
-			new Step(new TranslatableComponent(Helper.tutorial(16)),
-					new Rect((w, h) -> w / 2 - 45, (w, h) -> h - 90, 90, 30)),
+			new Step(new TranslatableComponent(Helper.tutorial(16))),
 			new Step(new TranslatableComponent(Helper.tutorial(17)),
+					new Rect((w, h) -> w / 2 - 45, (w, h) -> h - 90, 90, 30)),
+			new Step(new TranslatableComponent(Helper.tutorial(18)),
 					new Rect((w, h) -> w / 2 - 130, (w, h) -> h - 118, 260, 52), null, UnlockAction.MULLIGAN),
-			new Step(new TranslatableComponent(Helper.tutorial(18))),
-			new Step(new TranslatableComponent(Helper.tutorial(19),
+			new Step(new TranslatableComponent(Helper.tutorial(19))),
+			new Step(new TranslatableComponent(Helper.tutorial(20),
 					Cards.getInstance(true).get(EntityType.PLAYER).getHealth())),
-			new Step(new TranslatableComponent(Helper.tutorial(20)),
+			new Step(new TranslatableComponent(Helper.tutorial(21)),
 					new Rect((w, h) -> w - 210, (w, h) -> h - 66, 80, 12)),
-			new Step(new TranslatableComponent(Helper.tutorial(21))),
-			new Step(new TranslatableComponent(Helper.tutorial(22)), new Rect((w, h) -> 0, (w, h) -> 0, 18, 320), null,
+			new Step(new TranslatableComponent(Helper.tutorial(22))),
+			new Step(new TranslatableComponent(Helper.tutorial(23)), new Rect((w, h) -> 0, (w, h) -> 0, 18, 320), null,
 					UnlockAction.PLAY_CARD),
-			new Step(new TranslatableComponent(Helper.tutorial(23)), new Rect((w, h) -> 0, (w, h) -> 0, 18, 320)),
 			new Step(new TranslatableComponent(Helper.tutorial(24)), new Rect((w, h) -> 0, (w, h) -> 0, 18, 320)),
-			new Step(new TranslatableComponent(Helper.tutorial(25))),
-			new Step(new TranslatableComponent(Helper.tutorial(26)),
+			new Step(new TranslatableComponent(Helper.tutorial(25)), new Rect((w, h) -> 0, (w, h) -> 0, 18, 320)),
+			new Step(new TranslatableComponent(Helper.tutorial(26))),
+			new Step(new TranslatableComponent(Helper.tutorial(27)),
 					new Rect((w, h) -> w - 26, (w, h) -> h / 2 - 12, 24, 24)),
-			new Step(new TranslatableComponent(Helper.tutorial(27)), null, null, UnlockAction.END_TURN),
-			new Step(new TranslatableComponent(Helper.tutorial(28))),
-			new Step(new TranslatableComponent(Helper.tutorial(29)), null, null, UnlockAction.GAME_OVER) };
+			new Step(new TranslatableComponent(Helper.tutorial(28)), null, null, UnlockAction.END_TURN),
+			new Step(new TranslatableComponent(Helper.tutorial(29))),
+			new Step(new TranslatableComponent(Helper.tutorial(30)), null, null, UnlockAction.GAME_OVER) };
 
 	public GameTutorial(GameScreen screen, int initialStep) {
 		this.screen = screen;
@@ -178,7 +180,7 @@ public class GameTutorial implements GuiEventListener, NarratableEntry {
 	}
 
 	public void render(PoseStack poseStack, int mouseX, int mouseY, BufferSource source, float partialTick) {
-		if (index > 1 && index < 10) {
+		if (index > 1 && index < 11) {
 			poseStack.pushPose();
 			poseStack.translate(0, 0, 100);
 			card.render(poseStack, mouseX, mouseY, source, partialTick);
