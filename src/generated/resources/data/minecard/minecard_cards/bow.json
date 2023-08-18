@@ -1,0 +1,124 @@
+{
+  "additional_data": {
+    "item": {
+      "id": "minecraft:bow",
+      "Count": 1,
+      "tag": {
+        "Damage": 0
+      }
+    }
+  },
+  "abilities": {
+    "type": "minecard:chain",
+    "value": {
+      "triggers": [
+        "summon"
+      ],
+      "text_key": "card_ability.minecard.bow",
+      "abilities": [
+        {
+          "type": "minecard:select_cards",
+          "value": {
+            "selection": {
+              "groups": [
+                "enemy_board",
+                "your_board"
+              ],
+              "method": {
+                "type": "minecard:choice",
+                "value": {
+                  "discover": false
+                }
+              }
+            },
+            "clear": true
+          }
+        },
+        {
+          "type": "minecard:animation",
+          "value": {
+            "animation": "minecard:shoot_arrow"
+          }
+        },
+        {
+          "type": "minecard:history",
+          "value": {
+            "icon": {
+              "id": "minecraft:book",
+              "Count": 1
+            }
+          }
+        },
+        {
+          "type": "minecard:modify",
+          "value": {
+            "modifications": [
+              [
+                {
+                  "output": {
+                    "type": "minecard:health"
+                  },
+                  "operator": {
+                    "type": "minecard:constant",
+                    "value": -3
+                  }
+                }
+              ]
+            ]
+          }
+        },
+        {
+          "type": "minecard:select_cards",
+          "value": {
+            "selection": {
+              "groups": [
+                "self"
+              ],
+              "method": {
+                "type": "minecard:all"
+              }
+            },
+            "clear": true
+          }
+        },
+        {
+          "type": "minecard:modify",
+          "value": {
+            "modifications": [
+              [
+                {
+                  "output": {
+                    "type": "minecard:cost"
+                  },
+                  "operator": {
+                    "type": "minecard:add",
+                    "value": {
+                      "left": {
+                        "type": "minecard:variable",
+                        "value": {
+                          "type": "minecard:cost"
+                        }
+                      },
+                      "right": {
+                        "type": "minecard:constant",
+                        "value": 1
+                      }
+                    }
+                  }
+                }
+              ]
+            ]
+          }
+        },
+        {
+          "placement": "your_deck",
+          "type": "minecard:place_cards"
+        }
+      ]
+    }
+  },
+  "entity": "minecraft:item",
+  "cost": 1,
+  "health": 0,
+  "damage": 0
+}

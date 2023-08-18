@@ -806,6 +806,56 @@ public class ModCardProvider implements DataProvider {
 														new HistoryAbility(Items.BOOK.getDefaultInstance(),
 																Optional.of(HistoryEntry.Visibility.ALL))))),
 										history()))));
+		add(new Builder(EntityType.ITEM, 0, 0, 0)
+				.setKey(mod(
+						"slime_ball"))
+				.setAdditionalData(new AdditionalCardData.ItemData(Items.SLIME_BALL))
+				.setCardAbility(new ChainAbility(Set.of(CardAbilityTrigger.SUMMON), textKey("slime_ball"), List.of(
+						new DrawCardsAbility(Set.of(), "", 2), new HistoryAbility(Items.BOOK),
+						new SelectCardsAbility(new CardAbilitySelection(
+								new CardAbilityGroups(EnumSet.of(CardAbilityGroup.COLLECTED)),
+								new CardSelectionMethod.Random(1, false), CardCondition.NoCondition.NO_CONDITION),
+								true),
+						new PlaceCardsAbility(CardPlacement.ENEMY_HAND)))));
+		add(new Builder(EntityType.ITEM, 1, 0, 0).setKey(mod("bow"))
+				.setAdditionalData(new AdditionalCardData.ItemData(Items.BOW))
+				.setCardAbility(new ChainAbility(Set.of(CardAbilityTrigger.SUMMON), textKey("bow"), List.of(
+						new SelectCardsAbility(
+								new CardAbilitySelection(
+										new CardAbilityGroups(
+												EnumSet.of(CardAbilityGroup.ENEMY_BOARD, CardAbilityGroup.YOUR_BOARD)),
+										new CardSelectionMethod.Choice(false), CardCondition.NoCondition.NO_CONDITION),
+								true),
+						new AnimationAbility((mod("shoot_arrow"))), new HistoryAbility(Items.BOOK),
+						new ModifyAbility(List.of(new ModificationBuilder().heal(-3).build())),
+						new SelectCardsAbility(
+								new CardAbilitySelection(new CardAbilityGroups(EnumSet.of(CardAbilityGroup.SELF)),
+										CardSelectionMethod.All.ALL, CardCondition.NoCondition.NO_CONDITION),
+								true),
+						new ModifyAbility(List.of(new ModificationBuilder().addCost(1).build())),
+						new PlaceCardsAbility(CardPlacement.YOUR_DECK)))));
+		add(new Builder(EntityType.ITEM, 4, 0, 0).setKey(mod("pumpkin"))
+				.setAdditionalData(
+						new AdditionalCardData.ItemData(Items.PUMPKIN))
+				.setCardAbility(
+						new ChoiceCardAbility(textKey("pumpkin"), List.of(
+								new ChainAbility(
+										EnumSet.of(CardAbilityTrigger.SUMMON), textKey("pumpkin_taunt"), List.of(
+												new SelectCardsAbility(new CardAbilitySelection(new CardAbilityGroups(
+														EnumSet.of(CardAbilityGroup.YOUR_BOARD)),
+														new CardSelectionMethod.Choice(false),
+														CardCondition.NoCondition.NO_CONDITION)),
+												new AnimationAbility(mod("throw_pumpkin")),
+												new ModifyAbility(
+														List.of(new ModificationBuilder().addDamage(5).addMaxHealth(5)
+																.setProperty(CardProperty.TAUNT, 1).build())),
+												history())),
+								new ChainAbility(
+										EnumSet.of(CardAbilityTrigger.SUMMON), textKey("pumpkin_summon"), List.of(
+												new ConstantCardsAbility(
+														List.of(new LazyCardType(mod("taunt_snow_golem")),
+																new LazyCardType(mod("taunt_snow_golem")))),
+												new PlaceCardsAbility(CardPlacement.LEFT), history()))))));
 
 		// Auxiliary cards
 		add(new Builder(EntityType.ITEM, 0, 5, 0).setKey(mod("end_crystal"))
@@ -1020,6 +1070,8 @@ public class ModCardProvider implements DataProvider {
 						new ModifyAbility(List.of(new ModificationBuilder().restore().build())),
 						new PlaceCardsAbility(CardPlacement.YOUR_HAND), new HistoryAbility(
 								Items.BOOK.getDefaultInstance(), Optional.of(HistoryEntry.Visibility.ALL))))));
+		add(new Builder(EntityType.SNOW_GOLEM, 0, 2, 2).setKey(mod("taunt_snow_golem")).addProperty(CardProperty.TAUNT,
+				1));
 
 		printStatistics();
 	}

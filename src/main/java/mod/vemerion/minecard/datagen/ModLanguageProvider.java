@@ -196,6 +196,12 @@ public class ModLanguageProvider extends LanguageProvider {
 		card("buried_treasure", "Death: Gain a random treasure card.");
 		card("wooden_sword", "Give a card on the board 3 attack. The sword is return when the card dies.");
 		card("wooden_sword_return", "Death: Return the wooden sword to your hand.");
+		card("slime_ball", "Draw two cards. A random copy of one of the drawn cards is given to the enemy.");
+		card("bow", "Deal 3 damage to a card on the board. Put the bow back in the deck with cost + 1.");
+		card("pumpkin",
+				"Either give +5/+5 and taunt to a friendly selected card on the board, or summon two (2/2) snow golems with taunt.");
+		card("pumpkin_taunt", "Give +5/+5 and taunt to a friendly selected card on the board.");
+		card("pumpkin_summon", "Summon two (2/2) snow golems with taunt.");
 
 	}
 

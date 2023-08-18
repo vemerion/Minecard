@@ -1,0 +1,152 @@
+{
+  "additional_data": {
+    "item": {
+      "id": "minecraft:pumpkin",
+      "Count": 1
+    }
+  },
+  "abilities": {
+    "type": "minecard:choice",
+    "value": {
+      "text_key": "card_ability.minecard.pumpkin",
+      "abilities": [
+        {
+          "type": "minecard:chain",
+          "value": {
+            "triggers": [
+              "summon"
+            ],
+            "text_key": "card_ability.minecard.pumpkin_taunt",
+            "abilities": [
+              {
+                "type": "minecard:select_cards",
+                "value": {
+                  "selection": {
+                    "groups": [
+                      "your_board"
+                    ],
+                    "method": {
+                      "type": "minecard:choice",
+                      "value": {
+                        "discover": false
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "type": "minecard:animation",
+                "value": {
+                  "animation": "minecard:throw_pumpkin"
+                }
+              },
+              {
+                "type": "minecard:modify",
+                "value": {
+                  "modifications": [
+                    [
+                      {
+                        "output": {
+                          "type": "minecard:damage"
+                        },
+                        "operator": {
+                          "type": "minecard:add",
+                          "value": {
+                            "left": {
+                              "type": "minecard:variable",
+                              "value": {
+                                "type": "minecard:damage"
+                              }
+                            },
+                            "right": {
+                              "type": "minecard:constant",
+                              "value": 5
+                            }
+                          }
+                        }
+                      },
+                      {
+                        "output": {
+                          "type": "minecard:max_health"
+                        },
+                        "operator": {
+                          "type": "minecard:add",
+                          "value": {
+                            "left": {
+                              "type": "minecard:variable",
+                              "value": {
+                                "type": "minecard:max_health"
+                              }
+                            },
+                            "right": {
+                              "type": "minecard:constant",
+                              "value": 5
+                            }
+                          }
+                        }
+                      },
+                      {
+                        "output": {
+                          "type": "minecard:property",
+                          "value": "minecard:taunt"
+                        },
+                        "operator": {
+                          "type": "minecard:constant",
+                          "value": 1
+                        }
+                      }
+                    ]
+                  ]
+                }
+              },
+              {
+                "type": "minecard:history",
+                "value": {
+                  "icon": {
+                    "id": "minecraft:book",
+                    "Count": 1
+                  }
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "minecard:chain",
+          "value": {
+            "triggers": [
+              "summon"
+            ],
+            "text_key": "card_ability.minecard.pumpkin_summon",
+            "abilities": [
+              {
+                "cards": [
+                  "minecard:taunt_snow_golem",
+                  "minecard:taunt_snow_golem"
+                ],
+                "type": "minecard:constant_cards"
+              },
+              {
+                "placement": "left",
+                "type": "minecard:place_cards"
+              },
+              {
+                "type": "minecard:history",
+                "value": {
+                  "icon": {
+                    "id": "minecraft:book",
+                    "Count": 1
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "entity": "minecraft:item",
+  "cost": 4,
+  "health": 0,
+  "damage": 0
+}

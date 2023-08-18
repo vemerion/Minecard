@@ -1,0 +1,58 @@
+{
+  "additional_data": {
+    "item": {
+      "id": "minecraft:slime_ball",
+      "Count": 1
+    }
+  },
+  "abilities": {
+    "type": "minecard:chain",
+    "value": {
+      "triggers": [
+        "summon"
+      ],
+      "text_key": "card_ability.minecard.slime_ball",
+      "abilities": [
+        {
+          "count": 2,
+          "type": "minecard:draw_cards"
+        },
+        {
+          "type": "minecard:history",
+          "value": {
+            "icon": {
+              "id": "minecraft:book",
+              "Count": 1
+            }
+          }
+        },
+        {
+          "type": "minecard:select_cards",
+          "value": {
+            "selection": {
+              "groups": [
+                "collected"
+              ],
+              "method": {
+                "type": "minecard:random",
+                "value": {
+                  "count": 1,
+                  "repeat": false
+                }
+              }
+            },
+            "clear": true
+          }
+        },
+        {
+          "placement": "enemy_hand",
+          "type": "minecard:place_cards"
+        }
+      ]
+    }
+  },
+  "entity": "minecraft:item",
+  "cost": 0,
+  "health": 0,
+  "damage": 0
+}

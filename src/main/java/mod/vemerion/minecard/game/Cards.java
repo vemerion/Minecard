@@ -46,7 +46,9 @@ public class Cards extends SimpleJsonResourceReloadListener {
 			new ResourceLocation(Main.MODID, "enchanted_golden_apple"), new ResourceLocation(Main.MODID, "chest"),
 			new ResourceLocation(Main.MODID, "enchanted_book"), new ResourceLocation(Main.MODID, "spyglass"),
 			new ResourceLocation(Main.MODID, "lodestone"), new ResourceLocation(Main.MODID, "soul_sand"),
-			new ResourceLocation(Main.MODID, "amethyst_shard"), new ResourceLocation(Main.MODID, "wooden_sword"));
+			new ResourceLocation(Main.MODID, "amethyst_shard"), new ResourceLocation(Main.MODID, "wooden_sword"),
+			new ResourceLocation(Main.MODID, "slime_ball"), new ResourceLocation(Main.MODID, "bow"),
+			new ResourceLocation(Main.MODID, "pumpkin"));
 
 	private static Cards clientInstance;
 	private static Cards serverInstance;

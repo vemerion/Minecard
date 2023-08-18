@@ -94,6 +94,18 @@
     {
       "data": "minecard:wooden_sword",
       "weight": 1
+    },
+    {
+      "data": "minecard:slime_ball",
+      "weight": 1
+    },
+    {
+      "data": "minecard:bow",
+      "weight": 1
+    },
+    {
+      "data": "minecard:pumpkin",
+      "weight": 1
     }
   ],
   "type": "minecard:card_treasure"

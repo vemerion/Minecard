@@ -165,6 +165,8 @@ public class ModAnimationConfigProvider implements DataProvider {
 		animations.put("throw_amethyst_shard", new ThrowItemAnimationConfig(Items.AMETHYST_SHARD, Optional.empty(),
 				Optional.of(SoundEvents.AMETHYST_BLOCK_BREAK), Optional.empty()));
 		animations.put("soul_sand", new BlockAnimationConfig(Blocks.SOUL_SAND));
+		animations.put("throw_pumpkin", new ThrowItemAnimationConfig(Items.PUMPKIN, Optional.empty(),
+				Optional.of(SoundEvents.PUMPKIN_CARVE), Optional.empty()));
 
 	}
 

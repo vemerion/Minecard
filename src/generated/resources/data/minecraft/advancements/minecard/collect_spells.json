@@ -81,6 +81,24 @@
       "conditions": {
         "card": "minecard:wooden_sword"
       }
+    },
+    "has_minecard:slime_ball": {
+      "trigger": "minecard:collect_card",
+      "conditions": {
+        "card": "minecard:slime_ball"
+      }
+    },
+    "has_minecard:bow": {
+      "trigger": "minecard:collect_card",
+      "conditions": {
+        "card": "minecard:bow"
+      }
+    },
+    "has_minecard:pumpkin": {
+      "trigger": "minecard:collect_card",
+      "conditions": {
+        "card": "minecard:pumpkin"
+      }
     }
   },
   "requirements": [
@@ -116,6 +134,15 @@
     ],
     [
       "has_minecard:wooden_sword"
+    ],
+    [
+      "has_minecard:slime_ball"
+    ],
+    [
+      "has_minecard:bow"
+    ],
+    [
+      "has_minecard:pumpkin"
     ]
   ]
 }

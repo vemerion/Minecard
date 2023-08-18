@@ -250,10 +250,14 @@ public class PlayerState {
 
 	public void shuffleIn(List<Receiver> receivers, List<Card> cards) {
 		for (var card : cards) {
-			deck.add(game.getRandom().nextInt(deck.size()), card);
-			for (var receiver : receivers)
-				game.updateCards(receiver, board);
+			if (deck.isEmpty()) {
+				deck.add(card);
+			} else {
+				deck.add(game.getRandom().nextInt(deck.size()), card);
+			}
 		}
+		for (var receiver : receivers)
+			game.updateCards(receiver, cards);
 	}
 
 	public MessagePlayerState toMessage(boolean hide) {
