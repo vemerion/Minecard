@@ -25,32 +25,38 @@ import net.minecraft.world.item.ItemStack;
 public class PlayerState {
 
 	public static final Codec<PlayerState> CODEC = ExtraCodecs
-			.lazyInitializedCodec(() -> RecordCodecBuilder.create(instance -> instance
-					.group(SerializableUUID.CODEC.fieldOf("id").forGetter(PlayerState::getId),
-							Codec.list(Card.CODEC).fieldOf("deck").forGetter(PlayerState::getDeck),
-							Codec.list(Card.CODEC).fieldOf("hand").forGetter(PlayerState::getHand),
-							Codec.list(Card.CODEC).fieldOf("board").forGetter(PlayerState::getBoard),
-							Codec.INT.fieldOf("resources").forGetter(PlayerState::getResources),
-							Codec.INT.fieldOf("maxResources").forGetter(PlayerState::getMaxResources),
-							Codec.BOOL.fieldOf("mulligan").forGetter(PlayerState::isMulligan))
-					.apply(instance, PlayerState::new)));
+			.lazyInitializedCodec(
+					() -> RecordCodecBuilder
+							.create(instance -> instance
+									.group(SerializableUUID.CODEC.fieldOf("id").forGetter(PlayerState::getId),
+											Codec.list(Card.CODEC).fieldOf("deck").forGetter(PlayerState::getDeck),
+											Codec.list(Card.CODEC).fieldOf("hand").forGetter(PlayerState::getHand),
+											Codec.list(Card.CODEC).fieldOf("board").forGetter(PlayerState::getBoard),
+											Codec.list(Card.CODEC).fieldOf("graveyard")
+													.forGetter(PlayerState::getGraveyard),
+											Codec.INT.fieldOf("resources").forGetter(PlayerState::getResources),
+											Codec.INT.fieldOf("maxResources").forGetter(PlayerState::getMaxResources),
+											Codec.BOOL.fieldOf("mulligan").forGetter(PlayerState::isMulligan))
+									.apply(instance, PlayerState::new)));
 
 	private UUID id;
 	private List<Card> deck;
 	private List<Card> hand;
 	private List<Card> board;
+	private List<Card> graveyard;
 	private int resources;
 	private int maxResources;
 	private boolean mulligan;
 	private GameState game;
 	private boolean isGameOver;
 
-	public PlayerState(UUID id, List<Card> deck, List<Card> hand, List<Card> board, int resources, int maxResources,
-			boolean mulligan) {
+	public PlayerState(UUID id, List<Card> deck, List<Card> hand, List<Card> board, List<Card> graveyard, int resources,
+			int maxResources, boolean mulligan) {
 		this.id = id;
 		this.deck = new ArrayList<>(deck);
 		this.hand = new ArrayList<>(hand);
 		this.board = new ArrayList<>(board);
+		this.graveyard = new ArrayList<>(graveyard);
 		this.resources = resources;
 		this.maxResources = maxResources;
 		this.mulligan = mulligan;
@@ -78,6 +84,10 @@ public class PlayerState {
 
 	public List<Card> getBoard() {
 		return board;
+	}
+
+	public List<Card> getGraveyard() {
+		return graveyard;
 	}
 
 	public int getResources() {

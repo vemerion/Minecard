@@ -121,6 +121,12 @@ public class CardAbilityGroups {
 			case COLLECTED:
 				result.addAll(collected);
 				break;
+			case ENEMY_GRAVEYARD:
+				result.addAll(enemyState.getGraveyard());
+				break;
+			case YOUR_GRAVEYARD:
+				result.addAll(yourState.getGraveyard());
+				break;
 			}
 		}
 

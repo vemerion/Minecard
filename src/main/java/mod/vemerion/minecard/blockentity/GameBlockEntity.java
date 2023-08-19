@@ -280,7 +280,7 @@ public class GameBlockEntity extends BlockEntity {
 			playerCard.setHealth(1);
 		board.add(playerCard);
 
-		var playerState = new PlayerState(id, deck, hand, board, 1, 1, true);
+		var playerState = new PlayerState(id, deck, hand, board, new ArrayList<>(), 1, 1, true);
 		playerState.setGame(state);
 		state.getPlayerStates().add(playerState);
 

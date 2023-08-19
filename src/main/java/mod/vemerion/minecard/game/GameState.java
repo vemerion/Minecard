@@ -211,12 +211,14 @@ public class GameState {
 
 		PlayerState owner = null;
 		List<Card> container = null;
+		List<Card> graveyard = null;
 
 		for (var playerState : getPlayerStates()) {
 			for (var list : List.of(playerState.getBoard(), playerState.getHand(), playerState.getDeck())) {
 				if (list.stream().anyMatch(c -> c.getId() == card.getId())) {
 					owner = playerState;
 					container = list;
+					graveyard = owner.getGraveyard();
 					break;
 				}
 			}
@@ -240,6 +242,7 @@ public class GameState {
 
 		if (card.isDead()) {
 			container.remove(card);
+			graveyard.add(card);
 		}
 	}
 

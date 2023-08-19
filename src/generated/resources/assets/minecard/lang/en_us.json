@@ -38,7 +38,7 @@
   "card_ability.minecard.chest": "Draw 3 cards, but increase their cost by 1.",
   "card_ability.minecard.chicken": "Summon: 50% chance to gain an egg.",
   "card_ability.minecard.cod": "Summon: Chance to summon another Cod.",
-  "card_ability.minecard.cow": "Death: Gain a milk bucket card.",
+  "card_ability.minecard.cow": "Summon: Gain a milk bucket card.",
   "card_ability.minecard.creeper": "Death: Explode and deal 3 damage to adjacent cards.",
   "card_ability.minecard.dolphin": "Summon: Spawn a treasure chest.",
   "card_ability.minecard.donkey": "Summon: Draw a card.",

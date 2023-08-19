@@ -184,7 +184,7 @@ public class ModLanguageProvider extends LanguageProvider {
 		card("salmon_bucket", "Summon a Salmon.");
 		card("turtle", "Grow: Gain a scute card.");
 		card("drowned", "Death: Gain a trident card.");
-		card("cow", "Death: Gain a milk bucket card.");
+		card("cow", "Summon: Gain a milk bucket card.");
 		card("fox", "Summon: Spawn a sweet berries card.");
 		card("mooshroom", "Summon: Gain a mushroom stew card.");
 		card("witch", "Summon: Gain a random potion card.");
