@@ -72,6 +72,7 @@ public class AIPlayer implements GameClient {
 			var choice = choices.get(0);
 			game.choice(choice.cards().get(rand.nextInt(choice.cards().size())).getId());
 			choices.remove(0);
+			return;
 		}
 
 		if (yourBoard.size() < GameState.MAX_BOARD_SIZE) {

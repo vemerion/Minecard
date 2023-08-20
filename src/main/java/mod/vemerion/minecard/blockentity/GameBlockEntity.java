@@ -77,8 +77,11 @@ public class GameBlockEntity extends BlockEntity {
 	}
 
 	public void tick() {
-		for (var ai : ais.values())
+		for (var ai : ais.values()) {
 			ai.tick();
+			if (state.isGameOver())
+				break;
+		}
 
 		if (state.isGameOver()) {
 			if (isTutorial()) {
@@ -294,7 +297,7 @@ public class GameBlockEntity extends BlockEntity {
 		}
 	}
 
-	private void addAIPlayer() {
+	public void addAIPlayer() {
 		List<Card> deck = new ArrayList<>();
 
 		var entities = ForgeRegistries.ENTITIES.getValues();
