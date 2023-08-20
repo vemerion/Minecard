@@ -17,7 +17,12 @@ import net.minecraft.world.entity.EntityType;
 
 public class AIPlayer implements GameClient {
 
-	public static final UUID ID = UUID.fromString("8dfb8e37-27f3-4ebd-870f-9a8e4e7a123d");
+	public static final UUID ID_1 = UUID.fromString("8dfb8e37-27f3-4ebd-870f-9a8e4e7a123d");
+	public static final UUID ID_2 = UUID.fromString("57d76b03-0570-422e-93b9-10603073fce5");
+
+	public static boolean isAi(UUID id) {
+		return ID_1.equals(id) || ID_2.equals(id);
+	}
 
 	private List<Card> yourHand = new ArrayList<>();
 	private List<Card> yourBoard = new ArrayList<>();
@@ -31,10 +36,16 @@ public class AIPlayer implements GameClient {
 	private GameBlockEntity game;
 	private Random rand;
 	private List<Choice> choices = new ArrayList<>();
+	private UUID id;
 
-	public AIPlayer(GameBlockEntity game) {
+	public AIPlayer(GameBlockEntity game, UUID id) {
 		this.game = game;
+		this.id = id;
 		this.rand = new Random();
+	}
+
+	public UUID getId() {
+		return id;
 	}
 
 	public void tick() {
@@ -44,7 +55,7 @@ public class AIPlayer implements GameClient {
 		timer++;
 
 		if (yourMulligan && timer % 8 == 0) {
-			game.performMulligan(ID,
+			game.performMulligan(getId(),
 					yourHand.stream().filter(c -> c.getCost() > 3).map(c -> c.getId()).collect(Collectors.toSet()));
 			return;
 		}
@@ -178,7 +189,7 @@ public class AIPlayer implements GameClient {
 
 	@Override
 	public void drawCards(UUID id, List<Card> cards, boolean shrinkDeck) {
-		if (id.equals(ID)) {
+		if (id.equals(getId())) {
 			for (var card : cards)
 				yourHand.add(card);
 		}
@@ -196,8 +207,8 @@ public class AIPlayer implements GameClient {
 
 	@Override
 	public void placeCard(UUID id, Card card, int leftId) {
-		var board = id.equals(ID) ? yourBoard : enemyBoard;
-		if (id.equals(ID)) {
+		var board = id.equals(getId()) ? yourBoard : enemyBoard;
+		if (id.equals(getId())) {
 			yourHand.removeIf(c -> c.getId() == card.getId());
 		}
 
@@ -216,19 +227,19 @@ public class AIPlayer implements GameClient {
 
 	@Override
 	public void setResources(UUID id, int resources, int maxResources) {
-		if (ID.equals(id))
+		if (getId().equals(id))
 			this.resources = resources;
 	}
 
 	@Override
 	public void setCurrent(UUID current) {
-		isCurrent = ID.equals(current);
+		isCurrent = getId().equals(current);
 	}
 
 	@Override
 	public void openGame(List<MessagePlayerState> state, BlockPos pos) {
 		for (var playerState : state) {
-			if (playerState.id.equals(ID)) {
+			if (playerState.id.equals(getId())) {
 				yourHand = playerState.hand;
 				yourBoard = playerState.board;
 				yourMulligan = playerState.mulligan;
@@ -251,7 +262,7 @@ public class AIPlayer implements GameClient {
 
 	@Override
 	public void mulliganDone(UUID id) {
-		if (id.equals(ID)) {
+		if (id.equals(getId())) {
 			yourMulligan = false;
 		} else {
 			enemyMulligan = false;

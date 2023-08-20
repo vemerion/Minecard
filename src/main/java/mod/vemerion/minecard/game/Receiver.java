@@ -24,7 +24,7 @@ public abstract class Receiver {
 
 		@Override
 		public UUID getId() {
-			return AIPlayer.ID;
+			return ai.getId();
 		}
 
 		@Override

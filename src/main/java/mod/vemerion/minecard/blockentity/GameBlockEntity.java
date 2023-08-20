@@ -57,7 +57,7 @@ public class GameBlockEntity extends BlockEntity {
 
 	private GameState state;
 	private Set<UUID> receivers;
-	private AIPlayer aiPlayer;
+	private Map<UUID, AIPlayer> ais = new HashMap<>();
 
 	// Sub thread that runs card ability in playCard() that will block on ability
 	// choice. Sub thread and main thread will never run at the same time, to reduce
@@ -77,15 +77,14 @@ public class GameBlockEntity extends BlockEntity {
 	}
 
 	public void tick() {
-		if (aiPlayer != null) {
-			aiPlayer.tick();
-		}
+		for (var ai : ais.values())
+			ai.tick();
 
 		if (state.isGameOver()) {
 			if (isTutorial()) {
 				advancement(ModFinishGameTrigger.Type.COMPLETE_TUTORIAL, s -> true);
 			} else {
-				if (aiPlayer != null) {
+				if (!ais.isEmpty()) {
 					advancement(ModFinishGameTrigger.Type.WIN_AI, s -> !s.isGameOver());
 				}
 				advancement(ModFinishGameTrigger.Type.WIN_GAME, s -> !s.isGameOver());
@@ -98,7 +97,7 @@ public class GameBlockEntity extends BlockEntity {
 
 			state = new GameState();
 			state.setLevel(level);
-			aiPlayer = null;
+			ais.clear();
 			receivers.clear();
 			setChanged();
 		}
@@ -207,8 +206,8 @@ public class GameBlockEntity extends BlockEntity {
 	private List<Receiver> getReceivers() {
 		var list = new ArrayList<Receiver>();
 		for (var id : receivers) {
-			if (id.equals(AIPlayer.ID)) {
-				list.add(new Receiver.AI(aiPlayer));
+			if (AIPlayer.isAi(id)) {
+				list.add(new Receiver.AI(ais.get(id)));
 			} else {
 				var player = level.getPlayerByUUID(id);
 				if (player != null) {
@@ -244,7 +243,7 @@ public class GameBlockEntity extends BlockEntity {
 			addRealPlayer(player, stack);
 			setChanged();
 		} else if (stack.is(Items.REDSTONE)
-				&& state.getPlayerStates().stream().noneMatch(s -> s.getId().equals(AIPlayer.ID))) {
+				&& state.getPlayerStates().stream().noneMatch(s -> AIPlayer.isAi(s.getId()))) {
 			addAIPlayer();
 			setChanged();
 		} else {
@@ -255,14 +254,15 @@ public class GameBlockEntity extends BlockEntity {
 	private void startTutorial(ServerPlayer player) {
 		state = new GameState();
 		state.setLevel(level);
-		aiPlayer = new AIPlayer(this);
-		receivers.add(AIPlayer.ID);
+		ais.clear();
+		ais.put(AIPlayer.ID_1, new AIPlayer(this, AIPlayer.ID_1));
+		receivers.add(AIPlayer.ID_1);
 
 		state.setTutorialStep(0);
 
 		addPlayer(player.getUUID(), IntStream.range(0, 10).mapToObj(i -> Cards.TUTORIAL_CARD_TYPE.create())
 				.collect(Collectors.toCollection(() -> new ArrayList<>())));
-		addPlayer(AIPlayer.ID, IntStream.range(0, 10).mapToObj(i -> Cards.TUTORIAL_CARD_TYPE.create())
+		addPlayer(AIPlayer.ID_1, IntStream.range(0, 10).mapToObj(i -> Cards.TUTORIAL_CARD_TYPE.create())
 				.collect(Collectors.toCollection(() -> new ArrayList<>())));
 	}
 
@@ -285,10 +285,12 @@ public class GameBlockEntity extends BlockEntity {
 		state.getPlayerStates().add(playerState);
 
 		// Notify AI that game has started
-		if (state.getPlayerStates().size() > 1 && aiPlayer != null) {
-			var receiver = new Receiver.AI(aiPlayer);
-			receiver.receiver(createOpenGameMessage(receiver.getId()));
-			receiver.receiver(new NewTurnMessage(state.getCurrentPlayer()));
+		if (state.getPlayerStates().size() > 1) {
+			for (var ai : ais.values()) {
+				var receiver = new Receiver.AI(ai);
+				receiver.receiver(createOpenGameMessage(receiver.getId()));
+				receiver.receiver(new NewTurnMessage(state.getCurrentPlayer()));
+			}
 		}
 	}
 
@@ -310,9 +312,10 @@ public class GameBlockEntity extends BlockEntity {
 			}
 		}
 
-		aiPlayer = new AIPlayer(this);
-		receivers.add(AIPlayer.ID);
-		addPlayer(AIPlayer.ID, deck);
+		var id = ais.isEmpty() ? AIPlayer.ID_1 : AIPlayer.ID_2;
+		ais.put(id, new AIPlayer(this, id));
+		receivers.add(id);
+		addPlayer(id, deck);
 	}
 
 	private void addRealPlayer(ServerPlayer player, ItemStack stack) {
@@ -378,13 +381,18 @@ public class GameBlockEntity extends BlockEntity {
 							.error("Unable to load game state, will reset game state (maybe the format has changed?)"));
 
 			// Initialize AI player is necessary
-			if (state.getPlayerStates().stream().anyMatch(s -> s.getId().equals(AIPlayer.ID))) {
-				aiPlayer = new AIPlayer(this);
-				receivers.add(AIPlayer.ID);
+			for (var playerState : state.getPlayerStates()) {
+				var id = playerState.getId();
+				if (!AIPlayer.isAi(id))
+					continue;
+
+				var ai = new AIPlayer(this, id);
+				ais.put(id, ai);
+				receivers.add(id);
 
 				// Notify AI that game has started
 				if (state.getPlayerStates().size() > 1) {
-					var receiver = new Receiver.AI(aiPlayer);
+					var receiver = new Receiver.AI(ai);
 					receiver.receiver(createOpenGameMessage(receiver.getId()));
 					receiver.receiver(new NewTurnMessage(state.getCurrentPlayer()));
 				}

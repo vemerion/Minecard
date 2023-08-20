@@ -265,7 +265,7 @@ public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 		if (type.get() == EntityType.PLAYER) {
 			if (card.getAdditionalData() instanceof AdditionalCardData.IdData idData) {
 				var id = idData.getId();
-				if (id.equals(AIPlayer.ID)) {
+				if (AIPlayer.isAi(id)) {
 					return CACHE.computeIfAbsent(ModEntities.CARD_GAME_ROBOT.get(), t -> t.create(level));
 				}
 

@@ -1035,7 +1035,7 @@ public class GameScreen extends Screen implements GameClient {
 		}
 
 		private Component getPlayerName(UUID id) {
-			if (id.equals(AIPlayer.ID)) {
+			if (AIPlayer.isAi(id)) {
 				return new TranslatableComponent(ModEntities.CARD_GAME_ROBOT.get().getDescriptionId());
 			}
 
