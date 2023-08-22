@@ -136,6 +136,8 @@
   "card_property.minecard.burn.description": "Take 1 damage every turn until burn ends",
   "card_property.minecard.charge": "charge",
   "card_property.minecard.charge.description": "Can attack immediately after being played",
+  "card_property.minecard.echo": "echo",
+  "card_property.minecard.echo.description": "The card can attack multiple times per turn",
   "card_property.minecard.freeze": "freeze",
   "card_property.minecard.freeze.description": "Decreases by 1 every turn, can not attack while frozen",
   "card_property.minecard.poison": "poison",

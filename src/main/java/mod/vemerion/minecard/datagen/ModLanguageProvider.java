@@ -75,6 +75,7 @@ public class ModLanguageProvider extends LanguageProvider {
 		add(CardProperty.getTextKey(CardProperty.THORNS), "thorns");
 		add(CardProperty.getTextKey(CardProperty.POISON), "poison");
 		add(CardProperty.getTextKey(CardProperty.UNDEAD), "undead");
+		add(CardProperty.getTextKey(CardProperty.ECHO), "echo");
 
 		add(CardProperty.getDescriptionKey(CardProperty.CHARGE), "Can attack immediately after being played");
 		add(CardProperty.getDescriptionKey(CardProperty.FREEZE),
@@ -88,6 +89,7 @@ public class ModLanguageProvider extends LanguageProvider {
 		add(CardProperty.getDescriptionKey(CardProperty.THORNS), "Deals extra damage when attacked");
 		add(CardProperty.getDescriptionKey(CardProperty.POISON), "Take 1 damage every turn, but cannot kill");
 		add(CardProperty.getDescriptionKey(CardProperty.UNDEAD), "The card belongs to the undead category");
+		add(CardProperty.getDescriptionKey(CardProperty.ECHO), "The card can attack multiple times per turn");
 
 		// Card abilities
 		card("tutorial_creeper", "Attack: Draw 2 cards");

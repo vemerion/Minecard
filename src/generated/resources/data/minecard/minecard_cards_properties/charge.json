@@ -38,15 +38,15 @@
                     "type": "minecard:add",
                     "value": {
                       "left": {
+                        "type": "minecard:constant",
+                        "value": 1
+                      },
+                      "right": {
                         "type": "minecard:variable",
                         "value": {
                           "type": "minecard:property",
-                          "value": "minecard:ready"
+                          "value": "minecard:echo"
                         }
-                      },
-                      "right": {
-                        "type": "minecard:constant",
-                        "value": 1
                       }
                     }
                   }

@@ -72,12 +72,10 @@ public class ModCardPropertyProvider implements DataProvider {
 										CardSelectionMethod.All.ALL, CardCondition.NoCondition.NO_CONDITION)),
 						new ModifyAbility(
 
-								List.of(List
-										.of(new CardModification(new CardVariable.PropertyVariable(CardProperty.READY),
-												new CardOperator.Add(
-														new CardOperator.Variable(
-																new CardVariable.PropertyVariable(CardProperty.READY)),
-														new CardOperator.Constant(1))))))))));
+								List.of(List.of(new CardModification(
+										new CardVariable.PropertyVariable(CardProperty.READY),
+										new CardOperator.Add(new CardOperator.Constant(1), new CardOperator.Variable(
+												new CardVariable.PropertyVariable(CardProperty.ECHO)))))))))));
 		properties.put(CardProperty.STEALTH,
 				new CardProperty(new ItemStack(Items.TALL_GRASS), NoCardAbility.NO_CARD_ABILITY));
 		properties.put(CardProperty.FREEZE, new CardProperty(new ItemStack(Items.ICE), NoCardAbility.NO_CARD_ABILITY));
@@ -144,6 +142,8 @@ public class ModCardPropertyProvider implements DataProvider {
 																new CardOperator.Constant(0)))))))))));
 		properties.put(CardProperty.ADVANCEMENT_COUNTER,
 				new CardProperty(ItemStack.EMPTY, NoCardAbility.NO_CARD_ABILITY));
+		properties.put(CardProperty.ECHO,
+				new CardProperty(new ItemStack(Items.AMETHYST_SHARD), NoCardAbility.NO_CARD_ABILITY));
 
 	}
 

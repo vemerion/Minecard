@@ -170,7 +170,7 @@ public class PlayerState {
 				card.decrementProperty(CardProperty.FREEZE);
 				updated.add(card);
 			} else {
-				card.putProperty(CardProperty.READY, card.getProperty(CardProperty.READY) + 1);
+				card.putProperty(CardProperty.READY, card.getProperty(CardProperty.ECHO) + 1);
 				updated.add(card);
 			}
 		}
