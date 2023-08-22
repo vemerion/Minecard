@@ -923,7 +923,13 @@ public class GameScreen extends Screen implements GameClient {
 				int x = padding * (i % 3) + border - 16 / 2;
 				int y = i / 3 * 60 + 1;
 
-				itemRenderer.renderGuiItem(property.getItem(), x, y);
+				poseStack.pushPose();
+				poseStack.translate(x + 8, y + 8, 50);
+				poseStack.scale(16, -16, 1);
+				itemRenderer.renderStatic(property.getItem(), ItemTransforms.TransformType.GUI,
+						LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY, poseStack, RENDER_BUFFERS.bufferSource(),
+						0);
+				poseStack.popPose();
 
 				// Title
 				float size = 1.3f;
