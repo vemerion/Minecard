@@ -34,6 +34,7 @@ public class Cards extends SimpleJsonResourceReloadListener {
 	private static final Gson GSON = (new GsonBuilder()).setPrettyPrinting().disableHtmlEscaping().create();
 	public static final String FOLDER_NAME = Main.MODID + "_cards";
 
+	public static final ResourceLocation EMPTY = new ResourceLocation(Main.MODID, "empty");
 	public static final CardType EMPTY_CARD_TYPE = new CardType(null, 0, 1, 1, Map.of(), NoCardAbility.NO_CARD_ABILITY,
 			AdditionalCardData.EMPTY, 0, 0);
 	public static final CardType TUTORIAL_CARD_TYPE = new CardType(EntityType.CREEPER, 1, 2, 1,
@@ -61,6 +62,9 @@ public class Cards extends SimpleJsonResourceReloadListener {
 	}
 
 	public CardType get(ResourceLocation rl) {
+		if (EMPTY.equals(rl))
+			return EMPTY_CARD_TYPE;
+
 		return CARDS.computeIfAbsent(rl, r -> generateCardType(ForgeRegistries.ENTITIES.getValue(r)));
 	}
 

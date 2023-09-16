@@ -3,6 +3,7 @@ package mod.vemerion.minecard.capability;
 import java.util.Optional;
 
 import mod.vemerion.minecard.Main;
+import mod.vemerion.minecard.game.Cards;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
@@ -27,6 +28,7 @@ public class CardData implements INBTSerializable<CompoundTag> {
 
 	public CardData(ItemStack owner) {
 		this.owner = owner;
+		this.type = Cards.EMPTY;
 
 		var nbt = owner.getOrCreateTag();
 		if (nbt.contains(NBT_KEY))
