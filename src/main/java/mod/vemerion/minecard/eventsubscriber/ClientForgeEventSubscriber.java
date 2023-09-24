@@ -22,16 +22,19 @@ public class ClientForgeEventSubscriber {
 			var tooltip = event.getToolTip();
 			var card = Cards.getInstance(true).get(t);
 			var descr = card.isSpell()
-					? new TranslatableComponent(ModItems.CARD.get().getDescriptionId() + ".tooltip_spell")
+					? new TranslatableComponent(ModItems.CARD.get().getDescriptionId() + ".tooltip_spell",
+							new TextComponent(String.valueOf(card.getCost())).withStyle(ChatFormatting.BLUE))
 							.withStyle(ChatFormatting.ITALIC)
 					: new TranslatableComponent(ModItems.CARD.get().getDescriptionId() + ".tooltip_stats",
 							new TextComponent(String.valueOf(card.getCost())).withStyle(ChatFormatting.BLUE),
 							new TextComponent(String.valueOf(card.getDamage())).withStyle(ChatFormatting.YELLOW),
 							new TextComponent(String.valueOf(card.getHealth())).withStyle(ChatFormatting.RED));
 			tooltip.add(descr);
-			tooltip.add(Screen.hasShiftDown() ? card.getAbility().getText()
-					: new TranslatableComponent(ModItems.CARD.get().getDescriptionId() + ".tooltip_more")
-							.withStyle(ChatFormatting.ITALIC));
+			if (card.getAbility().getText() != TextComponent.EMPTY) {
+				tooltip.add(Screen.hasShiftDown() ? card.getAbility().getText()
+						: new TranslatableComponent(ModItems.CARD.get().getDescriptionId() + ".tooltip_more")
+								.withStyle(ChatFormatting.ITALIC));
+			}
 		});
 	}
 }

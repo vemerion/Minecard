@@ -209,7 +209,7 @@
   "gui.minecard.tutorial9": "And you can hover over this button to see your Minecard game statistics.",
   "item.minecard.card": "%s Card",
   "item.minecard.card.tooltip_more": "Press shift to see description",
-  "item.minecard.card.tooltip_spell": "spell",
+  "item.minecard.card.tooltip_spell": "spell (%s)",
   "item.minecard.card.tooltip_stats": "(%s/%s/%s)",
   "item.minecard.deck": "Deck",
   "item.minecard.empty_card_back": "Empty Card",
