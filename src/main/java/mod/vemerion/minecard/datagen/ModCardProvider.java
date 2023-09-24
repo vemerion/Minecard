@@ -787,25 +787,30 @@ public class ModCardProvider implements DataProvider {
 																.build())),
 												new MoveCollectedAbility(1, 0, false, false), history()))));
 		add(new Builder(EntityType.ITEM, 2, 0, 0).setKey(mod("wooden_sword"))
-				.setAdditionalData(
-						new AdditionalCardData.ItemData(Items.WOODEN_SWORD))
-				.setCardAbility(
+				.setAdditionalData(new AdditionalCardData.ItemData(Items.WOODEN_SWORD)).setCardAbility(
 						new ChainAbility(
 								Set.of(CardAbilityTrigger.SUMMON), textKey("wooden_sword"), List.of(
+										new ConstantCardsAbility(
+												List.of(new LazyCardType(new Builder(EntityType.ITEM, 0, 0, 0)
+														.setCardAbility(new ChainAbility(
+																Set.of(CardAbilityTrigger.DEATH),
+																textKey("wooden_sword_return"),
+																List.of(new ConstantCardsAbility(
+																		List.of(new LazyCardType(mod("wooden_sword")))),
+																		new PlaceCardsAbility(CardPlacement.YOUR_HAND),
+																		new HistoryAbility(
+																				Items.BOOK.getDefaultInstance(),
+																				Optional.of(
+																						HistoryEntry.Visibility.ALL)))))
+														.build()))),
+										new MoveCollectedAbility(0, 1, true, true),
 										new SelectCardsAbility(new CardAbilitySelection(
 												new CardAbilityGroups(EnumSet.of(CardAbilityGroup.ENEMY_BOARD,
 														CardAbilityGroup.YOUR_BOARD)),
 												new CardSelectionMethod.Choice(false),
 												CardCondition.NoCondition.NO_CONDITION), true),
 										new ModifyAbility(List.of(new ModificationBuilder().addDamage(3).build())),
-										new AddAbilityAbility(new ChainAbility(Set.of(CardAbilityTrigger.DEATH),
-												textKey("wooden_sword_return"),
-												List.of(new ConstantCardsAbility(
-														List.of(new LazyCardType(mod("wooden_sword")))),
-														new PlaceCardsAbility(CardPlacement.YOUR_HAND),
-														new HistoryAbility(Items.BOOK.getDefaultInstance(),
-																Optional.of(HistoryEntry.Visibility.ALL))))),
-										history()))));
+										new AddAbilityAbility(1), history()))));
 		add(new Builder(EntityType.ITEM, 0, 0, 0)
 				.setKey(mod(
 						"slime_ball"))

@@ -17,6 +17,57 @@
       "text_key": "card_ability.minecard.wooden_sword",
       "abilities": [
         {
+          "cards": [
+            {
+              "abilities": {
+                "type": "minecard:chain",
+                "value": {
+                  "triggers": [
+                    "death"
+                  ],
+                  "text_key": "card_ability.minecard.wooden_sword_return",
+                  "abilities": [
+                    {
+                      "cards": [
+                        "minecard:wooden_sword"
+                      ],
+                      "type": "minecard:constant_cards"
+                    },
+                    {
+                      "placement": "your_hand",
+                      "type": "minecard:place_cards"
+                    },
+                    {
+                      "type": "minecard:history",
+                      "value": {
+                        "icon": {
+                          "id": "minecraft:book",
+                          "Count": 1
+                        },
+                        "visibility": "all"
+                      }
+                    }
+                  ]
+                }
+              },
+              "entity": "minecraft:item",
+              "cost": 0,
+              "health": 0,
+              "damage": 0
+            }
+          ],
+          "type": "minecard:constant_cards"
+        },
+        {
+          "type": "minecard:move_collected",
+          "value": {
+            "source": 0,
+            "destination": 1,
+            "clear_source": true,
+            "clear_destination": true
+          }
+        },
+        {
           "type": "minecard:select_cards",
           "value": {
             "selection": {
@@ -66,37 +117,7 @@
         {
           "type": "minecard:card_abilities",
           "value": {
-            "ability": {
-              "type": "minecard:chain",
-              "value": {
-                "triggers": [
-                  "death"
-                ],
-                "text_key": "card_ability.minecard.wooden_sword_return",
-                "abilities": [
-                  {
-                    "cards": [
-                      "minecard:wooden_sword"
-                    ],
-                    "type": "minecard:constant_cards"
-                  },
-                  {
-                    "placement": "your_hand",
-                    "type": "minecard:place_cards"
-                  },
-                  {
-                    "type": "minecard:history",
-                    "value": {
-                      "icon": {
-                        "id": "minecraft:book",
-                        "Count": 1
-                      },
-                      "visibility": "all"
-                    }
-                  }
-                ]
-              }
-            }
+            "index": 1
           }
         },
         {

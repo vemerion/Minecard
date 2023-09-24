@@ -16,16 +16,15 @@ import net.minecraft.util.ExtraCodecs;
 
 public class AddAbilityAbility extends CardAbility {
 
-	public static final Codec<AddAbilityAbility> CODEC = ExtraCodecs
-			.lazyInitializedCodec(() -> RecordCodecBuilder.create(instance -> instance
-					.group(CardAbility.CODEC.fieldOf("ability").forGetter(AddAbilityAbility::getAbility))
+	public static final Codec<AddAbilityAbility> CODEC = ExtraCodecs.lazyInitializedCodec(() -> RecordCodecBuilder
+			.create(instance -> instance.group(Codec.INT.fieldOf("index").forGetter(AddAbilityAbility::getIndex))
 					.apply(instance, AddAbilityAbility::new)));
 
-	private final CardAbility ability;
+	private final int index;
 
-	public AddAbilityAbility(CardAbility ability) {
+	public AddAbilityAbility(int index) {
 		super(Set.of(), "");
-		this.ability = ability;
+		this.index = index;
 	}
 
 	@Override
@@ -36,6 +35,11 @@ public class AddAbilityAbility extends CardAbility {
 	@Override
 	protected void invoke(List<Receiver> receivers, PlayerState state, Card card, @Nullable Card other,
 			Collected collected) {
+		var coll = collected.get(index);
+		var ability = coll.isEmpty() ? null : coll.get(state.getGame().getRandom().nextInt(coll.size())).getAbility();
+		if (ability == null)
+			return;
+
 		for (var selected : collected.get(0)) {
 			selected.setAbility(new MultiAbility("", List.of(ability, selected.getAbility())));
 		}
@@ -45,8 +49,8 @@ public class AddAbilityAbility extends CardAbility {
 		}
 	}
 
-	public CardAbility getAbility() {
-		return ability;
+	public int getIndex() {
+		return index;
 	}
 
 }

@@ -124,7 +124,7 @@
   "card_ability.minecard.witch": "Summon: Gain a random potion card.",
   "card_ability.minecard.wither": "Tick: Deal 4 damage to a random enemy card.",
   "card_ability.minecard.wither_skeleton": "Summon: Reduce the cost of your Wither by two.",
-  "card_ability.minecard.wooden_sword": "Give a card on the board 3 attack. The sword is return when the card dies.",
+  "card_ability.minecard.wooden_sword": "Give a card on the board 3 attack. The sword is returned when the card dies.",
   "card_ability.minecard.wooden_sword_return": "Death: Return the wooden sword to your hand.",
   "card_ability.minecard.zoglin": "Death: Gain a rotten flesh card.",
   "card_ability.minecard.zombie": "Summon: Gain a random piece of equipment.",

@@ -196,7 +196,7 @@ public class ModLanguageProvider extends LanguageProvider {
 		card("sweet_berries", "Death: Gain a sweet berries card.");
 		card("pufferfish_bucket", "Summon: Spawn a Pufferfish card.");
 		card("buried_treasure", "Death: Gain a random treasure card.");
-		card("wooden_sword", "Give a card on the board 3 attack. The sword is return when the card dies.");
+		card("wooden_sword", "Give a card on the board 3 attack. The sword is returned when the card dies.");
 		card("wooden_sword_return", "Death: Return the wooden sword to your hand.");
 		card("slime_ball", "Draw two cards. A random copy of one of the drawn cards is given to the enemy.");
 		card("bow", "Deal 3 damage to a card on the board. Put the bow back in the deck with cost + 1.");
