@@ -1,58 +1,51 @@
 {
-  "deck_count": 1,
-  "drop_chance": 1.0,
   "abilities": {
     "type": "minecard:multi",
     "value": {
-      "text_key": "card_ability.minecard.ender_dragon",
       "abilities": [
         {
           "type": "minecard:chain",
           "value": {
-            "triggers": [
-              "summon"
-            ],
-            "text_key": "",
             "abilities": [
               {
+                "type": "minecard:constant_cards",
                 "cards": [
                   "minecard:end_crystal"
-                ],
-                "type": "minecard:constant_cards"
+                ]
               },
               {
-                "placement": "left",
-                "type": "minecard:place_cards"
+                "type": "minecard:place_cards",
+                "placement": "left"
               },
               {
-                "placement": "right",
-                "type": "minecard:place_cards"
+                "type": "minecard:place_cards",
+                "placement": "right"
               },
               {
+                "type": "minecard:constant_cards",
                 "cards": [
                   "minecard:end_crystal"
-                ],
-                "type": "minecard:constant_cards"
+                ]
               },
               {
                 "type": "minecard:history",
                 "value": {
                   "icon": {
-                    "id": "minecraft:book",
-                    "Count": 1
+                    "Count": 1,
+                    "id": "minecraft:book"
                   }
                 }
               }
+            ],
+            "text_key": "",
+            "triggers": [
+              "summon"
             ]
           }
         },
         {
           "type": "minecard:chain",
           "value": {
-            "triggers": [
-              "tick"
-            ],
-            "text_key": "",
             "abilities": [
               {
                 "type": "minecard:select_cards",
@@ -79,12 +72,12 @@
                   "modifications": [
                     [
                       {
-                        "output": {
-                          "type": "minecard:health"
-                        },
                         "operator": {
                           "type": "minecard:constant",
                           "value": -1
+                        },
+                        "output": {
+                          "type": "minecard:health"
                         }
                       }
                     ]
@@ -95,19 +88,26 @@
                 "type": "minecard:history",
                 "value": {
                   "icon": {
-                    "id": "minecraft:book",
-                    "Count": 1
+                    "Count": 1,
+                    "id": "minecraft:book"
                   }
                 }
               }
+            ],
+            "text_key": "",
+            "triggers": [
+              "tick"
             ]
           }
         }
-      ]
+      ],
+      "text_key": "card_ability.minecard.ender_dragon"
     }
   },
-  "entity": "minecraft:ender_dragon",
   "cost": 10,
-  "health": 13,
-  "damage": 5
+  "damage": 5,
+  "deck_count": 1,
+  "drop_chance": 1.0,
+  "entity": "minecraft:ender_dragon",
+  "health": 13
 }

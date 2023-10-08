@@ -27,10 +27,8 @@ public class ModAnimationConfigs {
 	public static final DeferredRegister<AnimationConfigType<?>> ANIMATION_CONFIGS = DeferredRegister
 			.create(REGISTRY_NAME, Main.MODID);
 
-	@SuppressWarnings("unchecked")
-	private static Supplier<IForgeRegistry<AnimationConfigType<?>>> supplier = ANIMATION_CONFIGS.makeRegistry(
-			(Class<AnimationConfigType<?>>) (Class<?>) AnimationConfigType.class,
-			() -> new RegistryBuilder<AnimationConfigType<?>>().setName(REGISTRY_NAME));
+	private static Supplier<IForgeRegistry<AnimationConfigType<?>>> supplier = ANIMATION_CONFIGS
+			.makeRegistry(() -> new RegistryBuilder<AnimationConfigType<?>>().setName(REGISTRY_NAME));
 
 	public static IForgeRegistry<AnimationConfigType<?>> getRegistry() {
 		return supplier.get();

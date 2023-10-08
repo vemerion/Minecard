@@ -14,7 +14,7 @@ import net.minecraftforge.registries.RegistryObject;
 
 @EventBusSubscriber(bus = Bus.MOD, modid = Main.MODID)
 public class ModEntities {
-	public static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(ForgeRegistries.ENTITIES,
+	public static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(ForgeRegistries.ENTITY_TYPES,
 			Main.MODID);
 
 	public static final RegistryObject<EntityType<CardGameRobot>> CARD_GAME_ROBOT = ENTITIES.register("card_game_robot",

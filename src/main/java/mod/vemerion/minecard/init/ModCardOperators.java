@@ -17,10 +17,8 @@ public class ModCardOperators {
 	public static final DeferredRegister<CardOperatorType<?>> CARD_OPERATORS = DeferredRegister.create(REGISTRY_NAME,
 			Main.MODID);
 
-	@SuppressWarnings("unchecked")
-	private static Supplier<IForgeRegistry<CardOperatorType<?>>> supplier = CARD_OPERATORS.makeRegistry(
-			(Class<CardOperatorType<?>>) (Class<?>) CardOperatorType.class,
-			() -> new RegistryBuilder<CardOperatorType<?>>().setName(REGISTRY_NAME));
+	private static Supplier<IForgeRegistry<CardOperatorType<?>>> supplier = CARD_OPERATORS
+			.makeRegistry(() -> new RegistryBuilder<CardOperatorType<?>>().setName(REGISTRY_NAME));
 
 	public static IForgeRegistry<CardOperatorType<?>> getRegistry() {
 		return supplier.get();

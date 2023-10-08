@@ -6,8 +6,8 @@ import mod.vemerion.minecard.game.Cards;
 import mod.vemerion.minecard.init.ModItems;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.CommonComponents;
+import net.minecraft.network.chat.Component;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -22,17 +22,18 @@ public class ClientForgeEventSubscriber {
 			var tooltip = event.getToolTip();
 			var card = Cards.getInstance(true).get(t);
 			var descr = card.isSpell()
-					? new TranslatableComponent(ModItems.CARD.get().getDescriptionId() + ".tooltip_spell",
-							new TextComponent(String.valueOf(card.getCost())).withStyle(ChatFormatting.BLUE))
+					? Component
+							.translatable(ModItems.CARD.get().getDescriptionId() + ".tooltip_spell",
+									Component.literal(String.valueOf(card.getCost())).withStyle(ChatFormatting.BLUE))
 							.withStyle(ChatFormatting.ITALIC)
-					: new TranslatableComponent(ModItems.CARD.get().getDescriptionId() + ".tooltip_stats",
-							new TextComponent(String.valueOf(card.getCost())).withStyle(ChatFormatting.BLUE),
-							new TextComponent(String.valueOf(card.getDamage())).withStyle(ChatFormatting.YELLOW),
-							new TextComponent(String.valueOf(card.getHealth())).withStyle(ChatFormatting.RED));
+					: Component.translatable(ModItems.CARD.get().getDescriptionId() + ".tooltip_stats",
+							Component.literal(String.valueOf(card.getCost())).withStyle(ChatFormatting.BLUE),
+							Component.literal(String.valueOf(card.getDamage())).withStyle(ChatFormatting.YELLOW),
+							Component.literal(String.valueOf(card.getHealth())).withStyle(ChatFormatting.RED));
 			tooltip.add(descr);
-			if (card.getAbility().getText() != TextComponent.EMPTY) {
+			if (card.getAbility().getText() != CommonComponents.EMPTY) {
 				tooltip.add(Screen.hasShiftDown() ? card.getAbility().getText()
-						: new TranslatableComponent(ModItems.CARD.get().getDescriptionId() + ".tooltip_more")
+						: Component.translatable(ModItems.CARD.get().getDescriptionId() + ".tooltip_more")
 								.withStyle(ChatFormatting.ITALIC));
 			}
 		});

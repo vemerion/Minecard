@@ -17,7 +17,6 @@ import org.lwjgl.glfw.GLFW;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Quaternion;
 
 import mod.vemerion.minecard.Main;
 import mod.vemerion.minecard.capability.PlayerStats;
@@ -58,20 +57,17 @@ import mod.vemerion.minecard.screen.animation.config.AnimationConfigs;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.gui.components.AbstractButton;
-import net.minecraft.client.gui.components.Widget;
+import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource.BufferSource;
 import net.minecraft.client.renderer.RenderBuffers;
-import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -80,20 +76,23 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.Vec2;
 import net.minecraftforge.client.gui.widget.ExtendedButton;
+import net.minecraftforge.common.util.TransformationHelper;
 import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
+import net.minecraftforge.registries.ForgeRegistries;
 
 public class GameScreen extends Screen implements GameClient {
 
-	public static final Component TITLE = new TranslatableComponent("gui." + Main.MODID + ".game");
-	private static final Component NEXT_TURN = new TranslatableComponent(Helper.gui("next_turn"));
-	private static final Component GAME_OVER = new TranslatableComponent(Helper.gui("game_over"));
-	private static final Component CHOOSE_TEXT = new TranslatableComponent(Helper.gui("choose"));
-	private static final Component MULLIGAN_TEXT = new TranslatableComponent(Helper.gui("mulligan"));
-	private static final Component CONFIRM = new TranslatableComponent(Helper.gui("confirm"));
+	public static final Component TITLE = Component.translatable("gui." + Main.MODID + ".game");
+	private static final Component NEXT_TURN = Component.translatable(Helper.gui("next_turn"));
+	private static final Component GAME_OVER = Component.translatable(Helper.gui("game_over"));
+	private static final Component CHOOSE_TEXT = Component.translatable(Helper.gui("choose"));
+	private static final Component MULLIGAN_TEXT = Component.translatable(Helper.gui("mulligan"));
+	private static final Component CONFIRM = Component.translatable(Helper.gui("confirm"));
 
 	private static final RenderBuffers RENDER_BUFFERS = new RenderBuffers();
 
@@ -207,7 +206,7 @@ public class GameScreen extends Screen implements GameClient {
 
 		if (!isSpectator)
 			addRenderableWidget(new NextTurnButton(width - 24, height / 2 - NEXT_TURN_BUTTON_SIZE / 2,
-					NEXT_TURN_BUTTON_SIZE, NEXT_TURN_BUTTON_SIZE, TextComponent.EMPTY));
+					NEXT_TURN_BUTTON_SIZE, NEXT_TURN_BUTTON_SIZE, Component.empty()));
 
 		if (!isSpectator && yourState().mulligan)
 			addRenderableWidget(new ExtendedButton(width / 2 - 40, height - 85, 80, 20, CONFIRM, b -> {
@@ -671,7 +670,7 @@ public class GameScreen extends Screen implements GameClient {
 			for (int i = 0; i < playerState.deck; i++) {
 				poseStack.pushPose();
 				poseStack.translate(deckX + i * offset, deckY, 100);
-				poseStack.mulPose(new Quaternion(0, 80 * offset, 0, true));
+				poseStack.mulPose(TransformationHelper.quatFromXYZ(0, 80 * offset, 0, true));
 				poseStack.scale(1f, 1f, 0.2f);
 
 				new ClientCard(EMPTY_CARD, Vec2.ZERO, this).render(poseStack, 0, 0, source, partialTicks);
@@ -680,7 +679,7 @@ public class GameScreen extends Screen implements GameClient {
 			if (mouseX > (enemy ? deckX - 3 : deckX - playerState.deck * 1)
 					&& mouseX < (enemy ? deckX + playerState.deck + 7 : deckX + 7) && mouseY > deckY
 					&& mouseY < deckY + CARD_HEIGHT)
-				renderTooltip(poseStack, new TranslatableComponent(Helper.gui("deck_count"), playerState.deck), mouseX,
+				renderTooltip(poseStack, Component.translatable(Helper.gui("deck_count"), playerState.deck), mouseX,
 						mouseY);
 		}
 
@@ -731,8 +730,8 @@ public class GameScreen extends Screen implements GameClient {
 		poseStack.pushPose();
 		poseStack.translate(card.getPosition().x + CARD_WIDTH / 2, card.getPosition().y + CARD_HEIGHT / 2, 10);
 		poseStack.scale(30, -30, 30);
-		itemRenderer.renderStatic(Items.BARRIER.getDefaultInstance(), ItemTransforms.TransformType.GUI,
-				LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY, poseStack, source, 0);
+		itemRenderer.renderStatic(Items.BARRIER.getDefaultInstance(), ItemDisplayContext.GUI, LightTexture.FULL_BRIGHT,
+				OverlayTexture.NO_OVERLAY, poseStack, source, null, 0);
 		poseStack.popPose();
 	}
 
@@ -782,7 +781,7 @@ public class GameScreen extends Screen implements GameClient {
 				minecraft.getSoundManager().play(SimpleSoundInstance.forUI(sound, 1));
 			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 				Main.LOGGER.error("Unable to play ambient sound for card "
-						+ card.getType().get().getRegistryName().toString() + ": " + e);
+						+ ForgeRegistries.ENTITY_TYPES.getKey(card.getType().get()).toString() + ": " + e);
 			}
 		}
 	}
@@ -790,15 +789,10 @@ public class GameScreen extends Screen implements GameClient {
 	private class NextTurnButton extends AbstractButton {
 
 		private static final ResourceLocation TEXTURE = new ResourceLocation(Main.MODID, "textures/gui/next_turn.png");
-		private static final TranslatableComponent NEXT_TURN = new TranslatableComponent(Helper.gui("next_turn"));
+		private static final Component NEXT_TURN = Component.translatable(Helper.gui("next_turn"));
 
 		public NextTurnButton(int pX, int pY, int pWidth, int pHeight, Component pMessage) {
 			super(pX, pY, pWidth, pHeight, pMessage);
-		}
-
-		@Override
-		public void updateNarration(NarrationElementOutput pNarrationElementOutput) {
-
 		}
 
 		@Override
@@ -812,24 +806,29 @@ public class GameScreen extends Screen implements GameClient {
 		}
 
 		@Override
-		public void renderButton(PoseStack pPoseStack, int pMouseX, int pMouseY, float pPartialTick) {
+		public void renderWidget(PoseStack pPoseStack, int pMouseX, int pMouseY, float pPartialTick) {
 			RenderSystem.setShader(GameRenderer::getPositionTexShader);
 			RenderSystem.setShaderTexture(0, TEXTURE);
 
 			RenderSystem.enableDepthTest();
 			RenderSystem.setShaderColor(isHovered ? 0.6f : 1, isHovered ? 0.6f : 1, 1, 1);
-			blit(pPoseStack, x, y, isCurrentActive() ? 0 : NEXT_TURN_BUTTON_SIZE, 0, width, height,
+			blit(pPoseStack, getX(), getY(), isCurrentActive() ? 0 : NEXT_TURN_BUTTON_SIZE, 0, width, height,
 					NEXT_TURN_BUTTON_SIZE * 2, NEXT_TURN_BUTTON_SIZE);
 			if (isHovered && isCurrentActive()) {
 				GameScreen.this.renderTooltip(pPoseStack, NEXT_TURN, pMouseX, pMouseY);
 			}
 		}
 
+		@Override
+		protected void updateWidgetNarration(NarrationElementOutput pNarrationElementOutput) {
+
+		}
+
 	}
 
 	private abstract class OverlayButton extends AbstractButton {
 
-		private static final TranslatableComponent BUTTON_HOVER = new TranslatableComponent(Helper.gui("button_hover"));
+		private static final Component BUTTON_HOVER = Component.translatable(Helper.gui("button_hover"));
 
 		private int page = 0;
 		private boolean isHovered0;
@@ -837,13 +836,8 @@ public class GameScreen extends Screen implements GameClient {
 		private ResourceLocation texture;
 
 		public OverlayButton(int x, int y, ResourceLocation texture) {
-			super(x, y, INFO_BUTTON_SIZE, INFO_BUTTON_SIZE, TextComponent.EMPTY);
+			super(x, y, INFO_BUTTON_SIZE, INFO_BUTTON_SIZE, Component.empty());
 			this.texture = texture;
-		}
-
-		@Override
-		public void updateNarration(NarrationElementOutput pNarrationElementOutput) {
-
 		}
 
 		@Override
@@ -852,7 +846,7 @@ public class GameScreen extends Screen implements GameClient {
 		}
 
 		@Override
-		public void renderButton(PoseStack pPoseStack, int pMouseX, int pMouseY, float pPartialTick) {
+		public void renderWidget(PoseStack pPoseStack, int pMouseX, int pMouseY, float pPartialTick) {
 			if (isHovered && !isHovered0) {
 				hoverTimestamp = minecraft.level.getGameTime();
 			}
@@ -872,7 +866,8 @@ public class GameScreen extends Screen implements GameClient {
 			RenderSystem.setShaderTexture(0, texture);
 
 			RenderSystem.setShaderColor(isHovered ? 0.6f : 1, isHovered ? 0.6f : 1, 1, 1);
-			blit(pPoseStack, x, y, 0, 0, width, height, INFO_BUTTON_SIZE, INFO_BUTTON_SIZE);
+			blit(pPoseStack, getX(), getY(), 0, 0, width, height, INFO_BUTTON_SIZE, INFO_BUTTON_SIZE);
+			RenderSystem.setShaderColor(1, 1, 1, 1);
 			if (isHovered) {
 				drawOverlay(pPoseStack, pMouseX, pMouseY, pPartialTick, page);
 			}
@@ -926,14 +921,13 @@ public class GameScreen extends Screen implements GameClient {
 				poseStack.pushPose();
 				poseStack.translate(x + 8, y + 8, 50);
 				poseStack.scale(16, -16, 1);
-				itemRenderer.renderStatic(property.getItem(), ItemTransforms.TransformType.GUI,
-						LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY, poseStack, RENDER_BUFFERS.bufferSource(),
-						0);
+				itemRenderer.renderStatic(property.getItem(), ItemDisplayContext.GUI, LightTexture.FULL_BRIGHT,
+						OverlayTexture.NO_OVERLAY, poseStack, RENDER_BUFFERS.bufferSource(), null, 0);
 				poseStack.popPose();
 
 				// Title
 				float size = 1.3f;
-				var title = new TranslatableComponent(CardProperty.getTextKey(rl));
+				var title = Component.translatable(CardProperty.getTextKey(rl));
 				var width = font.width(title) * size;
 				poseStack.pushPose();
 				poseStack.translate(x + 8 - width / 2, y + 17, 0);
@@ -942,7 +936,7 @@ public class GameScreen extends Screen implements GameClient {
 				poseStack.popPose();
 
 				// Description
-				var description = new TranslatableComponent(CardProperty.getDescriptionKey(rl));
+				var description = Component.translatable(CardProperty.getDescriptionKey(rl));
 				var lines = font.split(description, 110);
 				for (int j = 0; j < lines.size(); j++) {
 					font.drawShadow(poseStack, lines.get(j), x + 8 - font.width(lines.get(j)) / 2, y + 30 + j * 9,
@@ -952,10 +946,15 @@ public class GameScreen extends Screen implements GameClient {
 			}
 
 			// Page count
-			var pageText = new TextComponent((page + 1) + "/" + maxPages());
+			var pageText = Component.literal((page + 1) + "/" + maxPages());
 			font.drawShadow(poseStack, pageText, 4, GameScreen.this.height - 12, 0xffaaaaaa);
 
 			poseStack.popPose();
+		}
+
+		@Override
+		protected void updateWidgetNarration(NarrationElementOutput pNarrationElementOutput) {
+
 		}
 
 	}
@@ -967,8 +966,8 @@ public class GameScreen extends Screen implements GameClient {
 		private static final int SPACING = 10;
 		private static final int ENEMIES_PER_PAGE = 4;
 
-		private static final Component GENERAL_HEADER = new TranslatableComponent(Helper.gui("stats_general"));
-		private static final Component ENEMIES_HEADER = new TranslatableComponent(Helper.gui("stats_enemies"));
+		private static final Component GENERAL_HEADER = Component.translatable(Helper.gui("stats_general"));
+		private static final Component ENEMIES_HEADER = Component.translatable(Helper.gui("stats_enemies"));
 
 		private static final ResourceLocation TEXTURE = new ResourceLocation(Main.MODID, "textures/gui/stats.png");
 
@@ -1029,7 +1028,7 @@ public class GameScreen extends Screen implements GameClient {
 					0xffffffff);
 
 			// Page count
-			var pageText = new TextComponent((page + 1) + "/" + maxPages());
+			var pageText = Component.literal((page + 1) + "/" + maxPages());
 			font.drawShadow(pPoseStack, pageText, 4, GameScreen.this.height - 12, 0xffaaaaaa);
 
 			pPoseStack.popPose();
@@ -1042,10 +1041,10 @@ public class GameScreen extends Screen implements GameClient {
 
 		private Component getPlayerName(UUID id) {
 			if (AIPlayer.isAi(id)) {
-				return new TranslatableComponent(ModEntities.CARD_GAME_ROBOT.get().getDescriptionId());
+				return Component.translatable(ModEntities.CARD_GAME_ROBOT.get().getDescriptionId());
 			}
 
-			return new TextComponent(names.getOrDefault(id, id.toString()));
+			return Component.literal(names.getOrDefault(id, id.toString()));
 		}
 
 		private void drawHeader(PoseStack poseStack, Component text, int x, float scale) {
@@ -1062,9 +1061,14 @@ public class GameScreen extends Screen implements GameClient {
 					: (int) Math.ceil((double) enemies.size() / ENEMIES_PER_PAGE);
 		}
 
+		@Override
+		protected void updateWidgetNarration(NarrationElementOutput pNarrationElementOutput) {
+
+		}
+
 	}
 
-	private class PopupText implements Widget {
+	private class PopupText implements Renderable {
 		private Component text;
 		private int alpha;
 		private float scale;
@@ -1126,7 +1130,7 @@ public class GameScreen extends Screen implements GameClient {
 				poseStack.translate(position.x + i * OFFSET * (top ? -1 : 1), position.y, 0);
 				if (shaking > 0 && shaking <= playerState.resources && i >= playerState.resources - shaking
 						&& i < playerState.resources) {
-					poseStack.mulPose(new Quaternion(0, 0,
+					poseStack.mulPose(TransformationHelper.quatFromXYZ(0, 0,
 							Mth.cos(minecraft.level.getGameTime() % 100000 + pPartialTick) * 20, true));
 				}
 
@@ -1141,7 +1145,7 @@ public class GameScreen extends Screen implements GameClient {
 			position = position.add(new Vec2(OFFSET / 2 * (top ? 1 : -1), -OFFSET / 2));
 			if (pMouseX > (top ? position.x - width : position.x) && pMouseX < (top ? position.x : position.x + width)
 					&& pMouseY > position.y && pMouseY < position.y + OFFSET)
-				GameScreen.this.renderTooltip(poseStack, new TranslatableComponent(Helper.gui("resources_count"),
+				GameScreen.this.renderTooltip(poseStack, Component.translatable(Helper.gui("resources_count"),
 						playerState.resources, playerState.maxResources), pMouseX, pMouseY);
 		}
 
@@ -1152,8 +1156,8 @@ public class GameScreen extends Screen implements GameClient {
 			poseStack.scale(scale, -scale, scale);
 			if (!background)
 				poseStack.translate(0, 0, 0.1);
-			itemRenderer.renderStatic(Items.EMERALD.getDefaultInstance(), ItemTransforms.TransformType.GUI,
-					background ? 0 : LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY, poseStack, source, 0);
+			itemRenderer.renderStatic(Items.EMERALD.getDefaultInstance(), ItemDisplayContext.GUI,
+					background ? 0 : LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY, poseStack, source, null, 0);
 			poseStack.popPose();
 		}
 
@@ -1330,7 +1334,7 @@ public class GameScreen extends Screen implements GameClient {
 				poseStack.translate(x, y + (entity.getType() == EntityType.ITEM ? 6 : 0), 500);
 				float scale = getScale(entity);
 				poseStack.scale(scale, -scale, scale);
-				poseStack.mulPose(new Quaternion(0, 20, 0, true));
+				poseStack.mulPose(TransformationHelper.quatFromXYZ(0, 20, 0, true));
 				minecraft.getEntityRenderDispatcher().getRenderer(entity).render(entity, 0, 0, poseStack, source,
 						LightTexture.FULL_BRIGHT);
 				poseStack.popPose();
@@ -1396,8 +1400,8 @@ public class GameScreen extends Screen implements GameClient {
 			poseStack.translate(x + ENTRY_SIZE / 2 + 3 + CARD_WIDTH * ENTRY_CARD_SCALE + CARD_TARGET_SPACING / 2,
 					y + CARD_HEIGHT / 2 * ENTRY_CARD_SCALE, 600);
 			poseStack.scale(40, -40, 40);
-			itemRenderer.renderStatic(stack, ItemTransforms.TransformType.GUI, LightTexture.FULL_BRIGHT,
-					OverlayTexture.NO_OVERLAY, poseStack, source, 0);
+			itemRenderer.renderStatic(stack, ItemDisplayContext.GUI, LightTexture.FULL_BRIGHT,
+					OverlayTexture.NO_OVERLAY, poseStack, source, null, 0);
 			poseStack.popPose();
 		}
 

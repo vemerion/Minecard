@@ -1,31 +1,24 @@
 {
-  "properties": {
-    "minecard:undead": 1
-  },
   "abilities": {
     "type": "minecard:chain",
     "value": {
-      "triggers": [
-        "summon"
-      ],
-      "text_key": "card_ability.minecard.wither_skeleton",
       "abilities": [
         {
           "type": "minecard:select_cards",
           "value": {
             "selection": {
+              "condition": {
+                "type": "minecard:entity",
+                "value": {
+                  "inner": "minecraft:wither"
+                }
+              },
               "groups": [
                 "your_hand",
                 "your_deck"
               ],
               "method": {
                 "type": "minecard:all"
-              },
-              "condition": {
-                "type": "minecard:entity",
-                "value": {
-                  "inner": "minecraft:wither"
-                }
               }
             }
           }
@@ -36,9 +29,6 @@
             "modifications": [
               [
                 {
-                  "output": {
-                    "type": "minecard:cost"
-                  },
                   "operator": {
                     "type": "minecard:add",
                     "value": {
@@ -53,17 +43,27 @@
                         "value": -2
                       }
                     }
+                  },
+                  "output": {
+                    "type": "minecard:cost"
                   }
                 }
               ]
             ]
           }
         }
+      ],
+      "text_key": "card_ability.minecard.wither_skeleton",
+      "triggers": [
+        "summon"
       ]
     }
   },
-  "entity": "minecraft:wither_skeleton",
   "cost": 5,
+  "damage": 4,
+  "entity": "minecraft:wither_skeleton",
   "health": 6,
-  "damage": 4
+  "properties": {
+    "minecard:undead": 1
+  }
 }

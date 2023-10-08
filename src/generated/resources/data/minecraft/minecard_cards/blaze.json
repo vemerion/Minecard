@@ -2,10 +2,6 @@
   "abilities": {
     "type": "minecard:chain",
     "value": {
-      "triggers": [
-        "attack"
-      ],
-      "text_key": "card_ability.minecard.blaze",
       "abilities": [
         {
           "type": "minecard:select_cards",
@@ -26,10 +22,6 @@
             "modifications": [
               [
                 {
-                  "output": {
-                    "type": "minecard:property",
-                    "value": "minecard:burn"
-                  },
                   "operator": {
                     "type": "minecard:add",
                     "value": {
@@ -45,17 +37,25 @@
                         "value": 3
                       }
                     }
+                  },
+                  "output": {
+                    "type": "minecard:property",
+                    "value": "minecard:burn"
                   }
                 }
               ]
             ]
           }
         }
+      ],
+      "text_key": "card_ability.minecard.blaze",
+      "triggers": [
+        "attack"
       ]
     }
   },
-  "entity": "minecraft:blaze",
   "cost": 6,
-  "health": 6,
-  "damage": 5
+  "damage": 5,
+  "entity": "minecraft:blaze",
+  "health": 6
 }

@@ -6,7 +6,8 @@ import mod.vemerion.minecard.renderer.CardItemRenderer;
 import mod.vemerion.minecard.screen.ClientCard;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource.BufferSource;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec2;
 
@@ -18,7 +19,7 @@ public class HealthAnimation extends Animation {
 	private int value;
 	private int start;
 	private int timer;
-	private TextComponent text;
+	private MutableComponent text;
 
 	public HealthAnimation(Minecraft mc, ClientCard card, int value) {
 		super(mc, () -> {
@@ -26,7 +27,7 @@ public class HealthAnimation extends Animation {
 		this.card = card;
 		this.value = value;
 		this.start = card.getHealth();
-		this.text = new TextComponent((value > 0 ? "+" : "") + String.valueOf(value));
+		this.text = Component.literal((value > 0 ? "+" : "") + String.valueOf(value));
 	}
 
 	@Override
@@ -38,7 +39,7 @@ public class HealthAnimation extends Animation {
 	public void render(int mouseX, int mouseY, BufferSource source, float partialTick) {
 		if (value == 0)
 			return;
-		
+
 		float progress = (timer + partialTick) / DURATION;
 		var poseStack = new PoseStack();
 		var scale = Mth.lerp(progress, 2f, 0);

@@ -1,12 +1,10 @@
 package mod.vemerion.minecard.datagen;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.mojang.serialization.JsonOps;
 
@@ -23,9 +21,9 @@ import mod.vemerion.minecard.screen.animation.config.PotionAnimationConfig;
 import mod.vemerion.minecard.screen.animation.config.SplashAnimationConfig;
 import mod.vemerion.minecard.screen.animation.config.ThrowItemAnimationConfig;
 import mod.vemerion.minecard.screen.animation.config.WitherAnimationConfig;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
-import net.minecraft.data.HashCache;
+import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.EntityType;
@@ -35,20 +33,19 @@ import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.level.block.Blocks;
 
 public class ModAnimationConfigProvider implements DataProvider {
-	private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
 	private static final String FILE_NAME = "animations.json";
 
 	private Map<String, AnimationConfig> animations = new HashMap<>();
-	private DataGenerator generator;
+	private PackOutput packOutput;
 
-	public ModAnimationConfigProvider(DataGenerator generator) {
-		this.generator = generator;
+	public ModAnimationConfigProvider(PackOutput packOutput) {
+		this.packOutput = packOutput;
 	}
 
 	@Override
-	public void run(HashCache cache) throws IOException {
+	public CompletableFuture<?> run(CachedOutput cache) {
 		addAnimations();
-		var folder = generator.getOutputFolder();
+		var folder = packOutput.getOutputFolder();
 		var json = new JsonObject();
 		for (var entry : animations.entrySet()) {
 			json.add(entry.getKey(),
@@ -57,11 +54,7 @@ public class ModAnimationConfigProvider implements DataProvider {
 		}
 		var path = folder.resolve("assets").resolve(Main.MODID).resolve(AnimationConfigs.FOLDER_NAME)
 				.resolve(FILE_NAME);
-		try {
-			DataProvider.save(GSON, cache, json, path);
-		} catch (IOException e) {
-			Main.LOGGER.error("Couldn't save animations " + path + ": " + e);
-		}
+		return DataProvider.saveStable(cache, json, path);
 	}
 
 	private void addAnimations() {

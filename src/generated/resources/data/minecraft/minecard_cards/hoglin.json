@@ -2,53 +2,48 @@
   "abilities": {
     "type": "minecard:choice",
     "value": {
-      "text_key": "card_ability.minecard.hoglin",
       "abilities": [
         {
           "type": "minecard:chain",
           "value": {
-            "triggers": [
-              "summon"
-            ],
-            "text_key": "card_ability.minecard.hoglin_baby",
             "abilities": [
               {
+                "type": "minecard:constant_cards",
                 "cards": [
                   {
+                    "cost": 0,
+                    "damage": 4,
+                    "entity": "minecraft:hoglin",
+                    "health": 3,
                     "properties": {
                       "minecard:baby": 1
-                    },
-                    "entity": "minecraft:hoglin",
-                    "cost": 0,
-                    "health": 3,
-                    "damage": 4
+                    }
                   }
-                ],
-                "type": "minecard:constant_cards"
+                ]
               },
               {
-                "placement": "right",
-                "type": "minecard:place_cards"
+                "type": "minecard:place_cards",
+                "placement": "right"
               },
               {
                 "type": "minecard:history",
                 "value": {
                   "icon": {
-                    "id": "minecraft:book",
-                    "Count": 1
+                    "Count": 1,
+                    "id": "minecraft:book"
                   }
                 }
               }
+            ],
+            "text_key": "card_ability.minecard.hoglin_baby",
+            "triggers": [
+              "summon"
             ]
           }
         },
         {
           "type": "minecard:chain",
           "value": {
-            "triggers": [
-              "summon"
-            ],
-            "text_key": "card_ability.minecard.hoglin_buff",
             "abilities": [
               {
                 "type": "minecard:select_cards",
@@ -69,9 +64,6 @@
                   "modifications": [
                     [
                       {
-                        "output": {
-                          "type": "minecard:max_health"
-                        },
                         "operator": {
                           "type": "minecard:add",
                           "value": {
@@ -86,12 +78,12 @@
                               "value": 1
                             }
                           }
+                        },
+                        "output": {
+                          "type": "minecard:max_health"
                         }
                       },
                       {
-                        "output": {
-                          "type": "minecard:damage"
-                        },
                         "operator": {
                           "type": "minecard:add",
                           "value": {
@@ -106,16 +98,19 @@
                               "value": 1
                             }
                           }
+                        },
+                        "output": {
+                          "type": "minecard:damage"
                         }
                       },
                       {
-                        "output": {
-                          "type": "minecard:property",
-                          "value": "minecard:taunt"
-                        },
                         "operator": {
                           "type": "minecard:constant",
                           "value": 1
+                        },
+                        "output": {
+                          "type": "minecard:property",
+                          "value": "minecard:taunt"
                         }
                       }
                     ]
@@ -126,19 +121,24 @@
                 "type": "minecard:history",
                 "value": {
                   "icon": {
-                    "id": "minecraft:book",
-                    "Count": 1
+                    "Count": 1,
+                    "id": "minecraft:book"
                   }
                 }
               }
+            ],
+            "text_key": "card_ability.minecard.hoglin_buff",
+            "triggers": [
+              "summon"
             ]
           }
         }
-      ]
+      ],
+      "text_key": "card_ability.minecard.hoglin"
     }
   },
-  "entity": "minecraft:hoglin",
   "cost": 8,
-  "health": 5,
-  "damage": 7
+  "damage": 7,
+  "entity": "minecraft:hoglin",
+  "health": 5
 }

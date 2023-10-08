@@ -5,10 +5,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import org.joml.Vector3f;
+
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Quaternion;
-import com.mojang.math.Vector3f;
 
 import mod.vemerion.minecard.screen.animation.ParticlesAnimation;
 import net.minecraft.client.gui.components.events.GuiEventListener;
@@ -20,7 +20,6 @@ import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource.BufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.core.BlockPos;
@@ -30,6 +29,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.animal.Dolphin;
 import net.minecraft.world.entity.monster.Skeleton;
+import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
@@ -39,7 +39,8 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraftforge.client.model.data.EmptyModelData;
+import net.minecraftforge.client.model.data.ModelData;
+import net.minecraftforge.common.util.TransformationHelper;
 
 public class GameBackground implements GuiEventListener, NarratableEntry {
 
@@ -197,13 +198,13 @@ public class GameBackground implements GuiEventListener, NarratableEntry {
 		poseStack.pushPose();
 		poseStack.translate(x, y, z);
 		poseStack.scale(blockWidth, -blockHeight, 1);
-		poseStack.mulPose(new Quaternion(90 - 15 * (z - BASE_Z), 0, 0, true));
+		poseStack.mulPose(TransformationHelper.quatFromXYZ(90 - 15 * (z - BASE_Z), 0, 0, true));
 		if (blockEntity != null) {
 			mc.getBlockEntityRenderDispatcher().getRenderer(blockEntity).render(blockEntity, mc.getFrameTime(),
 					poseStack, source, light(x, y), OverlayTexture.NO_OVERLAY);
 		} else if (block.getBlock() != Blocks.WATER) {
 			mc.getBlockRenderer().renderSingleBlock(block, poseStack, source, light(x, y), OverlayTexture.NO_OVERLAY,
-					EmptyModelData.INSTANCE);
+					ModelData.EMPTY, RenderType.cutout());
 		} else {
 			renderFluid(poseStack, block, source, x, y, z);
 		}
@@ -300,8 +301,8 @@ public class GameBackground implements GuiEventListener, NarratableEntry {
 			poseStack.pushPose();
 			poseStack.translate(pos.x() + blockWidth / 2, pos.y() + blockHeight * 0.35, pos.z() + 0.5f);
 			poseStack.scale(10, -10, 10);
-			screen.getMinecraft().getItemRenderer().renderStatic(ITEMS[index], ItemTransforms.TransformType.NONE,
-					light(pos.x(), pos.y()), OverlayTexture.NO_OVERLAY, poseStack, source, 0);
+			screen.getMinecraft().getItemRenderer().renderStatic(ITEMS[index], ItemDisplayContext.NONE,
+					light(pos.x(), pos.y()), OverlayTexture.NO_OVERLAY, poseStack, source, null, 0);
 			poseStack.popPose();
 		}
 	}
@@ -388,7 +389,7 @@ public class GameBackground implements GuiEventListener, NarratableEntry {
 			poseStack.pushPose();
 			poseStack.translate(pos.x() + blockWidth / 2, pos.y() - blockHeight / 2, pos.z());
 			poseStack.scale(22, 22, 22);
-			poseStack.mulPose(new Quaternion(-45, 160, 0, true));
+			poseStack.mulPose(TransformationHelper.quatFromXYZ(-45, 160, 0, true));
 			model.renderToBuffer(poseStack, source.getBuffer(model.renderType(TEXTURE)), light(pos.x(), pos.y()),
 					OverlayTexture.NO_OVERLAY, 1, 1, 1, 1);
 			poseStack.popPose();
@@ -468,8 +469,8 @@ public class GameBackground implements GuiEventListener, NarratableEntry {
 		protected boolean click(double x, double y, int pButton) {
 			if (pButton == InputConstants.MOUSE_BUTTON_LEFT && contains(x, y)) {
 				screen.getMinecraft().getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.PLAYER_HURT, 1));
-				pos.setX(startPos.x() + rand.nextInt(-1, 2) * blockWidth);
-				pos.setY(startPos.y() + rand.nextInt(-1, 2) * blockHeight);
+				pos.x = startPos.x() + rand.nextInt(-1, 2) * blockWidth;
+				pos.y = startPos.y() + rand.nextInt(-1, 2) * blockHeight;
 				return true;
 			}
 			return super.click(x, y, pButton);
@@ -534,6 +535,16 @@ public class GameBackground implements GuiEventListener, NarratableEntry {
 					.uv2(light).endVertex();
 		}
 
+	}
+
+	@Override
+	public void setFocused(boolean pFocused) {
+
+	}
+
+	@Override
+	public boolean isFocused() {
+		return false;
 	}
 
 }

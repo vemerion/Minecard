@@ -15,9 +15,8 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import mod.vemerion.minecard.Main;
 import mod.vemerion.minecard.game.GameUtil;
-import net.minecraft.core.SerializableUUID;
+import net.minecraft.core.UUIDUtil;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
 
@@ -49,7 +48,7 @@ public class PlayerStats {
 		List<StatLine> result = new ArrayList<>();
 		for (var entry : stats.entrySet()) {
 			if (entry.getKey().getEnemy().isEmpty()) {
-				result.add(new StatLine(new TranslatableComponent(entry.getKey().textKey()),
+				result.add(new StatLine(Component.translatable(entry.getKey().textKey()),
 						String.valueOf(entry.getValue())));
 			}
 		}
@@ -61,7 +60,7 @@ public class PlayerStats {
 		for (var entry : stats.entrySet()) {
 			if (entry.getKey().getEnemy().isPresent()) {
 				result.computeIfAbsent(entry.getKey().getEnemy().get(), id -> new ArrayList<>()).add(new StatLine(
-						new TranslatableComponent(entry.getKey().textKey()), String.valueOf(entry.getValue())));
+						Component.translatable(entry.getKey().textKey()), String.valueOf(entry.getValue())));
 			}
 		}
 		return result;
@@ -102,10 +101,11 @@ public class PlayerStats {
 		public static final ResourceLocation CARDS_PLAYED = new ResourceLocation(Main.MODID, "cards_played");
 		public static final ResourceLocation TURNS_ENDED = new ResourceLocation(Main.MODID, "turns_ended");
 
-		public static final Codec<Key> CODEC = RecordCodecBuilder.create(instance -> instance
-				.group(ResourceLocation.CODEC.fieldOf("id").forGetter(Key::getId),
-						SerializableUUID.CODEC.optionalFieldOf("enemy").forGetter(Key::getEnemy))
-				.apply(instance, Key::new));
+		public static final Codec<Key> CODEC = RecordCodecBuilder
+				.create(instance -> instance
+						.group(ResourceLocation.CODEC.fieldOf("id").forGetter(Key::getId),
+								UUIDUtil.CODEC.optionalFieldOf("enemy").forGetter(Key::getEnemy))
+						.apply(instance, Key::new));
 
 		private ResourceLocation id;
 		private Optional<UUID> enemy;

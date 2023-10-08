@@ -2,10 +2,6 @@
   "abilities": {
     "type": "minecard:chain",
     "value": {
-      "triggers": [
-        "hurt"
-      ],
-      "text_key": "card_ability.minecard.squid",
       "abilities": [
         {
           "type": "minecard:select_cards",
@@ -29,14 +25,14 @@
             "modifications": [
               [
                 {
-                  "output": {
-                    "type": "minecard:health"
-                  },
                   "operator": {
                     "type": "minecard:variable",
                     "value": {
                       "type": "minecard:max_health"
                     }
+                  },
+                  "output": {
+                    "type": "minecard:health"
                   }
                 }
               ]
@@ -44,14 +40,18 @@
           }
         },
         {
-          "placement": "your_hand",
-          "type": "minecard:place_cards"
+          "type": "minecard:place_cards",
+          "placement": "your_hand"
         }
+      ],
+      "text_key": "card_ability.minecard.squid",
+      "triggers": [
+        "hurt"
       ]
     }
   },
-  "entity": "minecraft:squid",
   "cost": 1,
-  "health": 1,
-  "damage": 1
+  "damage": 1,
+  "entity": "minecraft:squid",
+  "health": 1
 }

@@ -9,48 +9,48 @@
         {
           "type": "minecard:chain",
           "value": {
-            "triggers": [
-              "death"
-            ],
-            "text_key": "card_ability.minecard.splitter",
             "abilities": [
               {
+                "type": "minecard:constant_cards",
                 "cards": [
                   "minecard:medium_slime"
-                ],
-                "type": "minecard:constant_cards"
+                ]
               },
               {
-                "placement": "left",
-                "type": "minecard:place_cards"
+                "type": "minecard:place_cards",
+                "placement": "left"
               },
               {
-                "placement": "right",
-                "type": "minecard:place_cards"
+                "type": "minecard:place_cards",
+                "placement": "right"
               },
               {
+                "type": "minecard:constant_cards",
                 "cards": [
                   "minecard:medium_slime"
-                ],
-                "type": "minecard:constant_cards"
+                ]
               },
               {
                 "type": "minecard:history",
                 "value": {
                   "icon": {
-                    "id": "minecraft:book",
-                    "Count": 1
+                    "Count": 1,
+                    "id": "minecraft:book"
                   }
                 }
               }
+            ],
+            "text_key": "card_ability.minecard.splitter",
+            "triggers": [
+              "death"
             ]
           }
         }
       ]
     }
   },
-  "entity": "minecraft:slime",
   "cost": 7,
-  "health": 4,
-  "damage": 4
+  "damage": 4,
+  "entity": "minecraft:slime",
+  "health": 4
 }

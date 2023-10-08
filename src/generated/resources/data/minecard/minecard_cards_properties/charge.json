@@ -1,15 +1,7 @@
 {
-  "item": {
-    "id": "minecraft:sugar",
-    "Count": 1
-  },
   "ability": {
     "type": "minecard:chain",
     "value": {
-      "triggers": [
-        "summon"
-      ],
-      "text_key": "",
       "abilities": [
         {
           "type": "minecard:select_cards",
@@ -30,10 +22,6 @@
             "modifications": [
               [
                 {
-                  "output": {
-                    "type": "minecard:property",
-                    "value": "minecard:ready"
-                  },
                   "operator": {
                     "type": "minecard:add",
                     "value": {
@@ -49,13 +37,25 @@
                         }
                       }
                     }
+                  },
+                  "output": {
+                    "type": "minecard:property",
+                    "value": "minecard:ready"
                   }
                 }
               ]
             ]
           }
         }
+      ],
+      "text_key": "",
+      "triggers": [
+        "summon"
       ]
     }
+  },
+  "item": {
+    "Count": 1,
+    "id": "minecraft:sugar"
   }
 }

@@ -1,26 +1,12 @@
 {
-  "item": {
-    "id": "minecraft:spider_eye",
-    "Count": 1
-  },
   "ability": {
     "type": "minecard:chain",
     "value": {
-      "triggers": [
-        "tick"
-      ],
-      "text_key": "",
       "abilities": [
         {
           "type": "minecard:select_cards",
           "value": {
             "selection": {
-              "groups": [
-                "self"
-              ],
-              "method": {
-                "type": "minecard:all"
-              },
               "condition": {
                 "type": "minecard:operator",
                 "value": {
@@ -40,6 +26,12 @@
                     }
                   }
                 }
+              },
+              "groups": [
+                "self"
+              ],
+              "method": {
+                "type": "minecard:all"
               }
             }
           }
@@ -50,19 +42,27 @@
             "modifications": [
               [
                 {
-                  "output": {
-                    "type": "minecard:health"
-                  },
                   "operator": {
                     "type": "minecard:constant",
                     "value": -1
+                  },
+                  "output": {
+                    "type": "minecard:health"
                   }
                 }
               ]
             ]
           }
         }
+      ],
+      "text_key": "",
+      "triggers": [
+        "tick"
       ]
     }
+  },
+  "item": {
+    "Count": 1,
+    "id": "minecraft:spider_eye"
   }
 }

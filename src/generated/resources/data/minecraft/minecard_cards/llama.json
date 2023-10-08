@@ -2,10 +2,6 @@
   "abilities": {
     "type": "minecard:chain",
     "value": {
-      "triggers": [
-        "summon"
-      ],
-      "text_key": "card_ability.minecard.llama",
       "abilities": [
         {
           "type": "minecard:select_cards",
@@ -36,12 +32,12 @@
             "modifications": [
               [
                 {
-                  "output": {
-                    "type": "minecard:health"
-                  },
                   "operator": {
                     "type": "minecard:constant",
                     "value": -1
+                  },
+                  "output": {
+                    "type": "minecard:health"
                   }
                 }
               ]
@@ -52,16 +48,20 @@
           "type": "minecard:history",
           "value": {
             "icon": {
-              "id": "minecraft:book",
-              "Count": 1
+              "Count": 1,
+              "id": "minecraft:book"
             }
           }
         }
+      ],
+      "text_key": "card_ability.minecard.llama",
+      "triggers": [
+        "summon"
       ]
     }
   },
-  "entity": "minecraft:llama",
   "cost": 1,
-  "health": 1,
-  "damage": 1
+  "damage": 1,
+  "entity": "minecraft:llama",
+  "health": 1
 }

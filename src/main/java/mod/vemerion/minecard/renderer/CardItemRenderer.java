@@ -1,13 +1,15 @@
 package mod.vemerion.minecard.renderer;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
 import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Quaternion;
 
+import mod.vemerion.minecard.Main;
 import mod.vemerion.minecard.capability.CardData;
 import mod.vemerion.minecard.entity.CardGameRobot;
 import mod.vemerion.minecard.game.AIPlayer;
@@ -24,7 +26,6 @@ import net.minecraft.client.model.geom.EntityModelSet;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.block.model.ItemTransforms.TransformType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.util.Mth;
@@ -34,9 +35,13 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.animal.Rabbit;
 import net.minecraft.world.entity.animal.TropicalFish;
 import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.common.util.TransformationHelper;
+import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 
 public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 
@@ -65,27 +70,27 @@ public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 		return (CardGameRobot) CACHE.computeIfAbsent(ModEntities.CARD_GAME_ROBOT.get(), t -> t.create(level));
 	}
 
-	public static void renderCard(Card card, TransformType transform, PoseStack pose, MultiBufferSource buffer,
+	public static void renderCard(Card card, ItemDisplayContext transform, PoseStack pose, MultiBufferSource buffer,
 			int light, int overlay) {
 		Lighting.setupForFlatItems();
 		var mc = Minecraft.getInstance();
 		var itemRenderer = mc.getItemRenderer();
 
 		// Render card
-		if (transform == TransformType.GUI)
+		if (transform == ItemDisplayContext.GUI)
 			pose.translate(0.01, -0.1, 0);
-		if (transform != TransformType.NONE)
+		if (transform != ItemDisplayContext.NONE)
 			pose.translate(0.1, 1, 0.45);
 		pose.pushPose();
 		pose.translate(0.4, -0.4, -0.03);
 		pose.scale(CARD_SIZE, CARD_SIZE, CARD_SIZE);
-		itemRenderer.renderStatic(ModItems.EMPTY_CARD_FRONT.get().getDefaultInstance(), TransformType.NONE, light,
-				overlay, pose, buffer, 0);
+		itemRenderer.renderStatic(ModItems.EMPTY_CARD_FRONT.get().getDefaultInstance(), ItemDisplayContext.NONE, light,
+				overlay, pose, buffer, null, 0);
 		pose.translate(-0.001, -0.001, -0.001);
 		itemRenderer.renderStatic(
 				card.getType().isEmpty() ? ModItems.EMPTY_CARD_FULL.get().getDefaultInstance()
 						: ModItems.EMPTY_CARD_BACK.get().getDefaultInstance(),
-				TransformType.NONE, light, overlay, pose, buffer, 0);
+				ItemDisplayContext.NONE, light, overlay, pose, buffer, null, 0);
 		pose.popPose();
 
 		var type = card.getType();
@@ -188,10 +193,10 @@ public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 
 		pose.pushPose();
 		pose.translate(0.4, -0.47 + (0.34f - dimensions.height * drawingScale * scaleFactor) / 2f, 0);
-		if (transform == TransformType.NONE)
+		if (transform == ItemDisplayContext.NONE)
 			pose.translate(0, 0, -0.2);
 		pose.scale(drawingScale, drawingScale, drawingScale);
-		pose.mulPose(new Quaternion(0, 20, 0, true));
+		pose.mulPose(TransformationHelper.quatFromXYZ(0, 20, 0, true));
 
 		mc.getEntityRenderDispatcher().getRenderer(entity).render(entity, 0, 0, pose, buffer, light);
 		pose.popPose();
@@ -225,7 +230,7 @@ public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 			PoseStack poseStack, MultiBufferSource buffer) {
 		poseStack.pushPose();
 		poseStack.scale(0.2f, 0.2f, 0.2f);
-		itemRenderer.renderStatic(stack, TransformType.GUI, light, overlay, poseStack, buffer, 0);
+		itemRenderer.renderStatic(stack, ItemDisplayContext.GUI, light, overlay, poseStack, buffer, null, 0);
 		poseStack.popPose();
 	}
 
@@ -308,21 +313,32 @@ public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 		return entity;
 	}
 
+	private static final Method SET_PACKED_VARIANT = ObfuscationReflectionHelper.findMethod(TropicalFish.class,
+			"m_30056_", int.class);
+
 	private static void setSpecialAttributes(Card card, Entity entity) {
 		if (entity instanceof Rabbit rabbit) {
-			rabbit.setRabbitType(card.hasProperty(CardProperty.SPECIAL) ? Rabbit.TYPE_EVIL : Rabbit.TYPE_BROWN);
+			rabbit.setVariant(card.hasProperty(CardProperty.SPECIAL) ? Rabbit.Variant.EVIL : Rabbit.Variant.BROWN);
 		}
 		if (entity instanceof Mob mob) {
 			mob.setBaby(card.hasProperty(CardProperty.BABY));
 		}
 		if (entity instanceof TropicalFish fish) {
 			var rand = new Random(card.getId());
-			fish.setVariant(rand.nextInt(2) | rand.nextInt(6) << 8 | rand.nextInt(15) << 16 | rand.nextInt(15) << 24);
+			try {
+				SET_PACKED_VARIANT.invoke(fish,
+						new TropicalFish.Variant(
+								TropicalFish.Pattern.values()[rand.nextInt(TropicalFish.Pattern.values().length)],
+								DyeColor.values()[rand.nextInt(DyeColor.values().length)],
+								DyeColor.values()[rand.nextInt(DyeColor.values().length)]).getPackedId());
+			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+				Main.LOGGER.error("Unable to play set variant for tropical fish card");
+			}
 		}
 	}
 
 	@Override
-	public void renderByItem(ItemStack stack, TransformType transform, PoseStack pose, MultiBufferSource buffer,
+	public void renderByItem(ItemStack stack, ItemDisplayContext transform, PoseStack pose, MultiBufferSource buffer,
 			int light, int overlay) {
 
 		CardData.getType(stack).ifPresent(rl -> {

@@ -1,9 +1,9 @@
 {
+  "cost": 8,
+  "damage": 7,
+  "entity": "minecraft:iron_golem",
+  "health": 7,
   "properties": {
     "minecard:taunt": 1
-  },
-  "entity": "minecraft:iron_golem",
-  "cost": 8,
-  "health": 7,
-  "damage": 7
+  }
 }

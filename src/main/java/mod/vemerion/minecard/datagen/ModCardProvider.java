@@ -1,6 +1,5 @@
 package mod.vemerion.minecard.datagen;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.HashMap;
@@ -10,9 +9,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.concurrent.CompletableFuture;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.mojang.serialization.JsonOps;
 
 import mod.vemerion.minecard.Main;
@@ -52,43 +50,42 @@ import mod.vemerion.minecard.game.ability.ResourceAbility;
 import mod.vemerion.minecard.game.ability.SelectCardsAbility;
 import mod.vemerion.minecard.game.ability.TriggerAdvancementAbility;
 import mod.vemerion.minecard.helper.Helper;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
-import net.minecraft.data.HashCache;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.data.PackOutput;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraftforge.registries.ForgeRegistries;
 
 public class ModCardProvider implements DataProvider {
-	private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
-
 	private Map<ResourceLocation, CardType> cards = new HashMap<>();
-	private DataGenerator generator;
+	private PackOutput packOutput;
 
-	public ModCardProvider(DataGenerator generator) {
-		this.generator = generator;
+	public ModCardProvider(PackOutput packOutput) {
+		this.packOutput = packOutput;
 	}
 
 	@Override
-	public void run(HashCache cache) throws IOException {
+	public CompletableFuture<?> run(CachedOutput cache) {
 		addCards();
-		var folder = generator.getOutputFolder();
+		var folder = packOutput.getOutputFolder();
+		var list = new ArrayList<CompletableFuture<?>>();
 		for (var entry : cards.entrySet()) {
 			var key = entry.getKey();
 			var path = folder
 					.resolve("data/" + key.getNamespace() + "/" + Cards.FOLDER_NAME + "/" + key.getPath() + ".json");
-			try {
-				DataProvider.save(GSON, cache,
-						CardType.CODEC.encodeStart(JsonOps.INSTANCE, entry.getValue()).getOrThrow(false, s -> {
-						}), path);
-			} catch (IOException e) {
-				Main.LOGGER.error("Couldn't save card " + path + ": " + e);
-			}
+			list.add(DataProvider.saveStable(cache,
+					CardType.CODEC.encodeStart(JsonOps.INSTANCE, entry.getValue()).getOrThrow(false, s -> {
+					}), path));
 		}
+		return CompletableFuture.allOf(list.toArray((length) -> {
+			return new CompletableFuture[length];
+		}));
 	}
 
 	// Give player card:
@@ -463,13 +460,18 @@ public class ModCardProvider implements DataProvider {
 								new ModifyAbility(List.of(
 										new ModificationBuilder().heal(-2).addProperty(CardProperty.BURN, 2).build())),
 								history()))));
-		add(new Builder(EntityType.SALMON, 1, 1, 1).setCardAbility(new ChanceAbility(textKey("salmon"), 50,
-				addCards(EnumSet.of(CardAbilityTrigger.DEATH), "",
-						List.of(new LazyCardType(new Builder(EntityType.ITEM, 0, 0, 0)
-								.setAdditionalData(new AdditionalCardData.ItemData(Items.SALMON_BUCKET))
-								.setCardAbility(summon(EnumSet.of(CardAbilityTrigger.SUMMON), textKey("salmon_bucket"),
-										CardPlacement.RIGHT, new LazyCardType(EntityType.SALMON.getRegistryName())))
-								.build()))))));
+		add(new Builder(EntityType.SALMON, 1, 1, 1)
+				.setCardAbility(
+						new ChanceAbility(textKey("salmon"), 50,
+								addCards(EnumSet.of(CardAbilityTrigger.DEATH), "",
+										List.of(new LazyCardType(new Builder(EntityType.ITEM, 0, 0, 0)
+												.setAdditionalData(new AdditionalCardData.ItemData(
+														Items.SALMON_BUCKET))
+												.setCardAbility(summon(EnumSet.of(CardAbilityTrigger.SUMMON),
+														textKey("salmon_bucket"), CardPlacement.RIGHT,
+														new LazyCardType(ForgeRegistries.ENTITY_TYPES
+																.getKey(EntityType.SALMON))))
+												.build()))))));
 		add(new Builder(EntityType.OCELOT, 3, 3, 3)
 				.setCardAbility(new ChainAbility(EnumSet.of(CardAbilityTrigger.SUMMON), textKey("ocelot"), List.of(
 						new SelectCardsAbility(new CardAbilitySelection(
@@ -489,12 +491,12 @@ public class ModCardProvider implements DataProvider {
 										new ModifyAbility(List.of(new ModificationBuilder().heal(-2)
 												.addProperty(CardProperty.FREEZE, 1).build())),
 										history()))));
-		add(new Builder(EntityType.CHICKEN, 2, 2, 1)
-				.setCardAbility(new ChanceAbility(textKey("chicken"), 50,
-						addCards(EnumSet.of(CardAbilityTrigger.SUMMON), "",
-								List.of(new LazyCardType(new Builder(EntityType.ITEM, 0, 0, 0)
-										.setAdditionalData(new AdditionalCardData.ItemData(Items.EGG))
-										.setCardAbility(new MultiAbility(textKey("egg"), List.of(
+		add(new Builder(EntityType.CHICKEN, 2, 2, 1).setCardAbility(new ChanceAbility(textKey("chicken"), 50,
+				addCards(EnumSet.of(CardAbilityTrigger.SUMMON), "",
+						List.of(new LazyCardType(new Builder(EntityType.ITEM, 0, 0, 0)
+								.setAdditionalData(new AdditionalCardData.ItemData(Items.EGG))
+								.setCardAbility(new MultiAbility(
+										textKey("egg"), List.of(
 												new ChainAbility(
 														EnumSet.of(CardAbilityTrigger.SUMMON), "", List.of(
 																new SelectCardsAbility(new CardAbilitySelection(
@@ -507,8 +509,9 @@ public class ModCardProvider implements DataProvider {
 																		new ModificationBuilder().heal(-1).build())),
 																history())),
 												summon(EnumSet.of(CardAbilityTrigger.SUMMON), "", CardPlacement.RIGHT,
-														new LazyCardType(EntityType.CHICKEN.getRegistryName())))))
-										.build()))))));
+														new LazyCardType(ForgeRegistries.ENTITY_TYPES
+																.getKey(EntityType.CHICKEN))))))
+								.build()))))));
 		add(new Builder(EntityType.TURTLE, 5, 8, 1)
 				.addProperty(CardProperty.BABY,
 						1)
@@ -972,9 +975,9 @@ public class ModCardProvider implements DataProvider {
 										new ModifyAbility(List.of(new ModificationBuilder().heal(5).build())),
 										history()))));
 		add(new Builder(EntityType.ITEM, 0, 0, 0).setKey(mod("pufferfish_bucket"))
-				.setAdditionalData(new AdditionalCardData.ItemData(Items.PUFFERFISH_BUCKET))
-				.setCardAbility(summon(EnumSet.of(CardAbilityTrigger.SUMMON), textKey("pufferfish_bucket"),
-						CardPlacement.RIGHT, new LazyCardType(EntityType.PUFFERFISH.getRegistryName()))));
+				.setAdditionalData(new AdditionalCardData.ItemData(Items.PUFFERFISH_BUCKET)).setCardAbility(
+						summon(EnumSet.of(CardAbilityTrigger.SUMMON), textKey("pufferfish_bucket"), CardPlacement.RIGHT,
+								new LazyCardType(ForgeRegistries.ENTITY_TYPES.getKey(EntityType.PUFFERFISH)))));
 		add(new Builder(EntityType.ITEM, 0, 0, 0).setKey(mod("packed_ice"))
 				.setAdditionalData(new AdditionalCardData.ItemData(Items.PACKED_ICE)).setCardAbility(
 						new ChainAbility(
@@ -1032,7 +1035,7 @@ public class ModCardProvider implements DataProvider {
 										history()))));
 		add(new Builder(EntityType.ITEM, 0, 2, 0).setKey(mod("buried_treasure"))
 				.setAdditionalData(new AdditionalCardData.ItemData(Items.CHEST.getDefaultInstance()
-						.setHoverName(new TranslatableComponent(Helper.gui("buried_treasure")))))
+						.setHoverName(Component.translatable(Helper.gui("buried_treasure")))))
 				.setCardAbility(addCards(EnumSet.of(CardAbilityTrigger.DEATH), textKey("buried_treasure"),
 						List.of(new LazyCardType(mod("emerald")), new LazyCardType(mod("leather_chestplate")),
 								new LazyCardType(mod("iron_sword"))))));
@@ -1088,7 +1091,8 @@ public class ModCardProvider implements DataProvider {
 		for (var entry : cards.entrySet()) {
 			var card = entry.getValue();
 			types.add(card.getType());
-			if (Cards.isAllowed(card.getType()) && ForgeRegistries.ENTITIES.containsKey(entry.getKey())) {
+			if (Cards.isAllowed(card.getType(), FeatureFlags.DEFAULT_FLAGS)
+					&& ForgeRegistries.ENTITY_TYPES.containsKey(entry.getKey())) {
 				costCounts.compute(card.getCost(), (k, v) -> v == null ? 1 : v + 1);
 
 				for (var property : card.getProperties().entrySet()) {
@@ -1107,8 +1111,8 @@ public class ModCardProvider implements DataProvider {
 		for (var entry : propertyCounts.entrySet())
 			System.out.println(entry.getKey() + ": " + entry.getValue());
 
-		for (var entry : ForgeRegistries.ENTITIES.getEntries()) {
-			if (Cards.isAllowed(entry.getValue()) && !types.contains(entry.getValue())) {
+		for (var entry : ForgeRegistries.ENTITY_TYPES.getEntries()) {
+			if (Cards.isAllowed(entry.getValue(), FeatureFlags.DEFAULT_FLAGS) && !types.contains(entry.getValue())) {
 				System.out.println("Missing " + entry.getKey());
 			}
 		}
@@ -1136,7 +1140,7 @@ public class ModCardProvider implements DataProvider {
 	}
 
 	private void splitter(EntityType<?> entity, int cost, CardAbility ability) {
-		var name = entity.getRegistryName().getPath();
+		var name = ForgeRegistries.ENTITY_TYPES.getKey(entity).getPath();
 		var small = mod("small_" + name);
 		var medium = mod("medium_" + name);
 		var textKey = textKey("splitter");
@@ -1305,7 +1309,7 @@ public class ModCardProvider implements DataProvider {
 		}
 
 		private ResourceLocation getKey() {
-			return key == null ? type.getRegistryName() : key;
+			return key == null ? ForgeRegistries.ENTITY_TYPES.getKey(type) : key;
 		}
 	}
 

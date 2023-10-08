@@ -1,14 +1,7 @@
 {
-  "properties": {
-    "minecard:undead": 1
-  },
   "abilities": {
     "type": "minecard:chain",
     "value": {
-      "triggers": [
-        "attack"
-      ],
-      "text_key": "card_ability.minecard.husk",
       "abilities": [
         {
           "type": "minecard:select_cards",
@@ -29,9 +22,6 @@
             "modifications": [
               [
                 {
-                  "output": {
-                    "type": "minecard:damage"
-                  },
                   "operator": {
                     "type": "minecard:add",
                     "value": {
@@ -46,17 +36,27 @@
                         "value": -2
                       }
                     }
+                  },
+                  "output": {
+                    "type": "minecard:damage"
                   }
                 }
               ]
             ]
           }
         }
+      ],
+      "text_key": "card_ability.minecard.husk",
+      "triggers": [
+        "attack"
       ]
     }
   },
-  "entity": "minecraft:husk",
   "cost": 3,
+  "damage": 2,
+  "entity": "minecraft:husk",
   "health": 4,
-  "damage": 2
+  "properties": {
+    "minecard:undead": 1
+  }
 }

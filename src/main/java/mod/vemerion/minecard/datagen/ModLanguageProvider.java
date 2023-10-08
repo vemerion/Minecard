@@ -7,15 +7,15 @@ import mod.vemerion.minecard.helper.Helper;
 import mod.vemerion.minecard.init.ModBlocks;
 import mod.vemerion.minecard.init.ModEntities;
 import mod.vemerion.minecard.init.ModItems;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraftforge.common.data.LanguageProvider;
 
 public class ModLanguageProvider extends LanguageProvider {
 
 	private int tutorialCounter;
 
-	public ModLanguageProvider(DataGenerator gen) {
-		super(gen, Main.MODID, "en_us");
+	public ModLanguageProvider(PackOutput output) {
+		super(output, Main.MODID, "en_us");
 	}
 
 	@Override

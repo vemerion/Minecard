@@ -2,29 +2,29 @@
   "abilities": {
     "type": "minecard:chain",
     "value": {
-      "triggers": [
-        "summon"
-      ],
-      "text_key": "card_ability.minecard.donkey",
       "abilities": [
         {
-          "count": 1,
-          "type": "minecard:draw_cards"
+          "type": "minecard:draw_cards",
+          "count": 1
         },
         {
           "type": "minecard:history",
           "value": {
             "icon": {
-              "id": "minecraft:book",
-              "Count": 1
+              "Count": 1,
+              "id": "minecraft:book"
             }
           }
         }
+      ],
+      "text_key": "card_ability.minecard.donkey",
+      "triggers": [
+        "summon"
       ]
     }
   },
-  "entity": "minecraft:donkey",
   "cost": 3,
-  "health": 2,
-  "damage": 2
+  "damage": 2,
+  "entity": "minecraft:donkey",
+  "health": 2
 }

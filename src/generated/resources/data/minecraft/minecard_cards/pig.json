@@ -2,26 +2,22 @@
   "abilities": {
     "type": "minecard:chain",
     "value": {
-      "triggers": [
-        "death"
-      ],
-      "text_key": "card_ability.minecard.pig",
       "abilities": [
         {
           "type": "minecard:select_cards",
           "value": {
             "selection": {
-              "groups": [
-                "your_board"
-              ],
-              "method": {
-                "type": "minecard:all"
-              },
               "condition": {
                 "type": "minecard:entity",
                 "value": {
                   "inner": "minecraft:player"
                 }
+              },
+              "groups": [
+                "your_board"
+              ],
+              "method": {
+                "type": "minecard:all"
               }
             }
           }
@@ -38,12 +34,12 @@
             "modifications": [
               [
                 {
-                  "output": {
-                    "type": "minecard:health"
-                  },
                   "operator": {
                     "type": "minecard:constant",
                     "value": 3
+                  },
+                  "output": {
+                    "type": "minecard:health"
                   }
                 }
               ]
@@ -54,16 +50,20 @@
           "type": "minecard:history",
           "value": {
             "icon": {
-              "id": "minecraft:book",
-              "Count": 1
+              "Count": 1,
+              "id": "minecraft:book"
             }
           }
         }
+      ],
+      "text_key": "card_ability.minecard.pig",
+      "triggers": [
+        "death"
       ]
     }
   },
-  "entity": "minecraft:pig",
   "cost": 2,
-  "health": 2,
-  "damage": 3
+  "damage": 3,
+  "entity": "minecraft:pig",
+  "health": 2
 }

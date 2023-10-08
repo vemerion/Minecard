@@ -1,15 +1,12 @@
 package mod.vemerion.minecard.eventsubscriber;
 
 import mod.vemerion.minecard.Main;
-import mod.vemerion.minecard.init.ModBlocks;
 import mod.vemerion.minecard.init.ModEntities;
 import mod.vemerion.minecard.model.CardGameRobotModel;
 import mod.vemerion.minecard.renderer.CardGameRobotRenderer;
 import mod.vemerion.minecard.screen.DeckScreen;
 import mod.vemerion.minecard.screen.animation.config.AnimationConfigs;
 import net.minecraft.client.gui.screens.MenuScreens;
-import net.minecraft.client.renderer.ItemBlockRenderTypes;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.RegisterClientReloadListenersEvent;
@@ -22,8 +19,6 @@ public class ClientModEventSubscriber {
 
 	@SubscribeEvent
 	public static void onClientSetupEvent(FMLClientSetupEvent event) {
-		ItemBlockRenderTypes.setRenderLayer(ModBlocks.GAME.get(), RenderType.cutout());
-
 		event.enqueueWork(() -> {
 			MenuScreens.register(mod.vemerion.minecard.init.ModMenus.DECK.get(), DeckScreen::new);
 		});

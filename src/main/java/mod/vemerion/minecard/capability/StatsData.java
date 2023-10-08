@@ -11,7 +11,7 @@ import mod.vemerion.minecard.game.GameUtil;
 import mod.vemerion.minecard.network.Network;
 import mod.vemerion.minecard.network.StatMessage;
 import net.minecraft.core.Direction;
-import net.minecraft.core.SerializableUUID;
+import net.minecraft.core.UUIDUtil;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.resources.ResourceLocation;
@@ -31,8 +31,7 @@ public class StatsData implements INBTSerializable<CompoundTag> {
 	public static final Capability<StatsData> CAPABILITY = CapabilityManager.get(new CapabilityToken<StatsData>() {
 	});
 
-	public static final Codec<Map<UUID, PlayerStats>> MAP_CODEC = GameUtil.mapCodec(SerializableUUID.CODEC,
-			PlayerStats.CODEC);
+	public static final Codec<Map<UUID, PlayerStats>> MAP_CODEC = GameUtil.mapCodec(UUIDUtil.CODEC, PlayerStats.CODEC);
 
 	private Map<UUID, PlayerStats> stats;
 

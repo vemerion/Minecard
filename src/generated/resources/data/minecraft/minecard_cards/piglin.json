@@ -2,22 +2,19 @@
   "abilities": {
     "type": "minecard:chain",
     "value": {
-      "triggers": [
-        "summon"
-      ],
-      "text_key": "card_ability.minecard.piglin",
       "abilities": [
         {
+          "type": "minecard:constant_cards",
           "cards": [
             "minecard:iron_boots",
             "minecard:ender_pearl",
             "minecard:fire_charge"
-          ],
-          "type": "minecard:constant_cards"
+          ]
         },
         {
           "type": "minecard:select_cards",
           "value": {
+            "clear": true,
             "selection": {
               "groups": [
                 "collected"
@@ -29,28 +26,31 @@
                   "repeat": false
                 }
               }
-            },
-            "clear": true
+            }
           }
         },
         {
-          "placement": "your_hand",
-          "type": "minecard:place_cards"
+          "type": "minecard:place_cards",
+          "placement": "your_hand"
         },
         {
           "type": "minecard:history",
           "value": {
             "icon": {
-              "id": "minecraft:book",
-              "Count": 1
+              "Count": 1,
+              "id": "minecraft:book"
             }
           }
         }
+      ],
+      "text_key": "card_ability.minecard.piglin",
+      "triggers": [
+        "summon"
       ]
     }
   },
-  "entity": "minecraft:piglin",
   "cost": 5,
-  "health": 4,
-  "damage": 4
+  "damage": 4,
+  "entity": "minecraft:piglin",
+  "health": 4
 }

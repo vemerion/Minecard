@@ -10,7 +10,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import mod.vemerion.minecard.game.ability.CardAbility;
 import mod.vemerion.minecard.game.ability.NoCardAbility;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.FormattedText;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.entity.EntityType;
@@ -23,7 +23,7 @@ public class CardType {
 
 	public static final Codec<CardType> CODEC = ExtraCodecs
 			.lazyInitializedCodec(() -> RecordCodecBuilder.create(instance -> instance.group(
-					ForgeRegistries.ENTITIES.getCodec().fieldOf("entity").forGetter(CardType::getType),
+					ForgeRegistries.ENTITY_TYPES.getCodec().fieldOf("entity").forGetter(CardType::getType),
 					Codec.INT.fieldOf("cost").forGetter(CardType::getCost),
 					Codec.INT.fieldOf("health").forGetter(CardType::getHealth),
 					Codec.INT.fieldOf("damage").forGetter(CardType::getDamage),
@@ -112,9 +112,9 @@ public class CardType {
 		return dropChance;
 	}
 
-	public Component getName() {
+	public FormattedText getName() {
 		return getAdditionalData() instanceof AdditionalCardData.ItemData itemData ? itemData.getStack().getHoverName()
-				: (getType() == null ? TextComponent.EMPTY : getType().getDescription());
+				: (getType() == null ? Component.EMPTY : getType().getDescription());
 	}
 
 	public Card getCardForRendering() {

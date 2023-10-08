@@ -1,40 +1,40 @@
 {
-  "properties": {
-    "minecard:undead": 1
-  },
   "abilities": {
     "type": "minecard:chain",
     "value": {
-      "triggers": [
-        "death"
-      ],
-      "text_key": "card_ability.minecard.zoglin",
       "abilities": [
         {
+          "type": "minecard:constant_cards",
           "cards": [
             "minecard:rotten_flesh"
-          ],
-          "type": "minecard:constant_cards"
+          ]
         },
         {
-          "placement": "your_hand",
-          "type": "minecard:place_cards"
+          "type": "minecard:place_cards",
+          "placement": "your_hand"
         },
         {
           "type": "minecard:history",
           "value": {
             "icon": {
-              "id": "minecraft:book",
-              "Count": 1
+              "Count": 1,
+              "id": "minecraft:book"
             },
             "visibility": "all"
           }
         }
+      ],
+      "text_key": "card_ability.minecard.zoglin",
+      "triggers": [
+        "death"
       ]
     }
   },
-  "entity": "minecraft:zoglin",
   "cost": 9,
+  "damage": 12,
+  "entity": "minecraft:zoglin",
   "health": 6,
-  "damage": 12
+  "properties": {
+    "minecard:undead": 1
+  }
 }

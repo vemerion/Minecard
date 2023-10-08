@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
 import java.util.function.Predicate;
@@ -39,7 +40,7 @@ import mod.vemerion.minecard.network.SetResourcesMessage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.entity.EntityType;
@@ -58,6 +59,7 @@ public class GameBlockEntity extends BlockEntity {
 	private GameState state;
 	private Set<UUID> receivers;
 	private Map<UUID, AIPlayer> ais = new HashMap<>();
+	private Random random = new Random();
 
 	// Sub thread that runs card ability in playCard() that will block on ability
 	// choice. Sub thread and main thread will never run at the same time, to reduce
@@ -250,7 +252,7 @@ public class GameBlockEntity extends BlockEntity {
 			addAIPlayer();
 			setChanged();
 		} else {
-			player.sendMessage(new TranslatableComponent(Helper.chat("game_interactions")), id);
+			player.sendSystemMessage(Component.translatable(Helper.chat("game_interactions")));
 		}
 	}
 
@@ -300,13 +302,13 @@ public class GameBlockEntity extends BlockEntity {
 	public void addAIPlayer() {
 		List<Card> deck = new ArrayList<>();
 
-		var entities = ForgeRegistries.ENTITIES.getValues();
+		var entities = ForgeRegistries.ENTITY_TYPES.getValues();
 
 		while (deck.size() < DeckData.CAPACITY) {
-			int i = level.random.nextInt(entities.size());
+			int i = random.nextInt(entities.size());
 			for (var entity : entities) {
 				if (i == 0) {
-					if (Cards.isAllowed(entity)) {
+					if (Cards.isAllowed(entity, level.enabledFeatures())) {
 						deck.add(Cards.getInstance(false).get(entity).create());
 					}
 					break;
@@ -330,7 +332,7 @@ public class GameBlockEntity extends BlockEntity {
 			for (int i = 0; i < data.getSlots(); i++) {
 				var item = data.getStackInSlot(i);
 				if (item.isEmpty()) {
-					player.sendMessage(new TranslatableComponent(Helper.chat("not_enough_cards")), id);
+					player.sendSystemMessage(Component.translatable(Helper.chat("not_enough_cards")));
 					return;
 				}
 				CardData.getType(item).ifPresent(type -> {
@@ -343,8 +345,8 @@ public class GameBlockEntity extends BlockEntity {
 			for (var entry : counts.entrySet()) {
 				var max = entry.getKey().getDeckCount();
 				if (entry.getValue() > max) {
-					player.sendMessage(new TranslatableComponent(Helper.chat("too_many_duplicates"),
-							entry.getKey().getType().getDescription(), max), id);
+					player.sendSystemMessage(Component.translatable(Helper.chat("too_many_duplicates"),
+							entry.getKey().getType().getDescription(), max));
 					return;
 				}
 			}

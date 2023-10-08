@@ -1,8 +1,8 @@
 {
+  "type": "minecard:card",
   "conditions": [
     {
       "condition": "minecraft:killed_by_player"
     }
-  ],
-  "type": "minecard:card"
+  ]
 }

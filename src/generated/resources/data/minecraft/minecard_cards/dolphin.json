@@ -2,35 +2,35 @@
   "abilities": {
     "type": "minecard:chain",
     "value": {
-      "triggers": [
-        "summon"
-      ],
-      "text_key": "card_ability.minecard.dolphin",
       "abilities": [
         {
+          "type": "minecard:constant_cards",
           "cards": [
             "minecard:buried_treasure"
-          ],
-          "type": "minecard:constant_cards"
+          ]
         },
         {
-          "placement": "right",
-          "type": "minecard:place_cards"
+          "type": "minecard:place_cards",
+          "placement": "right"
         },
         {
           "type": "minecard:history",
           "value": {
             "icon": {
-              "id": "minecraft:book",
-              "Count": 1
+              "Count": 1,
+              "id": "minecraft:book"
             }
           }
         }
+      ],
+      "text_key": "card_ability.minecard.dolphin",
+      "triggers": [
+        "summon"
       ]
     }
   },
-  "entity": "minecraft:dolphin",
   "cost": 3,
-  "health": 2,
-  "damage": 3
+  "damage": 3,
+  "entity": "minecraft:dolphin",
+  "health": 2
 }

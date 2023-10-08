@@ -2,10 +2,6 @@
   "abilities": {
     "type": "minecard:chain",
     "value": {
-      "triggers": [
-        "summon"
-      ],
-      "text_key": "card_ability.minecard.strider",
       "abilities": [
         {
           "type": "minecard:select_cards",
@@ -26,13 +22,13 @@
             "modifications": [
               [
                 {
-                  "output": {
-                    "type": "minecard:property",
-                    "value": "minecard:burn"
-                  },
                   "operator": {
                     "type": "minecard:constant",
                     "value": 0
+                  },
+                  "output": {
+                    "type": "minecard:property",
+                    "value": "minecard:burn"
                   }
                 }
               ]
@@ -43,16 +39,20 @@
           "type": "minecard:history",
           "value": {
             "icon": {
-              "id": "minecraft:book",
-              "Count": 1
+              "Count": 1,
+              "id": "minecraft:book"
             }
           }
         }
+      ],
+      "text_key": "card_ability.minecard.strider",
+      "triggers": [
+        "summon"
       ]
     }
   },
-  "entity": "minecraft:strider",
   "cost": 4,
-  "health": 5,
-  "damage": 4
+  "damage": 4,
+  "entity": "minecraft:strider",
+  "health": 5
 }

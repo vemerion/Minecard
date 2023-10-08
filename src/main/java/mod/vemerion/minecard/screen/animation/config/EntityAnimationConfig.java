@@ -18,7 +18,8 @@ import net.minecraftforge.registries.ForgeRegistries;
 public class EntityAnimationConfig extends AnimationConfig {
 
 	public static final Codec<EntityAnimationConfig> CODEC = RecordCodecBuilder.create(instance -> instance
-			.group(ForgeRegistries.ENTITIES.getCodec().fieldOf("entity").forGetter(EntityAnimationConfig::getEntity),
+			.group(ForgeRegistries.ENTITY_TYPES.getCodec().fieldOf("entity")
+					.forGetter(EntityAnimationConfig::getEntity),
 					Codec.BOOL.fieldOf("moving").forGetter(EntityAnimationConfig::isMoving),
 					Codec.INT.fieldOf("duration").forGetter(EntityAnimationConfig::getDuration),
 					Codec.INT.fieldOf("size").forGetter(EntityAnimationConfig::getSize),

@@ -1,26 +1,26 @@
 {
   "parent": "minecraft:minecard/root",
+  "criteria": {
+    "iron_golem_farm": {
+      "conditions": {
+        "id": "minecard:iron_golem_farm"
+      },
+      "trigger": "minecard:game"
+    }
+  },
   "display": {
-    "icon": {
-      "item": "minecraft:iron_ingot"
-    },
-    "title": {
-      "translate": "advancements.minecard.iron_golem_farm.title"
-    },
+    "announce_to_chat": true,
     "description": {
       "translate": "advancements.minecard.iron_golem_farm.description"
     },
     "frame": "goal",
+    "hidden": false,
+    "icon": {
+      "item": "minecraft:iron_ingot"
+    },
     "show_toast": true,
-    "announce_to_chat": true,
-    "hidden": false
-  },
-  "criteria": {
-    "iron_golem_farm": {
-      "trigger": "minecard:game",
-      "conditions": {
-        "id": "minecard:iron_golem_farm"
-      }
+    "title": {
+      "translate": "advancements.minecard.iron_golem_farm.title"
     }
   },
   "requirements": [

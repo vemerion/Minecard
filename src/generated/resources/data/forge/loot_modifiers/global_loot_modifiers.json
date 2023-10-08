@@ -1,7 +1,7 @@
 {
-  "replace": false,
   "entries": [
     "minecard:card_treasure",
     "minecard:card"
-  ]
+  ],
+  "replace": false
 }

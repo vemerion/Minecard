@@ -2,10 +2,6 @@
   "abilities": {
     "type": "minecard:chain",
     "value": {
-      "triggers": [
-        "summon"
-      ],
-      "text_key": "card_ability.minecard.evoker",
       "abilities": [
         {
           "type": "minecard:select_cards",
@@ -32,12 +28,12 @@
             "modifications": [
               [
                 {
-                  "output": {
-                    "type": "minecard:health"
-                  },
                   "operator": {
                     "type": "minecard:constant",
                     "value": -2
+                  },
+                  "output": {
+                    "type": "minecard:health"
                   }
                 }
               ]
@@ -48,16 +44,20 @@
           "type": "minecard:history",
           "value": {
             "icon": {
-              "id": "minecraft:book",
-              "Count": 1
+              "Count": 1,
+              "id": "minecraft:book"
             }
           }
         }
+      ],
+      "text_key": "card_ability.minecard.evoker",
+      "triggers": [
+        "summon"
       ]
     }
   },
-  "entity": "minecraft:evoker",
   "cost": 5,
-  "health": 2,
-  "damage": 2
+  "damage": 2,
+  "entity": "minecraft:evoker",
+  "health": 2
 }

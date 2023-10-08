@@ -4,7 +4,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Quaternion;
 
 import mod.vemerion.minecard.Main;
 import mod.vemerion.minecard.renderer.CardItemRenderer;
@@ -16,7 +15,9 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraftforge.common.util.TransformationHelper;
 import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
+import net.minecraftforge.registries.ForgeRegistries;
 
 public class DeathAnimation extends Animation {
 
@@ -44,7 +45,7 @@ public class DeathAnimation extends Animation {
 		var progress = timer <= 0 ? 0 : (timer + partialTick) / DURATION;
 		poseStack.translate(card.getPosition().x + ClientCard.CARD_WIDTH / 2,
 				card.getPosition().y + ClientCard.CARD_HEIGHT / 2, 0);
-		poseStack.mulPose(new Quaternion(0, 0, Mth.sin(progress * 50) * 30, true));
+		poseStack.mulPose(TransformationHelper.quatFromXYZ(0, 0, Mth.sin(progress * 50) * 30, true));
 		poseStack.translate(-(card.getPosition().x + ClientCard.CARD_WIDTH / 2),
 				-(card.getPosition().y + ClientCard.CARD_HEIGHT / 2), 0);
 		card.render(poseStack, mouseX, mouseY, source, partialTick);
@@ -66,7 +67,7 @@ public class DeathAnimation extends Animation {
 				mc.getSoundManager().play(SimpleSoundInstance.forUI(sound, 1));
 			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 				Main.LOGGER.error("Unable to play death sound for card "
-						+ card.getType().get().getRegistryName().toString() + ": " + e);
+						+ ForgeRegistries.ENTITY_TYPES.getKey(card.getType().get()).toString() + ": " + e);
 			}
 		}
 	}

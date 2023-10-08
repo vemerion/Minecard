@@ -8,7 +8,6 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -18,7 +17,7 @@ import net.minecraftforge.network.NetworkHooks;
 public class DeckItem extends Item {
 
 	public DeckItem() {
-		super(new Item.Properties().stacksTo(1).tab(CreativeModeTab.TAB_SEARCH));
+		super(new Item.Properties().stacksTo(1));
 	}
 
 	@Override
@@ -31,7 +30,7 @@ public class DeckItem extends Item {
 		var stack = playerIn.getItemInHand(handIn);
 		if (!level.isClientSide) {
 			DeckData.get(stack).ifPresent(data -> {
-				NetworkHooks.openGui((ServerPlayer) playerIn, new SimpleMenuProvider(
+				NetworkHooks.openScreen((ServerPlayer) playerIn, new SimpleMenuProvider(
 						(id, inventory, player) -> new DeckMenu(id, inventory, data), getName(stack)));
 			});
 		}

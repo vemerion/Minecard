@@ -25,6 +25,7 @@ import net.minecraft.util.GsonHelper;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.flag.FeatureFlagSet;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -65,11 +66,11 @@ public class Cards extends SimpleJsonResourceReloadListener {
 		if (EMPTY.equals(rl))
 			return EMPTY_CARD_TYPE;
 
-		return CARDS.computeIfAbsent(rl, r -> generateCardType(ForgeRegistries.ENTITIES.getValue(r)));
+		return CARDS.computeIfAbsent(rl, r -> generateCardType(ForgeRegistries.ENTITY_TYPES.getValue(r)));
 	}
 
 	public CardType get(EntityType<?> type) {
-		return get(type.getRegistryName());
+		return get(ForgeRegistries.ENTITY_TYPES.getKey(type));
 	}
 
 	public static Cards getInstance(boolean isClient) {
@@ -84,16 +85,16 @@ public class Cards extends SimpleJsonResourceReloadListener {
 		return getInstance(level.isClientSide);
 	}
 
-	public static boolean isAllowed(EntityType<?> type) {
-		return type.getCategory() != MobCategory.MISC || type == EntityType.VILLAGER || type == EntityType.IRON_GOLEM
-				|| type == EntityType.SNOW_GOLEM;
+	public static boolean isAllowed(EntityType<?> type, FeatureFlagSet features) {
+		return type.isEnabled(features) && (type.getCategory() != MobCategory.MISC || type == EntityType.VILLAGER
+				|| type == EntityType.IRON_GOLEM || type == EntityType.SNOW_GOLEM);
 	}
 
 	private CardType generateCardType(EntityType<?> type) {
 		if (type == null)
 			return null;
 
-		var rand = new Random(type.getRegistryName().toString().hashCode());
+		var rand = new Random(ForgeRegistries.ENTITY_TYPES.getKey(type).toString().hashCode());
 
 		int cost = rand.nextInt(1, 11);
 		int totalStats = cost * 2 + 1;

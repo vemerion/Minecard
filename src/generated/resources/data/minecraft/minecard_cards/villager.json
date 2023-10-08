@@ -2,42 +2,38 @@
   "abilities": {
     "type": "minecard:chain",
     "value": {
-      "triggers": [
-        "hurt"
-      ],
-      "text_key": "card_ability.minecard.villager",
       "abilities": [
         {
+          "type": "minecard:constant_cards",
           "cards": [
             {
-              "entity": "minecraft:iron_golem",
               "cost": 0,
-              "health": 7,
-              "damage": 7
+              "damage": 7,
+              "entity": "minecraft:iron_golem",
+              "health": 7
             }
-          ],
-          "type": "minecard:constant_cards"
+          ]
         },
         {
-          "placement": "right",
-          "type": "minecard:place_cards"
+          "type": "minecard:place_cards",
+          "placement": "right"
         },
         {
           "type": "minecard:history",
           "value": {
             "icon": {
-              "id": "minecraft:book",
-              "Count": 1
+              "Count": 1,
+              "id": "minecraft:book"
             }
           }
         },
         {
           "type": "minecard:move_collected",
           "value": {
-            "source": 0,
-            "destination": 1,
+            "clear_destination": false,
             "clear_source": true,
-            "clear_destination": false
+            "destination": 1,
+            "source": 0
           }
         },
         {
@@ -59,10 +55,6 @@
             "modifications": [
               [
                 {
-                  "output": {
-                    "type": "minecard:property",
-                    "value": "minecard:advancement_counter"
-                  },
                   "operator": {
                     "type": "minecard:add",
                     "value": {
@@ -80,6 +72,10 @@
                         }
                       }
                     }
+                  },
+                  "output": {
+                    "type": "minecard:property",
+                    "value": "minecard:advancement_counter"
                   }
                 }
               ]
@@ -89,7 +85,6 @@
         {
           "type": "minecard:trigger_advancement",
           "value": {
-            "id": "minecard:iron_golem_farm",
             "condition": {
               "type": "minecard:operator",
               "value": {
@@ -110,14 +105,19 @@
                   }
                 }
               }
-            }
+            },
+            "id": "minecard:iron_golem_farm"
           }
         }
+      ],
+      "text_key": "card_ability.minecard.villager",
+      "triggers": [
+        "hurt"
       ]
     }
   },
-  "entity": "minecraft:villager",
   "cost": 6,
-  "health": 3,
-  "damage": 3
+  "damage": 3,
+  "entity": "minecraft:villager",
+  "health": 3
 }

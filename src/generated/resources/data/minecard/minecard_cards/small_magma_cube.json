@@ -2,10 +2,6 @@
   "abilities": {
     "type": "minecard:chain",
     "value": {
-      "triggers": [
-        "attack"
-      ],
-      "text_key": "card_ability.minecard.magma_cube",
       "abilities": [
         {
           "type": "minecard:select_cards",
@@ -26,10 +22,6 @@
             "modifications": [
               [
                 {
-                  "output": {
-                    "type": "minecard:property",
-                    "value": "minecard:burn"
-                  },
                   "operator": {
                     "type": "minecard:add",
                     "value": {
@@ -45,17 +37,25 @@
                         "value": 2
                       }
                     }
+                  },
+                  "output": {
+                    "type": "minecard:property",
+                    "value": "minecard:burn"
                   }
                 }
               ]
             ]
           }
         }
+      ],
+      "text_key": "card_ability.minecard.magma_cube",
+      "triggers": [
+        "attack"
       ]
     }
   },
-  "entity": "minecraft:magma_cube",
   "cost": 0,
-  "health": 1,
-  "damage": 1
+  "damage": 1,
+  "entity": "minecraft:magma_cube",
+  "health": 1
 }

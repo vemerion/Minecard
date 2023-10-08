@@ -1,20 +1,7 @@
 {
-  "additional_data": {
-    "item": {
-      "id": "minecraft:fishing_rod",
-      "Count": 1,
-      "tag": {
-        "Damage": 0
-      }
-    }
-  },
   "abilities": {
     "type": "minecard:chain",
     "value": {
-      "triggers": [
-        "summon"
-      ],
-      "text_key": "card_ability.minecard.fishing_rod",
       "abilities": [
         {
           "type": "minecard:select_cards",
@@ -36,24 +23,37 @@
           "type": "minecard:remove_cards"
         },
         {
-          "placement": "your_hand",
-          "type": "minecard:place_cards"
+          "type": "minecard:place_cards",
+          "placement": "your_hand"
         },
         {
           "type": "minecard:history",
           "value": {
             "icon": {
-              "id": "minecraft:book",
-              "Count": 1
+              "Count": 1,
+              "id": "minecraft:book"
             },
             "visibility": "all"
           }
         }
+      ],
+      "text_key": "card_ability.minecard.fishing_rod",
+      "triggers": [
+        "summon"
       ]
     }
   },
-  "entity": "minecraft:item",
+  "additional_data": {
+    "item": {
+      "Count": 1,
+      "id": "minecraft:fishing_rod",
+      "tag": {
+        "Damage": 0
+      }
+    }
+  },
   "cost": 4,
-  "health": 0,
-  "damage": 0
+  "damage": 0,
+  "entity": "minecraft:item",
+  "health": 0
 }

@@ -4,7 +4,6 @@ import java.util.Optional;
 import java.util.function.Supplier;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Quaternion;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.LightTexture;
@@ -18,6 +17,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.minecraft.world.entity.projectile.EvokerFangs;
 import net.minecraft.world.phys.Vec2;
+import net.minecraftforge.common.util.TransformationHelper;
 
 public class EntityAnimation extends Animation {
 
@@ -73,7 +73,7 @@ public class EntityAnimation extends Animation {
 				: new Vec2(Mth.lerp(progress, start.x, targetPos.x), Mth.lerp(progress, start.y, targetPos.y));
 		poseStack.translate(pos.x, pos.y, 0);
 		poseStack.scale(size * (entity instanceof EnderDragon ? -1 : 1), -size, size);
-		poseStack.mulPose(new Quaternion(Mth.HALF_PI,
+		poseStack.mulPose(TransformationHelper.quatFromXYZ(Mth.HALF_PI,
 				(float) -Mth.atan2(targetPos.y - pos.y, targetPos.x - pos.x) + Mth.HALF_PI, -0.6f, false));
 
 		mc.getEntityRenderDispatcher().getRenderer(entity).render(entity, 0, partialTick, poseStack, source,
@@ -95,9 +95,7 @@ public class EntityAnimation extends Animation {
 			living.yBodyRot = 0;
 			living.yHeadRotO = 0;
 			living.yHeadRot = 0;
-			living.animationSpeedOld = 0.2f;
-			living.animationSpeed = 0.2f;
-			living.animationPosition = timer * 1.5f;
+			living.walkAnimation.update(0.3f, 1f);
 		}
 		if (entity instanceof EnderDragon dragon) {
 			dragon.oFlapTime = dragon.flapTime;

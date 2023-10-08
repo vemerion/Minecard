@@ -1,7 +1,7 @@
 {
   "item": {
-    "id": "minecraft:diamond_chestplate",
     "Count": 1,
+    "id": "minecraft:diamond_chestplate",
     "tag": {
       "Damage": 0
     }

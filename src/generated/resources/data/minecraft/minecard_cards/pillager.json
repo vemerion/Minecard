@@ -2,10 +2,6 @@
   "abilities": {
     "type": "minecard:chain",
     "value": {
-      "triggers": [
-        "summon"
-      ],
-      "text_key": "card_ability.minecard.pillager",
       "abilities": [
         {
           "type": "minecard:select_cards",
@@ -32,9 +28,6 @@
             "modifications": [
               [
                 {
-                  "output": {
-                    "type": "minecard:max_health"
-                  },
                   "operator": {
                     "type": "minecard:add",
                     "value": {
@@ -49,12 +42,12 @@
                         "value": 1
                       }
                     }
+                  },
+                  "output": {
+                    "type": "minecard:max_health"
                   }
                 },
                 {
-                  "output": {
-                    "type": "minecard:damage"
-                  },
                   "operator": {
                     "type": "minecard:add",
                     "value": {
@@ -69,16 +62,19 @@
                         "value": 1
                       }
                     }
+                  },
+                  "output": {
+                    "type": "minecard:damage"
                   }
                 },
                 {
-                  "output": {
-                    "type": "minecard:property",
-                    "value": "minecard:taunt"
-                  },
                   "operator": {
                     "type": "minecard:constant",
                     "value": 1
+                  },
+                  "output": {
+                    "type": "minecard:property",
+                    "value": "minecard:taunt"
                   }
                 }
               ]
@@ -89,16 +85,20 @@
           "type": "minecard:history",
           "value": {
             "icon": {
-              "id": "minecraft:book",
-              "Count": 1
+              "Count": 1,
+              "id": "minecraft:book"
             }
           }
         }
+      ],
+      "text_key": "card_ability.minecard.pillager",
+      "triggers": [
+        "summon"
       ]
     }
   },
-  "entity": "minecraft:pillager",
   "cost": 4,
-  "health": 2,
-  "damage": 2
+  "damage": 2,
+  "entity": "minecraft:pillager",
+  "health": 2
 }

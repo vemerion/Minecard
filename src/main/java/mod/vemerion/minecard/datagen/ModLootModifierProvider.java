@@ -5,7 +5,7 @@ import mod.vemerion.minecard.game.Cards;
 import mod.vemerion.minecard.init.ModLootModifiers;
 import mod.vemerion.minecard.lootmodifier.CardLootModifier;
 import mod.vemerion.minecard.lootmodifier.CardTreasureLootModifier;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.random.SimpleWeightedRandomList;
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
@@ -15,23 +15,26 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemKilledByPlayerC
 import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition;
 import net.minecraftforge.common.data.GlobalLootModifierProvider;
 import net.minecraftforge.common.loot.LootTableIdCondition;
+import net.minecraftforge.registries.ForgeRegistries;
 
 public class ModLootModifierProvider extends GlobalLootModifierProvider {
 
-	public ModLootModifierProvider(DataGenerator gen) {
-		super(gen, Main.MODID);
+	public ModLootModifierProvider(PackOutput output) {
+		super(output, Main.MODID);
 	}
 
 	@Override
 	protected void start() {
-		add(ModLootModifiers.CARD.get().getRegistryName().getPath(), ModLootModifiers.CARD.get(), new CardLootModifier(
-				new LootItemCondition[] { LootItemKilledByPlayerCondition.killedByPlayer().build() }));
+		add(ForgeRegistries.GLOBAL_LOOT_MODIFIER_SERIALIZERS.get().getKey(ModLootModifiers.CARD.get()).getPath(),
+				new CardLootModifier(
+						new LootItemCondition[] { LootItemKilledByPlayerCondition.killedByPlayer().build() }));
 
 		var builder = SimpleWeightedRandomList.<ResourceLocation>builder();
 		for (var spell : Cards.SPELLS) {
 			builder.add(spell, 1);
 		}
-		add(ModLootModifiers.CARD_TREASURE.get().getRegistryName().getPath(), ModLootModifiers.CARD_TREASURE.get(),
+		add(ForgeRegistries.GLOBAL_LOOT_MODIFIER_SERIALIZERS.get().getKey(ModLootModifiers.CARD_TREASURE.get())
+				.getPath(),
 				new CardTreasureLootModifier(
 						new LootItemCondition[] { LootItemRandomChanceCondition.randomChance(0.2f).build(),
 								tables(BuiltInLootTables.ABANDONED_MINESHAFT, BuiltInLootTables.BASTION_TREASURE,

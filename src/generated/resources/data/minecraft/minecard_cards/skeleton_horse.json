@@ -1,14 +1,7 @@
 {
-  "properties": {
-    "minecard:undead": 1
-  },
   "abilities": {
     "type": "minecard:chain",
     "value": {
-      "triggers": [
-        "summon"
-      ],
-      "text_key": "card_ability.minecard.skeleton_horse",
       "abilities": [
         {
           "type": "minecard:select_cards",
@@ -39,19 +32,15 @@
             "modifications": [
               [
                 {
-                  "output": {
-                    "type": "minecard:health"
-                  },
                   "operator": {
                     "type": "minecard:constant",
                     "value": -2
+                  },
+                  "output": {
+                    "type": "minecard:health"
                   }
                 },
                 {
-                  "output": {
-                    "type": "minecard:property",
-                    "value": "minecard:burn"
-                  },
                   "operator": {
                     "type": "minecard:add",
                     "value": {
@@ -67,6 +56,10 @@
                         "value": 2
                       }
                     }
+                  },
+                  "output": {
+                    "type": "minecard:property",
+                    "value": "minecard:burn"
                   }
                 }
               ]
@@ -77,16 +70,23 @@
           "type": "minecard:history",
           "value": {
             "icon": {
-              "id": "minecraft:book",
-              "Count": 1
+              "Count": 1,
+              "id": "minecraft:book"
             }
           }
         }
+      ],
+      "text_key": "card_ability.minecard.skeleton_horse",
+      "triggers": [
+        "summon"
       ]
     }
   },
-  "entity": "minecraft:skeleton_horse",
   "cost": 4,
+  "damage": 4,
+  "entity": "minecraft:skeleton_horse",
   "health": 4,
-  "damage": 4
+  "properties": {
+    "minecard:undead": 1
+  }
 }

@@ -8,31 +8,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 import mod.vemerion.minecard.capability.DeckData;
 import mod.vemerion.minecard.game.ability.CardAbility;
 import mod.vemerion.minecard.game.ability.CardAbilityGroup;
 import mod.vemerion.minecard.game.ability.CardAbilityGroups;
-import mod.vemerion.minecard.game.ability.CardAbilitySelection;
 import mod.vemerion.minecard.game.ability.CardAbilityTrigger;
-import mod.vemerion.minecard.game.ability.CardCondition;
 import mod.vemerion.minecard.game.ability.CardModification;
 import mod.vemerion.minecard.game.ability.CardOperator;
-import mod.vemerion.minecard.game.ability.CardPlacement;
-import mod.vemerion.minecard.game.ability.CardSelectionMethod;
 import mod.vemerion.minecard.game.ability.CardVariable;
-import mod.vemerion.minecard.game.ability.ChainAbility;
-import mod.vemerion.minecard.game.ability.ChoiceCardAbility;
-import mod.vemerion.minecard.game.ability.ConstantCardsAbility;
-import mod.vemerion.minecard.game.ability.DrawCardsAbility;
-import mod.vemerion.minecard.game.ability.ModifyAbility;
-import mod.vemerion.minecard.game.ability.MultiAbility;
 import mod.vemerion.minecard.game.ability.NoCardAbility;
-import mod.vemerion.minecard.game.ability.PlaceCardsAbility;
-import mod.vemerion.minecard.game.ability.ResourceAbility;
-import mod.vemerion.minecard.game.ability.SelectCardsAbility;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -124,7 +109,7 @@ public class RandomCardGenerator {
 	}
 
 	private CardType next(int depth) {
-		var entities = ForgeRegistries.ENTITIES.getValues();
+		var entities = ForgeRegistries.ENTITY_TYPES.getValues();
 		var type = entities.stream().skip(rand.nextInt(entities.size())).findFirst().get();
 		var cost = rand.nextInt(11);
 		var health = rand.nextInt(3);

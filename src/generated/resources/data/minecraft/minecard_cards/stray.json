@@ -1,14 +1,7 @@
 {
-  "properties": {
-    "minecard:undead": 1
-  },
   "abilities": {
     "type": "minecard:chain",
     "value": {
-      "triggers": [
-        "attack"
-      ],
-      "text_key": "card_ability.minecard.stray",
       "abilities": [
         {
           "type": "minecard:select_cards",
@@ -29,10 +22,6 @@
             "modifications": [
               [
                 {
-                  "output": {
-                    "type": "minecard:property",
-                    "value": "minecard:freeze"
-                  },
                   "operator": {
                     "type": "minecard:add",
                     "value": {
@@ -48,17 +37,28 @@
                         "value": 2
                       }
                     }
+                  },
+                  "output": {
+                    "type": "minecard:property",
+                    "value": "minecard:freeze"
                   }
                 }
               ]
             ]
           }
         }
+      ],
+      "text_key": "card_ability.minecard.stray",
+      "triggers": [
+        "attack"
       ]
     }
   },
-  "entity": "minecraft:stray",
   "cost": 2,
+  "damage": 2,
+  "entity": "minecraft:stray",
   "health": 2,
-  "damage": 2
+  "properties": {
+    "minecard:undead": 1
+  }
 }

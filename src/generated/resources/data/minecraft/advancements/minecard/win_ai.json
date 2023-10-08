@@ -1,26 +1,26 @@
 {
   "parent": "minecraft:minecard/root",
+  "criteria": {
+    "won_agains_ai": {
+      "conditions": {
+        "type": "win_ai"
+      },
+      "trigger": "minecard:finish_game"
+    }
+  },
   "display": {
-    "icon": {
-      "item": "minecraft:redstone"
-    },
-    "title": {
-      "translate": "advancements.minecard.win_ai.title"
-    },
+    "announce_to_chat": true,
     "description": {
       "translate": "advancements.minecard.win_ai.description"
     },
     "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "minecraft:redstone"
+    },
     "show_toast": true,
-    "announce_to_chat": true,
-    "hidden": false
-  },
-  "criteria": {
-    "won_agains_ai": {
-      "trigger": "minecard:finish_game",
-      "conditions": {
-        "type": "win_ai"
-      }
+    "title": {
+      "translate": "advancements.minecard.win_ai.title"
     }
   },
   "requirements": [

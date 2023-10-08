@@ -1,26 +1,26 @@
 {
   "parent": "minecraft:minecard/root",
+  "criteria": {
+    "won_game": {
+      "conditions": {
+        "type": "win_game"
+      },
+      "trigger": "minecard:finish_game"
+    }
+  },
   "display": {
-    "icon": {
-      "item": "minecard:game"
-    },
-    "title": {
-      "translate": "advancements.minecard.win.title"
-    },
+    "announce_to_chat": true,
     "description": {
       "translate": "advancements.minecard.win.description"
     },
     "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "minecard:game"
+    },
     "show_toast": true,
-    "announce_to_chat": true,
-    "hidden": false
-  },
-  "criteria": {
-    "won_game": {
-      "trigger": "minecard:finish_game",
-      "conditions": {
-        "type": "win_game"
-      }
+    "title": {
+      "translate": "advancements.minecard.win.title"
     }
   },
   "requirements": [

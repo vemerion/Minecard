@@ -2,10 +2,6 @@
   "abilities": {
     "type": "minecard:chain",
     "value": {
-      "triggers": [
-        "summon"
-      ],
-      "text_key": "card_ability.minecard.snow_golem",
       "abilities": [
         {
           "type": "minecard:select_cards",
@@ -35,19 +31,15 @@
             "modifications": [
               [
                 {
-                  "output": {
-                    "type": "minecard:health"
-                  },
                   "operator": {
                     "type": "minecard:constant",
                     "value": -2
+                  },
+                  "output": {
+                    "type": "minecard:health"
                   }
                 },
                 {
-                  "output": {
-                    "type": "minecard:property",
-                    "value": "minecard:freeze"
-                  },
                   "operator": {
                     "type": "minecard:add",
                     "value": {
@@ -63,6 +55,10 @@
                         "value": 1
                       }
                     }
+                  },
+                  "output": {
+                    "type": "minecard:property",
+                    "value": "minecard:freeze"
                   }
                 }
               ]
@@ -73,16 +69,20 @@
           "type": "minecard:history",
           "value": {
             "icon": {
-              "id": "minecraft:book",
-              "Count": 1
+              "Count": 1,
+              "id": "minecraft:book"
             }
           }
         }
+      ],
+      "text_key": "card_ability.minecard.snow_golem",
+      "triggers": [
+        "summon"
       ]
     }
   },
-  "entity": "minecraft:snow_golem",
   "cost": 4,
-  "health": 4,
-  "damage": 4
+  "damage": 4,
+  "entity": "minecraft:snow_golem",
+  "health": 4
 }

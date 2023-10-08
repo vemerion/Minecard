@@ -30,8 +30,8 @@ public class ForgeEventSubscriber {
 
 	@SubscribeEvent
 	public static void synchDataDriven(PlayerLoggedInEvent event) {
-		Cards.getInstance(false).sendAllCardTypeMessage((ServerPlayer) event.getPlayer());
-		CardProperties.getInstance(false).sendAllCardPropertiesMessage((ServerPlayer) event.getPlayer());
+		Cards.getInstance(false).sendAllCardTypeMessage((ServerPlayer) event.getEntity());
+		CardProperties.getInstance(false).sendAllCardPropertiesMessage((ServerPlayer) event.getEntity());
 	}
 
 	@SubscribeEvent

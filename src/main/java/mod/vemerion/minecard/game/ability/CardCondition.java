@@ -13,7 +13,6 @@ import mod.vemerion.minecard.init.ModCardConditions;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.entity.EntityType;
 import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.ForgeRegistryEntry;
 
 public abstract class CardCondition {
 
@@ -35,7 +34,7 @@ public abstract class CardCondition {
 		return cards.stream().filter(c -> test(c, collected)).collect(Collectors.toCollection(() -> new ArrayList<>()));
 	}
 
-	public static class CardConditionType<T extends CardCondition> extends ForgeRegistryEntry<CardConditionType<?>> {
+	public static class CardConditionType<T extends CardCondition> {
 		private final Codec<T> codec;
 
 		public CardConditionType(Codec<T> codec) {
@@ -170,7 +169,7 @@ public abstract class CardCondition {
 
 		public static final Codec<Entity> CODEC = ExtraCodecs
 				.lazyInitializedCodec(() -> RecordCodecBuilder.create(instance -> instance
-						.group(ForgeRegistries.ENTITIES.getCodec().fieldOf("inner").forGetter(Entity::getEntity))
+						.group(ForgeRegistries.ENTITY_TYPES.getCodec().fieldOf("inner").forGetter(Entity::getEntity))
 						.apply(instance, Entity::new)));
 
 		private final EntityType<?> entity;

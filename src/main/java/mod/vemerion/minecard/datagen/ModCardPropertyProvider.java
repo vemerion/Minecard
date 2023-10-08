@@ -1,13 +1,12 @@
 package mod.vemerion.minecard.datagen;
 
-import java.io.IOException;
+import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.mojang.serialization.JsonOps;
 
 import mod.vemerion.minecard.Main;
@@ -27,39 +26,37 @@ import mod.vemerion.minecard.game.ability.ModifyAbility;
 import mod.vemerion.minecard.game.ability.MultiAbility;
 import mod.vemerion.minecard.game.ability.NoCardAbility;
 import mod.vemerion.minecard.game.ability.SelectCardsAbility;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
-import net.minecraft.data.HashCache;
+import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 
 public class ModCardPropertyProvider implements DataProvider {
-	private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
-
 	private Map<ResourceLocation, CardProperty> properties = new HashMap<>();
-	private DataGenerator generator;
+	private PackOutput packOutput;
 
-	public ModCardPropertyProvider(DataGenerator generator) {
-		this.generator = generator;
+	public ModCardPropertyProvider(PackOutput packOutput) {
+		this.packOutput = packOutput;
 	}
 
 	@Override
-	public void run(HashCache cache) throws IOException {
+	public CompletableFuture<?> run(CachedOutput cache) {
 		addProperties();
-		var folder = generator.getOutputFolder();
+		var folder = packOutput.getOutputFolder();
+		var list = new ArrayList<CompletableFuture<?>>();
 		for (var entry : properties.entrySet()) {
 			var key = entry.getKey();
 			var path = folder.resolve(
 					"data/" + key.getNamespace() + "/" + CardProperties.FOLDER_NAME + "/" + key.getPath() + ".json");
-			try {
-				DataProvider.save(GSON, cache,
-						CardProperty.CODEC.encodeStart(JsonOps.INSTANCE, entry.getValue()).getOrThrow(false, s -> {
-						}), path);
-			} catch (IOException e) {
-				Main.LOGGER.error("Couldn't save card property " + path + ": " + e);
-			}
+			list.add(DataProvider.saveStable(cache,
+					CardProperty.CODEC.encodeStart(JsonOps.INSTANCE, entry.getValue()).getOrThrow(false, s -> {
+					}), path));
 		}
+		return CompletableFuture.allOf(list.toArray((length) -> {
+			return new CompletableFuture[length];
+		}));
 	}
 
 	private void addProperties() {

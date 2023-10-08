@@ -2,10 +2,6 @@
   "abilities": {
     "type": "minecard:chain",
     "value": {
-      "triggers": [
-        "attack"
-      ],
-      "text_key": "card_ability.minecard.ravager",
       "abilities": [
         {
           "type": "minecard:select_cards",
@@ -23,10 +19,10 @@
         {
           "type": "minecard:move_collected",
           "value": {
-            "source": 0,
-            "destination": 1,
+            "clear_destination": false,
             "clear_source": true,
-            "clear_destination": false
+            "destination": 1,
+            "source": 0
           }
         },
         {
@@ -54,9 +50,6 @@
             "modifications": [
               [
                 {
-                  "output": {
-                    "type": "minecard:health"
-                  },
                   "operator": {
                     "type": "minecard:negate",
                     "value": {
@@ -73,6 +66,9 @@
                         }
                       }
                     }
+                  },
+                  "output": {
+                    "type": "minecard:health"
                   }
                 }
               ]
@@ -83,21 +79,16 @@
           "type": "minecard:history",
           "value": {
             "icon": {
-              "id": "minecraft:book",
-              "Count": 1
+              "Count": 1,
+              "id": "minecraft:book"
             }
           }
         },
         {
           "type": "minecard:select_cards",
           "value": {
+            "clear": true,
             "selection": {
-              "groups": [
-                "collected"
-              ],
-              "method": {
-                "type": "minecard:all"
-              },
               "condition": {
                 "type": "minecard:not",
                 "value": {
@@ -122,15 +113,19 @@
                     }
                   }
                 }
+              },
+              "groups": [
+                "collected"
+              ],
+              "method": {
+                "type": "minecard:all"
               }
-            },
-            "clear": true
+            }
           }
         },
         {
           "type": "minecard:trigger_advancement",
           "value": {
-            "id": "minecard:sweeping_edge",
             "condition": {
               "type": "minecard:operator",
               "value": {
@@ -150,14 +145,19 @@
                   }
                 }
               }
-            }
+            },
+            "id": "minecard:sweeping_edge"
           }
         }
+      ],
+      "text_key": "card_ability.minecard.ravager",
+      "triggers": [
+        "attack"
       ]
     }
   },
-  "entity": "minecraft:ravager",
   "cost": 9,
-  "health": 10,
-  "damage": 4
+  "damage": 4,
+  "entity": "minecraft:ravager",
+  "health": 10
 }

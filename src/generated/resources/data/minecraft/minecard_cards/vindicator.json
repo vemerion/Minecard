@@ -2,36 +2,36 @@
   "abilities": {
     "type": "minecard:chain",
     "value": {
-      "triggers": [
-        "death"
-      ],
-      "text_key": "card_ability.minecard.vindicator",
       "abilities": [
         {
+          "type": "minecard:constant_cards",
           "cards": [
             "minecard:emerald"
-          ],
-          "type": "minecard:constant_cards"
+          ]
         },
         {
-          "placement": "your_hand",
-          "type": "minecard:place_cards"
+          "type": "minecard:place_cards",
+          "placement": "your_hand"
         },
         {
           "type": "minecard:history",
           "value": {
             "icon": {
-              "id": "minecraft:book",
-              "Count": 1
+              "Count": 1,
+              "id": "minecraft:book"
             },
             "visibility": "all"
           }
         }
+      ],
+      "text_key": "card_ability.minecard.vindicator",
+      "triggers": [
+        "death"
       ]
     }
   },
-  "entity": "minecraft:vindicator",
   "cost": 6,
-  "health": 4,
-  "damage": 8
+  "damage": 8,
+  "entity": "minecraft:vindicator",
+  "health": 4
 }

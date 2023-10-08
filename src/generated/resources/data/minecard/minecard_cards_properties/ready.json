@@ -1,8 +1,4 @@
 {
-  "item": {
-    "id": "minecraft:air",
-    "Count": 1
-  },
   "ability": {
     "type": "minecard:multi",
     "value": {
@@ -10,10 +6,6 @@
         {
           "type": "minecard:chain",
           "value": {
-            "triggers": [
-              "attack"
-            ],
-            "text_key": "",
             "abilities": [
               {
                 "type": "minecard:select_cards",
@@ -34,10 +26,6 @@
                   "modifications": [
                     [
                       {
-                        "output": {
-                          "type": "minecard:property",
-                          "value": "minecard:ready"
-                        },
                         "operator": {
                           "type": "minecard:add",
                           "value": {
@@ -53,22 +41,26 @@
                               "value": -1
                             }
                           }
+                        },
+                        "output": {
+                          "type": "minecard:property",
+                          "value": "minecard:ready"
                         }
                       }
                     ]
                   ]
                 }
               }
+            ],
+            "text_key": "",
+            "triggers": [
+              "attack"
             ]
           }
         },
         {
           "type": "minecard:chain",
           "value": {
-            "triggers": [
-              "tick"
-            ],
-            "text_key": "",
             "abilities": [
               {
                 "type": "minecard:select_cards",
@@ -89,23 +81,31 @@
                   "modifications": [
                     [
                       {
-                        "output": {
-                          "type": "minecard:property",
-                          "value": "minecard:ready"
-                        },
                         "operator": {
                           "type": "minecard:constant",
                           "value": 0
+                        },
+                        "output": {
+                          "type": "minecard:property",
+                          "value": "minecard:ready"
                         }
                       }
                     ]
                   ]
                 }
               }
+            ],
+            "text_key": "",
+            "triggers": [
+              "tick"
             ]
           }
         }
       ]
     }
+  },
+  "item": {
+    "Count": 1,
+    "id": "minecraft:air"
   }
 }

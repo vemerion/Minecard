@@ -2,10 +2,6 @@
   "abilities": {
     "type": "minecard:chain",
     "value": {
-      "triggers": [
-        "summon"
-      ],
-      "text_key": "card_ability.minecard.glow_squid",
       "abilities": [
         {
           "type": "minecard:select_cards",
@@ -33,13 +29,13 @@
             "modifications": [
               [
                 {
-                  "output": {
-                    "type": "minecard:property",
-                    "value": "minecard:stealth"
-                  },
                   "operator": {
                     "type": "minecard:constant",
                     "value": 0
+                  },
+                  "output": {
+                    "type": "minecard:property",
+                    "value": "minecard:stealth"
                   }
                 }
               ]
@@ -50,16 +46,20 @@
           "type": "minecard:history",
           "value": {
             "icon": {
-              "id": "minecraft:book",
-              "Count": 1
+              "Count": 1,
+              "id": "minecraft:book"
             }
           }
         }
+      ],
+      "text_key": "card_ability.minecard.glow_squid",
+      "triggers": [
+        "summon"
       ]
     }
   },
-  "entity": "minecraft:glow_squid",
   "cost": 3,
-  "health": 2,
-  "damage": 2
+  "damage": 2,
+  "entity": "minecraft:glow_squid",
+  "health": 2
 }

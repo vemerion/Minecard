@@ -1,26 +1,26 @@
 {
   "parent": "minecraft:minecard/root",
+  "criteria": {
+    "tutorial": {
+      "conditions": {
+        "type": "complete_tutorial"
+      },
+      "trigger": "minecard:finish_game"
+    }
+  },
   "display": {
-    "icon": {
-      "item": "minecraft:book"
-    },
-    "title": {
-      "translate": "advancements.minecard.tutorial.title"
-    },
+    "announce_to_chat": true,
     "description": {
       "translate": "advancements.minecard.tutorial.description"
     },
     "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "minecraft:book"
+    },
     "show_toast": true,
-    "announce_to_chat": true,
-    "hidden": false
-  },
-  "criteria": {
-    "tutorial": {
-      "trigger": "minecard:finish_game",
-      "conditions": {
-        "type": "complete_tutorial"
-      }
+    "title": {
+      "translate": "advancements.minecard.tutorial.title"
     }
   },
   "requirements": [

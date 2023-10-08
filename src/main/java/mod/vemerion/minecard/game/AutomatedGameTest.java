@@ -36,13 +36,13 @@ public class AutomatedGameTest {
 //	private static Thread thread;
 //
 //	@SubscribeEvent
-//	public static void test(TickEvent.WorldTickEvent event) {
+//	public static void test(TickEvent.LevelTickEvent event) {
 //		if (event.side == LogicalSide.SERVER && event.phase == Phase.START
-//				&& event.world.dimension() == Level.OVERWORLD) {
+//				&& event.level.dimension() == Level.OVERWORLD) {
 //			if (thread == null || !thread.isAlive()) {
 //				System.out.println("STARTING");
 //				thread = new Thread(() -> {
-//					var test = new AutomatedGameTest(event.world, 100);
+//					var test = new AutomatedGameTest(event.level, 100);
 //					for (int i = 0; i < 1000; i++) {
 //						test.tick();
 //					}

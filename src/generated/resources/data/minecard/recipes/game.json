@@ -1,10 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "#C#",
-    " # ",
-    "###"
-  ],
+  "category": "misc",
   "key": {
     "#": {
       "tag": "minecraft:planks"
@@ -13,7 +9,13 @@
       "item": "minecard:card"
     }
   },
+  "pattern": [
+    "#C#",
+    " # ",
+    "###"
+  ],
   "result": {
     "item": "minecard:game"
-  }
+  },
+  "show_notification": true
 }

@@ -2,15 +2,9 @@
   "abilities": {
     "type": "minecard:chance",
     "value": {
-      "text_key": "card_ability.minecard.cave_spider",
-      "chance": 50,
       "ability": {
         "type": "minecard:chain",
         "value": {
-          "triggers": [
-            "attack"
-          ],
-          "text_key": "",
           "abilities": [
             {
               "type": "minecard:select_cards",
@@ -31,26 +25,32 @@
                 "modifications": [
                   [
                     {
-                      "output": {
-                        "type": "minecard:property",
-                        "value": "minecard:poison"
-                      },
                       "operator": {
                         "type": "minecard:constant",
                         "value": 1
+                      },
+                      "output": {
+                        "type": "minecard:property",
+                        "value": "minecard:poison"
                       }
                     }
                   ]
                 ]
               }
             }
+          ],
+          "text_key": "",
+          "triggers": [
+            "attack"
           ]
         }
-      }
+      },
+      "chance": 50,
+      "text_key": "card_ability.minecard.cave_spider"
     }
   },
-  "entity": "minecraft:cave_spider",
   "cost": 3,
-  "health": 2,
-  "damage": 2
+  "damage": 2,
+  "entity": "minecraft:cave_spider",
+  "health": 2
 }

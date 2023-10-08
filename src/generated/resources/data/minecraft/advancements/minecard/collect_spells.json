@@ -1,104 +1,104 @@
 {
   "parent": "minecraft:minecard/root",
+  "criteria": {
+    "has_minecard:amethyst_shard": {
+      "conditions": {
+        "card": "minecard:amethyst_shard"
+      },
+      "trigger": "minecard:collect_card"
+    },
+    "has_minecard:book": {
+      "conditions": {
+        "card": "minecard:book"
+      },
+      "trigger": "minecard:collect_card"
+    },
+    "has_minecard:bow": {
+      "conditions": {
+        "card": "minecard:bow"
+      },
+      "trigger": "minecard:collect_card"
+    },
+    "has_minecard:chest": {
+      "conditions": {
+        "card": "minecard:chest"
+      },
+      "trigger": "minecard:collect_card"
+    },
+    "has_minecard:enchanted_book": {
+      "conditions": {
+        "card": "minecard:enchanted_book"
+      },
+      "trigger": "minecard:collect_card"
+    },
+    "has_minecard:enchanted_golden_apple": {
+      "conditions": {
+        "card": "minecard:enchanted_golden_apple"
+      },
+      "trigger": "minecard:collect_card"
+    },
+    "has_minecard:fishing_rod": {
+      "conditions": {
+        "card": "minecard:fishing_rod"
+      },
+      "trigger": "minecard:collect_card"
+    },
+    "has_minecard:lodestone": {
+      "conditions": {
+        "card": "minecard:lodestone"
+      },
+      "trigger": "minecard:collect_card"
+    },
+    "has_minecard:pumpkin": {
+      "conditions": {
+        "card": "minecard:pumpkin"
+      },
+      "trigger": "minecard:collect_card"
+    },
+    "has_minecard:slime_ball": {
+      "conditions": {
+        "card": "minecard:slime_ball"
+      },
+      "trigger": "minecard:collect_card"
+    },
+    "has_minecard:soul_sand": {
+      "conditions": {
+        "card": "minecard:soul_sand"
+      },
+      "trigger": "minecard:collect_card"
+    },
+    "has_minecard:splash_potion_of_harming": {
+      "conditions": {
+        "card": "minecard:splash_potion_of_harming"
+      },
+      "trigger": "minecard:collect_card"
+    },
+    "has_minecard:spyglass": {
+      "conditions": {
+        "card": "minecard:spyglass"
+      },
+      "trigger": "minecard:collect_card"
+    },
+    "has_minecard:wooden_sword": {
+      "conditions": {
+        "card": "minecard:wooden_sword"
+      },
+      "trigger": "minecard:collect_card"
+    }
+  },
   "display": {
-    "icon": {
-      "item": "minecraft:chest"
-    },
-    "title": {
-      "translate": "advancements.minecard.collect_spells.title"
-    },
+    "announce_to_chat": true,
     "description": {
       "translate": "advancements.minecard.collect_spells.description"
     },
     "frame": "challenge",
+    "hidden": false,
+    "icon": {
+      "item": "minecraft:chest"
+    },
     "show_toast": true,
-    "announce_to_chat": true,
-    "hidden": false
-  },
-  "criteria": {
-    "has_minecard:fishing_rod": {
-      "trigger": "minecard:collect_card",
-      "conditions": {
-        "card": "minecard:fishing_rod"
-      }
-    },
-    "has_minecard:book": {
-      "trigger": "minecard:collect_card",
-      "conditions": {
-        "card": "minecard:book"
-      }
-    },
-    "has_minecard:splash_potion_of_harming": {
-      "trigger": "minecard:collect_card",
-      "conditions": {
-        "card": "minecard:splash_potion_of_harming"
-      }
-    },
-    "has_minecard:enchanted_golden_apple": {
-      "trigger": "minecard:collect_card",
-      "conditions": {
-        "card": "minecard:enchanted_golden_apple"
-      }
-    },
-    "has_minecard:chest": {
-      "trigger": "minecard:collect_card",
-      "conditions": {
-        "card": "minecard:chest"
-      }
-    },
-    "has_minecard:enchanted_book": {
-      "trigger": "minecard:collect_card",
-      "conditions": {
-        "card": "minecard:enchanted_book"
-      }
-    },
-    "has_minecard:spyglass": {
-      "trigger": "minecard:collect_card",
-      "conditions": {
-        "card": "minecard:spyglass"
-      }
-    },
-    "has_minecard:lodestone": {
-      "trigger": "minecard:collect_card",
-      "conditions": {
-        "card": "minecard:lodestone"
-      }
-    },
-    "has_minecard:soul_sand": {
-      "trigger": "minecard:collect_card",
-      "conditions": {
-        "card": "minecard:soul_sand"
-      }
-    },
-    "has_minecard:amethyst_shard": {
-      "trigger": "minecard:collect_card",
-      "conditions": {
-        "card": "minecard:amethyst_shard"
-      }
-    },
-    "has_minecard:wooden_sword": {
-      "trigger": "minecard:collect_card",
-      "conditions": {
-        "card": "minecard:wooden_sword"
-      }
-    },
-    "has_minecard:slime_ball": {
-      "trigger": "minecard:collect_card",
-      "conditions": {
-        "card": "minecard:slime_ball"
-      }
-    },
-    "has_minecard:bow": {
-      "trigger": "minecard:collect_card",
-      "conditions": {
-        "card": "minecard:bow"
-      }
-    },
-    "has_minecard:pumpkin": {
-      "trigger": "minecard:collect_card",
-      "conditions": {
-        "card": "minecard:pumpkin"
-      }
+    "title": {
+      "translate": "advancements.minecard.collect_spells.title"
     }
   },
   "requirements": [

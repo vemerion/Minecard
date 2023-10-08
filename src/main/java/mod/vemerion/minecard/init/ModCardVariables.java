@@ -19,10 +19,8 @@ public class ModCardVariables {
 	public static final DeferredRegister<CardVariableType<?>> CARD_VARIABLES = DeferredRegister.create(REGISTRY_NAME,
 			Main.MODID);
 
-	@SuppressWarnings("unchecked")
-	private static Supplier<IForgeRegistry<CardVariableType<?>>> supplier = CARD_VARIABLES.makeRegistry(
-			(Class<CardVariableType<?>>) (Class<?>) CardVariableType.class,
-			() -> new RegistryBuilder<CardVariableType<?>>().setName(REGISTRY_NAME));
+	private static Supplier<IForgeRegistry<CardVariableType<?>>> supplier = CARD_VARIABLES
+			.makeRegistry(() -> new RegistryBuilder<CardVariableType<?>>().setName(REGISTRY_NAME));
 
 	public static IForgeRegistry<CardVariableType<?>> getRegistry() {
 		return supplier.get();

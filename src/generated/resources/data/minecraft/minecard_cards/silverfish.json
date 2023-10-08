@@ -2,15 +2,17 @@
   "abilities": {
     "type": "minecard:chain",
     "value": {
-      "triggers": [
-        "hurt"
-      ],
-      "text_key": "card_ability.minecard.silverfish",
       "abilities": [
         {
           "type": "minecard:select_cards",
           "value": {
             "selection": {
+              "condition": {
+                "type": "minecard:entity",
+                "value": {
+                  "inner": "minecraft:silverfish"
+                }
+              },
               "groups": [
                 "your_deck"
               ],
@@ -20,12 +22,6 @@
                   "count": 1,
                   "repeat": false
                 }
-              },
-              "condition": {
-                "type": "minecard:entity",
-                "value": {
-                  "inner": "minecraft:silverfish"
-                }
               }
             }
           }
@@ -34,23 +30,27 @@
           "type": "minecard:remove_cards"
         },
         {
-          "placement": "your_hand",
-          "type": "minecard:place_cards"
+          "type": "minecard:place_cards",
+          "placement": "your_hand"
         },
         {
           "type": "minecard:history",
           "value": {
             "icon": {
-              "id": "minecraft:book",
-              "Count": 1
+              "Count": 1,
+              "id": "minecraft:book"
             }
           }
         }
+      ],
+      "text_key": "card_ability.minecard.silverfish",
+      "triggers": [
+        "hurt"
       ]
     }
   },
-  "entity": "minecraft:silverfish",
   "cost": 1,
-  "health": 1,
-  "damage": 1
+  "damage": 1,
+  "entity": "minecraft:silverfish",
+  "health": 1
 }

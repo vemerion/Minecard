@@ -2,26 +2,22 @@
   "abilities": {
     "type": "minecard:chain",
     "value": {
-      "triggers": [
-        "attack"
-      ],
-      "text_key": "card_ability.minecard.bat",
       "abilities": [
         {
           "type": "minecard:select_cards",
           "value": {
             "selection": {
-              "groups": [
-                "your_board"
-              ],
-              "method": {
-                "type": "minecard:all"
-              },
               "condition": {
                 "type": "minecard:entity",
                 "value": {
                   "inner": "minecraft:player"
                 }
+              },
+              "groups": [
+                "your_board"
+              ],
+              "method": {
+                "type": "minecard:all"
               }
             }
           }
@@ -32,12 +28,12 @@
             "modifications": [
               [
                 {
-                  "output": {
-                    "type": "minecard:health"
-                  },
                   "operator": {
                     "type": "minecard:constant",
                     "value": 1
+                  },
+                  "output": {
+                    "type": "minecard:health"
                   }
                 }
               ]
@@ -48,16 +44,20 @@
           "type": "minecard:history",
           "value": {
             "icon": {
-              "id": "minecraft:book",
-              "Count": 1
+              "Count": 1,
+              "id": "minecraft:book"
             }
           }
         }
+      ],
+      "text_key": "card_ability.minecard.bat",
+      "triggers": [
+        "attack"
       ]
     }
   },
-  "entity": "minecraft:bat",
   "cost": 1,
-  "health": 2,
-  "damage": 1
+  "damage": 1,
+  "entity": "minecraft:bat",
+  "health": 2
 }

@@ -2,10 +2,6 @@
   "abilities": {
     "type": "minecard:chain",
     "value": {
-      "triggers": [
-        "death"
-      ],
-      "text_key": "card_ability.minecard.spider",
       "abilities": [
         {
           "type": "minecard:select_cards",
@@ -36,9 +32,6 @@
             "modifications": [
               [
                 {
-                  "output": {
-                    "type": "minecard:cost"
-                  },
                   "operator": {
                     "type": "minecard:add",
                     "value": {
@@ -53,6 +46,9 @@
                         "value": 1
                       }
                     }
+                  },
+                  "output": {
+                    "type": "minecard:cost"
                   }
                 }
               ]
@@ -63,16 +59,20 @@
           "type": "minecard:history",
           "value": {
             "icon": {
-              "id": "minecraft:book",
-              "Count": 1
+              "Count": 1,
+              "id": "minecraft:book"
             }
           }
         }
+      ],
+      "text_key": "card_ability.minecard.spider",
+      "triggers": [
+        "death"
       ]
     }
   },
-  "entity": "minecraft:spider",
   "cost": 2,
-  "health": 2,
-  "damage": 2
+  "damage": 2,
+  "entity": "minecraft:spider",
+  "health": 2
 }

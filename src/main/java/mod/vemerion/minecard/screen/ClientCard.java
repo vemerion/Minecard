@@ -1,18 +1,18 @@
 package mod.vemerion.minecard.screen;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Quaternion;
 
 import mod.vemerion.minecard.game.Card;
 import mod.vemerion.minecard.renderer.CardItemRenderer;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource.BufferSource;
-import net.minecraft.client.renderer.block.model.ItemTransforms.TransformType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.util.Mth;
+import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.Vec2;
+import net.minecraftforge.common.util.TransformationHelper;
 
 public class ClientCard extends Card {
 
@@ -106,7 +106,7 @@ public class ClientCard extends Card {
 		// Rotate to show back
 		if (getType().isEmpty()) {
 			ps.translate(pos.x + 24, 0, 0);
-			ps.mulPose(new Quaternion(0, 180, 0, true));
+			ps.mulPose(TransformationHelper.quatFromXYZ(0, 180, 0, true));
 			ps.translate(-pos.x - 24, 0, 0);
 		}
 
@@ -117,7 +117,7 @@ public class ClientCard extends Card {
 		ps.scale(currentSize, -currentSize, currentSize);
 
 		int light = (contains(mouseX, mouseY) ? CARD_LIGHT : CARD_LIGHT_HOVER);
-		CardItemRenderer.renderCard(this, TransformType.NONE, ps, source, light, OverlayTexture.NO_OVERLAY);
+		CardItemRenderer.renderCard(this, ItemDisplayContext.NONE, ps, source, light, OverlayTexture.NO_OVERLAY);
 		ps.popPose();
 
 		// Attacking card
@@ -126,10 +126,10 @@ public class ClientCard extends Card {
 			ps.translate(pos.x + CARD_WIDTH / 2, pos.y + CARD_HEIGHT / 2 - 2, 50);
 			ps.scale(30, -30, 30);
 			screen.getMinecraft().getItemRenderer().renderStatic(new ItemStack(Items.NETHERITE_SWORD),
-					TransformType.NONE, LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY, ps, source, 0);
+					ItemDisplayContext.NONE, LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY, ps, source, null, 0);
 			ps.scale(-1, 1, 1);
 			screen.getMinecraft().getItemRenderer().renderStatic(new ItemStack(Items.NETHERITE_SWORD),
-					TransformType.NONE, LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY, ps, source, 0);
+					ItemDisplayContext.NONE, LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY, ps, source, null, 0);
 			ps.popPose();
 		}
 //		GuiComponent.fill(ps, (int) getPosition().x, (int) getPosition().y, (int) getPosition().x + CARD_WIDTH,

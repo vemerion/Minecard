@@ -17,10 +17,8 @@ public class ModCardSelectionMethods {
 	public static final DeferredRegister<CardSelectionMethodType<?>> CARD_SELECTION_METHODS = DeferredRegister
 			.create(REGISTRY_NAME, Main.MODID);
 
-	@SuppressWarnings("unchecked")
-	private static Supplier<IForgeRegistry<CardSelectionMethodType<?>>> supplier = CARD_SELECTION_METHODS.makeRegistry(
-			(Class<CardSelectionMethodType<?>>) (Class<?>) CardSelectionMethodType.class,
-			() -> new RegistryBuilder<CardSelectionMethodType<?>>().setName(REGISTRY_NAME));
+	private static Supplier<IForgeRegistry<CardSelectionMethodType<?>>> supplier = CARD_SELECTION_METHODS
+			.makeRegistry(() -> new RegistryBuilder<CardSelectionMethodType<?>>().setName(REGISTRY_NAME));
 
 	public static IForgeRegistry<CardSelectionMethodType<?>> getRegistry() {
 		return supplier.get();

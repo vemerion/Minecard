@@ -55,7 +55,7 @@ public class GameUtil {
 			.comapFlatMap(list -> {
 				Set<CardAbilityTrigger> set = EnumSet.copyOf(list);
 				if (list.size() != set.size()) {
-					return DataResult.error("Trigger list has duplicate entries");
+					return DataResult.error(() -> "Trigger list has duplicate entries");
 				}
 				return DataResult.success(set);
 			}, set -> List.copyOf(set));
@@ -74,7 +74,7 @@ public class GameUtil {
 				if (getName.apply(e).equals(s))
 					return DataResult.success(e);
 			}
-			return DataResult.error("Invalid value '" + s + "'");
+			return DataResult.error(() -> "Invalid value '" + s + "'");
 		}, e -> getName.apply(e));
 	}
 

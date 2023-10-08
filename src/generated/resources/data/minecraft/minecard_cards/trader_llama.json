@@ -2,15 +2,10 @@
   "abilities": {
     "type": "minecard:choice",
     "value": {
-      "text_key": "card_ability.minecard.trader_llama",
       "abilities": [
         {
           "type": "minecard:chain",
           "value": {
-            "triggers": [
-              "summon"
-            ],
-            "text_key": "card_ability.minecard.trader_llama_spit",
             "abilities": [
               {
                 "type": "minecard:select_cards",
@@ -41,12 +36,12 @@
                   "modifications": [
                     [
                       {
-                        "output": {
-                          "type": "minecard:health"
-                        },
                         "operator": {
                           "type": "minecard:constant",
                           "value": -2
+                        },
+                        "output": {
+                          "type": "minecard:health"
                         }
                       }
                     ]
@@ -57,43 +52,48 @@
                 "type": "minecard:history",
                 "value": {
                   "icon": {
-                    "id": "minecraft:book",
-                    "Count": 1
+                    "Count": 1,
+                    "id": "minecraft:book"
                   }
                 }
               }
+            ],
+            "text_key": "card_ability.minecard.trader_llama_spit",
+            "triggers": [
+              "summon"
             ]
           }
         },
         {
           "type": "minecard:chain",
           "value": {
-            "triggers": [
-              "summon"
-            ],
-            "text_key": "card_ability.minecard.trader_llama_draw",
             "abilities": [
               {
-                "count": 1,
-                "type": "minecard:draw_cards"
+                "type": "minecard:draw_cards",
+                "count": 1
               },
               {
                 "type": "minecard:history",
                 "value": {
                   "icon": {
-                    "id": "minecraft:book",
-                    "Count": 1
+                    "Count": 1,
+                    "id": "minecraft:book"
                   }
                 }
               }
+            ],
+            "text_key": "card_ability.minecard.trader_llama_draw",
+            "triggers": [
+              "summon"
             ]
           }
         }
-      ]
+      ],
+      "text_key": "card_ability.minecard.trader_llama"
     }
   },
-  "entity": "minecraft:trader_llama",
   "cost": 5,
-  "health": 4,
-  "damage": 4
+  "damage": 4,
+  "entity": "minecraft:trader_llama",
+  "health": 4
 }

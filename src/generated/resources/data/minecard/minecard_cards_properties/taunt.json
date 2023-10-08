@@ -1,7 +1,7 @@
 {
   "item": {
-    "id": "minecraft:carrot_on_a_stick",
     "Count": 1,
+    "id": "minecraft:carrot_on_a_stick",
     "tag": {
       "Damage": 0
     }

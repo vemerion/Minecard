@@ -1,14 +1,7 @@
 {
-  "properties": {
-    "minecard:undead": 1
-  },
   "abilities": {
     "type": "minecard:chain",
     "value": {
-      "triggers": [
-        "tick"
-      ],
-      "text_key": "card_ability.minecard.skeleton",
       "abilities": [
         {
           "type": "minecard:select_cards",
@@ -39,12 +32,12 @@
             "modifications": [
               [
                 {
-                  "output": {
-                    "type": "minecard:health"
-                  },
                   "operator": {
                     "type": "minecard:constant",
                     "value": -1
+                  },
+                  "output": {
+                    "type": "minecard:health"
                   }
                 }
               ]
@@ -55,16 +48,23 @@
           "type": "minecard:history",
           "value": {
             "icon": {
-              "id": "minecraft:book",
-              "Count": 1
+              "Count": 1,
+              "id": "minecraft:book"
             }
           }
         }
+      ],
+      "text_key": "card_ability.minecard.skeleton",
+      "triggers": [
+        "tick"
       ]
     }
   },
-  "entity": "minecraft:skeleton",
   "cost": 4,
+  "damage": 1,
+  "entity": "minecraft:skeleton",
   "health": 4,
-  "damage": 1
+  "properties": {
+    "minecard:undead": 1
+  }
 }

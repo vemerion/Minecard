@@ -13,7 +13,6 @@ import mod.vemerion.minecard.game.PlayerState;
 import mod.vemerion.minecard.game.Receiver;
 import mod.vemerion.minecard.init.ModCardAbilities;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.util.ExtraCodecs;
 
 public class MultiAbility extends CardAbility {
@@ -41,11 +40,11 @@ public class MultiAbility extends CardAbility {
 	@Override
 	public Component getText() {
 		if (getTextKey().isEmpty()) {
-			var text = TextComponent.EMPTY.copy();
+			var text = Component.empty().copy();
 			int i = 0;
 			for (var ability : abilities) {
 				var abilityText = ability.getText();
-				if (abilityText == TextComponent.EMPTY)
+				if (abilityText == Component.empty())
 					continue;
 				text.append(ability.getText());
 				if (i < abilities.size() - 1)

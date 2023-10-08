@@ -1,30 +1,33 @@
 package mod.vemerion.minecard.lootmodifier;
 
-import java.util.List;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 
-import com.google.gson.JsonObject;
-
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import mod.vemerion.minecard.capability.CardData;
 import mod.vemerion.minecard.game.Cards;
 import mod.vemerion.minecard.init.ModItems;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
+import net.minecraftforge.common.loot.IGlobalLootModifier;
 import net.minecraftforge.common.loot.LootModifier;
 
 public class CardLootModifier extends LootModifier {
+
+	public static final Codec<CardLootModifier> CODEC = RecordCodecBuilder.create(
+			instance -> instance.group(LOOT_CONDITIONS_CODEC.fieldOf("conditions").forGetter(lm -> lm.conditions))
+					.apply(instance, CardLootModifier::new));
 
 	public CardLootModifier(LootItemCondition[] ailootcondition) {
 		super(ailootcondition);
 	}
 
 	@Override
-	protected List<ItemStack> doApply(List<ItemStack> generatedLoot, LootContext context) {
+	protected ObjectArrayList<ItemStack> doApply(ObjectArrayList<ItemStack> generatedLoot, LootContext context) {
 		var type = context.getParam(LootContextParams.THIS_ENTITY).getType();
-		if (!Cards.isAllowed(type)
+		if (!Cards.isAllowed(type, context.getLevel().enabledFeatures())
 				|| context.getRandom().nextFloat() >= Cards.getInstance(false).get(type).getDropChance())
 			return generatedLoot;
 
@@ -34,18 +37,8 @@ public class CardLootModifier extends LootModifier {
 		return generatedLoot;
 	}
 
-	public static class Serializer extends GlobalLootModifierSerializer<CardLootModifier> {
-
-		@Override
-		public CardLootModifier read(ResourceLocation location, JsonObject json, LootItemCondition[] ailootcondition) {
-			return new CardLootModifier(ailootcondition);
-		}
-
-		@Override
-		public JsonObject write(CardLootModifier instance) {
-			JsonObject json = makeConditions(instance.conditions);
-			return json;
-		}
-
+	@Override
+	public Codec<? extends IGlobalLootModifier> codec() {
+		return CODEC;
 	}
 }

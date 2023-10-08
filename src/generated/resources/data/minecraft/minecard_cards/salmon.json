@@ -2,84 +2,84 @@
   "abilities": {
     "type": "minecard:chance",
     "value": {
-      "text_key": "card_ability.minecard.salmon",
-      "chance": 50,
       "ability": {
         "type": "minecard:chain",
         "value": {
-          "triggers": [
-            "death"
-          ],
-          "text_key": "",
           "abilities": [
             {
+              "type": "minecard:constant_cards",
               "cards": [
                 {
-                  "additional_data": {
-                    "item": {
-                      "id": "minecraft:salmon_bucket",
-                      "Count": 1
-                    }
-                  },
                   "abilities": {
                     "type": "minecard:chain",
                     "value": {
-                      "triggers": [
-                        "summon"
-                      ],
-                      "text_key": "card_ability.minecard.salmon_bucket",
                       "abilities": [
                         {
+                          "type": "minecard:constant_cards",
                           "cards": [
                             "minecraft:salmon"
-                          ],
-                          "type": "minecard:constant_cards"
+                          ]
                         },
                         {
-                          "placement": "right",
-                          "type": "minecard:place_cards"
+                          "type": "minecard:place_cards",
+                          "placement": "right"
                         },
                         {
                           "type": "minecard:history",
                           "value": {
                             "icon": {
-                              "id": "minecraft:book",
-                              "Count": 1
+                              "Count": 1,
+                              "id": "minecraft:book"
                             }
                           }
                         }
+                      ],
+                      "text_key": "card_ability.minecard.salmon_bucket",
+                      "triggers": [
+                        "summon"
                       ]
                     }
                   },
-                  "entity": "minecraft:item",
+                  "additional_data": {
+                    "item": {
+                      "Count": 1,
+                      "id": "minecraft:salmon_bucket"
+                    }
+                  },
                   "cost": 0,
-                  "health": 0,
-                  "damage": 0
+                  "damage": 0,
+                  "entity": "minecraft:item",
+                  "health": 0
                 }
-              ],
-              "type": "minecard:constant_cards"
+              ]
             },
             {
-              "placement": "your_hand",
-              "type": "minecard:place_cards"
+              "type": "minecard:place_cards",
+              "placement": "your_hand"
             },
             {
               "type": "minecard:history",
               "value": {
                 "icon": {
-                  "id": "minecraft:book",
-                  "Count": 1
+                  "Count": 1,
+                  "id": "minecraft:book"
                 },
                 "visibility": "all"
               }
             }
+          ],
+          "text_key": "",
+          "triggers": [
+            "death"
           ]
         }
-      }
+      },
+      "chance": 50,
+      "text_key": "card_ability.minecard.salmon"
     }
   },
-  "entity": "minecraft:salmon",
   "cost": 1,
-  "health": 1,
-  "damage": 1
+  "damage": 1,
+  "entity": "minecraft:salmon",
+  "health": 1
 }

@@ -15,6 +15,7 @@ import net.minecraftforge.common.capabilities.CapabilityToken;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.registries.ForgeRegistries;
 
 public class CardData implements INBTSerializable<CompoundTag> {
 
@@ -41,7 +42,7 @@ public class CardData implements INBTSerializable<CompoundTag> {
 	}
 
 	public void setType(EntityType<?> type) {
-		setType(type.getRegistryName());
+		setType(ForgeRegistries.ENTITY_TYPES.getKey(type));
 	}
 
 	public static LazyOptional<CardData> get(ItemStack stack) {

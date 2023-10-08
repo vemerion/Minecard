@@ -17,10 +17,8 @@ public class ModCardConditions {
 	public static final DeferredRegister<CardConditionType<?>> CARD_CONDITIONS = DeferredRegister.create(REGISTRY_NAME,
 			Main.MODID);
 
-	@SuppressWarnings("unchecked")
-	private static Supplier<IForgeRegistry<CardConditionType<?>>> supplier = CARD_CONDITIONS.makeRegistry(
-			(Class<CardConditionType<?>>) (Class<?>) CardConditionType.class,
-			() -> new RegistryBuilder<CardConditionType<?>>().setName(REGISTRY_NAME));
+	private static Supplier<IForgeRegistry<CardConditionType<?>>> supplier = CARD_CONDITIONS
+			.makeRegistry(() -> new RegistryBuilder<CardConditionType<?>>().setName(REGISTRY_NAME));
 
 	public static IForgeRegistry<CardConditionType<?>> getRegistry() {
 		return supplier.get();

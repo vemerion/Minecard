@@ -11,7 +11,6 @@ import mod.vemerion.minecard.game.GameState;
 import mod.vemerion.minecard.game.Receiver;
 import mod.vemerion.minecard.init.ModCardSelectionMethods;
 import net.minecraft.util.ExtraCodecs;
-import net.minecraftforge.registries.ForgeRegistryEntry;
 
 public abstract class CardSelectionMethod {
 
@@ -27,8 +26,7 @@ public abstract class CardSelectionMethod {
 	public abstract List<Card> select(List<Receiver> receivers, GameState state, CardAbility ability,
 			List<Card> candidates);
 
-	public static class CardSelectionMethodType<T extends CardSelectionMethod>
-			extends ForgeRegistryEntry<CardSelectionMethodType<?>> {
+	public static class CardSelectionMethodType<T extends CardSelectionMethod> {
 		private final Codec<T> codec;
 
 		public CardSelectionMethodType(Codec<T> codec) {

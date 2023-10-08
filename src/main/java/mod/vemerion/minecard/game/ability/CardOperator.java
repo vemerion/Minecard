@@ -8,7 +8,6 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import mod.vemerion.minecard.game.Card;
 import mod.vemerion.minecard.init.ModCardOperators;
 import net.minecraft.util.ExtraCodecs;
-import net.minecraftforge.registries.ForgeRegistryEntry;
 
 public abstract class CardOperator {
 
@@ -22,7 +21,7 @@ public abstract class CardOperator {
 
 	public abstract int evaluate(Random rand, Card card, Collected collected);
 
-	public static class CardOperatorType<T extends CardOperator> extends ForgeRegistryEntry<CardOperatorType<?>> {
+	public static class CardOperatorType<T extends CardOperator> {
 		private final Codec<T> codec;
 
 		public CardOperatorType(Codec<T> codec) {

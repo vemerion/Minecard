@@ -1,19 +1,19 @@
 package mod.vemerion.minecard.screen.animation;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Quaternion;
 
 import mod.vemerion.minecard.game.CardProperty;
 import mod.vemerion.minecard.screen.ClientCard;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource.BufferSource;
-import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraftforge.common.util.TransformationHelper;
 
 public class WallAnimation extends Animation {
 
@@ -40,10 +40,10 @@ public class WallAnimation extends Animation {
 		for (int i = 0; i < Math.min(9, timer / 3); i++) {
 			poseStack.pushPose();
 			poseStack.translate(i % 3 * 6.3, -i / 3 * 3.3, 10 + i / 3 * 3);
-			poseStack.mulPose(new Quaternion(60, 10, 0, true));
+			poseStack.mulPose(TransformationHelper.quatFromXYZ(60, 10, 0, true));
 			poseStack.scale(6, 6, 6);
-			mc.getItemRenderer().renderStatic(stack, ItemTransforms.TransformType.NONE, LightTexture.FULL_BRIGHT,
-					OverlayTexture.NO_OVERLAY, poseStack, source, 0);
+			mc.getItemRenderer().renderStatic(stack, ItemDisplayContext.NONE, LightTexture.FULL_BRIGHT,
+					OverlayTexture.NO_OVERLAY, poseStack, source, null, 0);
 			poseStack.popPose();
 		}
 	}

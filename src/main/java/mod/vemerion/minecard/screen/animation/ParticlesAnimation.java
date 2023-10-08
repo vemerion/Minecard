@@ -46,6 +46,7 @@ public class ParticlesAnimation extends Animation {
 	private int count;
 	private ParticleConfig config;
 	private Vec2 origin;
+	private Random rand = new Random();
 
 	public ParticlesAnimation(Minecraft mc, AABB area, int count, int delay, ParticleConfig config, Runnable onDone) {
 		super(mc, onDone);
@@ -56,7 +57,7 @@ public class ParticlesAnimation extends Animation {
 		this.origin = new Vec2((float) area.getCenter().x, (float) area.getCenter().y);
 	}
 
-	private static Vec2 randomInAABB(Random rand, AABB area) {
+	private Vec2 randomInAABB(AABB area) {
 		return new Vec2(rand.nextFloat((float) area.minX, (float) area.maxX),
 				rand.nextFloat((float) area.minY, (float) area.maxY));
 	}
@@ -77,9 +78,8 @@ public class ParticlesAnimation extends Animation {
 		timer++;
 
 		if (timer <= delay) {
-			var rand = mc.level.random;
 			for (int i = 0; i < count; i++) {
-				particles.add(new GameParticle(config, rand, randomInAABB(rand, area), origin));
+				particles.add(new GameParticle(config, rand, randomInAABB(area), origin));
 			}
 		}
 

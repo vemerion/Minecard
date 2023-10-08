@@ -11,9 +11,8 @@ import mod.vemerion.minecard.game.Card;
 import mod.vemerion.minecard.game.PlayerState;
 import mod.vemerion.minecard.game.Receiver;
 import mod.vemerion.minecard.init.ModCardAbilities;
+import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.util.ExtraCodecs;
 
 public abstract class CardAbility {
@@ -35,7 +34,7 @@ public abstract class CardAbility {
 			Collected collected);
 
 	public Component getText() {
-		return textKey.isEmpty() ? TextComponent.EMPTY : new TranslatableComponent(textKey);
+		return textKey.isEmpty() ? CommonComponents.EMPTY : Component.translatable(textKey);
 	}
 
 	public Set<CardAbilityTrigger> getTriggers() {

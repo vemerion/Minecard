@@ -2,10 +2,6 @@
   "abilities": {
     "type": "minecard:chain",
     "value": {
-      "triggers": [
-        "hurt"
-      ],
-      "text_key": "card_ability.minecard.axolotl",
       "abilities": [
         {
           "type": "minecard:select_cards",
@@ -26,24 +22,28 @@
             "modifications": [
               [
                 {
-                  "output": {
-                    "type": "minecard:property",
-                    "value": "minecard:stealth"
-                  },
                   "operator": {
                     "type": "minecard:constant",
                     "value": 1
+                  },
+                  "output": {
+                    "type": "minecard:property",
+                    "value": "minecard:stealth"
                   }
                 }
               ]
             ]
           }
         }
+      ],
+      "text_key": "card_ability.minecard.axolotl",
+      "triggers": [
+        "hurt"
       ]
     }
   },
-  "entity": "minecraft:axolotl",
   "cost": 2,
-  "health": 4,
-  "damage": 1
+  "damage": 1,
+  "entity": "minecraft:axolotl",
+  "health": 4
 }

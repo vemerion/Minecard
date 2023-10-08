@@ -1,20 +1,21 @@
 package mod.vemerion.minecard.screen.animation;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Quaternion;
 
 import mod.vemerion.minecard.game.CardProperty;
 import mod.vemerion.minecard.screen.ClientCard;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource.BufferSource;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DripstoneThickness;
 import net.minecraft.world.phys.Vec2;
-import net.minecraftforge.client.model.data.EmptyModelData;
+import net.minecraftforge.client.model.data.ModelData;
+import net.minecraftforge.common.util.TransformationHelper;
 
 public class ThornsAnimation extends Animation {
 
@@ -46,9 +47,9 @@ public class ThornsAnimation extends Animation {
 			poseStack.pushPose();
 			poseStack.translate(offset.x, offset.y, 0);
 			poseStack.scale(SCALE, SCALE, SCALE);
-			poseStack.mulPose(new Quaternion(ROTATION, 0, 0, true));
+			poseStack.mulPose(TransformationHelper.quatFromXYZ(ROTATION, 0, 0, true));
 			mc.getBlockRenderer().renderSingleBlock(state, poseStack, source, LightTexture.FULL_BRIGHT,
-					OverlayTexture.NO_OVERLAY, EmptyModelData.INSTANCE);
+					OverlayTexture.NO_OVERLAY, ModelData.EMPTY, RenderType.cutout());
 			poseStack.popPose();
 		}
 	}

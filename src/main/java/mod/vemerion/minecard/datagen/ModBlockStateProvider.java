@@ -3,16 +3,17 @@ package mod.vemerion.minecard.datagen;
 import mod.vemerion.minecard.Main;
 import mod.vemerion.minecard.init.ModBlocks;
 import net.minecraft.core.Direction;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.model.generators.BlockModelBuilder;
 import net.minecraftforge.client.model.generators.BlockStateProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
+import net.minecraftforge.registries.ForgeRegistries;
 
 public class ModBlockStateProvider extends BlockStateProvider {
 
-	public ModBlockStateProvider(DataGenerator gen, ExistingFileHelper exFileHelper) {
-		super(gen, Main.MODID, exFileHelper);
+	public ModBlockStateProvider(PackOutput output, ExistingFileHelper exFileHelper) {
+		super(output, Main.MODID, exFileHelper);
 	}
 
 	@Override
@@ -21,12 +22,12 @@ public class ModBlockStateProvider extends BlockStateProvider {
 	}
 
 	private void game() {
-		String name = ModBlocks.GAME.get().getRegistryName().getPath();
+		String name = ForgeRegistries.BLOCKS.getKey(ModBlocks.GAME.get()).getPath();
 		ResourceLocation top = modLoc("block/game_top");
 		ResourceLocation side = modLoc("block/game_side");
 		ResourceLocation leg = modLoc("block/game_leg");
 		BlockModelBuilder model = models().withExistingParent(name, mcLoc("block/block")).texture("particle", top)
-				.texture("bottom", top).texture("top", top).texture("side", side).texture("leg", leg);
+				.texture("bottom", top).texture("top", top).texture("side", side).texture("leg", leg).renderType("cutout");
 		
 		// Table
 		model.element().from(0, 15 - 3, 0).to(16, 15, 16).face(Direction.DOWN).uvs(0, 0, 16, 16).texture("#bottom")

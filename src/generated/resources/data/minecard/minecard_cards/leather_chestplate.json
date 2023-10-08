@@ -1,20 +1,7 @@
 {
-  "additional_data": {
-    "item": {
-      "id": "minecraft:leather_chestplate",
-      "Count": 1,
-      "tag": {
-        "Damage": 0
-      }
-    }
-  },
   "abilities": {
     "type": "minecard:chain",
     "value": {
-      "triggers": [
-        "summon"
-      ],
-      "text_key": "card_ability.minecard.leather_chestplate",
       "abilities": [
         {
           "type": "minecard:select_cards",
@@ -45,9 +32,6 @@
             "modifications": [
               [
                 {
-                  "output": {
-                    "type": "minecard:max_health"
-                  },
                   "operator": {
                     "type": "minecard:add",
                     "value": {
@@ -62,6 +46,9 @@
                         "value": 2
                       }
                     }
+                  },
+                  "output": {
+                    "type": "minecard:max_health"
                   }
                 }
               ]
@@ -72,16 +59,29 @@
           "type": "minecard:history",
           "value": {
             "icon": {
-              "id": "minecraft:book",
-              "Count": 1
+              "Count": 1,
+              "id": "minecraft:book"
             }
           }
         }
+      ],
+      "text_key": "card_ability.minecard.leather_chestplate",
+      "triggers": [
+        "summon"
       ]
     }
   },
-  "entity": "minecraft:item",
+  "additional_data": {
+    "item": {
+      "Count": 1,
+      "id": "minecraft:leather_chestplate",
+      "tag": {
+        "Damage": 0
+      }
+    }
+  },
   "cost": 0,
-  "health": 0,
-  "damage": 0
+  "damage": 0,
+  "entity": "minecraft:item",
+  "health": 0
 }

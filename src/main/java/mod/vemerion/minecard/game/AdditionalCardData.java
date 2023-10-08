@@ -9,7 +9,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
-import net.minecraft.core.SerializableUUID;
+import net.minecraft.core.UUIDUtil;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
@@ -31,7 +31,7 @@ public class AdditionalCardData {
 	public static class IdData extends AdditionalCardData {
 
 		public static final Codec<IdData> CODEC = RecordCodecBuilder.create(instance -> instance
-				.group(SerializableUUID.CODEC.fieldOf("id").forGetter(IdData::getId)).apply(instance, IdData::new));
+				.group(UUIDUtil.CODEC.fieldOf("id").forGetter(IdData::getId)).apply(instance, IdData::new));
 
 		private UUID id;
 
@@ -109,7 +109,7 @@ public class AdditionalCardData {
 	private static <T extends AdditionalCardData> Codec<AdditionalCardData> start(CodecEntry<T> entry) {
 		return entry.codec.flatComapMap(Function.identity(),
 				data -> entry.type.isInstance(data) ? DataResult.success(entry.type.cast(data))
-						: DataResult.error("Invalid additional card data type"));
+						: DataResult.error(() -> "Invalid additional card data type"));
 	}
 
 	private static <T extends AdditionalCardData> Codec<AdditionalCardData> combine(CodecEntry<T> entry,

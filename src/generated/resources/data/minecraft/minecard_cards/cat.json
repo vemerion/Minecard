@@ -2,26 +2,21 @@
   "abilities": {
     "type": "minecard:chance",
     "value": {
-      "text_key": "card_ability.minecard.cat",
-      "chance": 50,
       "ability": {
         "type": "minecard:chain",
         "value": {
-          "triggers": [
-            "tick"
-          ],
-          "text_key": "",
           "abilities": [
             {
+              "type": "minecard:constant_cards",
               "cards": [
                 "minecard:rotten_flesh",
                 "minecard:rabbit_foot"
-              ],
-              "type": "minecard:constant_cards"
+              ]
             },
             {
               "type": "minecard:select_cards",
               "value": {
+                "clear": true,
                 "selection": {
                   "groups": [
                     "collected"
@@ -33,30 +28,35 @@
                       "repeat": false
                     }
                   }
-                },
-                "clear": true
+                }
               }
             },
             {
-              "placement": "your_hand",
-              "type": "minecard:place_cards"
+              "type": "minecard:place_cards",
+              "placement": "your_hand"
             },
             {
               "type": "minecard:history",
               "value": {
                 "icon": {
-                  "id": "minecraft:book",
-                  "Count": 1
+                  "Count": 1,
+                  "id": "minecraft:book"
                 }
               }
             }
+          ],
+          "text_key": "",
+          "triggers": [
+            "tick"
           ]
         }
-      }
+      },
+      "chance": 50,
+      "text_key": "card_ability.minecard.cat"
     }
   },
-  "entity": "minecraft:cat",
   "cost": 3,
-  "health": 3,
-  "damage": 1
+  "damage": 1,
+  "entity": "minecraft:cat",
+  "health": 3
 }

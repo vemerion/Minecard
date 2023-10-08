@@ -2,27 +2,14 @@
   "abilities": {
     "type": "minecard:chain",
     "value": {
-      "triggers": [
-        "summon"
-      ],
-      "text_key": "card_ability.minecard.mooshroom",
       "abilities": [
         {
+          "type": "minecard:constant_cards",
           "cards": [
             {
-              "additional_data": {
-                "item": {
-                  "id": "minecraft:mushroom_stew",
-                  "Count": 1
-                }
-              },
               "abilities": {
                 "type": "minecard:chain",
                 "value": {
-                  "triggers": [
-                    "summon"
-                  ],
-                  "text_key": "card_ability.minecard.mushroom_stew",
                   "abilities": [
                     {
                       "type": "minecard:select_cards",
@@ -53,49 +40,62 @@
                         "modifications": [
                           [
                             {
-                              "output": {
-                                "type": "minecard:property",
-                                "value": "minecard:baby"
-                              },
                               "operator": {
                                 "type": "minecard:constant",
                                 "value": 0
+                              },
+                              "output": {
+                                "type": "minecard:property",
+                                "value": "minecard:baby"
                               }
                             }
                           ]
                         ]
                       }
                     }
+                  ],
+                  "text_key": "card_ability.minecard.mushroom_stew",
+                  "triggers": [
+                    "summon"
                   ]
                 }
               },
-              "entity": "minecraft:item",
+              "additional_data": {
+                "item": {
+                  "Count": 1,
+                  "id": "minecraft:mushroom_stew"
+                }
+              },
               "cost": 0,
-              "health": 0,
-              "damage": 0
+              "damage": 0,
+              "entity": "minecraft:item",
+              "health": 0
             }
-          ],
-          "type": "minecard:constant_cards"
+          ]
         },
         {
-          "placement": "your_hand",
-          "type": "minecard:place_cards"
+          "type": "minecard:place_cards",
+          "placement": "your_hand"
         },
         {
           "type": "minecard:history",
           "value": {
             "icon": {
-              "id": "minecraft:book",
-              "Count": 1
+              "Count": 1,
+              "id": "minecraft:book"
             },
             "visibility": "all"
           }
         }
+      ],
+      "text_key": "card_ability.minecard.mooshroom",
+      "triggers": [
+        "summon"
       ]
     }
   },
-  "entity": "minecraft:mooshroom",
   "cost": 2,
-  "health": 2,
-  "damage": 2
+  "damage": 2,
+  "entity": "minecraft:mooshroom",
+  "health": 2
 }

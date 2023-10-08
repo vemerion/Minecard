@@ -35,10 +35,8 @@ public class ModCardAbilities {
 	public static final DeferredRegister<CardAbilityType<?>> CARD_ABILITIES = DeferredRegister.create(REGISTRY_NAME,
 			Main.MODID);
 
-	@SuppressWarnings("unchecked")
-	private static Supplier<IForgeRegistry<CardAbilityType<?>>> supplier = CARD_ABILITIES.makeRegistry(
-			(Class<CardAbilityType<?>>) (Class<?>) CardAbilityType.class,
-			() -> new RegistryBuilder<CardAbilityType<?>>().setName(REGISTRY_NAME));
+	private static Supplier<IForgeRegistry<CardAbilityType<?>>> supplier = CARD_ABILITIES
+			.makeRegistry(() -> new RegistryBuilder<CardAbilityType<?>>().setName(REGISTRY_NAME));
 
 	public static IForgeRegistry<CardAbilityType<?>> getRegistry() {
 		return supplier.get();

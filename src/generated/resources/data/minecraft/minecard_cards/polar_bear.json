@@ -1,14 +1,7 @@
 {
-  "properties": {
-    "minecard:baby": 1
-  },
   "abilities": {
     "type": "minecard:chain",
     "value": {
-      "triggers": [
-        "grow"
-      ],
-      "text_key": "card_ability.minecard.polar_bear",
       "abilities": [
         {
           "type": "minecard:select_cards",
@@ -29,9 +22,6 @@
             "modifications": [
               [
                 {
-                  "output": {
-                    "type": "minecard:max_health"
-                  },
                   "operator": {
                     "type": "minecard:add",
                     "value": {
@@ -46,12 +36,12 @@
                         "value": 3
                       }
                     }
+                  },
+                  "output": {
+                    "type": "minecard:max_health"
                   }
                 },
                 {
-                  "output": {
-                    "type": "minecard:damage"
-                  },
                   "operator": {
                     "type": "minecard:add",
                     "value": {
@@ -66,16 +56,19 @@
                         "value": 1
                       }
                     }
+                  },
+                  "output": {
+                    "type": "minecard:damage"
                   }
                 },
                 {
-                  "output": {
-                    "type": "minecard:property",
-                    "value": "minecard:taunt"
-                  },
                   "operator": {
                     "type": "minecard:constant",
                     "value": 1
+                  },
+                  "output": {
+                    "type": "minecard:property",
+                    "value": "minecard:taunt"
                   }
                 }
               ]
@@ -86,16 +79,23 @@
           "type": "minecard:history",
           "value": {
             "icon": {
-              "id": "minecraft:book",
-              "Count": 1
+              "Count": 1,
+              "id": "minecraft:book"
             }
           }
         }
+      ],
+      "text_key": "card_ability.minecard.polar_bear",
+      "triggers": [
+        "grow"
       ]
     }
   },
-  "entity": "minecraft:polar_bear",
   "cost": 3,
+  "damage": 2,
+  "entity": "minecraft:polar_bear",
   "health": 4,
-  "damage": 2
+  "properties": {
+    "minecard:baby": 1
+  }
 }

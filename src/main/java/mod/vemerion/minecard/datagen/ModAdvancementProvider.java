@@ -13,16 +13,17 @@ import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.FrameType;
 import net.minecraft.advancements.RequirementsStrategy;
 import net.minecraft.advancements.critereon.InventoryChangeTrigger;
-import net.minecraft.data.DataGenerator;
-import net.minecraft.data.advancements.AdvancementProvider;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.raid.Raid;
 import net.minecraft.world.item.Items;
 import net.minecraftforge.common.data.ExistingFileHelper;
+import net.minecraftforge.common.data.ForgeAdvancementProvider.AdvancementGenerator;
+import net.minecraftforge.registries.ForgeRegistries;
 
-public class ModAdvancementProvider extends AdvancementProvider {
+public class ModAdvancementProvider implements AdvancementGenerator {
 
 	private static final List<EntityType<?>> BOSSES = List.of(EntityType.ENDER_DRAGON, EntityType.WITHER);
 	private static final List<EntityType<?>> MOBS = List.of(EntityType.SNOW_GOLEM, EntityType.WITHER_SKELETON,
@@ -41,12 +42,9 @@ public class ModAdvancementProvider extends AdvancementProvider {
 			EntityType.TROPICAL_FISH, EntityType.PARROT, EntityType.COD, EntityType.BAT, EntityType.PANDA,
 			EntityType.ZOMBIFIED_PIGLIN);
 
-	public ModAdvancementProvider(DataGenerator generatorIn, ExistingFileHelper fileHelperIn) {
-		super(generatorIn, fileHelperIn);
-	}
-
 	@Override
-	protected void registerAdvancements(Consumer<Advancement> consumer, ExistingFileHelper fileHelper) {
+	public void generate(HolderLookup.Provider registries, Consumer<Advancement> consumer,
+			ExistingFileHelper fileHelper) {
 		var root = Advancement.Builder.advancement()
 				.display(ModItems.EMPTY_CARD_FULL.get(), title("root"), description("root"),
 						new ResourceLocation(Main.MODID, "textures/block/game_top.png"), FrameType.TASK, true, true,
@@ -94,16 +92,16 @@ public class ModAdvancementProvider extends AdvancementProvider {
 						ModGameTrigger.Instance.create(new ResourceLocation(Main.MODID, "iron_golem_farm")))
 				.save(consumer, path("iron_golem_farm"));
 
-		collect(Advancement.Builder.advancement(), BOSSES.stream().map(e -> e.getRegistryName()).toList())
+		collect(Advancement.Builder.advancement(), BOSSES.stream().map(ForgeRegistries.ENTITY_TYPES::getKey).toList())
 				.parent(root).display(Items.DRAGON_HEAD, title("collect_boss"), description("collect_boss"), null,
 						FrameType.GOAL, true, true, false)
 				.requirements(RequirementsStrategy.OR).save(consumer, path("collect_boss"));
 		collect(Advancement.Builder.advancement(), Cards.SPELLS).parent(root).display(Items.CHEST,
 				title("collect_spells"), description("collect_spells"), null, FrameType.CHALLENGE, true, true, false)
 				.save(consumer, path("collect_spells"));
-		collect(Advancement.Builder.advancement(), MOBS.stream().map(e -> e.getRegistryName()).toList()).parent(root)
-				.display(Items.EGG, title("collect_mobs"), description("collect_mobs"), null, FrameType.CHALLENGE, true,
-						true, false)
+		collect(Advancement.Builder.advancement(), MOBS.stream().map(ForgeRegistries.ENTITY_TYPES::getKey).toList())
+				.parent(root).display(Items.EGG, title("collect_mobs"), description("collect_mobs"), null,
+						FrameType.CHALLENGE, true, true, false)
 				.save(consumer, path("collect_mobs"));
 	}
 
@@ -114,12 +112,12 @@ public class ModAdvancementProvider extends AdvancementProvider {
 		return builder;
 	}
 
-	private TranslatableComponent title(String s) {
-		return new TranslatableComponent(titleKey(s));
+	private Component title(String s) {
+		return Component.translatable(titleKey(s));
 	}
 
-	private TranslatableComponent description(String s) {
-		return new TranslatableComponent(descriptionKey(s));
+	private Component description(String s) {
+		return Component.translatable(descriptionKey(s));
 	}
 
 	public static String titleKey(String s) {
@@ -132,10 +130,5 @@ public class ModAdvancementProvider extends AdvancementProvider {
 
 	private String path(String s) {
 		return Main.MODID + "/" + s;
-	}
-
-	@Override
-	public String getName() {
-		return Main.MODID + ": Advancements";
 	}
 }

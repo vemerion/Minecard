@@ -2,10 +2,6 @@
   "abilities": {
     "type": "minecard:chain",
     "value": {
-      "triggers": [
-        "death"
-      ],
-      "text_key": "card_ability.minecard.creeper",
       "abilities": [
         {
           "type": "minecard:select_cards",
@@ -32,12 +28,12 @@
             "modifications": [
               [
                 {
-                  "output": {
-                    "type": "minecard:health"
-                  },
                   "operator": {
                     "type": "minecard:constant",
                     "value": -3
+                  },
+                  "output": {
+                    "type": "minecard:health"
                   }
                 }
               ]
@@ -48,16 +44,20 @@
           "type": "minecard:history",
           "value": {
             "icon": {
-              "id": "minecraft:book",
-              "Count": 1
+              "Count": 1,
+              "id": "minecraft:book"
             }
           }
         }
+      ],
+      "text_key": "card_ability.minecard.creeper",
+      "triggers": [
+        "death"
       ]
     }
   },
-  "entity": "minecraft:creeper",
   "cost": 1,
-  "health": 3,
-  "damage": 2
+  "damage": 2,
+  "entity": "minecraft:creeper",
+  "health": 3
 }

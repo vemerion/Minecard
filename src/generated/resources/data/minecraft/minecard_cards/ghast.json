@@ -2,26 +2,22 @@
   "abilities": {
     "type": "minecard:chain",
     "value": {
-      "triggers": [
-        "summon"
-      ],
-      "text_key": "card_ability.minecard.ghast",
       "abilities": [
         {
           "type": "minecard:select_cards",
           "value": {
             "selection": {
-              "groups": [
-                "enemy_board"
-              ],
-              "method": {
-                "type": "minecard:all"
-              },
               "condition": {
                 "type": "minecard:entity",
                 "value": {
                   "inner": "minecraft:player"
                 }
+              },
+              "groups": [
+                "enemy_board"
+              ],
+              "method": {
+                "type": "minecard:all"
               }
             }
           }
@@ -38,10 +34,6 @@
             "modifications": [
               [
                 {
-                  "output": {
-                    "type": "minecard:property",
-                    "value": "minecard:burn"
-                  },
                   "operator": {
                     "type": "minecard:add",
                     "value": {
@@ -57,6 +49,10 @@
                         "value": 4
                       }
                     }
+                  },
+                  "output": {
+                    "type": "minecard:property",
+                    "value": "minecard:burn"
                   }
                 }
               ]
@@ -67,16 +63,20 @@
           "type": "minecard:history",
           "value": {
             "icon": {
-              "id": "minecraft:book",
-              "Count": 1
+              "Count": 1,
+              "id": "minecraft:book"
             }
           }
         }
+      ],
+      "text_key": "card_ability.minecard.ghast",
+      "triggers": [
+        "summon"
       ]
     }
   },
-  "entity": "minecraft:ghast",
   "cost": 7,
-  "health": 3,
-  "damage": 7
+  "damage": 7,
+  "entity": "minecraft:ghast",
+  "health": 3
 }

@@ -1,26 +1,26 @@
 {
   "parent": "minecraft:minecard/root",
+  "criteria": {
+    "zombie_buff": {
+      "conditions": {
+        "id": "minecard:zombie_buff"
+      },
+      "trigger": "minecard:game"
+    }
+  },
   "display": {
-    "icon": {
-      "item": "minecraft:zombie_head"
-    },
-    "title": {
-      "translate": "advancements.minecard.zombie_buff.title"
-    },
+    "announce_to_chat": true,
     "description": {
       "translate": "advancements.minecard.zombie_buff.description"
     },
     "frame": "goal",
+    "hidden": false,
+    "icon": {
+      "item": "minecraft:zombie_head"
+    },
     "show_toast": true,
-    "announce_to_chat": true,
-    "hidden": false
-  },
-  "criteria": {
-    "zombie_buff": {
-      "trigger": "minecard:game",
-      "conditions": {
-        "id": "minecard:zombie_buff"
-      }
+    "title": {
+      "translate": "advancements.minecard.zombie_buff.title"
     }
   },
   "requirements": [

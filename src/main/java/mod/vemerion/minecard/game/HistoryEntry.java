@@ -6,7 +6,7 @@ import java.util.UUID;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
-import net.minecraft.core.SerializableUUID;
+import net.minecraft.core.UUIDUtil;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.item.ItemStack;
 
@@ -41,8 +41,7 @@ public class HistoryEntry {
 					() -> RecordCodecBuilder
 							.create(instance -> instance
 									.group(ItemStack.CODEC.fieldOf("icon").forGetter(HistoryEntry::getIcon),
-											SerializableUUID.CODEC.fieldOf("playerId")
-													.forGetter(HistoryEntry::getPlayerId),
+											UUIDUtil.CODEC.fieldOf("playerId").forGetter(HistoryEntry::getPlayerId),
 											Card.CODEC.fieldOf("card").forGetter(HistoryEntry::getCard),
 											Codec.list(Target.CODEC).fieldOf("targets")
 													.forGetter(HistoryEntry::getTargets))

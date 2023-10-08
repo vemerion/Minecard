@@ -1,15 +1,7 @@
 {
-  "item": {
-    "id": "minecraft:lava_bucket",
-    "Count": 1
-  },
   "ability": {
     "type": "minecard:chain",
     "value": {
-      "triggers": [
-        "tick"
-      ],
-      "text_key": "",
       "abilities": [
         {
           "type": "minecard:select_cards",
@@ -30,19 +22,15 @@
             "modifications": [
               [
                 {
-                  "output": {
-                    "type": "minecard:health"
-                  },
                   "operator": {
                     "type": "minecard:constant",
                     "value": -1
+                  },
+                  "output": {
+                    "type": "minecard:health"
                   }
                 },
                 {
-                  "output": {
-                    "type": "minecard:property",
-                    "value": "minecard:burn"
-                  },
                   "operator": {
                     "type": "minecard:add",
                     "value": {
@@ -58,13 +46,25 @@
                         "value": -1
                       }
                     }
+                  },
+                  "output": {
+                    "type": "minecard:property",
+                    "value": "minecard:burn"
                   }
                 }
               ]
             ]
           }
         }
+      ],
+      "text_key": "",
+      "triggers": [
+        "tick"
       ]
     }
+  },
+  "item": {
+    "Count": 1,
+    "id": "minecraft:lava_bucket"
   }
 }

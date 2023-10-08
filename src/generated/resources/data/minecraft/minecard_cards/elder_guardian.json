@@ -1,14 +1,7 @@
 {
-  "properties": {
-    "minecard:thorns": 3
-  },
   "abilities": {
     "type": "minecard:chain",
     "value": {
-      "triggers": [
-        "summon"
-      ],
-      "text_key": "card_ability.minecard.elder_guardian",
       "abilities": [
         {
           "type": "minecard:select_cards",
@@ -35,9 +28,6 @@
             "modifications": [
               [
                 {
-                  "output": {
-                    "type": "minecard:damage"
-                  },
                   "operator": {
                     "type": "minecard:add",
                     "value": {
@@ -52,6 +42,9 @@
                         "value": -1
                       }
                     }
+                  },
+                  "output": {
+                    "type": "minecard:damage"
                   }
                 }
               ]
@@ -62,16 +55,23 @@
           "type": "minecard:history",
           "value": {
             "icon": {
-              "id": "minecraft:book",
-              "Count": 1
+              "Count": 1,
+              "id": "minecraft:book"
             }
           }
         }
+      ],
+      "text_key": "card_ability.minecard.elder_guardian",
+      "triggers": [
+        "summon"
       ]
     }
   },
-  "entity": "minecraft:elder_guardian",
   "cost": 8,
+  "damage": 3,
+  "entity": "minecraft:elder_guardian",
   "health": 9,
-  "damage": 3
+  "properties": {
+    "minecard:thorns": 3
+  }
 }

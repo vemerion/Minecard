@@ -1,20 +1,20 @@
 package mod.vemerion.minecard.screen.animation;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Quaternion;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource.BufferSource;
-import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.Vec2;
+import net.minecraftforge.common.util.TransformationHelper;
 
 public class WitherAnimation extends Animation {
 
@@ -52,10 +52,10 @@ public class WitherAnimation extends Animation {
 			var part = PARTS[i];
 			poseStack.pushPose();
 			poseStack.translate(part.offset.x, part.offset.y, i * -10);
-			poseStack.mulPose(new Quaternion(10, 10, 0, true));
+			poseStack.mulPose(TransformationHelper.quatFromXYZ(10, 10, 0, true));
 			poseStack.scale(SIZE, -SIZE, SIZE);
-			mc.getItemRenderer().renderStatic(new ItemStack(part.block.asItem()), ItemTransforms.TransformType.NONE,
-					LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY, poseStack, source, 0);
+			mc.getItemRenderer().renderStatic(new ItemStack(part.block.asItem()), ItemDisplayContext.NONE,
+					LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY, poseStack, source, null, 0);
 			poseStack.popPose();
 		}
 	}

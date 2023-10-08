@@ -2,35 +2,35 @@
   "abilities": {
     "type": "minecard:chain",
     "value": {
-      "triggers": [
-        "summon"
-      ],
-      "text_key": "card_ability.minecard.fox",
       "abilities": [
         {
+          "type": "minecard:constant_cards",
           "cards": [
             "minecard:sweet_berries"
-          ],
-          "type": "minecard:constant_cards"
+          ]
         },
         {
-          "placement": "right",
-          "type": "minecard:place_cards"
+          "type": "minecard:place_cards",
+          "placement": "right"
         },
         {
           "type": "minecard:history",
           "value": {
             "icon": {
-              "id": "minecraft:book",
-              "Count": 1
+              "Count": 1,
+              "id": "minecraft:book"
             }
           }
         }
+      ],
+      "text_key": "card_ability.minecard.fox",
+      "triggers": [
+        "summon"
       ]
     }
   },
-  "entity": "minecraft:fox",
   "cost": 4,
-  "health": 3,
-  "damage": 2
+  "damage": 2,
+  "entity": "minecraft:fox",
+  "health": 3
 }

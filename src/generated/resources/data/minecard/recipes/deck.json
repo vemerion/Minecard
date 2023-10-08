@@ -1,10 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "###",
-    "#C#",
-    "###"
-  ],
+  "category": "misc",
   "key": {
     "#": {
       "tag": "forge:leather"
@@ -13,7 +9,13 @@
       "item": "minecard:card"
     }
   },
+  "pattern": [
+    "###",
+    "#C#",
+    "###"
+  ],
   "result": {
     "item": "minecard:deck"
-  }
+  },
+  "show_notification": true
 }

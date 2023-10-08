@@ -17,7 +17,7 @@ import mod.vemerion.minecard.network.DrawCardsMessage;
 import mod.vemerion.minecard.network.MulliganDoneMessage;
 import mod.vemerion.minecard.network.PlaceCardMessage;
 import mod.vemerion.minecard.network.SetResourcesMessage;
-import net.minecraft.core.SerializableUUID;
+import net.minecraft.core.UUIDUtil;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
@@ -28,7 +28,7 @@ public class PlayerState {
 			.lazyInitializedCodec(
 					() -> RecordCodecBuilder
 							.create(instance -> instance
-									.group(SerializableUUID.CODEC.fieldOf("id").forGetter(PlayerState::getId),
+									.group(UUIDUtil.CODEC.fieldOf("id").forGetter(PlayerState::getId),
 											Codec.list(Card.CODEC).fieldOf("deck").forGetter(PlayerState::getDeck),
 											Codec.list(Card.CODEC).fieldOf("hand").forGetter(PlayerState::getHand),
 											Codec.list(Card.CODEC).fieldOf("board").forGetter(PlayerState::getBoard),

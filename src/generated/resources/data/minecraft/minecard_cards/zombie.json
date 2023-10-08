@@ -1,14 +1,7 @@
 {
-  "properties": {
-    "minecard:undead": 1
-  },
   "abilities": {
     "type": "minecard:chain",
     "value": {
-      "triggers": [
-        "summon"
-      ],
-      "text_key": "card_ability.minecard.zombie",
       "abilities": [
         {
           "type": "minecard:select_cards",
@@ -29,9 +22,6 @@
             "modifications": [
               [
                 {
-                  "output": {
-                    "type": "minecard:max_health"
-                  },
                   "operator": {
                     "type": "minecard:add",
                     "value": {
@@ -46,24 +36,24 @@
                         "value": 1
                       }
                     }
+                  },
+                  "output": {
+                    "type": "minecard:max_health"
                   }
                 },
                 {
+                  "operator": {
+                    "type": "minecard:constant",
+                    "value": 1
+                  },
                   "output": {
                     "type": "minecard:property",
                     "value": "minecard:shield"
-                  },
-                  "operator": {
-                    "type": "minecard:constant",
-                    "value": 1
                   }
                 }
               ],
               [
                 {
-                  "output": {
-                    "type": "minecard:max_health"
-                  },
                   "operator": {
                     "type": "minecard:add",
                     "value": {
@@ -78,12 +68,12 @@
                         "value": 1
                       }
                     }
+                  },
+                  "output": {
+                    "type": "minecard:max_health"
                   }
                 },
                 {
-                  "output": {
-                    "type": "minecard:damage"
-                  },
                   "operator": {
                     "type": "minecard:add",
                     "value": {
@@ -98,14 +88,14 @@
                         "value": 1
                       }
                     }
+                  },
+                  "output": {
+                    "type": "minecard:damage"
                   }
                 }
               ],
               [
                 {
-                  "output": {
-                    "type": "minecard:damage"
-                  },
                   "operator": {
                     "type": "minecard:add",
                     "value": {
@@ -120,16 +110,19 @@
                         "value": 1
                       }
                     }
+                  },
+                  "output": {
+                    "type": "minecard:damage"
                   }
                 },
                 {
-                  "output": {
-                    "type": "minecard:property",
-                    "value": "minecard:charge"
-                  },
                   "operator": {
                     "type": "minecard:constant",
                     "value": 1
+                  },
+                  "output": {
+                    "type": "minecard:property",
+                    "value": "minecard:charge"
                   }
                 }
               ]
@@ -140,16 +133,23 @@
           "type": "minecard:history",
           "value": {
             "icon": {
-              "id": "minecraft:book",
-              "Count": 1
+              "Count": 1,
+              "id": "minecraft:book"
             }
           }
         }
+      ],
+      "text_key": "card_ability.minecard.zombie",
+      "triggers": [
+        "summon"
       ]
     }
   },
-  "entity": "minecraft:zombie",
   "cost": 4,
+  "damage": 4,
+  "entity": "minecraft:zombie",
   "health": 4,
-  "damage": 4
+  "properties": {
+    "minecard:undead": 1
+  }
 }

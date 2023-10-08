@@ -1,26 +1,26 @@
 {
   "parent": "minecraft:minecard/root",
+  "criteria": {
+    "discount_wither": {
+      "conditions": {
+        "id": "minecard:discount_wither"
+      },
+      "trigger": "minecard:game"
+    }
+  },
   "display": {
-    "icon": {
-      "item": "minecraft:wither_skeleton_skull"
-    },
-    "title": {
-      "translate": "advancements.minecard.discount_wither.title"
-    },
+    "announce_to_chat": true,
     "description": {
       "translate": "advancements.minecard.discount_wither.description"
     },
     "frame": "goal",
+    "hidden": false,
+    "icon": {
+      "item": "minecraft:wither_skeleton_skull"
+    },
     "show_toast": true,
-    "announce_to_chat": true,
-    "hidden": false
-  },
-  "criteria": {
-    "discount_wither": {
-      "trigger": "minecard:game",
-      "conditions": {
-        "id": "minecard:discount_wither"
-      }
+    "title": {
+      "translate": "advancements.minecard.discount_wither.title"
     }
   },
   "requirements": [

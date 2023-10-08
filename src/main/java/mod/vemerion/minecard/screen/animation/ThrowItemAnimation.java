@@ -1,17 +1,17 @@
 package mod.vemerion.minecard.screen.animation;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Quaternion;
 
 import mod.vemerion.minecard.screen.ClientCard;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource.BufferSource;
-import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.util.Mth;
+import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec2;
+import net.minecraftforge.common.util.TransformationHelper;
 
 public class ThrowItemAnimation extends Animation {
 
@@ -43,11 +43,11 @@ public class ThrowItemAnimation extends Animation {
 				Mth.lerp(progress, start.y, target.getPosition().y + ClientCard.CARD_HEIGHT * 0.33), 50);
 		float height = (-Mth.square(progress * 2 - 1) + 1) * 20;
 		poseStack.scale(15 + height, -(15 + height), 15 + height);
-		poseStack.mulPose(new Quaternion(start.y < target.getPosition().y ? (progress * 270) : (-progress * 270 + 180),
-				0, 45, true));
+		poseStack.mulPose(TransformationHelper.quatFromXYZ(
+				start.y < target.getPosition().y ? (progress * 270) : (-progress * 270 + 180), 0, 45, true));
 
-		mc.getItemRenderer().renderStatic(stack, ItemTransforms.TransformType.GUI, LightTexture.FULL_BRIGHT,
-				OverlayTexture.NO_OVERLAY, poseStack, source, 0);
+		mc.getItemRenderer().renderStatic(stack, ItemDisplayContext.GUI, LightTexture.FULL_BRIGHT,
+				OverlayTexture.NO_OVERLAY, poseStack, source, null, 0);
 		poseStack.popPose();
 	}
 

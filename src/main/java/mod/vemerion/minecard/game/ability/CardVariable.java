@@ -12,7 +12,6 @@ import mod.vemerion.minecard.game.Receiver;
 import mod.vemerion.minecard.init.ModCardVariables;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.ExtraCodecs;
-import net.minecraftforge.registries.ForgeRegistryEntry;
 
 public abstract class CardVariable {
 
@@ -52,7 +51,7 @@ public abstract class CardVariable {
 
 	public abstract void set(PlayerState state, Card card, List<Receiver> receivers, int value);
 
-	public static class CardVariableType<T extends CardVariable> extends ForgeRegistryEntry<CardVariableType<?>> {
+	public static class CardVariableType<T extends CardVariable> {
 		private final Codec<T> codec;
 
 		public CardVariableType(Codec<T> codec) {

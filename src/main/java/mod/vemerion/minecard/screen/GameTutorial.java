@@ -6,7 +6,6 @@ import java.util.function.Supplier;
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Quaternion;
 
 import mod.vemerion.minecard.Main;
 import mod.vemerion.minecard.game.Cards;
@@ -24,8 +23,6 @@ import net.minecraft.client.renderer.MultiBufferSource.BufferSource;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.core.Vec3i;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.FastColor;
@@ -33,6 +30,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.phys.Vec2;
+import net.minecraftforge.common.util.TransformationHelper;
 
 public class GameTutorial implements GuiEventListener, NarratableEntry {
 
@@ -56,52 +54,51 @@ public class GameTutorial implements GuiEventListener, NarratableEntry {
 	private ArrowButton back, forward;
 	private ClientCard card;
 
-	private final Step[] steps = { new Step(new TranslatableComponent(Helper.tutorial(0))),
-			new Step(new TranslatableComponent(Helper.tutorial(1))),
-			new Step(new TranslatableComponent(Helper.tutorial(2))),
-			new Step(new TranslatableComponent(Helper.tutorial(3)), null, () -> card.setDamage(10), UnlockAction.NONE),
-			new Step(new TranslatableComponent(Helper.tutorial(4)),
+	private final Step[] steps = { new Step(Component.translatable(Helper.tutorial(0))),
+			new Step(Component.translatable(Helper.tutorial(1))), new Step(Component.translatable(Helper.tutorial(2))),
+			new Step(Component.translatable(Helper.tutorial(3)), null, () -> card.setDamage(10), UnlockAction.NONE),
+			new Step(Component.translatable(Helper.tutorial(4)),
 					new Rect((w, h) -> w / 2 + 19, (w, h) -> h / 2 - 36, 20, 20)),
-			new Step(new TranslatableComponent(Helper.tutorial(5)),
+			new Step(Component.translatable(Helper.tutorial(5)),
 					new Rect((w, h) -> w / 2 + 18, (w, h) -> h / 2 - 7, 20, 20)),
-			new Step(new TranslatableComponent(Helper.tutorial(6)),
+			new Step(Component.translatable(Helper.tutorial(6)),
 					new Rect((w, h) -> w / 2 - 31, (w, h) -> h / 2 - 7, 20, 20)),
-			new Step(new TranslatableComponent(Helper.tutorial(7)),
+			new Step(Component.translatable(Helper.tutorial(7)),
 					new Rect((w, h) -> w / 2 + 35, (w, h) -> h / 2 - 50, 20, 100)),
-			new Step(new TranslatableComponent(Helper.tutorial(8)),
+			new Step(Component.translatable(Helper.tutorial(8)),
 					new Rect((w, h) -> w - 28, (w, h) -> h / 2 - 24, 14, 14)),
-			new Step(new TranslatableComponent(Helper.tutorial(9)),
+			new Step(Component.translatable(Helper.tutorial(9)),
 					new Rect((w, h) -> w - 14, (w, h) -> h / 2 - 24, 14, 14)),
-			new Step(new TranslatableComponent(Helper.tutorial(10)),
+			new Step(Component.translatable(Helper.tutorial(10)),
 					new Rect((w, h) -> w / 2 - 40, (w, h) -> h / 2 + 10, 86, 40)),
-			new Step(new TranslatableComponent(Helper.tutorial(11))),
-			new Step(new TranslatableComponent(Helper.tutorial(12)), new Rect((w, h) -> 0, (w, h) -> h / 2, 500, 500)),
-			new Step(new TranslatableComponent(Helper.tutorial(13)),
+			new Step(Component.translatable(Helper.tutorial(11))),
+			new Step(Component.translatable(Helper.tutorial(12)), new Rect((w, h) -> 0, (w, h) -> h / 2, 500, 500)),
+			new Step(Component.translatable(Helper.tutorial(13)),
 					new Rect((w, h) -> w - 19, (w, h) -> h - 110, 18, 62)),
-			new Step(new TranslatableComponent(Helper.tutorial(14)),
+			new Step(Component.translatable(Helper.tutorial(14)),
 					new Rect((w, h) -> w / 2 - 130, (w, h) -> h - 54, 260, 50)),
-			new Step(new TranslatableComponent(Helper.tutorial(15))),
-			new Step(new TranslatableComponent(Helper.tutorial(16))),
-			new Step(new TranslatableComponent(Helper.tutorial(17)),
+			new Step(Component.translatable(Helper.tutorial(15))),
+			new Step(Component.translatable(Helper.tutorial(16))),
+			new Step(Component.translatable(Helper.tutorial(17)),
 					new Rect((w, h) -> w / 2 - 45, (w, h) -> h - 90, 90, 30)),
-			new Step(new TranslatableComponent(Helper.tutorial(18)),
+			new Step(Component.translatable(Helper.tutorial(18)),
 					new Rect((w, h) -> w / 2 - 130, (w, h) -> h - 118, 260, 52), null, UnlockAction.MULLIGAN),
-			new Step(new TranslatableComponent(Helper.tutorial(19))),
-			new Step(new TranslatableComponent(Helper.tutorial(20),
+			new Step(Component.translatable(Helper.tutorial(19))),
+			new Step(Component.translatable(Helper.tutorial(20),
 					Cards.getInstance(true).get(EntityType.PLAYER).getHealth())),
-			new Step(new TranslatableComponent(Helper.tutorial(21)),
+			new Step(Component.translatable(Helper.tutorial(21)),
 					new Rect((w, h) -> w - 210, (w, h) -> h - 66, 80, 12)),
-			new Step(new TranslatableComponent(Helper.tutorial(22))),
-			new Step(new TranslatableComponent(Helper.tutorial(23)), new Rect((w, h) -> 0, (w, h) -> 0, 18, 320), null,
+			new Step(Component.translatable(Helper.tutorial(22))),
+			new Step(Component.translatable(Helper.tutorial(23)), new Rect((w, h) -> 0, (w, h) -> 0, 18, 320), null,
 					UnlockAction.PLAY_CARD),
-			new Step(new TranslatableComponent(Helper.tutorial(24)), new Rect((w, h) -> 0, (w, h) -> 0, 18, 320)),
-			new Step(new TranslatableComponent(Helper.tutorial(25)), new Rect((w, h) -> 0, (w, h) -> 0, 18, 320)),
-			new Step(new TranslatableComponent(Helper.tutorial(26))),
-			new Step(new TranslatableComponent(Helper.tutorial(27)),
+			new Step(Component.translatable(Helper.tutorial(24)), new Rect((w, h) -> 0, (w, h) -> 0, 18, 320)),
+			new Step(Component.translatable(Helper.tutorial(25)), new Rect((w, h) -> 0, (w, h) -> 0, 18, 320)),
+			new Step(Component.translatable(Helper.tutorial(26))),
+			new Step(Component.translatable(Helper.tutorial(27)),
 					new Rect((w, h) -> w - 26, (w, h) -> h / 2 - 12, 24, 24)),
-			new Step(new TranslatableComponent(Helper.tutorial(28)), null, null, UnlockAction.END_TURN),
-			new Step(new TranslatableComponent(Helper.tutorial(29))),
-			new Step(new TranslatableComponent(Helper.tutorial(30)), null, null, UnlockAction.GAME_OVER) };
+			new Step(Component.translatable(Helper.tutorial(28)), null, null, UnlockAction.END_TURN),
+			new Step(Component.translatable(Helper.tutorial(29))),
+			new Step(Component.translatable(Helper.tutorial(30)), null, null, UnlockAction.GAME_OVER) };
 
 	public GameTutorial(GameScreen screen, int initialStep) {
 		this.screen = screen;
@@ -114,7 +111,7 @@ public class GameTutorial implements GuiEventListener, NarratableEntry {
 				new Vec2((screen.width - ClientCard.CARD_WIDTH) / 2, (screen.height - ClientCard.CARD_HEIGHT) / 2),
 				screen);
 		this.card.appear(2);
-		CardItemRenderer.getEntity(card, mc.level).setCustomName(new TranslatableComponent(Helper.gui("cardy")));
+		CardItemRenderer.getEntity(card, mc.level).setCustomName(Component.translatable(Helper.gui("cardy")));
 		initSteps();
 	}
 
@@ -265,7 +262,7 @@ public class GameTutorial implements GuiEventListener, NarratableEntry {
 			poseStack.pushPose();
 			poseStack.translate(position.x, position.y, 300);
 			poseStack.scale(30, -30, 30);
-			poseStack.mulPose(new Quaternion(0, 20, 0, true));
+			poseStack.mulPose(TransformationHelper.quatFromXYZ(0, 20, 0, true));
 			mc.getEntityRenderDispatcher().getRenderer(creeper).render(creeper, 0, 0, poseStack, source,
 					LightTexture.FULL_BRIGHT);
 			poseStack.popPose();
@@ -327,7 +324,7 @@ public class GameTutorial implements GuiEventListener, NarratableEntry {
 		private void drawTextBubble() {
 			var lines = mc.font.split(text, MAX_BUBBLE_WIDTH);
 			var height = lines.size() * mc.font.lineHeight + BUBBLE_PADDING * 2;
-			var pos = new Vec3i(position.x + BUBBLE_X_OFFSET, position.y + BUBBLE_Y_OFFSET - height, 0);
+			var pos = new Vec3i((int) (position.x + BUBBLE_X_OFFSET), (int) (position.y + BUBBLE_Y_OFFSET - height), 0);
 			var poseStack = new PoseStack();
 			poseStack.translate(0, 0, 200);
 
@@ -369,15 +366,10 @@ public class GameTutorial implements GuiEventListener, NarratableEntry {
 		private final boolean forward;
 
 		public ArrowButton(Supplier<Integer> xPos, Supplier<Integer> yPos, boolean forward) {
-			super(xPos.get(), yPos.get(), ARROW_SIZE, ARROW_SIZE, TextComponent.EMPTY);
+			super(xPos.get(), yPos.get(), ARROW_SIZE, ARROW_SIZE, Component.empty());
 			this.xPos = xPos;
 			this.yPos = yPos;
 			this.forward = forward;
-		}
-
-		@Override
-		public void updateNarration(NarrationElementOutput pNarrationElementOutput) {
-
 		}
 
 		@Override
@@ -396,20 +388,21 @@ public class GameTutorial implements GuiEventListener, NarratableEntry {
 		}
 
 		private void updatePosition() {
-			this.x = xPos.get();
-			this.y = yPos.get();
+			setX(xPos.get());
+			setY(yPos.get());
 		}
 
 		@Override
-		public void renderButton(PoseStack pPoseStack, int pMouseX, int pMouseY, float pPartialTick) {
+		public void renderWidget(PoseStack pPoseStack, int pMouseX, int pMouseY, float pPartialTick) {
 			pPoseStack.pushPose();
 			pPoseStack.translate(0, 0, 200);
 			RenderSystem.setShader(GameRenderer::getPositionTexShader);
 			RenderSystem.setShaderTexture(0, TEXTURE);
 			setShaderColor();
 			RenderSystem.enableDepthTest();
-			blit(pPoseStack, x, y, forward ? 0 : ARROW_SIZE, 0, width, height, ARROW_SIZE * 2, ARROW_SIZE);
+			blit(pPoseStack, getX(), getY(), forward ? 0 : ARROW_SIZE, 0, width, height, ARROW_SIZE * 2, ARROW_SIZE);
 			pPoseStack.popPose();
+			RenderSystem.setShaderColor(1, 1, 1, 1);
 		}
 
 		private void setShaderColor() {
@@ -420,6 +413,11 @@ public class GameTutorial implements GuiEventListener, NarratableEntry {
 			} else {
 				RenderSystem.setShaderColor(1, 1, 1, 1);
 			}
+		}
+
+		@Override
+		protected void updateWidgetNarration(NarrationElementOutput pNarrationElementOutput) {
+
 		}
 
 	}
@@ -456,5 +454,15 @@ public class GameTutorial implements GuiEventListener, NarratableEntry {
 		private int getHeight() {
 			return height;
 		}
+	}
+
+	@Override
+	public void setFocused(boolean pFocused) {
+
+	}
+
+	@Override
+	public boolean isFocused() {
+		return false;
 	}
 }

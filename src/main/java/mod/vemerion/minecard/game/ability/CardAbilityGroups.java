@@ -26,21 +26,21 @@ public class CardAbilityGroups {
 		Set<CardAbilityGroup> groups = EnumSet.copyOf(list);
 
 		if (groups.isEmpty()) {
-			return DataResult.error("Card group list cannot be empty");
+			return DataResult.error(() -> "Card group list cannot be empty");
 		}
 
 		if (groups.size() != list.size()) {
-			return DataResult.error("Card group list has duplicate entries");
+			return DataResult.error(() -> "Card group list has duplicate entries");
 		}
 
 		if (groups.contains(CardAbilityGroup.ALL) && groups.size() != 1) {
-			return DataResult.error("Card group 'all' is incompatible with all other groups");
+			return DataResult.error(() -> "Card group 'all' is incompatible with all other groups");
 		}
 
 		for (var pair : INCOMPATIBLE) {
 			if (groups.contains(pair.getLeft()) && groups.contains(pair.getRight()))
-				return DataResult
-						.error("Card groups '" + pair.getLeft() + "' is incompatible with '" + pair.getRight() + "'");
+				return DataResult.error(
+						() -> "Card groups '" + pair.getLeft() + "' is incompatible with '" + pair.getRight() + "'");
 		}
 
 		return DataResult.success(new CardAbilityGroups(groups));

@@ -22,7 +22,7 @@ public class Card {
 
 	public static final Codec<Card> CODEC = ExtraCodecs
 			.lazyInitializedCodec(() -> RecordCodecBuilder.create(instance -> instance
-					.group(ForgeRegistries.ENTITIES.getCodec().optionalFieldOf("entity").forGetter(Card::getType),
+					.group(ForgeRegistries.ENTITY_TYPES.getCodec().optionalFieldOf("entity").forGetter(Card::getType),
 							Codec.INT.fieldOf("cost").forGetter(Card::getCost),
 							Codec.INT.fieldOf("original_cost").forGetter(Card::getOriginalCost),
 							Codec.INT.fieldOf("health").forGetter(Card::getHealth),

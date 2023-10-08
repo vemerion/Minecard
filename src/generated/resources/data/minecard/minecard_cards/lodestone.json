@@ -1,21 +1,12 @@
 {
-  "additional_data": {
-    "item": {
-      "id": "minecraft:lodestone",
-      "Count": 1
-    }
-  },
   "abilities": {
     "type": "minecard:chain",
     "value": {
-      "triggers": [
-        "summon"
-      ],
-      "text_key": "card_ability.minecard.lodestone",
       "abilities": [
         {
           "type": "minecard:select_cards",
           "value": {
+            "clear": true,
             "selection": {
               "groups": [
                 "enemy_hand"
@@ -23,8 +14,7 @@
               "method": {
                 "type": "minecard:all"
               }
-            },
-            "clear": true
+            }
           }
         },
         {
@@ -33,15 +23,16 @@
         {
           "type": "minecard:move_collected",
           "value": {
-            "source": 0,
-            "destination": 1,
+            "clear_destination": false,
             "clear_source": false,
-            "clear_destination": false
+            "destination": 1,
+            "source": 0
           }
         },
         {
           "type": "minecard:select_cards",
           "value": {
+            "clear": true,
             "selection": {
               "groups": [
                 "your_hand"
@@ -49,63 +40,72 @@
               "method": {
                 "type": "minecard:all"
               }
-            },
-            "clear": true
+            }
           }
         },
         {
           "type": "minecard:remove_cards"
         },
         {
-          "placement": "enemy_hand",
-          "type": "minecard:place_cards"
+          "type": "minecard:place_cards",
+          "placement": "enemy_hand"
         },
         {
           "type": "minecard:move_collected",
           "value": {
-            "source": 0,
+            "clear_destination": false,
+            "clear_source": false,
             "destination": 2,
-            "clear_source": false,
-            "clear_destination": false
+            "source": 0
           }
         },
         {
           "type": "minecard:move_collected",
           "value": {
-            "source": 1,
-            "destination": 0,
+            "clear_destination": true,
             "clear_source": false,
-            "clear_destination": true
+            "destination": 0,
+            "source": 1
           }
         },
         {
-          "placement": "your_hand",
-          "type": "minecard:place_cards"
+          "type": "minecard:place_cards",
+          "placement": "your_hand"
         },
         {
           "type": "minecard:move_collected",
           "value": {
-            "source": 2,
-            "destination": 0,
+            "clear_destination": false,
             "clear_source": false,
-            "clear_destination": false
+            "destination": 0,
+            "source": 2
           }
         },
         {
           "type": "minecard:history",
           "value": {
             "icon": {
-              "id": "minecraft:book",
-              "Count": 1
+              "Count": 1,
+              "id": "minecraft:book"
             },
             "visibility": "all"
           }
         }
+      ],
+      "text_key": "card_ability.minecard.lodestone",
+      "triggers": [
+        "summon"
       ]
     }
   },
-  "entity": "minecraft:item",
+  "additional_data": {
+    "item": {
+      "Count": 1,
+      "id": "minecraft:lodestone"
+    }
+  },
   "cost": 8,
-  "health": 0,
-  "damage": 0
+  "damage": 0,
+  "entity": "minecraft:item",
+  "health": 0
 }
