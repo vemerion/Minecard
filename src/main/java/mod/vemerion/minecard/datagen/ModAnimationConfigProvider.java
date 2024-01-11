@@ -160,6 +160,9 @@ public class ModAnimationConfigProvider implements DataProvider {
 		animations.put("soul_sand", new BlockAnimationConfig(Blocks.SOUL_SAND));
 		animations.put("throw_pumpkin", new ThrowItemAnimationConfig(Items.PUMPKIN, Optional.empty(),
 				Optional.of(SoundEvents.PUMPKIN_CARVE), Optional.empty()));
+		animations.put("frog_charge",
+				new EntityAnimationConfig(EntityType.FROG, true, 30, 25, 1, Optional.of(SoundEvents.FROG_TONGUE),
+						Optional.of(SoundEvents.FROG_STEP), Optional.of(SoundEvents.FROG_EAT)));
 
 	}
 

@@ -45,6 +45,16 @@
     },
     "start_sound": "minecraft:entity.ghast.shoot"
   },
+  "frog_charge": {
+    "type": "minecard:charge",
+    "duration": 30,
+    "duration_sound": "minecraft:entity.frog.step",
+    "entity": "minecraft:frog",
+    "impact_sound": "minecraft:entity.frog.eat",
+    "moving": true,
+    "size": 25,
+    "start_sound": "minecraft:entity.frog.tongue"
+  },
   "glow": {
     "type": "minecard:glow"
   },

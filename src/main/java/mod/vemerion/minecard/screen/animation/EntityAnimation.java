@@ -14,6 +14,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.animal.frog.Frog;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.minecraft.world.entity.projectile.EvokerFangs;
 import net.minecraft.world.phys.Vec2;
@@ -45,6 +46,9 @@ public class EntityAnimation extends Animation {
 		this.durationSound = durationSound;
 		this.impactSound = impactSound;
 		this.entity = create(type);
+		if (entity instanceof Frog frog) {
+			frog.tongueAnimationState.start(frog.tickCount);
+		}
 	}
 
 	private Entity create(EntityType<?> type) {
@@ -83,6 +87,7 @@ public class EntityAnimation extends Animation {
 	@Override
 	public void tick() {
 		timer++;
+		entity.tickCount++;
 		if (timer == soundDelay && startSound.isPresent())
 			mc.getSoundManager().play(SimpleSoundInstance.forUI(startSound.get(), 1));
 		if (timer % 10 == 1 && durationSound.isPresent())

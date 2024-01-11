@@ -661,7 +661,7 @@ public class ModCardProvider implements DataProvider {
 						new CardSelectionMethod.Choice(false),
 						new CardCondition.OperatorCondition(new CardOperator.GreaterThan(new CardOperator.Constant(4),
 								new CardOperator.Variable(CardVariable.MAX_HEALTH))))),
-						new AnimationAbility(mod("throw_snowball")), history(), new RemoveCardsAbility(),
+						new AnimationAbility(mod("frog_charge")), history(), new RemoveCardsAbility(),
 						new MoveCollectedAbility(0, 1, true, false),
 						new SelectCardsAbility(
 								new CardAbilitySelection(new CardAbilityGroups(EnumSet.of(CardAbilityGroup.SELF)),
