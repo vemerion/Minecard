@@ -654,6 +654,28 @@ public class ModCardProvider implements DataProvider {
 		add(new Builder(EntityType.PIGLIN, 5, 4, 4).setCardAbility(addCards(EnumSet.of(CardAbilityTrigger.SUMMON),
 				textKey("piglin"), List.of(new LazyCardType(mod("iron_boots")), new LazyCardType(mod("ender_pearl")),
 						new LazyCardType(mod("fire_charge"))))));
+		add(new Builder(EntityType.FROG, 3, 1, 1).setCardAbility(new ChainAbility(EnumSet.of(CardAbilityTrigger.SUMMON),
+				textKey("frog"),
+				List.of(new SelectCardsAbility(new CardAbilitySelection(
+						new CardAbilityGroups(EnumSet.of(CardAbilityGroup.ENEMY_BOARD, CardAbilityGroup.YOUR_BOARD)),
+						new CardSelectionMethod.Choice(false),
+						new CardCondition.OperatorCondition(new CardOperator.GreaterThan(new CardOperator.Constant(4),
+								new CardOperator.Variable(CardVariable.MAX_HEALTH))))),
+						new AnimationAbility(mod("throw_snowball")), history(), new RemoveCardsAbility(),
+						new MoveCollectedAbility(0, 1, true, false),
+						new SelectCardsAbility(
+								new CardAbilitySelection(new CardAbilityGroups(EnumSet.of(CardAbilityGroup.SELF)),
+										CardSelectionMethod.All.ALL, CardCondition.NoCondition.NO_CONDITION)),
+						new ModifyAbility(List.of(new ModificationBuilder()
+								.put(new CardModification(CardVariable.MAX_HEALTH,
+										new CardOperator.Add(new CardOperator.Variable(CardVariable.MAX_HEALTH),
+												new CardOperator.CollectedAny(1,
+														new CardOperator.Variable(CardVariable.MAX_HEALTH)))))
+								.put(new CardModification(CardVariable.DAMAGE,
+										new CardOperator.Add(new CardOperator.Variable(CardVariable.DAMAGE),
+												new CardOperator.CollectedAny(1,
+														new CardOperator.Variable(CardVariable.DAMAGE)))))
+								.build()))))));
 
 		// Spells
 		add(new Builder(EntityType.ITEM, 4, 0, 0).setKey(mod("fishing_rod"))

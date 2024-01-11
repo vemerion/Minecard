@@ -57,6 +57,7 @@
   "card_ability.minecard.fire_charge": "Select a card from the board and give it 3 burn.",
   "card_ability.minecard.fishing_rod": "Steal a selected card from the enemy hand.",
   "card_ability.minecard.fox": "Summon: Spawn a sweet berries card.",
+  "card_ability.minecard.frog": "Summon: Devour a creature with less than 4 health, and gain its stats.",
   "card_ability.minecard.ghast": "Summon: Apply 4 burn to the enemy player.",
   "card_ability.minecard.glow_squid": "Summon: Reveal all cards on the board.",
   "card_ability.minecard.goat": "Summon: Return an enemy card to their hand.",
