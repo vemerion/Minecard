@@ -10,6 +10,7 @@ import org.joml.Vector3f;
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.vertex.PoseStack;
 
+import mod.vemerion.minecard.helper.Helper;
 import mod.vemerion.minecard.screen.animation.ParticlesAnimation;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.narration.NarratableEntry;
@@ -27,13 +28,17 @@ import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.animal.Dolphin;
+import net.minecraft.world.entity.animal.SnowGolem;
 import net.minecraft.world.entity.monster.Skeleton;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.CarvedPumpkinBlock;
 import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.ChestBlockEntity;
@@ -112,6 +117,12 @@ public class GameBackground implements GuiEventListener, NarratableEntry {
 		objects.add(new Corpse(new Vector3f(30 * blockWidth, 2 * blockHeight, BASE_Z + 20)));
 		objects.add(new Fish(new Vector3f(1 * blockWidth, 15 * blockHeight, BASE_Z + 15)));
 		objects.add(new Cactus(new Vector3f(29 * blockWidth, 6 * blockHeight, BASE_Z + 1)));
+		if (Helper.isChristmas()) {
+			objects.add(new Snowman(new Vector3f(27 * blockWidth, 6 * blockHeight, BASE_Z + 1)));
+		} else if (Helper.isNewYear()) {
+			objects.add(new Firework(new Vector3f(27 * blockWidth, 6 * blockHeight, BASE_Z + 1)));
+
+		}
 	}
 
 	@Override
@@ -171,7 +182,7 @@ public class GameBackground implements GuiEventListener, NarratableEntry {
 
 	public void render(PoseStack ps, int mouseX, int mouseY, BufferSource source, float partialTick) {
 		for (var object : objects)
-			object.render(ps, source);
+			object.render(ps, source, partialTick);
 
 		var poseStack = new PoseStack();
 		for (int i = 0; i < GRID.length; i++) {
@@ -240,7 +251,7 @@ public class GameBackground implements GuiEventListener, NarratableEntry {
 
 		}
 
-		protected void render(PoseStack poseStack, BufferSource source) {
+		protected void render(PoseStack poseStack, BufferSource source, float partialTick) {
 
 		}
 
@@ -296,7 +307,7 @@ public class GameBackground implements GuiEventListener, NarratableEntry {
 		}
 
 		@Override
-		protected void render(PoseStack poseStack, BufferSource source) {
+		protected void render(PoseStack poseStack, BufferSource source, float partialTick) {
 			renderBlock(poseStack, blockEntity, blockEntity.getBlockState(), source, pos.x(), pos.y(), pos.z());
 			poseStack.pushPose();
 			poseStack.translate(pos.x() + blockWidth / 2, pos.y() + blockHeight * 0.35, pos.z() + 0.5f);
@@ -326,7 +337,7 @@ public class GameBackground implements GuiEventListener, NarratableEntry {
 		}
 
 		@Override
-		protected void render(PoseStack poseStack, BufferSource source) {
+		protected void render(PoseStack poseStack, BufferSource source, float partialTick) {
 			renderBlock(poseStack, null, state, source, pos.x(), pos.y(), pos.z());
 		}
 
@@ -385,7 +396,7 @@ public class GameBackground implements GuiEventListener, NarratableEntry {
 		}
 
 		@Override
-		protected void render(PoseStack poseStack, BufferSource source) {
+		protected void render(PoseStack poseStack, BufferSource source, float partialTick) {
 			poseStack.pushPose();
 			poseStack.translate(pos.x() + blockWidth / 2, pos.y() - blockHeight / 2, pos.z());
 			poseStack.scale(22, 22, 22);
@@ -436,7 +447,7 @@ public class GameBackground implements GuiEventListener, NarratableEntry {
 		}
 
 		@Override
-		protected void render(PoseStack poseStack, BufferSource source) {
+		protected void render(PoseStack poseStack, BufferSource source, float partialTick) {
 			var mc = screen.getMinecraft();
 			var progress = swimTimer == 0 ? 0 : (SWIM_DURATION - swimTimer + mc.getFrameTime()) / SWIM_DURATION;
 			poseStack.pushPose();
@@ -462,7 +473,9 @@ public class GameBackground implements GuiEventListener, NarratableEntry {
 		protected Cactus(Vector3f pos) {
 			super(pos);
 			this.startPos = new Vector3f(pos.x(), pos.y(), pos.z());
-			this.state = Blocks.CACTUS.defaultBlockState();
+			this.state = Helper.isHalloween()
+					? Blocks.CARVED_PUMPKIN.defaultBlockState().setValue(CarvedPumpkinBlock.FACING, Direction.SOUTH)
+					: Blocks.CACTUS.defaultBlockState();
 		}
 
 		@Override
@@ -477,7 +490,7 @@ public class GameBackground implements GuiEventListener, NarratableEntry {
 		}
 
 		@Override
-		protected void render(PoseStack poseStack, BufferSource source) {
+		protected void render(PoseStack poseStack, BufferSource source, float partialTick) {
 			renderBlock(poseStack, null, state, source, pos.x(), pos.y(), pos.z());
 		}
 	}
@@ -512,7 +525,7 @@ public class GameBackground implements GuiEventListener, NarratableEntry {
 		}
 
 		@Override
-		protected void render(PoseStack poseStack, BufferSource source) {
+		protected void render(PoseStack poseStack, BufferSource source, float partialTick) {
 			var mc = screen.getMinecraft();
 			var bufferbuilder = source.getBuffer(RenderType.text(TEXTURE));
 
@@ -537,6 +550,49 @@ public class GameBackground implements GuiEventListener, NarratableEntry {
 
 	}
 
+	private class Snowman extends BackgroundObject {
+
+		private SnowGolem entity;
+
+		protected Snowman(Vector3f pos) {
+			super(pos);
+			var mc = screen.getMinecraft();
+			entity = new SnowGolem(EntityType.SNOW_GOLEM, mc.level);
+			entity.setPumpkin(false);
+		}
+
+		@Override
+		protected void tick() {
+			entity.tickCount++;
+		}
+
+		@Override
+		protected boolean click(double x, double y, int pButton) {
+			if (contains(x, y)) {
+				screen.getMinecraft().getSoundManager()
+						.play(SimpleSoundInstance.forUI(SoundEvents.SNOW_GOLEM_SHOOT, 1));
+				objects.add(new ItemObject(new Vector3f(pos.x, pos.y, pos.z + 50),
+						new Vector3f((float) Math.random() - 0.5f, (float) Math.random() - 0.5f, 0).normalize().mul(3),
+						Items.SNOWBALL, true));
+				return true;
+			}
+			return super.click(x, y, pButton);
+		}
+
+		@Override
+		protected void render(PoseStack poseStack, BufferSource source, float partialTick) {
+			var mc = screen.getMinecraft();
+			poseStack.pushPose();
+			poseStack.translate(pos.x + blockWidth / 2, pos.y + blockHeight / 2, pos.z);
+			poseStack.scale(blockWidth, blockWidth, blockWidth);
+			poseStack.mulPose(TransformationHelper.quatFromXYZ(120, -180, 0, true));
+			mc.getEntityRenderDispatcher().getRenderer(entity).render(entity, 0, 0, poseStack, source,
+					light(pos.x(), pos.y()));
+			poseStack.popPose();
+		}
+
+	}
+
 	@Override
 	public void setFocused(boolean pFocused) {
 
@@ -545,6 +601,69 @@ public class GameBackground implements GuiEventListener, NarratableEntry {
 	@Override
 	public boolean isFocused() {
 		return false;
+	}
+
+	private class ItemObject extends BackgroundObject {
+
+		private static final int DURATION = 30;
+
+		private ItemStack stack;
+		private Vector3f velocity;
+		private int timer;
+		protected boolean move;
+
+		private ItemObject(Vector3f pos, Vector3f velocity, Item item, boolean move) {
+			super(pos);
+			this.velocity = velocity;
+			this.stack = item.getDefaultInstance();
+			this.move = move;
+			timer = DURATION;
+		}
+
+		@Override
+		protected void tick() {
+			if (move) {
+				pos.add(velocity);
+				timer--;
+			}
+		}
+
+		@Override
+		protected boolean isDone() {
+			return timer < 0;
+		}
+
+		@Override
+		protected void render(PoseStack poseStack, BufferSource source, float partialTick) {
+			poseStack.pushPose();
+			var p = pos;
+			if (move) {
+				pos.lerp(new Vector3f(pos).add(velocity), partialTick, p);
+			}
+			poseStack.translate(p.x() + blockWidth / 2, p.y() + blockHeight * 0.35, p.z() + 0.5f);
+			var size = Mth.lerp((float) (timer - partialTick) / DURATION, 0, 10);
+			poseStack.scale(size, -size, size);
+			screen.getMinecraft().getItemRenderer().renderStatic(stack, ItemDisplayContext.NONE, light(p.x(), p.y()),
+					OverlayTexture.NO_OVERLAY, poseStack, source, null, 0);
+			poseStack.popPose();
+		}
+	}
+
+	private class Firework extends ItemObject {
+
+		private Firework(Vector3f pos) {
+			super(pos, new Vector3f(0, -3, 0), Items.FIREWORK_ROCKET, false);
+		}
+
+		@Override
+		protected boolean click(double x, double y, int pButton) {
+			if (contains(x, y) && !move) {
+				screen.getMinecraft().getSoundManager()
+						.play(SimpleSoundInstance.forUI(SoundEvents.FIREWORK_ROCKET_LAUNCH, 1));
+				move = true;
+			}
+			return super.click(x, y, pButton);
+		}
 	}
 
 }
