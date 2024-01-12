@@ -4,12 +4,19 @@ import net.minecraft.network.FriendlyByteBuf;
 
 public class GameOverMessage extends ServerToClientMessage {
 
+	private final boolean defeat;
+
+	public GameOverMessage(boolean defeat) {
+		this.defeat = defeat;
+	}
+
 	@Override
 	public void encode(final FriendlyByteBuf buffer) {
+		buffer.writeBoolean(defeat);
 	}
 
 	public static GameOverMessage decode(final FriendlyByteBuf buffer) {
-		return new GameOverMessage();
+		return new GameOverMessage(buffer.readBoolean());
 	}
 
 	@Override
@@ -19,6 +26,6 @@ public class GameOverMessage extends ServerToClientMessage {
 
 	@Override
 	public void handle(GameClient client) {
-		client.gameOver();
+		client.gameOver(defeat);
 	}
 }

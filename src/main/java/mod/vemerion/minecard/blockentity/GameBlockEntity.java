@@ -97,7 +97,8 @@ public class GameBlockEntity extends BlockEntity {
 			}
 
 			for (var receiver : getReceivers()) {
-				receiver.receiver(new GameOverMessage());
+				receiver.receiver(new GameOverMessage(state.getPlayerStates().stream()
+						.anyMatch(s -> s.getId() == receiver.getId() && s.isGameOver())));
 			}
 
 			state = new GameState();

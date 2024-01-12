@@ -25,7 +25,7 @@ public interface GameClient {
 
 	public void setProperties(UUID id, int cardId, Map<ResourceLocation, Integer> properties);
 
-	public void gameOver();
+	public void gameOver(boolean defeat);
 
 	public void drawCards(UUID id, List<Card> cards, boolean shrinkDeck);
 

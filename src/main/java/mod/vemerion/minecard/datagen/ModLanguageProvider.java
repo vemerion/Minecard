@@ -55,6 +55,8 @@ public class ModLanguageProvider extends LanguageProvider {
 
 		add(Helper.gui("next_turn"), "Next Turn");
 		add(Helper.gui("game_over"), "Game Over");
+		add(Helper.gui("victory"), "Victory!");
+		add(Helper.gui("defeat"), "Defeat!");
 		add(Helper.gui("resources_count"), "%s/%s");
 		add(Helper.gui("deck_count"), "%s");
 		add(Helper.gui("choose"), "Choose a card for ability:");

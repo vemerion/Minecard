@@ -47,6 +47,7 @@ import mod.vemerion.minecard.screen.animation.BurnAnimation;
 import mod.vemerion.minecard.screen.animation.ChargeAnimation;
 import mod.vemerion.minecard.screen.animation.DeathAnimation;
 import mod.vemerion.minecard.screen.animation.FreezeAnimation;
+import mod.vemerion.minecard.screen.animation.GameOverAnimation;
 import mod.vemerion.minecard.screen.animation.HealthAnimation;
 import mod.vemerion.minecard.screen.animation.PoisonAnimation;
 import mod.vemerion.minecard.screen.animation.StealthAnimation;
@@ -90,6 +91,9 @@ public class GameScreen extends Screen implements GameClient {
 	public static final Component TITLE = Component.translatable("gui." + Main.MODID + ".game");
 	private static final Component NEXT_TURN = Component.translatable(Helper.gui("next_turn"));
 	private static final Component GAME_OVER = Component.translatable(Helper.gui("game_over"));
+	private static final Component VICTORY = Component.translatable(Helper.gui("victory"));
+	private static final Component DEFEAT = Component.translatable(Helper.gui("defeat"));
+
 	private static final Component CHOOSE_TEXT = Component.translatable(Helper.gui("choose"));
 	private static final Component MULLIGAN_TEXT = Component.translatable(Helper.gui("mulligan"));
 	private static final Component CONFIRM = Component.translatable(Helper.gui("confirm"));
@@ -362,8 +366,13 @@ public class GameScreen extends Screen implements GameClient {
 	}
 
 	@Override
-	public void gameOver() {
-		popup.popup(GAME_OVER);
+	public void gameOver(boolean defeat) {
+		if (isSpectator) {
+			popup.popup(GAME_OVER);
+		} else {
+			popup.popup(defeat ? DEFEAT : VICTORY);
+			animations.add(new GameOverAnimation(minecraft, minecraft.player, defeat));
+		}
 		tutorial.ifPresent(t -> t.unlock(GameTutorial.UnlockAction.GAME_OVER));
 	}
 
@@ -1081,7 +1090,8 @@ public class GameScreen extends Screen implements GameClient {
 		public void render(PoseStack pPoseStack, int pMouseX, int pMouseY, float pPartialTick) {
 			var font = minecraft.font;
 			pPoseStack.pushPose();
-			pPoseStack.translate(width / 2 - font.width(text) * scale / 2, height / 2 - font.lineHeight / 2 * scale, 0);
+			pPoseStack.translate(width / 2 - font.width(text) * scale / 2, height / 2 - font.lineHeight / 2 * scale,
+					150);
 			pPoseStack.scale(scale, scale, scale);
 			font.draw(pPoseStack, text, 0, 0, FastColor.ARGB32.color(alpha, 255, 255, 0));
 			pPoseStack.popPose();

@@ -184,7 +184,7 @@ public class AIPlayer implements GameClient {
 	}
 
 	@Override
-	public void gameOver() {
+	public void gameOver(boolean defeat) {
 		isGameOver = true;
 	}
 
