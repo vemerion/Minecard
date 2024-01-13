@@ -1,6 +1,12 @@
 {
   "parent": "minecraft:minecard/root",
   "criteria": {
+    "has_minecraft:allay": {
+      "conditions": {
+        "card": "minecraft:allay"
+      },
+      "trigger": "minecard:collect_card"
+    },
     "has_minecraft:axolotl": {
       "conditions": {
         "card": "minecraft:axolotl"
@@ -106,6 +112,12 @@
     "has_minecraft:fox": {
       "conditions": {
         "card": "minecraft:fox"
+      },
+      "trigger": "minecard:collect_card"
+    },
+    "has_minecraft:frog": {
+      "conditions": {
+        "card": "minecraft:frog"
       },
       "trigger": "minecard:collect_card"
     },
@@ -322,6 +334,12 @@
     "has_minecraft:strider": {
       "conditions": {
         "card": "minecraft:strider"
+      },
+      "trigger": "minecard:collect_card"
+    },
+    "has_minecraft:tadpole": {
+      "conditions": {
+        "card": "minecraft:tadpole"
       },
       "trigger": "minecard:collect_card"
     },
@@ -629,6 +647,15 @@
     ],
     [
       "has_minecraft:zombified_piglin"
+    ],
+    [
+      "has_minecraft:frog"
+    ],
+    [
+      "has_minecraft:tadpole"
+    ],
+    [
+      "has_minecraft:allay"
     ]
   ]
 }

@@ -25,7 +25,8 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 public class ModAdvancementProvider implements AdvancementGenerator {
 
-	private static final List<EntityType<?>> BOSSES = List.of(EntityType.ENDER_DRAGON, EntityType.WITHER);
+	private static final List<EntityType<?>> BOSSES = List.of(EntityType.ENDER_DRAGON, EntityType.WITHER,
+			EntityType.WARDEN);
 	private static final List<EntityType<?>> MOBS = List.of(EntityType.SNOW_GOLEM, EntityType.WITHER_SKELETON,
 			EntityType.VILLAGER, EntityType.PHANTOM, EntityType.ELDER_GUARDIAN, EntityType.SHULKER,
 			EntityType.ENDERMITE, EntityType.DONKEY, EntityType.WOLF, EntityType.STRAY, EntityType.LLAMA,
@@ -40,7 +41,7 @@ public class ModAdvancementProvider implements AdvancementGenerator {
 			EntityType.GHAST, EntityType.TURTLE, EntityType.WANDERING_TRADER, EntityType.POLAR_BEAR, EntityType.RAVAGER,
 			EntityType.HUSK, EntityType.GUARDIAN, EntityType.SKELETON, EntityType.SILVERFISH, EntityType.EVOKER,
 			EntityType.TROPICAL_FISH, EntityType.PARROT, EntityType.COD, EntityType.BAT, EntityType.PANDA,
-			EntityType.ZOMBIFIED_PIGLIN);
+			EntityType.ZOMBIFIED_PIGLIN, EntityType.FROG, EntityType.TADPOLE, EntityType.ALLAY);
 
 	@Override
 	public void generate(HolderLookup.Provider registries, Consumer<Advancement> consumer,

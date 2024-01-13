@@ -7,6 +7,12 @@
       },
       "trigger": "minecard:collect_card"
     },
+    "has_minecraft:warden": {
+      "conditions": {
+        "card": "minecraft:warden"
+      },
+      "trigger": "minecard:collect_card"
+    },
     "has_minecraft:wither": {
       "conditions": {
         "card": "minecraft:wither"
@@ -32,7 +38,8 @@
   "requirements": [
     [
       "has_minecraft:ender_dragon",
-      "has_minecraft:wither"
+      "has_minecraft:wither",
+      "has_minecraft:warden"
     ]
   ]
 }
