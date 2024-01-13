@@ -38,5 +38,6 @@ public class ModCardConditions {
 	public static final RegistryObject<CardConditionType<? extends CardCondition>> OPERATOR = CARD_CONDITIONS.register(
 			"operator",
 			() -> new CardConditionType<CardCondition.OperatorCondition>(CardCondition.OperatorCondition.CODEC));
-
+	public static final RegistryObject<CardConditionType<? extends CardCondition>> IS_SPELL = CARD_CONDITIONS
+			.register("is_spell", () -> new CardConditionType<CardCondition.IsSpell>(CardCondition.IsSpell.CODEC));
 }

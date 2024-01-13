@@ -1,0 +1,67 @@
+{
+  "abilities": {
+    "type": "minecard:chain",
+    "value": {
+      "abilities": [
+        {
+          "type": "minecard:select_cards",
+          "value": {
+            "selection": {
+              "condition": {
+                "type": "minecard:is_spell"
+              },
+              "groups": [
+                "enemy_deck"
+              ],
+              "method": {
+                "type": "minecard:random",
+                "value": {
+                  "count": 3,
+                  "repeat": false
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "minecard:select_cards",
+          "value": {
+            "clear": true,
+            "selection": {
+              "groups": [
+                "collected"
+              ],
+              "method": {
+                "type": "minecard:choice",
+                "value": {
+                  "discover": true
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "minecard:place_cards",
+          "placement": "your_hand"
+        },
+        {
+          "type": "minecard:history",
+          "value": {
+            "icon": {
+              "Count": 1,
+              "id": "minecraft:book"
+            }
+          }
+        }
+      ],
+      "text_key": "card_ability.minecard.allay",
+      "triggers": [
+        "summon"
+      ]
+    }
+  },
+  "cost": 3,
+  "damage": 2,
+  "entity": "minecraft:allay",
+  "health": 3
+}

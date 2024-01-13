@@ -23,6 +23,7 @@
   "advancements.minecard.zombie_buff.title": "Zombie horde",
   "block.minecard.game": "Game Board",
   "card_ability.minecard.absorption_potion": "Select a card from the board and give it shield.",
+  "card_ability.minecard.allay": "Summon: Discover a spell from the enemy deck and add a copy of it to your hand.",
   "card_ability.minecard.amethyst_shard": "Draw a card. Deal damage equal to the cost of the drawn card to a random enemy card on the board.",
   "card_ability.minecard.axolotl": "Hurt: Gain stealth.",
   "card_ability.minecard.bamboo": "Grow: Give all pands on the board +2/+2.",

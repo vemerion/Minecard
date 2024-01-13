@@ -220,4 +220,24 @@ public abstract class CardCondition {
 			return operator;
 		}
 	}
+
+	public static class IsSpell extends CardCondition {
+
+		public static final IsSpell IS_SPELL = new IsSpell();
+
+		public static final Codec<IsSpell> CODEC = Codec.unit(IS_SPELL);
+
+		private IsSpell() {
+		}
+
+		@Override
+		public boolean test(Card t, Collected collected) {
+			return t.isSpell();
+		}
+
+		@Override
+		protected CardConditionType<?> getType() {
+			return ModCardConditions.IS_SPELL.get();
+		}
+	}
 }

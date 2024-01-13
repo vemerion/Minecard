@@ -196,6 +196,7 @@ public class ModLanguageProvider extends LanguageProvider {
 		card("zoglin", "Death: Gain a rotten flesh card.");
 		card("piglin", "Summon: Gain a random barter card.");
 		card("frog", "Summon: Devour a creature with 3 or less max health, and gain its stats.");
+		card("allay", "Summon: Discover a spell from the enemy deck and add a copy of it to your hand.");
 		card("sweet_berries", "Death: Gain a sweet berries card.");
 		card("pufferfish_bucket", "Summon: Spawn a Pufferfish card.");
 		card("buried_treasure", "Death: Gain a random treasure card.");

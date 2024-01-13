@@ -676,6 +676,16 @@ public class ModCardProvider implements DataProvider {
 												new CardOperator.CollectedAny(1,
 														new CardOperator.Variable(CardVariable.DAMAGE)))))
 								.build()))))));
+		add(new Builder(EntityType.ALLAY, 3, 3, 2)
+				.setCardAbility(new ChainAbility(EnumSet.of(CardAbilityTrigger.SUMMON), textKey("allay"), List.of(
+						new SelectCardsAbility(
+								new CardAbilitySelection(new CardAbilityGroups(EnumSet.of(CardAbilityGroup.ENEMY_DECK)),
+										new CardSelectionMethod.Random(3, false), CardCondition.IsSpell.IS_SPELL)),
+						new SelectCardsAbility(
+								new CardAbilitySelection(new CardAbilityGroups(EnumSet.of(CardAbilityGroup.COLLECTED)),
+										new CardSelectionMethod.Choice(true), CardCondition.NoCondition.NO_CONDITION),
+								true),
+						new PlaceCardsAbility(CardPlacement.YOUR_HAND), history()))));
 
 		// Spells
 		add(new Builder(EntityType.ITEM, 4, 0, 0).setKey(mod("fishing_rod"))
