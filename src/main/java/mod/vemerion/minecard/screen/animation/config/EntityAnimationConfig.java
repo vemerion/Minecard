@@ -65,7 +65,7 @@ public class EntityAnimationConfig extends AnimationConfig {
 					new EntityAnimation(
 							game.getMinecraft(), moving
 									? (origin != null
-											? origin.getPosition().add(
+											? origin.getDestination().add(
 													new Vec2(ClientCard.CARD_WIDTH / 2, ClientCard.CARD_HEIGHT / 2))
 											: new Vec2(game.width / 2, game.height / 2))
 									: null,

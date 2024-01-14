@@ -69,6 +69,10 @@ public class ClientCard extends Card {
 	public Vec2 getPosition() {
 		return position;
 	}
+	
+	public Vec2 getDestination() {
+		return targetPosition != null ? targetPosition : position;
+	}
 
 	public void setPosition(Vec2 position) {
 		this.targetPosition = position;
