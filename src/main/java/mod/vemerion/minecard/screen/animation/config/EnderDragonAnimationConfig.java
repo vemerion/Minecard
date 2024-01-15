@@ -37,7 +37,7 @@ public class EnderDragonAnimationConfig extends AnimationConfig {
 		var end = new Vec2(game.width + 50, target.y + ClientCard.CARD_HEIGHT / 2);
 		game.addAnimation(new EntityAnimation(game.getMinecraft(), start, () -> end, EntityType.ENDER_DRAGON, 60, 6, 1,
 				Optional.of(SoundEvents.ENDER_DRAGON_GROWL), Optional.of(SoundEvents.ENDER_DRAGON_FLAP),
-				Optional.empty(), () -> {
+				Optional.empty(), EntityAnimation.SpecialAnimation.NONE, () -> {
 				}));
 		new PotionAnimationConfig(new ParticlesAnimation.Color(0.8f, 0, 0.9f)).invoke(game, origin, targets);
 	}

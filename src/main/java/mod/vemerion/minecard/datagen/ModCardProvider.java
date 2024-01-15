@@ -686,6 +686,12 @@ public class ModCardProvider implements DataProvider {
 										new CardSelectionMethod.Choice(true), CardCondition.NoCondition.NO_CONDITION),
 								true),
 						new PlaceCardsAbility(CardPlacement.YOUR_HAND), history()))));
+		add(new Builder(EntityType.WARDEN, 10, 15, 15).setDeckCount(1).setDropChance(1)
+				.setCardAbility(new ChainAbility(EnumSet.of(CardAbilityTrigger.SUMMON), "", List.of(
+						new SelectCardsAbility(
+								new CardAbilitySelection(new CardAbilityGroups(EnumSet.of(CardAbilityGroup.SELF)),
+										CardSelectionMethod.All.ALL, CardCondition.NoCondition.NO_CONDITION)),
+						new AnimationAbility(mod("warden"))))));
 
 		// Spells
 		add(new Builder(EntityType.ITEM, 4, 0, 0).setKey(mod("fishing_rod"))

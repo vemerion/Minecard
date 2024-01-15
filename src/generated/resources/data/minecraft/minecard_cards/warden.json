@@ -1,0 +1,38 @@
+{
+  "abilities": {
+    "type": "minecard:chain",
+    "value": {
+      "abilities": [
+        {
+          "type": "minecard:select_cards",
+          "value": {
+            "selection": {
+              "groups": [
+                "self"
+              ],
+              "method": {
+                "type": "minecard:all"
+              }
+            }
+          }
+        },
+        {
+          "type": "minecard:animation",
+          "value": {
+            "animation": "minecard:warden"
+          }
+        }
+      ],
+      "text_key": "",
+      "triggers": [
+        "summon"
+      ]
+    }
+  },
+  "cost": 10,
+  "damage": 15,
+  "deck_count": 1,
+  "drop_chance": 1.0,
+  "entity": "minecraft:warden",
+  "health": 15
+}

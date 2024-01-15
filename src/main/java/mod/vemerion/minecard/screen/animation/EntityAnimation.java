@@ -4,7 +4,9 @@ import java.util.Optional;
 import java.util.function.Supplier;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.serialization.Codec;
 
+import mod.vemerion.minecard.game.GameUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource.BufferSource;
@@ -16,11 +18,29 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.animal.frog.Frog;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
+import net.minecraft.world.entity.monster.warden.Warden;
 import net.minecraft.world.entity.projectile.EvokerFangs;
 import net.minecraft.world.phys.Vec2;
 import net.minecraftforge.common.util.TransformationHelper;
 
 public class EntityAnimation extends Animation {
+
+	public static enum SpecialAnimation {
+		NONE("none"), EVOKER_FANGS_EAT("evoker_fangs_eat"), FROG_TONGUE("frog_tongue"), WARDEN_SPAWN("warden_spawn");
+
+		public static final Codec<SpecialAnimation> CODEC = GameUtil.enumCodec(SpecialAnimation.class,
+				SpecialAnimation::getName);
+
+		private String name;
+
+		private SpecialAnimation(String name) {
+			this.name = name;
+		}
+
+		public String getName() {
+			return name;
+		}
+	}
 
 	private final Vec2 start;
 	private Supplier<Vec2> target;
@@ -32,10 +52,11 @@ public class EntityAnimation extends Animation {
 	private Optional<SoundEvent> startSound;
 	private Optional<SoundEvent> durationSound;
 	private Optional<SoundEvent> impactSound;
+	private SpecialAnimation specialAnimation;
 
 	public EntityAnimation(Minecraft mc, Vec2 start, Supplier<Vec2> target, EntityType<?> type, int duration, int size,
 			int soundDelay, Optional<SoundEvent> startSound, Optional<SoundEvent> durationSound,
-			Optional<SoundEvent> impactSound, Runnable onDone) {
+			Optional<SoundEvent> impactSound, SpecialAnimation specialAnimation, Runnable onDone) {
 		super(mc, onDone);
 		this.start = start;
 		this.target = target;
@@ -45,14 +66,21 @@ public class EntityAnimation extends Animation {
 		this.startSound = startSound;
 		this.durationSound = durationSound;
 		this.impactSound = impactSound;
+		this.specialAnimation = specialAnimation;
 		this.entity = create(type);
-		if (entity instanceof Frog frog) {
+		if (specialAnimation == SpecialAnimation.FROG_TONGUE && entity instanceof Frog frog) {
 			frog.tongueAnimationState.start(frog.tickCount);
+		} else if (specialAnimation == SpecialAnimation.WARDEN_SPAWN && entity instanceof Warden warden) {
+			warden.emergeAnimationState.start(warden.tickCount);
+			warden.yBodyRotO = 90;
+			warden.yBodyRot = 90;
+			warden.yHeadRotO = 90;
+			warden.yHeadRot = 90;
 		}
 	}
 
 	private Entity create(EntityType<?> type) {
-		if (type == EntityType.EVOKER_FANGS) {
+		if (specialAnimation == SpecialAnimation.EVOKER_FANGS_EAT && type == EntityType.EVOKER_FANGS) {
 			return new EvokerFangs(EntityType.EVOKER_FANGS, mc.level) {
 				@Override
 				public float getAnimationProgress(float pPartialTicks) {
@@ -95,7 +123,7 @@ public class EntityAnimation extends Animation {
 		if (timer == duration && impactSound.isPresent())
 			mc.getSoundManager().play(SimpleSoundInstance.forUI(impactSound.get(), 1));
 
-		if (entity instanceof LivingEntity living) {
+		if (entity instanceof LivingEntity living && specialAnimation != SpecialAnimation.WARDEN_SPAWN) {
 			living.yBodyRotO = 0;
 			living.yBodyRot = 0;
 			living.yHeadRotO = 0;

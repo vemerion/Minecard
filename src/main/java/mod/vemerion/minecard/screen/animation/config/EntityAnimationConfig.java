@@ -29,7 +29,10 @@ public class EntityAnimationConfig extends AnimationConfig {
 					ForgeRegistries.SOUND_EVENTS.getCodec().optionalFieldOf("duration_sound")
 							.forGetter(EntityAnimationConfig::getDurationSound),
 					ForgeRegistries.SOUND_EVENTS.getCodec().optionalFieldOf("impact_sound")
-							.forGetter(EntityAnimationConfig::getImpactSound))
+							.forGetter(EntityAnimationConfig::getImpactSound),
+					EntityAnimation.SpecialAnimation.CODEC
+							.optionalFieldOf("special_animation", EntityAnimation.SpecialAnimation.NONE)
+							.forGetter(EntityAnimationConfig::getSpecialAnimation))
 			.apply(instance, EntityAnimationConfig::new));
 
 	private final EntityType<?> entity;
@@ -40,9 +43,11 @@ public class EntityAnimationConfig extends AnimationConfig {
 	private final Optional<SoundEvent> startSound;
 	private final Optional<SoundEvent> durationSound;
 	private final Optional<SoundEvent> impactSound;
+	private final EntityAnimation.SpecialAnimation specialAnimation;
 
 	public EntityAnimationConfig(EntityType<?> entity, boolean moving, int duration, int size, int soundDelay,
-			Optional<SoundEvent> startSound, Optional<SoundEvent> durationSound, Optional<SoundEvent> impactSound) {
+			Optional<SoundEvent> startSound, Optional<SoundEvent> durationSound, Optional<SoundEvent> impactSound,
+			EntityAnimation.SpecialAnimation specialAnimation) {
 		this.moving = moving;
 		this.entity = entity;
 		this.duration = duration;
@@ -51,6 +56,7 @@ public class EntityAnimationConfig extends AnimationConfig {
 		this.startSound = startSound;
 		this.durationSound = durationSound;
 		this.impactSound = impactSound;
+		this.specialAnimation = specialAnimation;
 	}
 
 	@Override
@@ -71,7 +77,8 @@ public class EntityAnimationConfig extends AnimationConfig {
 									: null,
 							() -> new Vec2(target.getPosition().x + ClientCard.CARD_WIDTH / 2,
 									target.getPosition().y + ClientCard.CARD_HEIGHT / 2),
-							entity, duration, size, soundDelay, startSound, durationSound, impactSound, () -> {
+							entity, duration, size, soundDelay, startSound, durationSound, impactSound,
+							specialAnimation, () -> {
 							}));
 	}
 
@@ -105,5 +112,9 @@ public class EntityAnimationConfig extends AnimationConfig {
 
 	public Optional<SoundEvent> getImpactSound() {
 		return impactSound;
+	}
+
+	public EntityAnimation.SpecialAnimation getSpecialAnimation() {
+		return specialAnimation;
 	}
 }

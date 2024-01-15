@@ -33,6 +33,7 @@
     "moving": false,
     "size": 30,
     "sound_delay": 10,
+    "special_animation": "evoker_fangs_eat",
     "start_sound": "minecraft:entity.evoker_fangs.attack"
   },
   "fireball": {
@@ -53,6 +54,7 @@
     "impact_sound": "minecraft:entity.frog.eat",
     "moving": true,
     "size": 25,
+    "special_animation": "frog_tongue",
     "start_sound": "minecraft:entity.frog.tongue"
   },
   "glow": {
@@ -407,6 +409,15 @@
       "Count": 1,
       "id": "minecraft:cobweb"
     }
+  },
+  "warden": {
+    "type": "minecard:charge",
+    "duration": 160,
+    "entity": "minecraft:warden",
+    "moving": false,
+    "size": 22,
+    "special_animation": "warden_spawn",
+    "start_sound": "minecraft:entity.warden.emerge"
   },
   "white_splash": {
     "type": "minecard:splash",

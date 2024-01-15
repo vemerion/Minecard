@@ -9,6 +9,7 @@ import com.google.gson.JsonObject;
 import com.mojang.serialization.JsonOps;
 
 import mod.vemerion.minecard.Main;
+import mod.vemerion.minecard.screen.animation.EntityAnimation;
 import mod.vemerion.minecard.screen.animation.ParticlesAnimation;
 import mod.vemerion.minecard.screen.animation.config.AnimationConfig;
 import mod.vemerion.minecard.screen.animation.config.AnimationConfigs;
@@ -75,19 +76,28 @@ public class ModAnimationConfigProvider implements DataProvider {
 		animations.put("throw_bamboo", new ThrowItemAnimationConfig(Items.BAMBOO, Optional.empty(), Optional.empty(),
 				Optional.of(new ResourceLocation(Main.MODID, "green_splash"))));
 		animations.put("elder_guardian", new PotionAnimationConfig(new ParticlesAnimation.Color(0.29f, 0.26f, 0.09f)));
-		animations.put("goat_charge", new EntityAnimationConfig(EntityType.GOAT, true, 25, 25, 0, Optional.empty(),
-				Optional.of(SoundEvents.HORSE_GALLOP), Optional.of(SoundEvents.GOAT_RAM_IMPACT)));
+		animations.put("goat_charge",
+				new EntityAnimationConfig(EntityType.GOAT, true, 25, 25, 0, Optional.empty(),
+						Optional.of(SoundEvents.HORSE_GALLOP), Optional.of(SoundEvents.GOAT_RAM_IMPACT),
+						EntityAnimation.SpecialAnimation.NONE));
 		animations.put("throw_shield", new ThrowItemAnimationConfig(Items.SHIELD, Optional.empty(),
 				Optional.of(SoundEvents.SHIELD_BLOCK), Optional.empty()));
-		animations.put("shoot_arrow", new EntityAnimationConfig(EntityType.ARROW, true, 12, 25, 1,
-				Optional.of(SoundEvents.ARROW_SHOOT), Optional.empty(), Optional.of(SoundEvents.ARROW_HIT)));
-		animations.put("ravager_charge", new EntityAnimationConfig(EntityType.RAVAGER, true, 25, 15, 0,
-				Optional.empty(), Optional.of(SoundEvents.RAVAGER_STEP), Optional.of(SoundEvents.RAVAGER_ATTACK)));
+		animations.put("shoot_arrow",
+				new EntityAnimationConfig(EntityType.ARROW, true, 12, 25, 1, Optional.of(SoundEvents.ARROW_SHOOT),
+						Optional.empty(), Optional.of(SoundEvents.ARROW_HIT), EntityAnimation.SpecialAnimation.NONE));
+		animations.put("ravager_charge",
+				new EntityAnimationConfig(EntityType.RAVAGER, true, 25, 15, 0, Optional.empty(),
+						Optional.of(SoundEvents.RAVAGER_STEP), Optional.of(SoundEvents.RAVAGER_ATTACK),
+						EntityAnimation.SpecialAnimation.NONE));
 		animations.put("throw_web", new ThrowItemAnimationConfig(Items.COBWEB));
-		animations.put("evoker_fangs", new EntityAnimationConfig(EntityType.EVOKER_FANGS, false, 30, 30, 10,
-				Optional.of(SoundEvents.EVOKER_FANGS_ATTACK), Optional.empty(), Optional.empty()));
-		animations.put("lightning_bolt", new EntityAnimationConfig(EntityType.LIGHTNING_BOLT, false, 30, 15, 1,
-				Optional.of(SoundEvents.LIGHTNING_BOLT_IMPACT), Optional.empty(), Optional.empty()));
+		animations.put("evoker_fangs",
+				new EntityAnimationConfig(EntityType.EVOKER_FANGS, false, 30, 30, 10,
+						Optional.of(SoundEvents.EVOKER_FANGS_ATTACK), Optional.empty(), Optional.empty(),
+						EntityAnimation.SpecialAnimation.EVOKER_FANGS_EAT));
+		animations.put("lightning_bolt",
+				new EntityAnimationConfig(EntityType.LIGHTNING_BOLT, false, 30, 15, 1,
+						Optional.of(SoundEvents.LIGHTNING_BOLT_IMPACT), Optional.empty(), Optional.empty(),
+						EntityAnimation.SpecialAnimation.NONE));
 		animations.put("throw_snowball",
 				new ThrowItemAnimationConfig(Items.SNOWBALL, Optional.of(SoundEvents.SNOWBALL_THROW),
 						Optional.of(SoundEvents.GENERIC_HURT),
@@ -111,8 +121,10 @@ public class ModAnimationConfigProvider implements DataProvider {
 				Optional.of(SoundEvents.PLAYER_BURP), Optional.empty()));
 		animations.put("throw_mushroom_stew", new ThrowItemAnimationConfig(Items.MUSHROOM_STEW, Optional.empty(),
 				Optional.of(SoundEvents.PLAYER_BURP), Optional.empty()));
-		animations.put("llama_spit", new EntityAnimationConfig(EntityType.LLAMA_SPIT, true, 15, 25, 1,
-				Optional.of(SoundEvents.LLAMA_SPIT), Optional.empty(), Optional.of(SoundEvents.GENERIC_HURT)));
+		animations.put("llama_spit",
+				new EntityAnimationConfig(EntityType.LLAMA_SPIT, true, 15, 25, 1, Optional.of(SoundEvents.LLAMA_SPIT),
+						Optional.empty(), Optional.of(SoundEvents.GENERIC_HURT),
+						EntityAnimation.SpecialAnimation.NONE));
 		animations.put("throw_rotten_flesh", new ThrowItemAnimationConfig(Items.ROTTEN_FLESH, Optional.empty(),
 				Optional.of(SoundEvents.PLAYER_BURP), Optional.empty()));
 		animations.put("throw_rabbit_foot", new ThrowItemAnimationConfig(Items.RABBIT_FOOT));
@@ -162,7 +174,11 @@ public class ModAnimationConfigProvider implements DataProvider {
 				Optional.of(SoundEvents.PUMPKIN_CARVE), Optional.empty()));
 		animations.put("frog_charge",
 				new EntityAnimationConfig(EntityType.FROG, true, 30, 25, 1, Optional.of(SoundEvents.FROG_TONGUE),
-						Optional.of(SoundEvents.FROG_STEP), Optional.of(SoundEvents.FROG_EAT)));
+						Optional.of(SoundEvents.FROG_STEP), Optional.of(SoundEvents.FROG_EAT),
+						EntityAnimation.SpecialAnimation.FROG_TONGUE));
+		animations.put("warden",
+				new EntityAnimationConfig(EntityType.WARDEN, false, 160, 22, 1, Optional.of(SoundEvents.WARDEN_EMERGE),
+						Optional.empty(), Optional.empty(), EntityAnimation.SpecialAnimation.WARDEN_SPAWN));
 
 	}
 
