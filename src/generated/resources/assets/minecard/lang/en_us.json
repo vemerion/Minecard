@@ -113,6 +113,7 @@
   "card_ability.minecard.stray": "Attack: Freeze the target.",
   "card_ability.minecard.strider": "Summon: Remove burn from adjacent cards.",
   "card_ability.minecard.sweet_berries": "Death: Gain a sweet berries card.",
+  "card_ability.minecard.tadpole": "Tick: Get -1/-1 but summon a 2/2 frog.",
   "card_ability.minecard.throw_sweet_berries": "Select a card from the board and heal it by 4.",
   "card_ability.minecard.trader_llama": "Summon: Either deal 2 damage to a selected card on the board, or draw a card.",
   "card_ability.minecard.trader_llama_draw": "Draw a card.",

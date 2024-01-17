@@ -692,6 +692,17 @@ public class ModCardProvider implements DataProvider {
 								new CardAbilitySelection(new CardAbilityGroups(EnumSet.of(CardAbilityGroup.SELF)),
 										CardSelectionMethod.All.ALL, CardCondition.NoCondition.NO_CONDITION)),
 						new AnimationAbility(mod("warden"))))));
+		add(new Builder(EntityType.TADPOLE, 3, 3, 3)
+				.setCardAbility(new ChainAbility(EnumSet.of(CardAbilityTrigger.TICK), textKey("tadpole"), List.of(
+						new SelectCardsAbility(
+								new CardAbilitySelection(new CardAbilityGroups(EnumSet.of(CardAbilityGroup.SELF)),
+										CardSelectionMethod.All.ALL, CardCondition.NoCondition.NO_CONDITION)),
+						new ModifyAbility(List.of(new ModificationBuilder().heal(-1).addDamage(-1).build())),
+						new MoveCollectedAbility(0, 1, true, false),
+						new ConstantCardsAbility(
+								List.of(new LazyCardType(new Builder(EntityType.FROG, 2, 2, 2).build()))),
+						new PlaceCardsAbility(CardPlacement.RIGHT), new MoveCollectedAbility(1, 0, false, false),
+						history()))));
 
 		// Spells
 		add(new Builder(EntityType.ITEM, 4, 0, 0).setKey(mod("fishing_rod"))

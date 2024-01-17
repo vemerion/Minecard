@@ -1,0 +1,110 @@
+{
+  "abilities": {
+    "type": "minecard:chain",
+    "value": {
+      "abilities": [
+        {
+          "type": "minecard:select_cards",
+          "value": {
+            "selection": {
+              "groups": [
+                "self"
+              ],
+              "method": {
+                "type": "minecard:all"
+              }
+            }
+          }
+        },
+        {
+          "type": "minecard:modify",
+          "value": {
+            "modifications": [
+              [
+                {
+                  "operator": {
+                    "type": "minecard:constant",
+                    "value": -1
+                  },
+                  "output": {
+                    "type": "minecard:health"
+                  }
+                },
+                {
+                  "operator": {
+                    "type": "minecard:add",
+                    "value": {
+                      "left": {
+                        "type": "minecard:variable",
+                        "value": {
+                          "type": "minecard:damage"
+                        }
+                      },
+                      "right": {
+                        "type": "minecard:constant",
+                        "value": -1
+                      }
+                    }
+                  },
+                  "output": {
+                    "type": "minecard:damage"
+                  }
+                }
+              ]
+            ]
+          }
+        },
+        {
+          "type": "minecard:move_collected",
+          "value": {
+            "clear_destination": false,
+            "clear_source": true,
+            "destination": 1,
+            "source": 0
+          }
+        },
+        {
+          "type": "minecard:constant_cards",
+          "cards": [
+            {
+              "cost": 2,
+              "damage": 2,
+              "entity": "minecraft:frog",
+              "health": 2
+            }
+          ]
+        },
+        {
+          "type": "minecard:place_cards",
+          "placement": "right"
+        },
+        {
+          "type": "minecard:move_collected",
+          "value": {
+            "clear_destination": false,
+            "clear_source": false,
+            "destination": 0,
+            "source": 1
+          }
+        },
+        {
+          "type": "minecard:history",
+          "value": {
+            "icon": {
+              "Count": 1,
+              "id": "minecraft:book"
+            }
+          }
+        }
+      ],
+      "text_key": "card_ability.minecard.tadpole",
+      "triggers": [
+        "tick"
+      ]
+    }
+  },
+  "cost": 3,
+  "damage": 3,
+  "entity": "minecraft:tadpole",
+  "health": 3
+}
