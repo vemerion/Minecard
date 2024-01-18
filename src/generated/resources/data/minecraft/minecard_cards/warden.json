@@ -21,6 +21,29 @@
           "value": {
             "animation": "minecard:warden"
           }
+        },
+        {
+          "type": "minecard:select_cards",
+          "value": {
+            "clear": true,
+            "selection": {
+              "groups": [
+                "enemy_board"
+              ],
+              "method": {
+                "type": "minecard:choice",
+                "value": {
+                  "discover": false
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "minecard:animation",
+          "value": {
+            "animation": "minecard:sonic_boom"
+          }
         }
       ],
       "text_key": "",

@@ -12,6 +12,7 @@ import mod.vemerion.minecard.screen.animation.config.ExplosionAnimationConfig;
 import mod.vemerion.minecard.screen.animation.config.GlowAnimationConfig;
 import mod.vemerion.minecard.screen.animation.config.NoAnimationConfig;
 import mod.vemerion.minecard.screen.animation.config.PotionAnimationConfig;
+import mod.vemerion.minecard.screen.animation.config.SonicBoomAnimationConfig;
 import mod.vemerion.minecard.screen.animation.config.SplashAnimationConfig;
 import mod.vemerion.minecard.screen.animation.config.ThrowItemAnimationConfig;
 import mod.vemerion.minecard.screen.animation.config.WitherAnimationConfig;
@@ -57,5 +58,8 @@ public class ModAnimationConfigs {
 			.register("wither", () -> new AnimationConfigType<WitherAnimationConfig>(WitherAnimationConfig.CODEC));
 	public static final RegistryObject<AnimationConfigType<? extends AnimationConfig>> BLOCK = ANIMATION_CONFIGS
 			.register("block", () -> new AnimationConfigType<BlockAnimationConfig>(BlockAnimationConfig.CODEC));
+	public static final RegistryObject<AnimationConfigType<? extends AnimationConfig>> SONIC_BOOM = ANIMATION_CONFIGS
+			.register("sonic_boom",
+					() -> new AnimationConfigType<SonicBoomAnimationConfig>(SonicBoomAnimationConfig.CODEC));
 
 }

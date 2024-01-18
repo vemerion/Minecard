@@ -10,6 +10,7 @@ import mod.vemerion.minecard.screen.ClientCard;
 import mod.vemerion.minecard.screen.GameScreen;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec2;
 
 public abstract class AnimationConfig {
 	public static final Codec<AnimationConfig> CODEC = ExtraCodecs.lazyInitializedCodec(() -> ModAnimationConfigs
@@ -36,5 +37,10 @@ public abstract class AnimationConfig {
 	protected static AABB fromCard(ClientCard card) {
 		var p = card.getPosition();
 		return new AABB(p.x, p.y, 0, p.x + ClientCard.CARD_WIDTH, p.y + ClientCard.CARD_HEIGHT, 0);
+	}
+
+	protected Vec2 randomInAABB(AABB area) {
+		return new Vec2(random.nextFloat((float) area.minX, (float) area.maxX),
+				random.nextFloat((float) area.minY, (float) area.maxY));
 	}
 }

@@ -143,6 +143,9 @@
     "size": 25,
     "start_sound": "minecraft:entity.arrow.shoot"
   },
+  "sonic_boom": {
+    "type": "minecard:sonic_boom"
+  },
   "soul_sand": {
     "type": "minecard:block",
     "block": "minecraft:soul_sand"

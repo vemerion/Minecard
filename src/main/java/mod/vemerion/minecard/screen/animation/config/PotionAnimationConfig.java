@@ -36,8 +36,9 @@ public class PotionAnimationConfig extends AnimationConfig {
 		targets.remove(origin);
 		var area = calcArea(targets);
 		int count = (int) ((area.maxX - area.minX) * (area.maxY - area.minY) * 0.001);
-		game.addAnimation(new ParticlesAnimation(game.getMinecraft(), area, count, 20, particleConfig, () -> {
-		}));
+		game.addAnimation(
+				new ParticlesAnimation(game.getMinecraft(), () -> randomInAABB(area), count, 20, particleConfig, () -> {
+				}));
 	}
 
 	public ParticlesAnimation.Color getColor() {

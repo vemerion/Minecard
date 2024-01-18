@@ -19,6 +19,7 @@ import mod.vemerion.minecard.screen.animation.config.EntityAnimationConfig;
 import mod.vemerion.minecard.screen.animation.config.ExplosionAnimationConfig;
 import mod.vemerion.minecard.screen.animation.config.GlowAnimationConfig;
 import mod.vemerion.minecard.screen.animation.config.PotionAnimationConfig;
+import mod.vemerion.minecard.screen.animation.config.SonicBoomAnimationConfig;
 import mod.vemerion.minecard.screen.animation.config.SplashAnimationConfig;
 import mod.vemerion.minecard.screen.animation.config.ThrowItemAnimationConfig;
 import mod.vemerion.minecard.screen.animation.config.WitherAnimationConfig;
@@ -179,6 +180,7 @@ public class ModAnimationConfigProvider implements DataProvider {
 		animations.put("warden",
 				new EntityAnimationConfig(EntityType.WARDEN, false, 160, 22, 1, Optional.of(SoundEvents.WARDEN_EMERGE),
 						Optional.empty(), Optional.empty(), EntityAnimation.SpecialAnimation.WARDEN_SPAWN));
+		animations.put("sonic_boom", SonicBoomAnimationConfig.INSTANCE);
 
 	}
 

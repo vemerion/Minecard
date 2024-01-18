@@ -3,6 +3,7 @@ package mod.vemerion.minecard.screen.animation;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.function.Supplier;
 import java.util.stream.IntStream;
 
 import com.mojang.serialization.Codec;
@@ -37,29 +38,26 @@ public class ParticlesAnimation extends Animation {
 		public static final List<ResourceLocation> GENERIC_REVERSE_TEXTURES = IntStream.of(7, 6, 5, 4, 3, 2, 1, 0)
 				.mapToObj(i -> new ResourceLocation("textures/particle/generic_" + String.valueOf(i) + ".png"))
 				.toList();
+		public static final List<ResourceLocation> SONIC_BOOM_TEXTURES = IntStream.range(0, 16)
+				.mapToObj(i -> new ResourceLocation("textures/particle/sonic_boom_" + String.valueOf(i) + ".png"))
+				.toList();
 	}
 
 	private List<GameParticle> particles = new ArrayList<>();
-	private AABB area;
+	private Supplier<Vec2> generatePos;
 	private int timer;
 	private int delay;
 	private int count;
 	private ParticleConfig config;
-	private Vec2 origin;
 	private Random rand = new Random();
 
-	public ParticlesAnimation(Minecraft mc, AABB area, int count, int delay, ParticleConfig config, Runnable onDone) {
+	public ParticlesAnimation(Minecraft mc, Supplier<Vec2> generatePos, int count, int delay, ParticleConfig config,
+			Runnable onDone) {
 		super(mc, onDone);
-		this.area = area;
+		this.generatePos = generatePos;
 		this.count = count;
 		this.delay = delay;
 		this.config = config;
-		this.origin = new Vec2((float) area.getCenter().x, (float) area.getCenter().y);
-	}
-
-	private Vec2 randomInAABB(AABB area) {
-		return new Vec2(rand.nextFloat((float) area.minX, (float) area.maxX),
-				rand.nextFloat((float) area.minY, (float) area.maxY));
 	}
 
 	@Override
@@ -79,7 +77,7 @@ public class ParticlesAnimation extends Animation {
 
 		if (timer <= delay) {
 			for (int i = 0; i < count; i++) {
-				particles.add(new GameParticle(config, rand, randomInAABB(area), origin));
+				particles.add(new GameParticle(config, rand, generatePos.get()));
 			}
 		}
 
@@ -103,12 +101,12 @@ public class ParticlesAnimation extends Animation {
 		private final int duration;
 		private ParticleConfig config;
 
-		private GameParticle(ParticleConfig config, Random rand, Vec2 position, Vec2 origin) {
+		private GameParticle(ParticleConfig config, Random rand, Vec2 position) {
 			this.config = config;
 			this.position = position;
 			this.startSize = rand.nextFloat(config.minSize, config.maxSize);
 			this.speed = config.maxSpeed == 0 ? 0 : rand.nextFloat(config.minSpeed, config.maxSpeed);
-			this.direction = new Vec2(position.x - origin.x, position.y - origin.y).normalized();
+			this.direction = new Vec2(rand.nextFloat(-1, 1), rand.nextFloat(-1, 1)).normalized();
 			this.duration = rand.nextInt(15, 30);
 		}
 

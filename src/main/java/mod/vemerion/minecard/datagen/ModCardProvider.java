@@ -691,7 +691,15 @@ public class ModCardProvider implements DataProvider {
 						new SelectCardsAbility(
 								new CardAbilitySelection(new CardAbilityGroups(EnumSet.of(CardAbilityGroup.SELF)),
 										CardSelectionMethod.All.ALL, CardCondition.NoCondition.NO_CONDITION)),
-						new AnimationAbility(mod("warden"))))));
+						new AnimationAbility(mod("warden")),
+						new SelectCardsAbility(
+								new CardAbilitySelection(
+										new CardAbilityGroups(EnumSet.of(CardAbilityGroup.ENEMY_BOARD)),
+										new CardSelectionMethod.Choice(false), CardCondition.NoCondition.NO_CONDITION),
+								true),
+						new AnimationAbility(mod("sonic_boom"))
+
+				))));
 		add(new Builder(EntityType.TADPOLE, 3, 3, 3)
 				.setCardAbility(new ChainAbility(EnumSet.of(CardAbilityTrigger.TICK), textKey("tadpole"), List.of(
 						new SelectCardsAbility(

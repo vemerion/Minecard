@@ -55,8 +55,10 @@ public class ExplosionAnimationConfig extends AnimationConfig {
 					new ParticlesAnimation.Color(color, color, color), 40, 60, 0, 0,
 					ParticlesAnimation.ParticleConfig.EXPLOSION_TEXTURES);
 			game.getMinecraft().getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.GENERIC_EXPLODE, 1f));
-			game.addAnimation(new ParticlesAnimation(game.getMinecraft(), fromCard(card), 7, 1, particleConfig, () -> {
-			}));
+			var area = fromCard(card);
+			game.addAnimation(
+					new ParticlesAnimation(game.getMinecraft(), () -> randomInAABB(area), 7, 1, particleConfig, () -> {
+					}));
 		}
 	}
 }

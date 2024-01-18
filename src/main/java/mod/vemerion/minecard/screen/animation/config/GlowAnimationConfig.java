@@ -34,7 +34,8 @@ public class GlowAnimationConfig extends AnimationConfig {
 		targets.remove(origin);
 		var area = calcArea(targets);
 		int count = (int) ((area.maxX - area.minX) * (area.maxY - area.minY) * 0.0004);
-		game.addAnimation(new ParticlesAnimation(game.getMinecraft(), area, count, 20, particleConfig, () -> {
-		}));
+		game.addAnimation(
+				new ParticlesAnimation(game.getMinecraft(), () -> randomInAABB(area), count, 20, particleConfig, () -> {
+				}));
 	}
 }

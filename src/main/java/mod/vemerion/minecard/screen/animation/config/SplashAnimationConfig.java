@@ -36,8 +36,9 @@ public class SplashAnimationConfig extends AnimationConfig {
 				ParticlesAnimation.ParticleConfig.GENERIC_REVERSE_TEXTURES);
 		targets.remove(origin);
 		var area = calcArea(targets);
-		game.addAnimation(new ParticlesAnimation(game.getMinecraft(), area, 15, 1, particleConfig, () -> {
-		}));
+		game.addAnimation(
+				new ParticlesAnimation(game.getMinecraft(), () -> randomInAABB(area), 15, 1, particleConfig, () -> {
+				}));
 	}
 
 	public ParticlesAnimation.Color getColor() {
