@@ -240,4 +240,31 @@ public abstract class CardCondition {
 			return ModCardConditions.IS_SPELL.get();
 		}
 	}
+
+	public static class Contains extends CardCondition {
+
+		public static final Codec<Contains> CODEC = ExtraCodecs.lazyInitializedCodec(() -> RecordCodecBuilder
+				.create(instance -> instance.group(Codec.INT.fieldOf("index").forGetter(Contains::getIndex))
+						.apply(instance, Contains::new)));
+
+		private final int index;
+
+		public Contains(int index) {
+			this.index = index;
+		}
+
+		@Override
+		public boolean test(Card t, Collected collected) {
+			return collected.get(index).contains(t);
+		}
+
+		@Override
+		protected CardConditionType<?> getType() {
+			return ModCardConditions.CONTAINS.get();
+		}
+
+		public int getIndex() {
+			return index;
+		}
+	}
 }

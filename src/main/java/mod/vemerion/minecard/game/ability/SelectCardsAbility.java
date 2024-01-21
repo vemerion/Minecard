@@ -41,9 +41,10 @@ public class SelectCardsAbility extends CardAbility {
 	}
 
 	@Override
-	protected void invoke(List<Receiver> receivers, PlayerState state, Card card, @Nullable Card other,
+	protected void invoke(List<Receiver> receivers, PlayerState state, Card card, Card cause, @Nullable Card target,
 			Collected collected) {
-		var selected = selection.select(receivers, state.getGame(), this, state.getId(), card, other, collected);
+		var selected = selection.select(receivers, state.getGame(), this, state.getId(), card, cause, target,
+				collected);
 		if (shouldClear()) {
 			collected.get(0).clear();
 		}

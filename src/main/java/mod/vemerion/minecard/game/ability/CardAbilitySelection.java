@@ -22,8 +22,9 @@ public record CardAbilitySelection(CardAbilityGroups groups, CardSelectionMethod
 					.apply(instance, CardAbilitySelection::new)));
 
 	public List<Card> select(List<Receiver> receivers, GameState state, CardAbility ability, UUID id, Card self,
-			Card target, Collected collected) {
-		List<Card> candidates = condition.filter(groups.get(state, id, self, target, collected.get(0)), collected);
+			Card cause, Card target, Collected collected) {
+		List<Card> candidates = condition.filter(groups.get(state, id, self, cause, target, collected.get(0)),
+				collected);
 
 		if (candidates.isEmpty())
 			return candidates;

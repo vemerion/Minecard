@@ -40,4 +40,7 @@ public class ModCardConditions {
 			() -> new CardConditionType<CardCondition.OperatorCondition>(CardCondition.OperatorCondition.CODEC));
 	public static final RegistryObject<CardConditionType<? extends CardCondition>> IS_SPELL = CARD_CONDITIONS
 			.register("is_spell", () -> new CardConditionType<CardCondition.IsSpell>(CardCondition.IsSpell.CODEC));
+	public static final RegistryObject<CardConditionType<? extends CardCondition>> CONTAINS = CARD_CONDITIONS
+			.register("contains", () -> new CardConditionType<CardCondition.Contains>(CardCondition.Contains.CODEC));
+
 }

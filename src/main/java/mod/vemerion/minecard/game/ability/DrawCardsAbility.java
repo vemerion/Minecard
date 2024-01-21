@@ -35,7 +35,7 @@ public class DrawCardsAbility extends CardAbility {
 	}
 
 	@Override
-	protected void invoke(List<Receiver> receivers, PlayerState state, Card card, @Nullable Card other,
+	protected void invoke(List<Receiver> receivers, PlayerState state, Card card, Card cause, @Nullable Card target,
 			Collected collected) {
 		var drawn = state.drawCards(receivers, count);
 		collected.get(0).addAll(drawn);

@@ -36,6 +36,7 @@ import mod.vemerion.minecard.game.ability.CardVariable;
 import mod.vemerion.minecard.game.ability.ChainAbility;
 import mod.vemerion.minecard.game.ability.ChanceAbility;
 import mod.vemerion.minecard.game.ability.ChoiceCardAbility;
+import mod.vemerion.minecard.game.ability.ConditionalAbility;
 import mod.vemerion.minecard.game.ability.ConstantCardsAbility;
 import mod.vemerion.minecard.game.ability.DrawCardsAbility;
 import mod.vemerion.minecard.game.ability.GameOverAbility;
@@ -686,20 +687,69 @@ public class ModCardProvider implements DataProvider {
 										new CardSelectionMethod.Choice(true), CardCondition.NoCondition.NO_CONDITION),
 								true),
 						new PlaceCardsAbility(CardPlacement.YOUR_HAND), history()))));
-		add(new Builder(EntityType.WARDEN, 10, 15, 15).setDeckCount(1).setDropChance(1)
-				.setCardAbility(new ChainAbility(EnumSet.of(CardAbilityTrigger.SUMMON), "", List.of(
+		add(new Builder(EntityType.WARDEN, 10, 10, 10).setDeckCount(1).setDropChance(1).setCardAbility(new MultiAbility(
+				textKey("warden"),
+				List.of(new ChainAbility(EnumSet.of(CardAbilityTrigger.SUMMON), "", List.of(
 						new SelectCardsAbility(
 								new CardAbilitySelection(new CardAbilityGroups(EnumSet.of(CardAbilityGroup.SELF)),
 										CardSelectionMethod.All.ALL, CardCondition.NoCondition.NO_CONDITION)),
-						new AnimationAbility(mod("warden")),
 						new SelectCardsAbility(
-								new CardAbilitySelection(
-										new CardAbilityGroups(EnumSet.of(CardAbilityGroup.ENEMY_BOARD)),
-										new CardSelectionMethod.Choice(false), CardCondition.NoCondition.NO_CONDITION),
-								true),
-						new AnimationAbility(mod("sonic_boom"))
+								new CardAbilitySelection(new CardAbilityGroups(EnumSet.of(CardAbilityGroup.SELF)),
+										CardSelectionMethod.All.ALL, CardCondition.NoCondition.NO_CONDITION)),
+						new AnimationAbility(mod("warden"))
 
-				))));
+				)), new ChanceAbility("", 50,
+						new ChainAbility(EnumSet.of(CardAbilityTrigger.OTHER_ATTACK_POST), "",
+								List.of(new SelectCardsAbility(new CardAbilitySelection(
+										new CardAbilityGroups(EnumSet.of(CardAbilityGroup.CAUSE)),
+										CardSelectionMethod.All.ALL, CardCondition.NoCondition.NO_CONDITION), true),
+										new MoveCollectedAbility(0, 1, true, true),
+										new SelectCardsAbility(new CardAbilitySelection(new CardAbilityGroups(
+												EnumSet.of(CardAbilityGroup.ENEMY_BOARD)), CardSelectionMethod.All.ALL,
+												CardCondition.NoCondition.NO_CONDITION), true),
+										new ConditionalAbility("", Optional.of(1), new CardCondition.Contains(0),
+												new ChainAbility(Set.of(), "", List.of(
+														new SelectCardsAbility(
+																new CardAbilitySelection(
+																		new CardAbilityGroups(
+																				EnumSet.of(CardAbilityGroup.SELF)),
+																		CardSelectionMethod.All.ALL,
+																		CardCondition.NoCondition.NO_CONDITION),
+																true),
+														new MoveCollectedAbility(0, 1, true, true),
+														new SelectCardsAbility(new CardAbilitySelection(
+																new CardAbilityGroups(
+																		EnumSet.of(CardAbilityGroup.TARGET)),
+																CardSelectionMethod.All.ALL,
+																CardCondition.NoCondition.NO_CONDITION), true),
+														new ConditionalAbility("", Optional.of(0),
+																new CardCondition.Not(new CardCondition.Contains(1)),
+																new ChainAbility(Set.of(), "", List.of(
+																		new SelectCardsAbility(new CardAbilitySelection(
+																				new CardAbilityGroups(EnumSet
+																						.of(CardAbilityGroup.SELF)),
+																				CardSelectionMethod.All.ALL,
+																				CardCondition.NoCondition.NO_CONDITION),
+																				true),
+																		new MoveCollectedAbility(0, 1, true, true),
+																		new SelectCardsAbility(new CardAbilitySelection(
+																				new CardAbilityGroups(EnumSet
+																						.of(CardAbilityGroup.CAUSE)),
+																				CardSelectionMethod.All.ALL,
+																				CardCondition.NoCondition.NO_CONDITION),
+																				true),
+																		new AnimationAbility(mod("sonic_boom")),
+																		new ModifyAbility(
+																				List.of(new ModificationBuilder()
+																						.put(new CardModification(
+																								CardVariable.HEALTH,
+																								new CardOperator.Negate(
+																										new CardOperator.CollectedAny(
+																												1,
+																												new CardOperator.Variable(
+																														CardVariable.DAMAGE)))))
+																						.build())),
+																		history())))))))))))));
 		add(new Builder(EntityType.TADPOLE, 3, 3, 3)
 				.setCardAbility(new ChainAbility(EnumSet.of(CardAbilityTrigger.TICK), textKey("tadpole"), List.of(
 						new SelectCardsAbility(

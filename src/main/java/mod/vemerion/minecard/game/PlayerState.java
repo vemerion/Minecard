@@ -149,7 +149,7 @@ public class PlayerState {
 
 	public void endTurn(List<Receiver> receivers) {
 		for (var card : new ArrayList<>(new ArrayList<>(board))) {
-			card.ability(a -> a.trigger(CardAbilityTrigger.TICK, receivers, this, card, null));
+			card.ability(a -> a.trigger(CardAbilityTrigger.TICK, receivers, this, card, card, null));
 		}
 	}
 
@@ -162,7 +162,7 @@ public class PlayerState {
 			if (card.hasProperty(CardProperty.BABY)) {
 				card.decrementProperty(CardProperty.BABY);
 				if (!card.hasProperty(CardProperty.BABY)) {
-					card.ability(a -> a.trigger(CardAbilityTrigger.GROW, receivers, this, card, null));
+					card.ability(a -> a.trigger(CardAbilityTrigger.GROW, receivers, this, card, card, null));
 				}
 				updated.add(card);
 			}
@@ -253,7 +253,7 @@ public class PlayerState {
 		if (!card.isSpell())
 			game.addHistory(receivers, new HistoryEntry(ItemStack.EMPTY, id, card, List.of()));
 
-		card.ability(a -> a.trigger(CardAbilityTrigger.SUMMON, receivers, this, card, null));
+		card.ability(a -> a.trigger(CardAbilityTrigger.SUMMON, receivers, this, card, card, null));
 
 		StatsData.inc(game.getLevel(), id, PlayerStats.Key.CARDS_PLAYED, Optional.empty());
 	}

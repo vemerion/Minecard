@@ -52,7 +52,7 @@ public class CardAbilityGroups {
 		this.groups = groups;
 	}
 
-	public List<Card> get(GameState state, UUID id, Card self, Card target, List<Card> collected) {
+	public List<Card> get(GameState state, UUID id, Card self, Card cause, Card target, List<Card> collected) {
 		List<Card> result = new ArrayList<>();
 
 		var yourState = state.getYourPlayerState(id);
@@ -127,6 +127,8 @@ public class CardAbilityGroups {
 			case YOUR_GRAVEYARD:
 				result.addAll(yourState.getGraveyard());
 				break;
+			case CAUSE:
+				result.add(cause);
 			}
 		}
 

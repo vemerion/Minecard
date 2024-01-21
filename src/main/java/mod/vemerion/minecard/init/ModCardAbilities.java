@@ -10,6 +10,7 @@ import mod.vemerion.minecard.game.ability.CardAbilityType;
 import mod.vemerion.minecard.game.ability.ChainAbility;
 import mod.vemerion.minecard.game.ability.ChanceAbility;
 import mod.vemerion.minecard.game.ability.ChoiceCardAbility;
+import mod.vemerion.minecard.game.ability.ConditionalAbility;
 import mod.vemerion.minecard.game.ability.ConstantCardsAbility;
 import mod.vemerion.minecard.game.ability.DrawCardsAbility;
 import mod.vemerion.minecard.game.ability.GameOverAbility;
@@ -79,5 +80,7 @@ public class ModCardAbilities {
 	public static final RegistryObject<CardAbilityType<? extends CardAbility>> TRIGGER_ADVANCEMENT = CARD_ABILITIES
 			.register("trigger_advancement",
 					() -> new CardAbilityType<TriggerAdvancementAbility>(TriggerAdvancementAbility.CODEC));
+	public static final RegistryObject<CardAbilityType<? extends CardAbility>> CONDITIONAL = CARD_ABILITIES
+			.register("conditional", () -> new CardAbilityType<ConditionalAbility>(ConditionalAbility.CODEC));
 
 }

@@ -197,6 +197,7 @@ public class ModLanguageProvider extends LanguageProvider {
 		card("piglin", "Summon: Gain a random barter card.");
 		card("frog", "Summon: Devour a creature with 3 or less max health, and gain its stats.");
 		card("allay", "Summon: Discover a spell from the enemy deck and add a copy of it to your hand.");
+		card("warden", "50% chance to send a sonic boom when an enemy card attacks another card.");
 		card("tadpole", "Tick: Get -1/-1 but summon a 2/2 frog.");
 		card("sweet_berries", "Death: Gain a sweet berries card.");
 		card("pufferfish_bucket", "Summon: Spawn a Pufferfish card.");

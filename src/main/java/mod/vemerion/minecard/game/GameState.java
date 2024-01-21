@@ -229,11 +229,11 @@ public class GameState {
 
 		final var playerState = owner;
 		if (tookDamage) {
-			card.ability(a -> a.trigger(CardAbilityTrigger.HURT, receivers, playerState, card, null));
+			card.ability(a -> a.trigger(CardAbilityTrigger.HURT, receivers, playerState, card, card, null));
 		}
 
 		if (card.isDead()) {
-			card.ability(a -> a.trigger(CardAbilityTrigger.DEATH, receivers, playerState, card, null));
+			card.ability(a -> a.trigger(CardAbilityTrigger.DEATH, receivers, playerState, card, card, null));
 		}
 
 		for (var receiver : receivers) {
@@ -279,7 +279,7 @@ public class GameState {
 			receiver.receiver(new PlaceCardMessage(id, card, leftId));
 		}
 
-		card.ability(a -> a.trigger(CardAbilityTrigger.SUMMON, receivers, playerState, card, null));
+		card.ability(a -> a.trigger(CardAbilityTrigger.SUMMON, receivers, playerState, card, card, null));
 		return true;
 	}
 
@@ -304,7 +304,8 @@ public class GameState {
 			return;
 		}
 
-		attackerCard.ability(a -> a.trigger(CardAbilityTrigger.ATTACK, receivers, current, attackerCard, targetCard));
+		attackerCard.ability(
+				a -> a.trigger(CardAbilityTrigger.ATTACK, receivers, current, attackerCard, attackerCard, targetCard));
 
 		attackerCard.removeProperty(CardProperty.STEALTH);
 		hurt(receivers, attackerCard, targetCard.getDamage() + targetCard.getProperty(CardProperty.THORNS));
@@ -317,6 +318,15 @@ public class GameState {
 
 		addHistory(receivers, new HistoryEntry(new ItemStack(Items.NETHERITE_SWORD), current.getId(), attackerCard,
 				List.of(targetCard.toHistory(HistoryEntry.Visibility.ALL))));
+
+		for (var playerState : getPlayerStates()) {
+			for (var card : playerState.getBoard()) {
+				if (card != attackerCard) {
+					card.ability(a -> a.trigger(CardAbilityTrigger.OTHER_ATTACK_POST, receivers, playerState, card,
+							attackerCard, targetCard));
+				}
+			}
+		}
 	}
 
 	public void choice(List<Receiver> receivers, int selected) {

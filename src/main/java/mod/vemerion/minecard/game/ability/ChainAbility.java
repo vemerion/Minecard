@@ -19,12 +19,14 @@ public class ChainAbility extends CardAbility {
 
 	public static final Codec<ChainAbility> CODEC = ExtraCodecs
 			.lazyInitializedCodec(
-					() -> RecordCodecBuilder.create(instance -> instance
-							.group(GameUtil.TRIGGERS_CODEC.fieldOf("triggers").forGetter(CardAbility::getTriggers),
-									Codec.STRING.fieldOf("text_key").forGetter(CardAbility::getTextKey),
-									ExtraCodecs.nonEmptyList(Codec.list(CardAbility.CODEC)).fieldOf("abilities")
-											.forGetter(ChainAbility::getAbilities))
-							.apply(instance, ChainAbility::new)));
+					() -> RecordCodecBuilder
+							.create(instance -> instance
+									.group(GameUtil.TRIGGERS_CODEC.optionalFieldOf("triggers", Set.of())
+											.forGetter(CardAbility::getTriggers),
+											Codec.STRING.fieldOf("text_key").forGetter(CardAbility::getTextKey),
+											ExtraCodecs.nonEmptyList(Codec.list(CardAbility.CODEC)).fieldOf("abilities")
+													.forGetter(ChainAbility::getAbilities))
+									.apply(instance, ChainAbility::new)));
 
 	private final List<CardAbility> abilities;
 
@@ -39,17 +41,17 @@ public class ChainAbility extends CardAbility {
 	}
 
 	@Override
-	protected void invoke(List<Receiver> receivers, PlayerState state, Card card, @Nullable Card other,
+	protected void invoke(List<Receiver> receivers, PlayerState state, Card card, Card cause, @Nullable Card target,
 			Collected collected) {
 		for (var ability : abilities)
-			ability.invoke(receivers, state, card, other, collected);
+			ability.invoke(receivers, state, card, cause, target, collected);
 	}
 
 	@Override
-	public void trigger(CardAbilityTrigger trigger, List<Receiver> receivers, PlayerState state, Card card,
+	public void trigger(CardAbilityTrigger trigger, List<Receiver> receivers, PlayerState state, Card card, Card cause,
 			Card target) {
 		if (triggers.contains(trigger)) {
-			invoke(receivers, state, card, target, new Collected());
+			invoke(receivers, state, card, cause, target, new Collected());
 		}
 	}
 

@@ -45,7 +45,7 @@ public class AnimationAbility extends CardAbility {
 	}
 
 	@Override
-	protected void invoke(List<Receiver> receivers, PlayerState state, Card card, @Nullable Card other,
+	protected void invoke(List<Receiver> receivers, PlayerState state, Card card, Card cause, @Nullable Card target,
 			Collected collected) {
 		for (var receiver : receivers) {
 			receiver.receiver(new AnimationMessage(card.getId(), collected.get(0).stream().filter(c -> {

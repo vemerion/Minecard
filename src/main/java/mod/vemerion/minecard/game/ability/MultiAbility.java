@@ -57,15 +57,15 @@ public class MultiAbility extends CardAbility {
 	}
 
 	@Override
-	protected void invoke(List<Receiver> receivers, PlayerState state, Card card, @Nullable Card other,
+	protected void invoke(List<Receiver> receivers, PlayerState state, Card card, Card cause, @Nullable Card target,
 			Collected collected) {
 	}
 
 	@Override
-	public void trigger(CardAbilityTrigger trigger, List<Receiver> receivers, PlayerState state, Card card,
+	public void trigger(CardAbilityTrigger trigger, List<Receiver> receivers, PlayerState state, Card card, Card cause,
 			Card target) {
 		for (var ability : abilities)
-			ability.trigger(trigger, receivers, state, card, target);
+			ability.trigger(trigger, receivers, state, card, cause, target);
 	}
 
 	public List<CardAbility> getAbilities() {

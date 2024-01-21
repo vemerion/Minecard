@@ -39,7 +39,7 @@ public class ChoiceCardAbility extends CardAbility {
 	}
 
 	@Override
-	protected void invoke(List<Receiver> receivers, PlayerState state, Card card, @Nullable Card other,
+	protected void invoke(List<Receiver> receivers, PlayerState state, Card card, Card cause, @Nullable Card target,
 			Collected collected) {
 		var cards = new ArrayList<Card>();
 		for (int i = 0; i < abilities.size(); i++)
@@ -47,7 +47,7 @@ public class ChoiceCardAbility extends CardAbility {
 					CardType.DEFAULT_DECK_COUNT, CardType.DEFAULT_DROP_CHANCE).create().setId(i));
 		state.getGame().getChoice().make(receivers, this, cards, false, state.getGame().getRandom(), state.getId())
 				.ifPresent(c -> {
-					abilities.get(c.getId()).invoke(receivers, state, card, other, collected);
+					abilities.get(c.getId()).invoke(receivers, state, card, cause, target, collected);
 				});
 		;
 	}

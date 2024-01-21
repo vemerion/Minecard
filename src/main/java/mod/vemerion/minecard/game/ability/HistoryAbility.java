@@ -47,7 +47,7 @@ public class HistoryAbility extends CardAbility {
 	}
 
 	@Override
-	protected void invoke(List<Receiver> receivers, PlayerState state, Card card, @Nullable Card other,
+	protected void invoke(List<Receiver> receivers, PlayerState state, Card card, Card cause, @Nullable Card target,
 			Collected collected) {
 		state.getGame().addHistory(receivers, new HistoryEntry(icon, state.getId(), card,
 				collected.get(0).stream().map(c -> c.toHistory(calcHistoryVisibility(state, c))).toList()));

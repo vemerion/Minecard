@@ -30,8 +30,8 @@ public abstract class CardAbility {
 
 	protected abstract CardAbilityType<?> getType();
 
-	protected abstract void invoke(List<Receiver> receivers, PlayerState state, Card card, @Nullable Card other,
-			Collected collected);
+	protected abstract void invoke(List<Receiver> receivers, PlayerState state, Card card, Card cause,
+			@Nullable Card target, Collected collected);
 
 	public Component getText() {
 		return textKey.isEmpty() ? CommonComponents.EMPTY : Component.translatable(textKey);
@@ -45,10 +45,10 @@ public abstract class CardAbility {
 		return textKey;
 	}
 
-	public void trigger(CardAbilityTrigger trigger, List<Receiver> receivers, PlayerState state, Card card,
+	public void trigger(CardAbilityTrigger trigger, List<Receiver> receivers, PlayerState state, Card card, Card cause,
 			Card target) {
 		if (triggers.contains(trigger)) {
-			invoke(receivers, state, card, target, new Collected());
+			invoke(receivers, state, card, cause, target, new Collected());
 		}
 	}
 }

@@ -34,7 +34,7 @@ public class PlaceCardsAbility extends CardAbility {
 	}
 
 	@Override
-	protected void invoke(List<Receiver> receivers, PlayerState state, Card card, @Nullable Card other,
+	protected void invoke(List<Receiver> receivers, PlayerState state, Card card, Card cause, @Nullable Card target,
 			Collected collected) {
 		List<Card> toAdd = new ArrayList<>();
 		for (var c : collected.get(0))
