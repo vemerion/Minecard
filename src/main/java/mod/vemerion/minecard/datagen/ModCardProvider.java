@@ -34,7 +34,6 @@ import mod.vemerion.minecard.game.ability.CardPlacement;
 import mod.vemerion.minecard.game.ability.CardSelectionMethod;
 import mod.vemerion.minecard.game.ability.CardVariable;
 import mod.vemerion.minecard.game.ability.ChainAbility;
-import mod.vemerion.minecard.game.ability.ChanceAbility;
 import mod.vemerion.minecard.game.ability.ChoiceCardAbility;
 import mod.vemerion.minecard.game.ability.ConditionalAbility;
 import mod.vemerion.minecard.game.ability.ConstantCardsAbility;
@@ -252,7 +251,7 @@ public class ModCardProvider implements DataProvider {
 														new ModifyAbility(
 																List.of(new ModificationBuilder().heal(-1).build())),
 														history()))))));
-		add(new Builder(EntityType.RABBIT, 1, 2, 1).setCardAbility(new ChanceAbility(textKey("rabbit"), 30,
+		add(new Builder(EntityType.RABBIT, 1, 2, 1).setCardAbility(chance(textKey("rabbit"), 30,
 				new ChainAbility(EnumSet.of(CardAbilityTrigger.SUMMON), "", List.of(
 						new SelectCardsAbility(
 								new CardAbilitySelection(new CardAbilityGroups(EnumSet.of(CardAbilityGroup.SELF)),
@@ -463,7 +462,7 @@ public class ModCardProvider implements DataProvider {
 								history()))));
 		add(new Builder(EntityType.SALMON, 1, 1, 1)
 				.setCardAbility(
-						new ChanceAbility(textKey("salmon"), 50,
+						chance(textKey("salmon"), 50,
 								addCards(EnumSet.of(CardAbilityTrigger.DEATH), "",
 										List.of(new LazyCardType(new Builder(EntityType.ITEM, 0, 0, 0)
 												.setAdditionalData(new AdditionalCardData.ItemData(
@@ -492,12 +491,12 @@ public class ModCardProvider implements DataProvider {
 										new ModifyAbility(List.of(new ModificationBuilder().heal(-2)
 												.addProperty(CardProperty.FREEZE, 1).build())),
 										history()))));
-		add(new Builder(EntityType.CHICKEN, 2, 2, 1).setCardAbility(new ChanceAbility(textKey("chicken"), 50,
-				addCards(EnumSet.of(CardAbilityTrigger.SUMMON), "",
-						List.of(new LazyCardType(new Builder(EntityType.ITEM, 0, 0, 0)
-								.setAdditionalData(new AdditionalCardData.ItemData(Items.EGG))
-								.setCardAbility(new MultiAbility(
-										textKey("egg"), List.of(
+		add(new Builder(EntityType.CHICKEN, 2, 2, 1)
+				.setCardAbility(chance(textKey("chicken"), 50,
+						addCards(EnumSet.of(CardAbilityTrigger.SUMMON), "",
+								List.of(new LazyCardType(new Builder(EntityType.ITEM, 0, 0, 0)
+										.setAdditionalData(new AdditionalCardData.ItemData(Items.EGG))
+										.setCardAbility(new MultiAbility(textKey("egg"), List.of(
 												new ChainAbility(
 														EnumSet.of(CardAbilityTrigger.SUMMON), "", List.of(
 																new SelectCardsAbility(new CardAbilitySelection(
@@ -512,7 +511,7 @@ public class ModCardProvider implements DataProvider {
 												summon(EnumSet.of(CardAbilityTrigger.SUMMON), "", CardPlacement.RIGHT,
 														new LazyCardType(ForgeRegistries.ENTITY_TYPES
 																.getKey(EntityType.CHICKEN))))))
-								.build()))))));
+										.build()))))));
 		add(new Builder(EntityType.TURTLE, 5, 8, 1)
 				.addProperty(CardProperty.BABY,
 						1)
@@ -587,9 +586,9 @@ public class ModCardProvider implements DataProvider {
 										new ModifyAbility(List.of(new ModificationBuilder().heal(-1).build())),
 										history()))));
 		add(new Builder(EntityType.CAT, 3, 3, 1)
-				.setCardAbility(new ChanceAbility(textKey("cat"), 50, addCards(EnumSet.of(CardAbilityTrigger.TICK), "",
+				.setCardAbility(chance(textKey("cat"), 50, addCards(EnumSet.of(CardAbilityTrigger.TICK), "",
 						List.of(new LazyCardType(mod("rotten_flesh")), new LazyCardType(mod("rabbit_foot")))))));
-		add(new Builder(EntityType.CAVE_SPIDER, 3, 2, 2).setCardAbility(new ChanceAbility(textKey("cave_spider"), 50,
+		add(new Builder(EntityType.CAVE_SPIDER, 3, 2, 2).setCardAbility(chance(textKey("cave_spider"), 50,
 				new ChainAbility(EnumSet.of(CardAbilityTrigger.ATTACK), "", List.of(
 						new SelectCardsAbility(
 								new CardAbilitySelection(new CardAbilityGroups(EnumSet.of(CardAbilityGroup.TARGET)),
@@ -698,58 +697,48 @@ public class ModCardProvider implements DataProvider {
 										CardSelectionMethod.All.ALL, CardCondition.NoCondition.NO_CONDITION)),
 						new AnimationAbility(mod("warden"))
 
-				)), new ChanceAbility("", 50,
-						new ChainAbility(EnumSet.of(CardAbilityTrigger.OTHER_ATTACK_POST), "",
+				)), chance("", 50, new ChainAbility(EnumSet.of(CardAbilityTrigger.OTHER_ATTACK_POST), "", List.of(
+						new SelectCardsAbility(
+								new CardAbilitySelection(new CardAbilityGroups(EnumSet.of(CardAbilityGroup.CAUSE)),
+										CardSelectionMethod.All.ALL, CardCondition.NoCondition.NO_CONDITION),
+								true),
+						new MoveCollectedAbility(0, 1, true, true),
+						new SelectCardsAbility(new CardAbilitySelection(
+								new CardAbilityGroups(EnumSet.of(CardAbilityGroup.ENEMY_BOARD)),
+								CardSelectionMethod.All.ALL, CardCondition.NoCondition.NO_CONDITION), true),
+						new ConditionalAbility("", Optional.of(1), new CardCondition.Contains(0), new ChainAbility(
+								Set.of(), "",
 								List.of(new SelectCardsAbility(new CardAbilitySelection(
-										new CardAbilityGroups(EnumSet.of(CardAbilityGroup.CAUSE)),
+										new CardAbilityGroups(EnumSet.of(CardAbilityGroup.SELF)),
 										CardSelectionMethod.All.ALL, CardCondition.NoCondition.NO_CONDITION), true),
 										new MoveCollectedAbility(0, 1, true, true),
-										new SelectCardsAbility(new CardAbilitySelection(new CardAbilityGroups(
-												EnumSet.of(CardAbilityGroup.ENEMY_BOARD)), CardSelectionMethod.All.ALL,
-												CardCondition.NoCondition.NO_CONDITION), true),
-										new ConditionalAbility("", Optional.of(1), new CardCondition.Contains(0),
+										new SelectCardsAbility(new CardAbilitySelection(
+												new CardAbilityGroups(EnumSet.of(CardAbilityGroup.TARGET)),
+												CardSelectionMethod.All.ALL, CardCondition.NoCondition.NO_CONDITION),
+												true),
+										new ConditionalAbility("", Optional.of(0),
+												new CardCondition.Not(new CardCondition.Contains(1)),
 												new ChainAbility(Set.of(), "", List.of(
-														new SelectCardsAbility(
-																new CardAbilitySelection(
-																		new CardAbilityGroups(
-																				EnumSet.of(CardAbilityGroup.SELF)),
-																		CardSelectionMethod.All.ALL,
-																		CardCondition.NoCondition.NO_CONDITION),
-																true),
+														new SelectCardsAbility(new CardAbilitySelection(
+																new CardAbilityGroups(
+																		EnumSet.of(CardAbilityGroup.SELF)),
+																CardSelectionMethod.All.ALL,
+																CardCondition.NoCondition.NO_CONDITION), true),
 														new MoveCollectedAbility(0, 1, true, true),
 														new SelectCardsAbility(new CardAbilitySelection(
 																new CardAbilityGroups(
-																		EnumSet.of(CardAbilityGroup.TARGET)),
+																		EnumSet.of(CardAbilityGroup.CAUSE)),
 																CardSelectionMethod.All.ALL,
 																CardCondition.NoCondition.NO_CONDITION), true),
-														new ConditionalAbility("", Optional.of(0),
-																new CardCondition.Not(new CardCondition.Contains(1)),
-																new ChainAbility(Set.of(), "", List.of(
-																		new SelectCardsAbility(new CardAbilitySelection(
-																				new CardAbilityGroups(EnumSet
-																						.of(CardAbilityGroup.SELF)),
-																				CardSelectionMethod.All.ALL,
-																				CardCondition.NoCondition.NO_CONDITION),
-																				true),
-																		new MoveCollectedAbility(0, 1, true, true),
-																		new SelectCardsAbility(new CardAbilitySelection(
-																				new CardAbilityGroups(EnumSet
-																						.of(CardAbilityGroup.CAUSE)),
-																				CardSelectionMethod.All.ALL,
-																				CardCondition.NoCondition.NO_CONDITION),
-																				true),
-																		new AnimationAbility(mod("sonic_boom")),
-																		new ModifyAbility(
-																				List.of(new ModificationBuilder()
-																						.put(new CardModification(
-																								CardVariable.HEALTH,
-																								new CardOperator.Negate(
-																										new CardOperator.CollectedAny(
-																												1,
-																												new CardOperator.Variable(
-																														CardVariable.DAMAGE)))))
-																						.build())),
-																		history())))))))))))));
+														new AnimationAbility(mod("sonic_boom")),
+														new ModifyAbility(List.of(new ModificationBuilder()
+																.put(new CardModification(CardVariable.HEALTH,
+																		new CardOperator.Negate(
+																				new CardOperator.CollectedAny(1,
+																						new CardOperator.Variable(
+																								CardVariable.DAMAGE)))))
+																.build())),
+														history())))))))))))));
 		add(new Builder(EntityType.TADPOLE, 3, 3, 3)
 				.setCardAbility(new ChainAbility(EnumSet.of(CardAbilityTrigger.TICK), textKey("tadpole"), List.of(
 						new SelectCardsAbility(
@@ -993,7 +982,7 @@ public class ModCardProvider implements DataProvider {
 										new ModifyAbility(List.of(new ModificationBuilder().heal(-4)
 												.addProperty(CardProperty.BURN, 4).build())),
 										history())),
-								new ChanceAbility("", 30, addCards(EnumSet.of(CardAbilityTrigger.SUMMON), "",
+								chance("", 30, addCards(EnumSet.of(CardAbilityTrigger.SUMMON), "",
 										List.of(new LazyCardType(mod("trident")))))))));
 		add(new Builder(EntityType.ITEM, 0, 3, 0).setKey(mod("sweet_berries"))
 				.setAdditionalData(new AdditionalCardData.ItemData(Items.SWEET_BERRIES))
@@ -1225,6 +1214,13 @@ public class ModCardProvider implements DataProvider {
 		}
 	}
 
+	private CardAbility chance(String textKey, int chance, CardAbility inner) {
+		return new ConditionalAbility(textKey, Optional.empty(),
+				new CardCondition.OperatorCondition(new CardOperator.GreaterThan(new CardOperator.Constant(chance),
+						new CardOperator.RandomOperator(new CardOperator.Constant(0), new CardOperator.Constant(99)))),
+				inner);
+	}
+
 	private CardAbility summon(Set<CardAbilityTrigger> triggers, String textKey, CardPlacement placement,
 			LazyCardType summon) {
 		return new ChainAbility(triggers, textKey,
@@ -1269,8 +1265,8 @@ public class ModCardProvider implements DataProvider {
 			return new Builder(EntityType.COD, 1, 1, 1);
 
 		return new Builder(EntityType.COD, 1, 1, 1)
-				.setCardAbility(new ChanceAbility(textKey("cod"), chance, summon(EnumSet.of(CardAbilityTrigger.SUMMON),
-						"", CardPlacement.RIGHT, new LazyCardType(cod(chance - 10).build()))));
+				.setCardAbility(chance(textKey("cod"), chance, summon(EnumSet.of(CardAbilityTrigger.SUMMON), "",
+						CardPlacement.RIGHT, new LazyCardType(cod(chance - 10).build()))));
 	}
 
 	private ResourceLocation mod(String name) {

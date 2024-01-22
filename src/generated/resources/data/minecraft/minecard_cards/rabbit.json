@@ -1,6 +1,6 @@
 {
   "abilities": {
-    "type": "minecard:chance",
+    "type": "minecard:conditional",
     "value": {
       "ability": {
         "type": "minecard:chain",
@@ -94,7 +94,33 @@
           ]
         }
       },
-      "chance": 30,
+      "condition": {
+        "type": "minecard:operator",
+        "value": {
+          "operator": {
+            "type": "minecard:greater_than",
+            "value": {
+              "left": {
+                "type": "minecard:constant",
+                "value": 30
+              },
+              "right": {
+                "type": "minecard:random",
+                "value": {
+                  "max": {
+                    "type": "minecard:constant",
+                    "value": 99
+                  },
+                  "min": {
+                    "type": "minecard:constant",
+                    "value": 0
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
       "text_key": "card_ability.minecard.rabbit"
     }
   },

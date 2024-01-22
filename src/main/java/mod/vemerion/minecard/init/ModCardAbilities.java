@@ -8,7 +8,6 @@ import mod.vemerion.minecard.game.ability.AnimationAbility;
 import mod.vemerion.minecard.game.ability.CardAbility;
 import mod.vemerion.minecard.game.ability.CardAbilityType;
 import mod.vemerion.minecard.game.ability.ChainAbility;
-import mod.vemerion.minecard.game.ability.ChanceAbility;
 import mod.vemerion.minecard.game.ability.ChoiceCardAbility;
 import mod.vemerion.minecard.game.ability.ConditionalAbility;
 import mod.vemerion.minecard.game.ability.ConstantCardsAbility;
@@ -53,8 +52,6 @@ public class ModCardAbilities {
 			.register("resource", () -> new CardAbilityType<ResourceAbility>(ResourceAbility.CODEC));
 	public static final RegistryObject<CardAbilityType<? extends CardAbility>> MULTI = CARD_ABILITIES.register("multi",
 			() -> new CardAbilityType<MultiAbility>(MultiAbility.CODEC));
-	public static final RegistryObject<CardAbilityType<? extends CardAbility>> CHANCE = CARD_ABILITIES
-			.register("chance", () -> new CardAbilityType<ChanceAbility>(ChanceAbility.CODEC));
 	public static final RegistryObject<CardAbilityType<? extends CardAbility>> CHOICE = CARD_ABILITIES
 			.register("choice", () -> new CardAbilityType<ChoiceCardAbility>(ChoiceCardAbility.CODEC));
 	public static final RegistryObject<CardAbilityType<? extends CardAbility>> GAME_OVER = CARD_ABILITIES

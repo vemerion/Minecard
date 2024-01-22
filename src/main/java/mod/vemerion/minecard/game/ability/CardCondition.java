@@ -28,10 +28,11 @@ public abstract class CardCondition {
 		return false;
 	}
 
-	public abstract boolean test(Card t, Collected collected);
+	public abstract boolean test(Card t, Collected collected, Random rand);
 
-	public List<Card> filter(List<Card> cards, Collected collected) {
-		return cards.stream().filter(c -> test(c, collected)).collect(Collectors.toCollection(() -> new ArrayList<>()));
+	public List<Card> filter(List<Card> cards, Collected collected, Random rand) {
+		return cards.stream().filter(c -> test(c, collected, rand))
+				.collect(Collectors.toCollection(() -> new ArrayList<>()));
 	}
 
 	public static class CardConditionType<T extends CardCondition> {
@@ -56,7 +57,7 @@ public abstract class CardCondition {
 		}
 
 		@Override
-		public boolean test(Card t, Collected collected) {
+		public boolean test(Card t, Collected collected, Random rand) {
 			return true;
 		}
 
@@ -86,8 +87,8 @@ public abstract class CardCondition {
 		}
 
 		@Override
-		public boolean test(Card t, Collected collected) {
-			return left.test(t, collected) && right.test(t, collected);
+		public boolean test(Card t, Collected collected, Random rand) {
+			return left.test(t, collected, rand) && right.test(t, collected, rand);
 		}
 
 		@Override
@@ -120,8 +121,8 @@ public abstract class CardCondition {
 		}
 
 		@Override
-		public boolean test(Card t, Collected collected) {
-			return left.test(t, collected) || right.test(t, collected);
+		public boolean test(Card t, Collected collected, Random rand) {
+			return left.test(t, collected, rand) || right.test(t, collected, rand);
 		}
 
 		@Override
@@ -151,8 +152,8 @@ public abstract class CardCondition {
 		}
 
 		@Override
-		public boolean test(Card t, Collected collected) {
-			return !inner.test(t, collected);
+		public boolean test(Card t, Collected collected, Random rand) {
+			return !inner.test(t, collected, rand);
 		}
 
 		@Override
@@ -179,7 +180,7 @@ public abstract class CardCondition {
 		}
 
 		@Override
-		public boolean test(Card t, Collected collected) {
+		public boolean test(Card t, Collected collected, Random rand) {
 			return t.getType().orElse(null) == entity;
 		}
 
@@ -207,8 +208,8 @@ public abstract class CardCondition {
 		}
 
 		@Override
-		public boolean test(Card t, Collected collected) {
-			return operator.evaluate(new Random(0), t, collected) > 0;
+		public boolean test(Card t, Collected collected, Random rand) {
+			return operator.evaluate(rand, t, collected) > 0;
 		}
 
 		@Override
@@ -231,7 +232,7 @@ public abstract class CardCondition {
 		}
 
 		@Override
-		public boolean test(Card t, Collected collected) {
+		public boolean test(Card t, Collected collected, Random rand) {
 			return t.isSpell();
 		}
 
@@ -254,7 +255,7 @@ public abstract class CardCondition {
 		}
 
 		@Override
-		public boolean test(Card t, Collected collected) {
+		public boolean test(Card t, Collected collected, Random rand) {
 			return collected.get(index).contains(t);
 		}
 

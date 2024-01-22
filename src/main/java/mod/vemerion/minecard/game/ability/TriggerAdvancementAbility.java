@@ -44,7 +44,7 @@ public class TriggerAdvancementAbility extends CardAbility {
 	@Override
 	protected void invoke(List<Receiver> receivers, PlayerState state, Card card, Card cause, @Nullable Card target,
 			Collected collected) {
-		if (condition.test(card, collected)
+		if (condition.test(card, collected, state.getGame().getRandom())
 				&& state.getGame().getLevel().getPlayerByUUID(state.getId()) instanceof ServerPlayer player) {
 			ModAdvancements.GAME.trigger(player, id);
 		}

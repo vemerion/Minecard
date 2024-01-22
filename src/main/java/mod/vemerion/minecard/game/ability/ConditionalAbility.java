@@ -47,13 +47,13 @@ public class ConditionalAbility extends CardAbility {
 			Collected collected) {
 		index.ifPresentOrElse(i -> {
 			for (var c : collected.get(i)) {
-				if (!condition.test(c, collected)) {
+				if (!condition.test(c, collected, state.getGame().getRandom())) {
 					return;
 				}
 			}
 			ability.invoke(receivers, state, card, cause, target, collected);
 		}, () -> {
-			if (condition.test(card, collected)) {
+			if (condition.test(card, collected, state.getGame().getRandom())) {
 				ability.invoke(receivers, state, card, cause, target, collected);
 			}
 		});

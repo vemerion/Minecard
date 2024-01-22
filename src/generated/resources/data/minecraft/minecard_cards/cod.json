@@ -1,6 +1,6 @@
 {
   "abilities": {
-    "type": "minecard:chance",
+    "type": "minecard:conditional",
     "value": {
       "ability": {
         "type": "minecard:chain",
@@ -11,7 +11,7 @@
               "cards": [
                 {
                   "abilities": {
-                    "type": "minecard:chance",
+                    "type": "minecard:conditional",
                     "value": {
                       "ability": {
                         "type": "minecard:chain",
@@ -22,7 +22,7 @@
                               "cards": [
                                 {
                                   "abilities": {
-                                    "type": "minecard:chance",
+                                    "type": "minecard:conditional",
                                     "value": {
                                       "ability": {
                                         "type": "minecard:chain",
@@ -33,7 +33,7 @@
                                               "cards": [
                                                 {
                                                   "abilities": {
-                                                    "type": "minecard:chance",
+                                                    "type": "minecard:conditional",
                                                     "value": {
                                                       "ability": {
                                                         "type": "minecard:chain",
@@ -44,7 +44,7 @@
                                                               "cards": [
                                                                 {
                                                                   "abilities": {
-                                                                    "type": "minecard:chance",
+                                                                    "type": "minecard:conditional",
                                                                     "value": {
                                                                       "ability": {
                                                                         "type": "minecard:chain",
@@ -81,7 +81,33 @@
                                                                           ]
                                                                         }
                                                                       },
-                                                                      "chance": 10,
+                                                                      "condition": {
+                                                                        "type": "minecard:operator",
+                                                                        "value": {
+                                                                          "operator": {
+                                                                            "type": "minecard:greater_than",
+                                                                            "value": {
+                                                                              "left": {
+                                                                                "type": "minecard:constant",
+                                                                                "value": 10
+                                                                              },
+                                                                              "right": {
+                                                                                "type": "minecard:random",
+                                                                                "value": {
+                                                                                  "max": {
+                                                                                    "type": "minecard:constant",
+                                                                                    "value": 99
+                                                                                  },
+                                                                                  "min": {
+                                                                                    "type": "minecard:constant",
+                                                                                    "value": 0
+                                                                                  }
+                                                                                }
+                                                                              }
+                                                                            }
+                                                                          }
+                                                                        }
+                                                                      },
                                                                       "text_key": "card_ability.minecard.cod"
                                                                     }
                                                                   },
@@ -112,7 +138,33 @@
                                                           ]
                                                         }
                                                       },
-                                                      "chance": 20,
+                                                      "condition": {
+                                                        "type": "minecard:operator",
+                                                        "value": {
+                                                          "operator": {
+                                                            "type": "minecard:greater_than",
+                                                            "value": {
+                                                              "left": {
+                                                                "type": "minecard:constant",
+                                                                "value": 20
+                                                              },
+                                                              "right": {
+                                                                "type": "minecard:random",
+                                                                "value": {
+                                                                  "max": {
+                                                                    "type": "minecard:constant",
+                                                                    "value": 99
+                                                                  },
+                                                                  "min": {
+                                                                    "type": "minecard:constant",
+                                                                    "value": 0
+                                                                  }
+                                                                }
+                                                              }
+                                                            }
+                                                          }
+                                                        }
+                                                      },
                                                       "text_key": "card_ability.minecard.cod"
                                                     }
                                                   },
@@ -143,7 +195,33 @@
                                           ]
                                         }
                                       },
-                                      "chance": 30,
+                                      "condition": {
+                                        "type": "minecard:operator",
+                                        "value": {
+                                          "operator": {
+                                            "type": "minecard:greater_than",
+                                            "value": {
+                                              "left": {
+                                                "type": "minecard:constant",
+                                                "value": 30
+                                              },
+                                              "right": {
+                                                "type": "minecard:random",
+                                                "value": {
+                                                  "max": {
+                                                    "type": "minecard:constant",
+                                                    "value": 99
+                                                  },
+                                                  "min": {
+                                                    "type": "minecard:constant",
+                                                    "value": 0
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      },
                                       "text_key": "card_ability.minecard.cod"
                                     }
                                   },
@@ -174,7 +252,33 @@
                           ]
                         }
                       },
-                      "chance": 40,
+                      "condition": {
+                        "type": "minecard:operator",
+                        "value": {
+                          "operator": {
+                            "type": "minecard:greater_than",
+                            "value": {
+                              "left": {
+                                "type": "minecard:constant",
+                                "value": 40
+                              },
+                              "right": {
+                                "type": "minecard:random",
+                                "value": {
+                                  "max": {
+                                    "type": "minecard:constant",
+                                    "value": 99
+                                  },
+                                  "min": {
+                                    "type": "minecard:constant",
+                                    "value": 0
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      },
                       "text_key": "card_ability.minecard.cod"
                     }
                   },
@@ -205,7 +309,33 @@
           ]
         }
       },
-      "chance": 50,
+      "condition": {
+        "type": "minecard:operator",
+        "value": {
+          "operator": {
+            "type": "minecard:greater_than",
+            "value": {
+              "left": {
+                "type": "minecard:constant",
+                "value": 50
+              },
+              "right": {
+                "type": "minecard:random",
+                "value": {
+                  "max": {
+                    "type": "minecard:constant",
+                    "value": 99
+                  },
+                  "min": {
+                    "type": "minecard:constant",
+                    "value": 0
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
       "text_key": "card_ability.minecard.cod"
     }
   },
