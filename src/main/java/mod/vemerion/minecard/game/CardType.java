@@ -114,7 +114,7 @@ public class CardType {
 
 	public FormattedText getName() {
 		return getAdditionalData() instanceof AdditionalCardData.ItemData itemData ? itemData.getStack().getHoverName()
-				: (getType() == null ? Component.EMPTY : getType().getDescription());
+				: (getType() == null ? Component.empty() : getType().getDescription());
 	}
 
 	public Card getCardForRendering() {
