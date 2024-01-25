@@ -31,6 +31,7 @@ import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.animal.Rabbit;
 import net.minecraft.world.entity.animal.TropicalFish;
@@ -198,7 +199,29 @@ public class CardItemRenderer extends BlockEntityWithoutLevelRenderer {
 		pose.scale(drawingScale, drawingScale, drawingScale);
 		pose.mulPose(TransformationHelper.quatFromXYZ(0, 20, 0, true));
 
-		mc.getEntityRenderDispatcher().getRenderer(entity).render(entity, 0, 0, pose, buffer, light);
+		if (entity instanceof LivingEntity living) {
+			var xRotSaved = living.getXRot();
+			var xRot0Saved = living.xRotO;
+			var yBodyRotSaved = living.yBodyRot;
+			var yBodyRot0Saved = living.yBodyRotO;
+			var yHeadRotSaved = living.yHeadRot;
+			var yHeadRot0Saved = living.yHeadRot;
+			living.setXRot(0);
+			living.xRotO = living.getXRot();
+			living.yBodyRot = 0;
+			living.yBodyRotO = living.yBodyRot;
+			living.yHeadRot = 0;
+			living.yHeadRotO = living.yHeadRot;
+			mc.getEntityRenderDispatcher().getRenderer(entity).render(entity, 0, 0, pose, buffer, light);
+			living.setXRot(xRotSaved);
+			living.xRotO = xRot0Saved;
+			living.yBodyRot = yBodyRotSaved;
+			living.yBodyRotO = yBodyRot0Saved;
+			living.yHeadRot = yHeadRotSaved;
+			living.yHeadRotO = yHeadRot0Saved;
+		} else {
+			mc.getEntityRenderDispatcher().getRenderer(entity).render(entity, 0, 0, pose, buffer, light);
+		}
 		pose.popPose();
 	}
 
