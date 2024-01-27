@@ -29,6 +29,6 @@ public record CardAbilitySelection(CardAbilityGroups groups, CardSelectionMethod
 		if (candidates.isEmpty())
 			return candidates;
 
-		return method.select(receivers, state, ability, candidates);
+		return method.select(receivers, state, self, candidates);
 	}
 }

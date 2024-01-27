@@ -7,7 +7,6 @@ import java.util.UUID;
 import java.util.concurrent.Semaphore;
 
 import mod.vemerion.minecard.Main;
-import mod.vemerion.minecard.game.ability.CardAbility;
 import mod.vemerion.minecard.network.PlayerChoiceMessage;
 
 public class PlayerChoice {
@@ -47,11 +46,11 @@ public class PlayerChoice {
 
 	public void resend(Receiver receiver) {
 		if (request != null) {
-			receiver.receiver(new PlayerChoiceMessage(request.ability, request.cards, request.targeting));
+			receiver.receiver(new PlayerChoiceMessage(request.textKey, request.cards, request.targeting));
 		}
 	}
 
-	public Optional<Card> make(List<Receiver> receivers, CardAbility ability, List<Card> cards, boolean targeting,
+	public Optional<Card> make(List<Receiver> receivers, String textKey, List<Card> cards, boolean targeting,
 			Random rand, UUID player) {
 		if (cards.isEmpty())
 			return Optional.empty();
@@ -59,10 +58,10 @@ public class PlayerChoice {
 		if (!active)
 			return Optional.of(cards.get(rand.nextInt(cards.size())));
 
-		request = new Request(ability, cards, targeting);
+		request = new Request(textKey, cards, targeting);
 		for (var receiver : receivers) {
 			if (receiver.getId().equals(player)) {
-				receiver.receiver(new PlayerChoiceMessage(ability, cards, targeting));
+				receiver.receiver(new PlayerChoiceMessage(textKey, cards, targeting));
 			}
 		}
 		mainSignal.release();
@@ -86,7 +85,7 @@ public class PlayerChoice {
 
 	}
 
-	public static record Request(CardAbility ability, List<Card> cards, boolean targeting) {
+	public static record Request(String textKey, List<Card> cards, boolean targeting) {
 
 	}
 }

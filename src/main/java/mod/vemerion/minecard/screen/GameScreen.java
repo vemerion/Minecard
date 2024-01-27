@@ -1262,7 +1262,7 @@ public class GameScreen extends Screen implements GameClient {
 				font.drawShadow(poseStack, CHOOSE_TEXT, 0, 0, 0xffffff);
 				poseStack.popPose();
 
-				var lines = font.split(choice.ability().getText(), 200);
+				var lines = font.split(Component.translatable(choice.textKey()), 200);
 				float y = 18;
 				for (var line : lines) {
 					font.drawShadow(poseStack, line, (width - font.width(line)) / 2, y, 0xffffff);

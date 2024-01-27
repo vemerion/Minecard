@@ -23,8 +23,7 @@ public abstract class CardSelectionMethod {
 
 	protected abstract CardSelectionMethodType<?> getType();
 
-	public abstract List<Card> select(List<Receiver> receivers, GameState state, CardAbility ability,
-			List<Card> candidates);
+	public abstract List<Card> select(List<Receiver> receivers, GameState state, Card self, List<Card> candidates);
 
 	public static class CardSelectionMethodType<T extends CardSelectionMethod> {
 		private final Codec<T> codec;
@@ -53,8 +52,7 @@ public abstract class CardSelectionMethod {
 		}
 
 		@Override
-		public List<Card> select(List<Receiver> receivers, GameState state, CardAbility ability,
-				List<Card> candidates) {
+		public List<Card> select(List<Receiver> receivers, GameState state, Card self, List<Card> candidates) {
 			return candidates;
 		}
 	}
@@ -89,8 +87,7 @@ public abstract class CardSelectionMethod {
 		}
 
 		@Override
-		public List<Card> select(List<Receiver> receivers, GameState state, CardAbility ability,
-				List<Card> candidates) {
+		public List<Card> select(List<Receiver> receivers, GameState state, Card self, List<Card> candidates) {
 			var result = new ArrayList<Card>();
 			for (int i = 0; i < count; i++) {
 				if (candidates.isEmpty())
@@ -123,10 +120,9 @@ public abstract class CardSelectionMethod {
 		}
 
 		@Override
-		public List<Card> select(List<Receiver> receivers, GameState state, CardAbility ability,
-				List<Card> candidates) {
+		public List<Card> select(List<Receiver> receivers, GameState state, Card self, List<Card> candidates) {
 			var result = new ArrayList<Card>();
-			state.getChoice().make(receivers, ability, candidates, !discover, state.getRandom(),
+			state.getChoice().make(receivers, self.getAbility().getTextKey(), candidates, !discover, state.getRandom(),
 					state.getCurrentPlayerState().getId()).ifPresent(c -> result.add(c));
 			return result;
 		}

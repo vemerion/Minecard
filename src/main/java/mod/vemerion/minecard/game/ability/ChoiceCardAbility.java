@@ -45,8 +45,8 @@ public class ChoiceCardAbility extends CardAbility {
 		for (int i = 0; i < abilities.size(); i++)
 			cards.add(new CardType(card.getType().get(), 0, 0, 0, Map.of(), abilities.get(i), card.getAdditionalData(),
 					CardType.DEFAULT_DECK_COUNT, CardType.DEFAULT_DROP_CHANCE).create().setId(i));
-		state.getGame().getChoice().make(receivers, this, cards, false, state.getGame().getRandom(), state.getId())
-				.ifPresent(c -> {
+		state.getGame().getChoice().make(receivers, card.getAbility().getTextKey(), cards, false,
+				state.getGame().getRandom(), state.getId()).ifPresent(c -> {
 					abilities.get(c.getId()).invoke(receivers, state, card, cause, target, collected);
 				});
 		;
