@@ -320,7 +320,7 @@ public class GameState {
 				List.of(targetCard.toHistory(HistoryEntry.Visibility.ALL))));
 
 		for (var playerState : getPlayerStates()) {
-			for (var card : playerState.getBoard()) {
+			for (var card : new ArrayList<>(playerState.getBoard())) {
 				if (card != attackerCard) {
 					card.ability(a -> a.trigger(CardAbilityTrigger.OTHER_ATTACK_POST, receivers, playerState, card,
 							attackerCard, targetCard));
